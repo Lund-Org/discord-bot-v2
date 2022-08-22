@@ -1,0 +1,116 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/prisma/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/prisma/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/prisma"],
+      "options": {
+        "jestConfig": "libs/prisma/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "db-seed": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "libs/prisma",
+        "command": "npx dotenv -e ../../.env -- npx prisma db seed"
+      }
+    },
+    "generate": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "libs/prisma",
+        "command": "npx prisma generate"
+      }
+    },
+    "dev": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "libs/prisma",
+        "command": "npx prisma migrate dev"
+      }
+    },
+    "format": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "libs/prisma",
+        "command": "npx prisma format"
+      }
+    },
+    "migrate-reset": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "libs/prisma",
+        "command": "npx dotenv -e ../../.env -- npx prisma migrate reset --skip-generate --skip-seed --force"
+      }
+    },
+    "migrate-deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "libs/prisma",
+        "command": "npx dotenv -e ../../.env -- npx prisma migrate deploy"
+      }
+    },
+    "diff": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "libs/prisma",
+        "command": "npx dotenv -e ../../.env -- npx prisma migrate diff --preview-feature --from-schema-datamodel ./src/schema.prisma --to-migrations ./src/migrations --shadow-database-url '$DATABASE_URL' --exit-code"
+      }
+    },
+    "pull": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "libs/prisma",
+        "command": "npx dotenv -e ../../.env -- npx prisma db pull --schema ./src/schema.prisma"
+      }
+    },
+    "migrate-reset-test": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "libs/prisma",
+        "command": "npx dotenv -e ../../.env.test -- npx prisma migrate reset --skip-generate --skip-seed --force"
+      }
+    },
+    "studio": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "libs/prisma",
+        "command": "npx dotenv -e ../../.env -- npx prisma studio"
+      }
+    },
+    "schema-reset-dev": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "parallel": false,
+        "commands": [
+          "npx nx run prisma:generate",
+          "npx nx run prisma:format",
+          "npx nx run prisma:migrate-reset",
+          "npx nx run prisma:db-seed"
+        ]
+      }
+    },
+    "schema-update-dev": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "parallel": false,
+        "commands": [
+          "npx nx run prisma:generate",
+          "npx nx run prisma:format",
+          "npx nx run prisma:migrate-deploy"
+        ]
+      }
+    }
+  },
+  "tags": ["scope:shared"]
+}

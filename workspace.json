@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json",
+  "version": 2,
+  "projects": {
+    "bot": "apps/bot",
+    "card-generator": "libs/card-generator",
+    "common": "libs/common",
+    "frontend": "apps/frontend",
+    "prisma": "libs/prisma",
+    "web": "apps/web"
+  }
+}

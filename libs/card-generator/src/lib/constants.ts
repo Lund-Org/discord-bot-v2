@@ -1,0 +1,20 @@
+export const CARD_SIZE: readonly [number, number] = [475, 820] as const;
+export const TITLE_OFFSET: readonly [number, number] = [23, 40] as const;
+export const TITLE_SIZE: readonly [number, number] = [310, 62] as const;
+export const ID_OFFSET: readonly [number, number] = [355, 60] as const;
+export const ID_SIZE: readonly [number, number] = [95, 45] as const;
+export const IMAGE_OFFSET: readonly [number, number] = [25, 133] as const;
+export const IMAGE_SIZE: readonly [number, number] = [424, 320] as const;
+export const DESCRIPTION_OFFSET: readonly [number, number] = [38, 480] as const;
+export const DESCRIPTION_SIZE: readonly [number, number] = [400, 200] as const;
+export const FUSION_OFFSET: readonly [number, number] = [23, 728] as const;
+export const FUSION_TEXT_SIZE: readonly [number, number] = [270, 30] as const;
+export const FUSION_IMG_SIZE: readonly [number, number] = [40, 40] as const;
+export const STAR_OFFSETS = {
+  // 325 = max width bloc position
+  1: [325 + 45, 728] as const, // (120 - (1 * 30)) / 2 = 45
+  2: [325 + 30, 728] as const, // (120 - (2 * 30)) / 2 = 30
+  3: [325 + 15, 728] as const, // (120 - (3 * 30)) / 2 = 15
+  4: [325, 728] as const, // (120 - (4 * 30)) / 2 = 0
+} as const;
+export const STAR_SIZE: readonly [number, number] = [30, 30] as const;

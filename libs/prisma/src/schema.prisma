@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Birthday {
+  id            Int    @id @default(autoincrement())
+  discordId     String @unique @db.VarChar(255)
+  birthdayDay   Int
+  birthdayMonth Int
+  birthdayYear  Int
+}
+
+model CardType {
+  id                 Int               @id @default(autoincrement())
+  name               String            @unique @db.VarChar(255)
+  description        String            @db.VarChar(255)
+  level              Int
+  imageName          String            @unique @db.VarChar(255)
+  isFusion           Int               @default(0) @db.TinyInt
+  lore               String            @db.Text
+  possibleFusions    CardType[]        @relation("cardFusions")
+  fusionDependencies CardType[]        @relation("cardFusions")
+  playerInventory    PlayerInventory[]
+}
+
+model Config {
+  id    Int    @id @default(autoincrement())
+  name  String @unique @db.VarChar(255)
+  value Json
+}
+
+model Gift {
+  id                Int      @id @default(autoincrement())
+  beginningDatetime DateTime @db.DateTime(0)
+  endDatetime       DateTime @db.DateTime(0)
+  code              String   @unique @db.VarChar(255)
+  bonus             Json
+  players           Player[]
+}
+
+model Pagination {
+  id               Int    @id @default(autoincrement())
+  page             Int
+  discordMessageId String @unique @db.VarChar(255)
+  discordUserId    String @db.VarChar(255)
+}
+
+model Player {
+  id              Int               @id @default(autoincrement())
+  discordId       String            @unique @db.VarChar(255)
+  points          Int
+  lastMessageDate DateTime          @default(now()) @db.DateTime(0)
+  lastDailyDraw   DateTime?         @db.DateTime(0)
+  joinDate        DateTime          @default(now()) @db.DateTime(0)
+  twitchUsername  String?           @unique @db.VarChar(255)
+  username        String            @db.VarChar(255)
+  gifts           Gift[]
+  playerInventory PlayerInventory[]
+}
+
+model PlayerInventory {
+  id         Int      @id @default(autoincrement())
+  total      Int
+  playerId   Int
+  cardTypeId Int
+  type       String   @db.VarChar(255)
+  cardType   CardType @relation(fields: [cardTypeId], references: [id])
+  player     Player   @relation(fields: [playerId], references: [id])
+
+  @@unique([playerId, cardTypeId, type])
+  @@index([cardTypeId])
+  @@index([playerId])
+}

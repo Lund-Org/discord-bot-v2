@@ -1,0 +1,163 @@
+h3 {
+  margin: 0;
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+.gacha-profile-error {
+  text-align: center;
+  padding-top: 20px;
+
+  h2 {
+    padding: 20px;
+    border: 1px solid white;
+    width: 300px;
+    margin: auto;
+  }
+
+  p {
+    padding-top: 20px;
+    color: firebrick;
+    font-size: 15px;
+  }
+}
+
+.gacha-profile {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 50px;
+
+  .inventory-filter {
+    position: absolute;
+    top: 15px;
+    right: 5px;
+
+    .right-align {
+      text-align: right;
+    }
+
+    button {
+      background: #294767;
+      color: white;
+      border: none;
+      padding: 5px 20px;
+      font: inherit;
+      cursor: pointer;
+      outline: inherit;
+    }
+
+    .dropdown {
+      background: #1d3147;
+      padding: 10px;
+      margin-top: 15px;
+      position: relative;
+
+      &:after {
+        content: '';
+        position: absolute;
+        display: block;
+        width: 0;
+        top: -15px;
+        right: 10px;
+        bottom: auto;
+        left: auto;
+        border-width: 0 10px 15px;
+        border-color: #1d3147 transparent;
+        border-style: solid;
+      }
+
+      .filter-group {
+        padding-top: 3px;
+        padding-bottom: 3px;
+      }
+    }
+  }
+
+  .subtitle {
+    font-size: 13px;
+
+    a {
+      color: khaki;
+      text-decoration: none;
+    }
+  }
+
+  .column-container {
+    column-gap: 30px;
+    row-gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .column {
+    max-width: calc(50vw - 30px);
+    position: relative;
+    flex: calc(50% - 30px);
+  }
+
+  .scrollable-container {
+    max-height: 500px;
+    overflow: auto;
+    border: 1px solid #666;
+    margin: 3px;
+    padding: 5px;
+    border-radius: 6px;
+
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #666;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #eee;
+      border-radius: 3px;
+
+      &:hover {
+        background: #999;
+      }
+    }
+  }
+
+  ul.inventory {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    padding-bottom: 5px;
+
+    li {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      display: flex;
+
+      .card-list-item {
+        display: flex;
+        align-items: center;
+        margin-right: 15px;
+        font-size: 18px;
+
+        .fusion-icon {
+          font-size: 0.75em;
+          color: cyan;
+          width: 15px;
+        }
+
+        .level-icon {
+          font-size: 0.5em;
+          color: gold;
+          width: 40px;
+        }
+
+        .card-name {
+          font-size: 0.9em;
+        }
+      }
+    }
+  }
+
+  ul.inventory.gold-cards {
+    color: goldenrod;
+  }
+}
