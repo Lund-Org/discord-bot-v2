@@ -88,12 +88,12 @@ CREATE TABLE `PlayerInventory` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `_cardFusions` (
+CREATE TABLE `_CardFusions` (
     `A` INTEGER NOT NULL,
     `B` INTEGER NOT NULL,
 
-    UNIQUE INDEX `_cardFusions_AB_unique`(`A`, `B`),
-    INDEX `_cardFusions_B_index`(`B`)
+    UNIQUE INDEX `_CardFusions_AB_unique`(`A`, `B`),
+    INDEX `_CardFusions_B_index`(`B`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -112,10 +112,10 @@ ALTER TABLE `PlayerInventory` ADD CONSTRAINT `PlayerInventory_cardTypeId_fkey` F
 ALTER TABLE `PlayerInventory` ADD CONSTRAINT `PlayerInventory_playerId_fkey` FOREIGN KEY (`playerId`) REFERENCES `Player`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `_cardFusions` ADD CONSTRAINT `_cardFusions_A_fkey` FOREIGN KEY (`A`) REFERENCES `CardType`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `_CardFusions` ADD CONSTRAINT `_CardFusions_A_fkey` FOREIGN KEY (`A`) REFERENCES `CardType`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `_cardFusions` ADD CONSTRAINT `_cardFusions_B_fkey` FOREIGN KEY (`B`) REFERENCES `CardType`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `_CardFusions` ADD CONSTRAINT `_CardFusions_B_fkey` FOREIGN KEY (`B`) REFERENCES `CardType`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_GiftToPlayer` ADD CONSTRAINT `_GiftToPlayer_A_fkey` FOREIGN KEY (`A`) REFERENCES `Gift`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

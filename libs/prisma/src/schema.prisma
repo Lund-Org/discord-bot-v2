@@ -23,8 +23,8 @@ model CardType {
   imageName          String            @unique @db.VarChar(255)
   isFusion           Int               @default(0) @db.TinyInt
   lore               String            @db.Text
-  possibleFusions    CardType[]        @relation("cardFusions")
-  fusionDependencies CardType[]        @relation("cardFusions")
+  possibleFusions    CardType[]        @relation("CardFusions")
+  fusionDependencies CardType[]        @relation("CardFusions")
   playerInventory    PlayerInventory[]
 }
 
