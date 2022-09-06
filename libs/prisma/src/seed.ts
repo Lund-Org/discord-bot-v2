@@ -116,7 +116,7 @@ async function main() {
       {
         id: 13,
         name: "Largage de croiss'",
-        description: 'COD',
+        description: "Un meilleur largage tactique que dans n'importe quel COD",
         level: 1,
         imageName: 'gartic-croissant.jpg',
         isFusion: 0,
@@ -125,7 +125,8 @@ async function main() {
       {
         id: 14,
         name: "L'éléphant d'Ystaroth",
-        description: 'est valide quand même !',
+        description:
+          '"Tout le monde a reconnu l\'éléphant donc mon dessin est valide quand même !"',
         level: 1,
         imageName: 'gartic-elephant.jpg',
         isFusion: 0,
@@ -143,7 +144,7 @@ async function main() {
       {
         id: 16,
         name: 'Le talent de Sashalex',
-        description: 'sure',
+        description: '"Un éminent artiste du mouvement de la souris pour sure"',
         level: 1,
         imageName: 'sasha-talent.jpg',
         isFusion: 0,
@@ -278,7 +279,8 @@ async function main() {
       {
         id: 31,
         name: 'Les FDP',
-        description: 'mangouste est à leur tête',
+        description:
+          "Les forces de défense de Poudlard. On raconte qu'une mangouste est à leur tête",
         level: 1,
         imageName: 'fdp.jpg',
         isFusion: 0,
@@ -368,7 +370,8 @@ async function main() {
       {
         id: 41,
         name: 'Il est taquin !',
-        description: 'celles du français un jour',
+        description:
+          "Sasha a les bases de l'humour, on espère qu'il aura celles du français un jour",
         level: 1,
         imageName: 'sasha-humour.jpg',
         isFusion: 0,
@@ -530,7 +533,8 @@ async function main() {
       {
         id: 59,
         name: 'Encore une quête',
-        description: 'quête principale, promis',
+        description:
+          'Une petite quête secondaire et après on fait la quête principale, promis',
         level: 2,
         imageName: 'quete-annexe.jpg',
         isFusion: 0,
@@ -566,7 +570,8 @@ async function main() {
       {
         id: 63,
         name: 'MauriceBot',
-        description: 'balle dans le filet',
+        description:
+          'Il a plus de chance de planter que de mettre la balle dans le filet',
         level: 3,
         imageName: 'maurice-bot.jpg',
         isFusion: 1,
@@ -647,7 +652,8 @@ async function main() {
       {
         id: 72,
         name: 'Une histoire compliquée',
-        description: 'le temps...',
+        description:
+          'Des mondes de lumière, de ténèbres, des voyages dans le temps...',
         level: 2,
         imageName: 'kh-nomura.jpg',
         isFusion: 1,
@@ -665,7 +671,7 @@ async function main() {
       {
         id: 74,
         name: 'FFII - La magie ultime',
-        description: 'puissant',
+        description: 'Ultima, le pire sort du jeu vendu comme le plus puissant',
         level: 1,
         imageName: 'ff2-ultima.jpg',
         isFusion: 0,
@@ -701,7 +707,8 @@ async function main() {
       {
         id: 78,
         name: 'FFVI - Inconnus au bataillon',
-        description: "chance d'être récupérés",
+        description:
+          "Des compagnons optionnels qui n'ont jamais eu la chance d'être récupérés",
         level: 2,
         imageName: 'ff6-mog-gogo-omaru.jpg',
         isFusion: 0,
