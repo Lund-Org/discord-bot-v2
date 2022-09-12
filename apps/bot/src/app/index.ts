@@ -25,6 +25,7 @@ export const startBot = (): Promise<Client> => {
         'GuildMessages',
         'GuildMessageReactions',
         'GuildScheduledEvents',
+        'MessageContent',
       ],
     });
     const createHandlers = CreateHandlerClasses.map((HandlerClass): Handler => {
