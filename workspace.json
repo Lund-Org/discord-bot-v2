@@ -6,6 +6,7 @@
     "card-generator": "libs/card-generator",
     "common": "libs/common",
     "frontend": "apps/frontend",
+    "hltb": "libs/hltb",
     "prisma": "libs/prisma",
     "web": "apps/web"
   }

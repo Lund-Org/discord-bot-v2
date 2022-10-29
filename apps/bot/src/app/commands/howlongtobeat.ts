@@ -1,6 +1,6 @@
+import { HowLongToBeatService } from '@discord-bot-v2/hltb';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
-import { HowLongToBeatService } from 'howlongtobeat';
 
 type HLTBCode = 'gameplayMain' | 'gameplayMainExtra' | 'gameplayCompletionist';
 const HLTBLabelCode: [HLTBCode, string][] = [
@@ -30,25 +30,21 @@ async function howlongtobeatCallback(interaction: ChatInputCommandInteraction) {
   try {
     const searchResult = await hltbService.search(name);
 
-    if (searchResult && searchResult.length) {
-      const details = await hltbService.detail(searchResult[0].id);
+    if (searchResult) {
+      const embed = new EmbedBuilder()
+        .setColor('#0ee8da')
+        .setTitle(searchResult.name)
+        .setThumbnail(searchResult.imageUrl);
 
-      if (details) {
-        const embed = new EmbedBuilder()
-          .setColor('#0ee8da')
-          .setTitle(details.name)
-          .setThumbnail(`https://howlongtobeat.com${details.imageUrl}`);
+      HLTBLabelCode.forEach(([code, label]) => {
+        const value = searchResult[code];
 
-        HLTBLabelCode.forEach(([code, label]) => {
-          const value = details[code as HLTBCode];
+        if (value) {
+          embed.addFields([{ name: label, value }]);
+        }
+      });
 
-          if (value) {
-            embed.addFields([{ name: label, value: `${value}h` }]);
-          }
-        });
-
-        return interaction.reply({ embeds: [embed] });
-      }
+      return interaction.reply({ embeds: [embed] });
     }
 
     return interaction.reply('Aucun jeu trouvé');

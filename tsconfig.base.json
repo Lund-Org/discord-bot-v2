@@ -17,6 +17,7 @@
     "paths": {
       "@discord-bot-v2/card-generator": ["libs/card-generator/src/index.ts"],
       "@discord-bot-v2/common": ["libs/common/src/index.ts"],
+      "@discord-bot-v2/hltb": ["libs/hltb/src/index.ts"],
       "@discord-bot-v2/prisma": ["libs/prisma/src/index.ts"]
     }
   },
