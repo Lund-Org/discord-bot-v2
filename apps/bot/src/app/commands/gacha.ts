@@ -115,11 +115,6 @@ export const gachaCmd = new SlashCommandBuilder()
   )
   .addSubcommand((subcommand) =>
     subcommand
-      .setName('shopbuy')
-      .setDescription("Permet d'acheter une carte du magasin")
-  )
-  .addSubcommand((subcommand) =>
-    subcommand
       .setName('twitch')
       .setDescription('Permet de lier son compte Twitch au gacha')
       .addStringOption((option) =>
