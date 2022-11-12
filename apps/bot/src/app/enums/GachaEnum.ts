@@ -3,6 +3,9 @@ export enum GachaConfigEnum {
   LEVELS = 'LEVELS',
   PRICE = 'PRICE',
   SELL = 'SELL',
+  TWITCH_REWARD = 'TWITCH_REWARD',
+  SHOP_PRICES = 'SHOP_PRICES',
+  CARD_XP = 'CARD_XP',
 }
 
 export enum GachaGiftEnum {

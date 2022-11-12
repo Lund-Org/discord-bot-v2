@@ -6,7 +6,12 @@ import {
   SelectMenuInteraction,
   CacheType,
 } from 'discord.js';
-import { userNotFound } from './helper';
+import {
+  generateSummaryEmbed,
+  getCardEarnSummary,
+  getCardLostSummary,
+  userNotFound,
+} from './helper';
 import { getCardsToFusion } from '@discord-bot-v2/common';
 import { CardType, Player, PlayerInventory } from '@prisma/client';
 import { prisma } from '@discord-bot-v2/prisma';
@@ -111,8 +116,23 @@ export const fusion = async (interaction: SelectMenuInteraction<CacheType>) => {
   );
 
   if (missingCards.length === 0) {
+    const embed = generateSummaryEmbed([
+      ...getCardLostSummary(
+        player,
+        cardInventoriesRequired.map((x) => ({
+          cardType: x.cardType,
+          isGold: false,
+        }))
+      ),
+      ...getCardEarnSummary(player, [
+        { cardType: cardToCreate, isGold: false },
+      ]),
+    ]);
     await createFusionCard(player, cardInventoriesRequired, cardToCreate);
-    return interaction.editReply('Carte fusion créée !');
+    return interaction.editReply({
+      content: `Carte fusion #${cardToCreate.id} créée !`,
+      embeds: [embed],
+    });
   } else {
     return interaction.editReply(
       `Tu ne possèdes pas tous les réactifs nécessaires. Cartes manquantes : ${missingCards

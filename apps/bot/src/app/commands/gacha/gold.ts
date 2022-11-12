@@ -1,5 +1,10 @@
 import { ChatInputCommandInteraction } from 'discord.js';
-import { userNotFound } from './helper';
+import {
+  generateSummaryEmbed,
+  getCardEarnSummary,
+  getCardLostSummary,
+  userNotFound,
+} from './helper';
 import { CardType, Player, PlayerInventory } from '@prisma/client';
 import { prisma } from '@discord-bot-v2/prisma';
 
@@ -78,12 +83,27 @@ export const gold = async (interaction: ChatInputCommandInteraction) => {
       createOrUpdateGold(player, inventoryCardBasic.cardType),
       decreaseBasic(inventoryCardBasic),
     ]);
-    return interaction.editReply(
-      '5 cartes basiques ont été transformée en une carte en or'
-    );
+
+    const embed = generateSummaryEmbed([
+      ...getCardLostSummary(
+        player,
+        Array.from({ length: 5 }, () => ({
+          cardType: inventoryCardBasic.cardType,
+          isGold: false,
+        }))
+      ),
+      ...getCardEarnSummary(player, [
+        { cardType: inventoryCardBasic.cardType, isGold: true },
+      ]),
+    ]);
+
+    return interaction.editReply({
+      content: `5 cartes basiques ont été transformées en une carte en or (#${cardToGold})`,
+      embeds: [embed],
+    });
   } else if (inventoryCardBasic) {
     return interaction.editReply(
-      'Tu ne possèdes pas assez de cartes basic (5 cartes basiques = 1 carte en or)'
+      'Tu ne possèdes pas assez de cartes basiques (5 cartes basiques = 1 carte en or)'
     );
   } else {
     return interaction.editReply('Tu ne possèdes pas la carte');

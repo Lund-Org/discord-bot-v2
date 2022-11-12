@@ -26,6 +26,7 @@ model CardType {
   possibleFusions    CardType[]        @relation("CardFusions")
   fusionDependencies CardType[]        @relation("CardFusions")
   playerInventory    PlayerInventory[]
+  dailyShopItems     DailyShopItem[]
 }
 
 model Config {
@@ -61,6 +62,7 @@ model Player {
   username        String            @db.VarChar(255)
   gifts           Gift[]
   playerInventory PlayerInventory[]
+  DailyPurchase   DailyPurchase[]
 }
 
 model PlayerInventory {
@@ -74,5 +76,43 @@ model PlayerInventory {
 
   @@unique([playerId, cardTypeId, type])
   @@index([cardTypeId])
+  @@index([playerId])
+}
+
+model DailyShop {
+  id             Int             @id @default(autoincrement())
+  shopDay        Int
+  shopMonth      Int
+  shopYear       Int
+  threadId       String
+  dailyShopItems DailyShopItem[]
+
+  @@unique([shopDay, shopMonth, shopYear])
+}
+
+model DailyShopItem {
+  id            Int             @id @default(autoincrement())
+  cardTypeId    Int
+  dailyShopId   Int
+  type          String          @db.VarChar(255)
+  price         Int
+  cardType      CardType        @relation(fields: [cardTypeId], references: [id])
+  dailyShop     DailyShop       @relation(fields: [dailyShopId], references: [id])
+  dailyPurchase DailyPurchase[]
+
+  @@unique([cardTypeId, dailyShopId])
+  @@index([dailyShopId])
+  @@index([cardTypeId])
+}
+
+model DailyPurchase {
+  id              Int           @id @default(autoincrement())
+  playerId        Int
+  dailyShopItemId Int
+  dailyShopItem   DailyShopItem @relation(fields: [dailyShopItemId], references: [id])
+  player          Player        @relation(fields: [playerId], references: [id])
+
+  @@unique([playerId, dailyShopItemId])
+  @@index([dailyShopItemId])
   @@index([playerId])
 }

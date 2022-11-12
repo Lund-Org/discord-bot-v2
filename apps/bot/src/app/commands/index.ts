@@ -1,4 +1,4 @@
-import { gachaMenuResponse, gachaResponse } from './gacha';
+import { gachaButtonResponse, gachaMenuResponse, gachaResponse } from './gacha';
 import { googleResponse } from './google';
 import { howlongtobeatResponse } from './howlongtobeat';
 import { joinResponse } from './join';
@@ -23,3 +23,5 @@ export const commandsResponses = [
 ];
 
 export const menusCallback = [gachaMenuResponse];
+
+export const buttonsCallback = [gachaButtonResponse];

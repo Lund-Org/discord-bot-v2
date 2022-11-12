@@ -1392,6 +1392,7 @@ async function main() {
       },
       { id: 5, name: 'SELL', value: { gold: 300, basic: 100 } },
       { id: 6, name: 'CARD_XP', value: { gold: 500, basic: 100 } },
+      { id: 7, name: 'SHOP_PRICES', value: { gold: 5000, basic: 3000 } },
     ],
   });
 }

@@ -21,5 +21,5 @@
       "@discord-bot-v2/prisma": ["libs/prisma/src/index.ts"]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": ["dist", "node_modules", "tmp"]
 }

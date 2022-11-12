@@ -1,7 +1,14 @@
-import { Client, Message, MessageReaction, Partials, User } from 'discord.js';
+import {
+  Client,
+  Events,
+  Message,
+  MessageReaction,
+  Partials,
+  User,
+} from 'discord.js';
 import CreateHandlerClasses from './handlers/createHandlers';
 import UpdateHandlerClasses from './handlers/updateHandlers';
-import { commandsResponses, menusCallback } from './commands';
+import { buttonsCallback, commandsResponses, menusCallback } from './commands';
 import { Handler } from './handlers/Handler';
 import { initCommands } from './commands/initializer';
 import { manageGachaPagination } from './helpers/discordEvent';
@@ -35,14 +42,14 @@ export const startBot = (): Promise<Client> => {
       return new HandlerClass();
     });
 
-    client.on('ready', () => {
+    client.on(Events.ClientReady, () => {
       console.log(`Logged in as ${client.user?.tag} !`);
       initializers.forEach((initializer: (client: Client) => void) =>
         initializer(client)
       );
     });
 
-    client.on('messageCreate', async (msg: Message) => {
+    client.on(Events.MessageCreate, async (msg: Message) => {
       for (const handler of createHandlers) {
         const validation = await handler.validate(client, msg);
 
@@ -59,7 +66,7 @@ export const startBot = (): Promise<Client> => {
       }
     });
 
-    client.on('messageUpdate', async (msg: Message) => {
+    client.on(Events.MessageUpdate, async (msg: Message) => {
       for (const handler of updateHandlers) {
         const validation = await handler.validate(client, msg);
 
@@ -76,7 +83,7 @@ export const startBot = (): Promise<Client> => {
       }
     });
 
-    client.on('messageReactionAdd', async (reaction, user) => {
+    client.on(Events.MessageReactionAdd, async (reaction, user) => {
       let fullReaction: MessageReaction;
 
       // When we receive a reaction we check if the reaction is partial or not
@@ -110,7 +117,7 @@ export const startBot = (): Promise<Client> => {
       }
     });
 
-    client.on('interactionCreate', async (interaction) => {
+    client.on(Events.InteractionCreate, async (interaction) => {
       if (interaction.isChatInputCommand()) {
         for (const cmdCallback of commandsResponses) {
           if (interaction.commandName === cmdCallback.type) {
@@ -122,6 +129,11 @@ export const startBot = (): Promise<Client> => {
       if (interaction.isSelectMenu()) {
         for (const menuCallback of menusCallback) {
           await menuCallback(interaction);
+        }
+      }
+      if (interaction.isButton()) {
+        for (const buttonCallback of buttonsCallback) {
+          await buttonCallback(interaction);
         }
       }
     });
