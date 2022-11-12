@@ -1,5 +1,9 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { ChatInputCommandInteraction, SelectMenuInteraction } from 'discord.js';
+import {
+  ButtonInteraction,
+  ChatInputCommandInteraction,
+  SelectMenuInteraction,
+} from 'discord.js';
 import { buy } from './gacha/buy';
 import { cards } from './gacha/cards';
 import { daily } from './gacha/daily';
@@ -11,6 +15,7 @@ import { join } from './gacha/join';
 import { points } from './gacha/points';
 import { profile } from './gacha/profile';
 import { sell } from './gacha/sell';
+import { shopBuy } from './gacha/shop-buy';
 import { twitch } from './gacha/twitch';
 import { view } from './gacha/view';
 
@@ -177,4 +182,11 @@ export async function gachaMenuResponse(interaction: SelectMenuInteraction) {
     default:
       return Promise.resolve();
   }
+}
+
+export async function gachaButtonResponse(interaction: ButtonInteraction) {
+  if (interaction.customId.startsWith('shopbuy-')) {
+    return shopBuy(interaction);
+  }
+  return Promise.resolve();
 }

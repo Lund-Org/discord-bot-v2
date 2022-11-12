@@ -1,4 +1,9 @@
-import { ChatInputCommandInteraction, SelectMenuInteraction } from 'discord.js';
+import {
+  ButtonInteraction,
+  ChatInputCommandInteraction,
+  EmbedBuilder,
+  SelectMenuInteraction,
+} from 'discord.js';
 import { GachaConfigEnum } from '../../enums/GachaEnum';
 import { CardType, Player, PlayerInventory, Prisma } from '@prisma/client';
 import { prisma } from '@discord-bot-v2/prisma';
@@ -17,7 +22,10 @@ export const userNotFound = async ({
   withWarning = true,
   relations = {},
 }: {
-  interaction: ChatInputCommandInteraction | SelectMenuInteraction;
+  interaction:
+    | ChatInputCommandInteraction
+    | SelectMenuInteraction
+    | ButtonInteraction;
   withWarning?: boolean;
   relations?: Prisma.PlayerInclude;
 }) => {
@@ -146,3 +154,85 @@ export const drawCards = async (nbCardToDraw: number): Promise<CardDraw[]> => {
 
   return cardsDraw;
 };
+
+export function getCardEarnSummary(
+  playerWithInventory: Player & { playerInventory: PlayerInventory[] },
+  cards: CardDraw[]
+) {
+  return cards.reduce((acc, card) => {
+    const type = card.isGold ? 'gold' : 'basic';
+    const existingFieldIndex = acc.findIndex(
+      (x) => x.id === card.cardType.id && x.type === type
+    );
+
+    if (existingFieldIndex !== -1) {
+      ++acc[existingFieldIndex].count;
+      return acc;
+    }
+    const inventoryLine = playerWithInventory.playerInventory.find(
+      (x) => x.cardTypeId === card.cardType.id && x.type === type
+    );
+
+    acc.push({
+      id: card.cardType.id,
+      type,
+      count: inventoryLine ? inventoryLine.total + 1 : 1,
+    });
+    return acc;
+  }, []);
+}
+
+export function getCardLostSummary(
+  playerWithInventory: Player & { playerInventory: PlayerInventory[] },
+  cards: CardDraw[]
+) {
+  return cards.reduce((acc, card) => {
+    const type = card.isGold ? 'gold' : 'basic';
+    const existingFieldIndex = acc.findIndex(
+      (x) => x.id === card.cardType.id && x.type === type
+    );
+
+    if (existingFieldIndex !== -1) {
+      --acc[existingFieldIndex].count;
+      return acc;
+    }
+    // inventoryLine should always be present, if not, there is an issue
+    const inventoryLine = playerWithInventory.playerInventory.find(
+      (x) => x.cardTypeId === card.cardType.id && x.type === type
+    );
+
+    acc.push({
+      id: card.cardType.id,
+      type,
+      count: inventoryLine ? inventoryLine.total - 1 : 0,
+    });
+    return acc;
+  }, []);
+}
+
+export function generateSummaryEmbed(
+  summary: { id: number; count: number; type: 'basic' | 'gold' }[]
+) {
+  const snippet = new EmbedBuilder({
+    title: `Résumé :`,
+  });
+
+  summary
+    .sort((a, b) => {
+      if (a.id < b.id) {
+        return -1;
+      }
+      if (a.id > b.id) {
+        return 1;
+      }
+      return 0;
+    })
+    .forEach(({ id, count, type }) => {
+      snippet.addFields({
+        name: `Carte #${id} dans l'inventaire`,
+        value: `Type: ${type} | Quantité: x${count}`,
+      });
+    });
+
+  return snippet;
+}

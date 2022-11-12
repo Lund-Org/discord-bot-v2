@@ -1,5 +1,11 @@
 import { ChatInputCommandInteraction, AttachmentBuilder } from 'discord.js';
-import { addCardsToInventory, drawCards, userNotFound } from './helper';
+import {
+  addCardsToInventory,
+  drawCards,
+  generateSummaryEmbed,
+  getCardEarnSummary,
+  userNotFound,
+} from './helper';
 import { GachaConfigEnum } from '../../enums/GachaEnum';
 import { prisma } from '@discord-bot-v2/prisma';
 import { Player, PlayerInventory } from '@prisma/client';
@@ -70,10 +76,23 @@ export const buy = async (interaction: ChatInputCommandInteraction) => {
   const attachment = new AttachmentBuilder(canvas.toBuffer(), {
     name: 'cards.png',
   });
+  const embed = generateSummaryEmbed(getCardEarnSummary(player, cards));
 
   await addCardsToInventory(player, cards, cardToDraw.totalPrice);
   return interaction.editReply({
-    content: `Les ${cardToDraw.cardNumberToBuy} cartes que tu as acheté`,
+    content: getSuccessMessage(
+      cardToDraw.cardNumberToBuy,
+      player.points - cardToDraw.totalPrice
+    ),
     files: [attachment],
+    embeds: [embed],
   });
 };
+
+function getSuccessMessage(nb: number, points: number) {
+  if (nb === 1) {
+    return `Voici la carte que tu as acheté - il te reste ${points} points`;
+  }
+
+  return `Voici les ${nb} cartes que tu as acheté - il te reste ${points} points`;
+}

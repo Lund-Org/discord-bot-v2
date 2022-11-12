@@ -3,7 +3,14 @@ import { prisma } from '@discord-bot-v2/prisma';
 import { Gift, Player, PlayerInventory } from '@prisma/client';
 import { ChatInputCommandInteraction, AttachmentBuilder } from 'discord.js';
 import { generateDrawImage } from '../../helpers/canvas';
-import { addCardsToInventory, drawCards, userNotFound } from './helper';
+import { CardDraw } from '../../helpers/types';
+import {
+  addCardsToInventory,
+  drawCards,
+  generateSummaryEmbed,
+  getCardEarnSummary,
+  userNotFound,
+} from './helper';
 
 type GiftSchema = { points: number } | { card: number } | { gold: number };
 
@@ -58,10 +65,14 @@ async function saveNewGift(gift: Gift, player: Player) {
 async function getPointsToAdd(points: number | undefined) {
   return Promise.resolve(points || 0);
 }
-async function getBasicCards(numberOfCards: number | undefined) {
+async function getBasicCards(
+  numberOfCards: number | undefined
+): Promise<CardDraw[]> {
   return numberOfCards ? drawCards(numberOfCards) : Promise.resolve([]);
 }
-async function getGoldCards(numberOfCards: number | undefined) {
+async function getGoldCards(
+  numberOfCards: number | undefined
+): Promise<CardDraw[]> {
   return numberOfCards
     ? drawCards(numberOfCards).then((cards) => {
         return cards.map((card) => ({ ...card, isGold: true }));
@@ -129,7 +140,14 @@ export const gift = async (interaction: ChatInputCommandInteraction) => {
     getGoldCards(actions.goldCard),
   ]);
   const unionCards = [...basicCards, ...goldCards];
+  const embed = generateSummaryEmbed(
+    getCardEarnSummary(player, [
+      ...basicCards.map(({ cardType }) => ({ cardType, isGold: false })),
+      ...goldCards.map(({ cardType }) => ({ cardType, isGold: true })),
+    ])
+  );
   let attachment;
+  let additionalMessage = '';
 
   if (unionCards.length) {
     const canvas = await generateDrawImage(
@@ -140,6 +158,11 @@ export const gift = async (interaction: ChatInputCommandInteraction) => {
       name: 'cards.png',
     });
   }
+  if (actions.points) {
+    additionalMessage = `Tu as maintenant ${
+      player.points + actions.points
+    } points`;
+  }
 
   await Promise.all([
     addPoints(player.id, pointsToAdd),
@@ -148,8 +171,9 @@ export const gift = async (interaction: ChatInputCommandInteraction) => {
   ]);
   return attachment
     ? interaction.editReply({
-        content: message,
+        content: message + additionalMessage,
         files: [attachment],
+        embeds: [embed],
       })
-    : interaction.editReply(message);
+    : interaction.editReply(message + additionalMessage);
 };
