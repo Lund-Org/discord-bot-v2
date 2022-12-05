@@ -100,15 +100,19 @@ export const gift = async (interaction: ChatInputCommandInteraction) => {
   }
 
   await interaction.deferReply();
+  const now = new Date();
+  const nowDatetime = `${now
+    .toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris' })
+    .split('/')
+    .reverse()
+    .join('-')} ${now.toLocaleTimeString('fr-FR', {
+    timeZone: 'Europe/Paris',
+  })}`;
   const foundGift = await prisma.gift.findFirst({
     where: {
       code,
-      beginningDatetime: {
-        lt: new Date(),
-      },
-      endDatetime: {
-        gt: new Date(),
-      },
+      beginningDatetime: { lt: nowDatetime },
+      endDatetime: { gt: nowDatetime },
     },
   });
 

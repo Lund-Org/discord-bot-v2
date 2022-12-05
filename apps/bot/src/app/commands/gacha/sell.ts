@@ -125,9 +125,13 @@ export const sell = async (interaction: ChatInputCommandInteraction) => {
   ]);
 
   const embed = generateSummaryEmbed(
-    getCardLostSummary(player, [
-      { cardType: data.cardToSell.cardType, isGold: cardType === 'gold' },
-    ])
+    getCardLostSummary(
+      player,
+      Array.from({ length: data.quantity }, () => ({
+        cardType: data.cardToSell.cardType,
+        isGold: cardType === 'gold',
+      }))
+    )
   );
   return interaction.editReply({
     content: `Tu as gagné ${data.earningPoints} points - Tu as ${
