@@ -105,9 +105,9 @@ export const gift = async (interaction: ChatInputCommandInteraction) => {
     .toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris' })
     .split('/')
     .reverse()
-    .join('-')} ${now.toLocaleTimeString('fr-FR', {
+    .join('-')}T${now.toLocaleTimeString('fr-FR', {
     timeZone: 'Europe/Paris',
-  })}`;
+  })}Z`;
   const foundGift = await prisma.gift.findFirst({
     where: {
       code,
