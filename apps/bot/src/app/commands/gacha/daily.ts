@@ -7,6 +7,7 @@ import {
   drawCards,
   generateSummaryEmbed,
   getCardEarnSummary,
+  invalidateWebsitePages,
   userNotFound,
 } from './helper';
 
@@ -58,6 +59,7 @@ export const daily = async (interaction: ChatInputCommandInteraction) => {
 
     await addCardsToInventory(player, cards, 0);
     await setDailyDraw(dailyDrawDate, player.id);
+    invalidateWebsitePages(player.discordId);
     interaction.editReply({
       content: `Voici ton tirage quotidien GRA-TUIT`,
       files: [attachment],

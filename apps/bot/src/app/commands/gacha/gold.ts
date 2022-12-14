@@ -3,6 +3,7 @@ import {
   generateSummaryEmbed,
   getCardEarnSummary,
   getCardLostSummary,
+  invalidateWebsitePages,
   userNotFound,
 } from './helper';
 import { CardType, Player, PlayerInventory } from '@prisma/client';
@@ -97,6 +98,7 @@ export const gold = async (interaction: ChatInputCommandInteraction) => {
       ]),
     ]);
 
+    invalidateWebsitePages(player.discordId);
     return interaction.editReply({
       content: `5 cartes basiques ont été transformées en une carte en or (#${cardToGold})`,
       embeds: [embed],

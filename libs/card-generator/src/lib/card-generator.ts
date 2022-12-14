@@ -229,6 +229,8 @@ async function createImage(card: CardTypeAndFusions, type: 'basic' | 'gold') {
       '..', // /dist/libs/
       '..', // /dist/
       '..', // /
+      'apps',
+      'lundprod',
       'public',
       'card-images',
       `${type}-${card.imageName}`

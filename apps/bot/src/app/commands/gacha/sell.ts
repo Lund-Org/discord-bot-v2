@@ -3,6 +3,7 @@ import {
   generateSummaryEmbed,
   getCardEarnSummary,
   getCardLostSummary,
+  invalidateWebsitePages,
   userNotFound,
 } from './helper';
 import { GachaConfigEnum } from '../../enums/GachaEnum';
@@ -133,6 +134,7 @@ export const sell = async (interaction: ChatInputCommandInteraction) => {
       }))
     )
   );
+  invalidateWebsitePages(player.discordId);
   return interaction.editReply({
     content: `Tu as gagné ${data.earningPoints} points - Tu as ${
       player.points + data.earningPoints

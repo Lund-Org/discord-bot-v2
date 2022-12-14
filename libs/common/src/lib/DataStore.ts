@@ -1,6 +1,6 @@
-interface DataObject {
+type DataObject = {
   [key: string]: string;
-}
+};
 
 export class DataStore {
   static datas: DataObject = {};

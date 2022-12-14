@@ -236,3 +236,9 @@ export function generateSummaryEmbed(
 
   return snippet;
 }
+
+export function invalidateWebsitePages(discordId: string) {
+  return fetch(
+    `http://localhost:${process.env.PORT}/api/refresh-gacha-profile?discordId=${discordId}`
+  );
+}

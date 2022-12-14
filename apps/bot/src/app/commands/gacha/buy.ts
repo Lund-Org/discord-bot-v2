@@ -4,6 +4,7 @@ import {
   drawCards,
   generateSummaryEmbed,
   getCardEarnSummary,
+  invalidateWebsitePages,
   userNotFound,
 } from './helper';
 import { GachaConfigEnum } from '../../enums/GachaEnum';
@@ -79,6 +80,7 @@ export const buy = async (interaction: ChatInputCommandInteraction) => {
   const embed = generateSummaryEmbed(getCardEarnSummary(player, cards));
 
   await addCardsToInventory(player, cards, cardToDraw.totalPrice);
+  invalidateWebsitePages(player.discordId);
   return interaction.editReply({
     content: getSuccessMessage(
       cardToDraw.cardNumberToBuy,

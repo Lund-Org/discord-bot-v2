@@ -10,6 +10,7 @@ import {
   generateSummaryEmbed,
   getCardEarnSummary,
   getCardLostSummary,
+  invalidateWebsitePages,
   userNotFound,
 } from './helper';
 import { getCardsToFusion } from '@discord-bot-v2/common';
@@ -129,6 +130,7 @@ export const fusion = async (interaction: SelectMenuInteraction<CacheType>) => {
       ]),
     ]);
     await createFusionCard(player, cardInventoriesRequired, cardToCreate);
+    invalidateWebsitePages(player.discordId);
     return interaction.editReply({
       content: `Carte fusion #${cardToCreate.id} créée !`,
       embeds: [embed],

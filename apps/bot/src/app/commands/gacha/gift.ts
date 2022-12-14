@@ -9,6 +9,7 @@ import {
   drawCards,
   generateSummaryEmbed,
   getCardEarnSummary,
+  invalidateWebsitePages,
   userNotFound,
 } from './helper';
 
@@ -173,6 +174,7 @@ export const gift = async (interaction: ChatInputCommandInteraction) => {
     saveNewGift(foundGift, player),
     addCardsToInventory(player, unionCards, 0),
   ]);
+  invalidateWebsitePages(player.discordId);
   return attachment
     ? interaction.editReply({
         content: message + additionalMessage,

@@ -38,6 +38,9 @@ testem.log
 .DS_Store
 Thumbs.db
 
-public/card-images/*
+apps/lundprod/public/card-images/*
 .env
 .vscode
+
+# Next.js
+.next
