@@ -8,58 +8,59 @@ dotenvConfig();
 
 const app = (secure): RequestListener => {
   return (req, res) => {
-    if (secure) {
-      const chunks: Buffer[] = [];
-
-      req
-        .on('error', (err) => {
-          console.error(err);
-        })
-        .on('data', (chunk: Buffer) => {
-          chunks.push(chunk);
-        })
-        .on('end', () => {
-          const body = Buffer.concat(chunks);
-
-          axios({
-            method: req.method,
-            url: req.url,
-            baseURL: `http://localhost:${process.env.PORT}`,
-            data: body,
-            headers: req.headers,
-            responseType: 'stream',
-            decompress: false,
-          })
-            .then((axiosResponse) => {
-              res.writeHead(axiosResponse.status, axiosResponse.headers);
-              axiosResponse.data.on('end', () => {
-                res.end();
-              });
-              axiosResponse.data.pipe(res);
-            })
-            .catch((error) => {
-              if (axios.isAxiosError(error)) {
-                res.writeHead(error.response?.status || 500, error.message);
-                if (error.response) {
-                  error.response.data.on('end', () => {
-                    res.end();
-                  });
-                  error.response.data.pipe(res);
-                } else {
-                  res.end();
-                }
-              } else {
-                res.writeHead(500, error.message);
-                res.end();
-              }
-            });
-        });
-    } else {
+    // redirect if https server is set and we receive a http request
+    if (process.env.ENV !== 'dev' && !secure) {
       res.writeHead(302, {
         Location: `https://${req.headers.host}`,
       });
       res.end();
     }
+
+    const chunks: Buffer[] = [];
+
+    req
+      .on('error', (err) => {
+        console.error(err);
+      })
+      .on('data', (chunk: Buffer) => {
+        chunks.push(chunk);
+      })
+      .on('end', () => {
+        const body = Buffer.concat(chunks);
+
+        axios({
+          method: req.method,
+          url: req.url,
+          baseURL: `http://localhost:${process.env.PORT}`,
+          data: body,
+          headers: req.headers,
+          responseType: 'stream',
+          decompress: false,
+        })
+          .then((axiosResponse) => {
+            res.writeHead(axiosResponse.status, axiosResponse.headers);
+            axiosResponse.data.on('end', () => {
+              res.end();
+            });
+            axiosResponse.data.pipe(res);
+          })
+          .catch((error) => {
+            if (axios.isAxiosError(error)) {
+              res.writeHead(error.response?.status || 500, error.message);
+              if (error.response) {
+                error.response.data.on('end', () => {
+                  res.end();
+                });
+                error.response.data.pipe(res);
+              } else {
+                res.end();
+              }
+            } else {
+              res.writeHead(500, error.message);
+              res.end();
+            }
+          });
+      });
   };
 };
 
@@ -74,7 +75,6 @@ export const initServer = () => {
         process.env.ENV
       );
     });
-
     if (process.env.ENV !== 'dev') {
       const sslPath = `/etc/letsencrypt/live/${process.env.DOMAIN}/`;
       const privateKey = readFileSync(`${sslPath}/privkey.pem`, 'utf8');
