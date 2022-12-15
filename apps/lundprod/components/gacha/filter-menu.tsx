@@ -1,11 +1,6 @@
 import { Box, Checkbox, Flex, Input, Select, Text } from '@chakra-ui/react';
-import styled from '@emotion/styled';
 import { options } from '../../utils/filters';
 import { Filters } from '../../utils/types';
-
-const Option = styled.option`
-  background: var(--chakra-colors-gray-500) !important;
-`;
 
 type FilterMenuProps = {
   filters: Filters;
@@ -39,11 +34,14 @@ export const FilterMenu = ({
         <Select
           value={filters.filterStars}
           onChange={(event) => update('filterStars', event.target.value)}
+          sx={{
+            option: 'background: var(--chakra-colors-gray-500) !important;',
+          }}
         >
           {options.map((opt, index) => (
-            <Option value={opt} key={index}>
+            <option value={opt} key={index}>
               {opt}
-            </Option>
+            </option>
           ))}
         </Select>
       </Box>
