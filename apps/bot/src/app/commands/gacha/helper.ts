@@ -9,7 +9,6 @@ import { CardType, Player, PlayerInventory, Prisma } from '@prisma/client';
 import { prisma } from '@discord-bot-v2/prisma';
 import { addPoints } from '@discord-bot-v2/common';
 import { CardDraw } from '../../helpers/types';
-import axios from 'axios';
 
 type ChancesConfig = {
   '1': number;
@@ -236,10 +235,4 @@ export function generateSummaryEmbed(
     });
 
   return snippet;
-}
-
-export function invalidateWebsitePages(discordId: string) {
-  return axios.get(
-    `http://localhost:${process.env.PORT}/api/refresh-gacha-profile?discordId=${discordId}`
-  );
 }

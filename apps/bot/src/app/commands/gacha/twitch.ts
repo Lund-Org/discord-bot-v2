@@ -1,6 +1,7 @@
 import { prisma } from '@discord-bot-v2/prisma';
 import { ChatInputCommandInteraction } from 'discord.js';
-import { invalidateWebsitePages, userNotFound } from './helper';
+import { invalidateWebsitePages } from '../../helpers/discordEvent';
+import { userNotFound } from './helper';
 
 export const twitch = async (interaction: ChatInputCommandInteraction) => {
   const player = await userNotFound({ interaction });

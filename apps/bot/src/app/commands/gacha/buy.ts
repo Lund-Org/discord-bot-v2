@@ -4,13 +4,13 @@ import {
   drawCards,
   generateSummaryEmbed,
   getCardEarnSummary,
-  invalidateWebsitePages,
   userNotFound,
 } from './helper';
 import { GachaConfigEnum } from '../../enums/GachaEnum';
 import { prisma } from '@discord-bot-v2/prisma';
 import { Player, PlayerInventory } from '@prisma/client';
 import { generateDrawImage } from '../../helpers/canvas';
+import { invalidateWebsitePages } from '../../helpers/discordEvent';
 
 type PriceConfig = { price: number };
 

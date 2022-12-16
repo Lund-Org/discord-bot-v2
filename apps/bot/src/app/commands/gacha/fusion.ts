@@ -10,12 +10,12 @@ import {
   generateSummaryEmbed,
   getCardEarnSummary,
   getCardLostSummary,
-  invalidateWebsitePages,
   userNotFound,
 } from './helper';
 import { getCardsToFusion } from '@discord-bot-v2/common';
 import { CardType, Player, PlayerInventory } from '@prisma/client';
 import { prisma } from '@discord-bot-v2/prisma';
+import { invalidateWebsitePages } from '../../helpers/discordEvent';
 
 async function createFusionCard(
   player: Player & {

@@ -1,12 +1,9 @@
 import { ChatInputCommandInteraction, AttachmentBuilder } from 'discord.js';
-import {
-  addCardsToInventory,
-  drawCards,
-  invalidateWebsitePages,
-} from './helper';
+import { addCardsToInventory, drawCards } from './helper';
 import { givenPointsForBirthday } from '@discord-bot-v2/common';
 import { generateDrawImage } from '../../helpers/canvas';
 import { prisma } from '@discord-bot-v2/prisma';
+import { invalidateWebsitePages } from '../../helpers/discordEvent';
 
 async function hasBirthdayAndBeforeDate(discordId: string) {
   const birthday = await prisma.birthday.findUnique({

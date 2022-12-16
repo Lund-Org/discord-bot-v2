@@ -1,6 +1,7 @@
 import { Client, Message } from 'discord.js';
 import { Handler } from '../Handler';
 import { prisma } from '@discord-bot-v2/prisma';
+import { invalidateWebsitePages } from '../../helpers/discordEvent';
 
 class GachaHandler extends Handler {
   async validate(client: Client, msg: Message): Promise<boolean> {
@@ -39,6 +40,7 @@ export const addPoints = async ({ msg }: { msg: Message }): Promise<void> => {
         lastMessageDate: new Date(),
       },
     });
+    invalidateWebsitePages(msg.author.id);
   }
 };
 

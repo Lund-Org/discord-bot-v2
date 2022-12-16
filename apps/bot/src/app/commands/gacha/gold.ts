@@ -3,11 +3,11 @@ import {
   generateSummaryEmbed,
   getCardEarnSummary,
   getCardLostSummary,
-  invalidateWebsitePages,
   userNotFound,
 } from './helper';
 import { CardType, Player, PlayerInventory } from '@prisma/client';
 import { prisma } from '@discord-bot-v2/prisma';
+import { invalidateWebsitePages } from '../../helpers/discordEvent';
 
 async function createOrUpdateGold(player: Player, cardToGold: CardType) {
   await prisma.playerInventory.upsert({
