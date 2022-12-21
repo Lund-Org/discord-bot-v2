@@ -1,7 +1,14 @@
 import { prisma } from '@discord-bot-v2/prisma';
 import { Pagination } from '@prisma/client';
+import axios from 'axios';
 import { MessageReaction, User } from 'discord.js';
 import { CARD_PER_PAGE, updateMessage } from '../commands/gacha/cards';
+
+export function invalidateWebsitePages(discordId: string) {
+  return axios.get(
+    `http://localhost:${process.env.PORT}/api/refresh-gacha-profile?discordId=${discordId}`
+  );
+}
 
 export const manageGachaPagination = async (
   pagination: Pagination,

@@ -1,18 +1,12 @@
 import { prisma } from '@discord-bot-v2/prisma';
+import { Player } from '@prisma/client';
 
-type XpByUser = {
+type XpByUser = Player & {
   playerId: number;
   currentXP: number;
-  id: number;
-  discordId: string;
-  twitch_username: string | null;
-  points: number;
-  lastMessageDate: Date;
-  lastDailyDraw: Date | null;
-  joinDate: Date;
 };
 type EnrichXpByUser = XpByUser & { position: number };
-type RankByUser = {
+export type RankByUser = {
   level: { currentLevel: number; xpNextLevel: number };
 } & EnrichXpByUser;
 

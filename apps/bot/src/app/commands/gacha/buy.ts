@@ -10,6 +10,7 @@ import { GachaConfigEnum } from '../../enums/GachaEnum';
 import { prisma } from '@discord-bot-v2/prisma';
 import { Player, PlayerInventory } from '@prisma/client';
 import { generateDrawImage } from '../../helpers/canvas';
+import { invalidateWebsitePages } from '../../helpers/discordEvent';
 
 type PriceConfig = { price: number };
 
@@ -79,6 +80,7 @@ export const buy = async (interaction: ChatInputCommandInteraction) => {
   const embed = generateSummaryEmbed(getCardEarnSummary(player, cards));
 
   await addCardsToInventory(player, cards, cardToDraw.totalPrice);
+  invalidateWebsitePages(player.discordId);
   return interaction.editReply({
     content: getSuccessMessage(
       cardToDraw.cardNumberToBuy,

@@ -221,7 +221,29 @@ async function createImage(card: CardTypeAndFusions, type: 'basic' | 'gold') {
     );
   }
 
-  const out = createWriteStream(
+  const lundProdOut = createWriteStream(
+    join(
+      __dirname, // /dist/libs/card-generator/src/lib
+      '..', // /dist/libs/card-generator/src
+      '..', // /dist/libs/card-generator/
+      '..', // /dist/libs/
+      '..', // /dist/
+      '..', // /
+      'apps',
+      'lundprod',
+      'public',
+      'card-images',
+      `${type}-${card.imageName}`
+    )
+  );
+  const streamLundProd = canvas.createJPEGStream();
+  streamLundProd.pipe(lundProdOut);
+  lundProdOut.on('finish', () =>
+    console.log(
+      `The file ${type}-${card.imageName} has been created in lundprod public folder.`
+    )
+  );
+  const publicOut = createWriteStream(
     join(
       __dirname, // /dist/libs/card-generator/src/lib
       '..', // /dist/libs/card-generator/src
@@ -234,10 +256,12 @@ async function createImage(card: CardTypeAndFusions, type: 'basic' | 'gold') {
       `${type}-${card.imageName}`
     )
   );
-  const stream = canvas.createJPEGStream();
-  stream.pipe(out);
-  out.on('finish', () =>
-    console.log(`The file ${type}-${card.imageName} has been created.`)
+  const publicStream = canvas.createJPEGStream();
+  publicStream.pipe(publicOut);
+  publicOut.on('finish', () =>
+    console.log(
+      `The file ${type}-${card.imageName} has been created in root public folder.`
+    )
   );
 }
 

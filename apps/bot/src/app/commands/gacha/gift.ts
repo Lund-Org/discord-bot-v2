@@ -3,6 +3,7 @@ import { prisma } from '@discord-bot-v2/prisma';
 import { Gift, Player, PlayerInventory } from '@prisma/client';
 import { ChatInputCommandInteraction, AttachmentBuilder } from 'discord.js';
 import { generateDrawImage } from '../../helpers/canvas';
+import { invalidateWebsitePages } from '../../helpers/discordEvent';
 import { CardDraw } from '../../helpers/types';
 import {
   addCardsToInventory,
@@ -173,6 +174,7 @@ export const gift = async (interaction: ChatInputCommandInteraction) => {
     saveNewGift(foundGift, player),
     addCardsToInventory(player, unionCards, 0),
   ]);
+  invalidateWebsitePages(player.discordId);
   return attachment
     ? interaction.editReply({
         content: message + additionalMessage,

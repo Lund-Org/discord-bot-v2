@@ -7,6 +7,7 @@ import {
 } from './helper';
 import { CardType, Player, PlayerInventory } from '@prisma/client';
 import { prisma } from '@discord-bot-v2/prisma';
+import { invalidateWebsitePages } from '../../helpers/discordEvent';
 
 async function createOrUpdateGold(player: Player, cardToGold: CardType) {
   await prisma.playerInventory.upsert({
@@ -97,6 +98,7 @@ export const gold = async (interaction: ChatInputCommandInteraction) => {
       ]),
     ]);
 
+    invalidateWebsitePages(player.discordId);
     return interaction.editReply({
       content: `5 cartes basiques ont été transformées en une carte en or (#${cardToGold})`,
       embeds: [embed],

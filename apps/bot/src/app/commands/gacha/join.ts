@@ -3,6 +3,7 @@ import { addCardsToInventory, drawCards } from './helper';
 import { givenPointsForBirthday } from '@discord-bot-v2/common';
 import { generateDrawImage } from '../../helpers/canvas';
 import { prisma } from '@discord-bot-v2/prisma';
+import { invalidateWebsitePages } from '../../helpers/discordEvent';
 
 async function hasBirthdayAndBeforeDate(discordId: string) {
   const birthday = await prisma.birthday.findUnique({
@@ -57,6 +58,7 @@ export const join = async (interaction: ChatInputCommandInteraction) => {
     });
 
     await addCardsToInventory(player, cards, 0);
+    invalidateWebsitePages(player.discordId);
     return interaction.editReply({
       content: `Bienvenue dans le gacha, voici tes 8 premières cartes ! ${
         birthdayBonus

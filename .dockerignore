@@ -1,0 +1,10 @@
+node_modules
+dist
+tmp
+README.md
+.env.dist
+.editorconfig
+.eslintrc.json
+.gitignore
+.prettierignore
+.prettierrc

@@ -13,8 +13,8 @@ Discord bot for the LundProd server
 - `npm run start-bot`
   Execute the compiled code built earlier for the bot
 
-- `npm run start-web`
-  Execute the compiled code built earlier for the web
+- `npm run start-lundprod`
+  Execute the compiled code built earlier for the website
 
 - `npm run test`
   Run tests. Currently, they are not written.

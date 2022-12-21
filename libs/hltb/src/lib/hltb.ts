@@ -82,8 +82,6 @@ export class HowLongToBeatService {
    * not used for now because search data are enough
    */
   async details(gameId: string) {
-    console.log(gameId);
-    console.log(`${DETAIL_URL}${gameId}`);
     const detailContent = await this.axios.get(`${DETAIL_URL}${gameId}`, {
       headers: {
         'user-agent':

@@ -1,7 +1,7 @@
 import { prisma } from '@discord-bot-v2/prisma';
 import { CardType } from '@prisma/client';
 
-type CardTypeWithFusionDependencies = CardType & {
+export type CardTypeWithFusionDependencies = CardType & {
   fusionDependencies: CardType[];
 };
 
@@ -13,7 +13,7 @@ export async function getCardsToGold(discordId: string) {
         type: 'basic',
         total: { gte: 5 },
       },
-      include: { player: true, cardType: true },
+      include: { cardType: true },
       orderBy: { cardType: { id: 'asc' } },
     });
   } catch (e) {

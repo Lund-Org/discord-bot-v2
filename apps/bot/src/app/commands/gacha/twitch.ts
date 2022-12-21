@@ -1,5 +1,6 @@
 import { prisma } from '@discord-bot-v2/prisma';
 import { ChatInputCommandInteraction } from 'discord.js';
+import { invalidateWebsitePages } from '../../helpers/discordEvent';
 import { userNotFound } from './helper';
 
 export const twitch = async (interaction: ChatInputCommandInteraction) => {
@@ -18,6 +19,7 @@ export const twitch = async (interaction: ChatInputCommandInteraction) => {
         twitchUsername: twitchUsername.toLowerCase(),
       },
     });
+    invalidateWebsitePages(player.discordId);
     interaction.reply(`Pseudo twitch attaché`);
   } catch (e) {
     interaction.reply(

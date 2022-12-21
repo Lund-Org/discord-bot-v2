@@ -8,6 +8,7 @@ import {
 import { GachaConfigEnum } from '../../enums/GachaEnum';
 import { prisma } from '@discord-bot-v2/prisma';
 import { CardType, Player, PlayerInventory } from '@prisma/client';
+import { invalidateWebsitePages } from '../../helpers/discordEvent';
 
 function getDailyShop(playerId: number) {
   const today = new Date();
@@ -47,62 +48,6 @@ function getCardId(customId: string) {
 function identifyMsg(interaction: ButtonInteraction, msg: string) {
   return `<@${interaction.user.id}>\n${msg}`;
 }
-
-// export const shopBuyMenu = async (interaction: ChatInputCommandInteraction) => {
-//   const player = await userNotFound({
-//     interaction,
-//   });
-
-//   if (!player) {
-//     return;
-//   }
-//   await interaction.deferReply({ ephemeral: true });
-
-//   const config = await prisma.config.findUnique({
-//     where: { name: GachaConfigEnum.SHOP_PRICES },
-//   });
-//   const dailyShop = await getDailyShop(player.id);
-
-//   if (!dailyShop) {
-//     return interaction.editReply('Aucun shop disponible');
-//   }
-
-//   const shopPriceConfig = config?.value as { basic: number; gold: number };
-//   const shopItems = dailyShop.dailyShopItems
-//     .map((item) => {
-//       return item.dailyPurchase.length ? null : item;
-//     })
-//     .filter(Boolean);
-
-//   if (!shopItems.length) {
-//     return interaction.editReply(
-//       'Tu as déjà acheté toutes les cartes du magasin'
-//     );
-//   }
-
-//   const row = new ActionRowBuilder<SelectMenuBuilder>().addComponents(
-//     new SelectMenuBuilder()
-//       .setCustomId('shopbuy')
-//       .setPlaceholder('Selectionner')
-//       .addOptions(
-//         shopItems.map((shopItem): APISelectMenuOption => {
-//           return {
-//             label: `#${shopItem.cardType.id} - ${shopItem.cardType.name} (${
-//               shopItem.type === 'gold'
-//                 ? shopPriceConfig.gold
-//                 : shopPriceConfig.basic
-//             } points)`,
-//             value: String(shopItem.id),
-//           };
-//         })
-//       )
-//   );
-
-//   return interaction.editReply({
-//     content: 'Choisissez la carte du shop à acheter',
-//     components: [row],
-//   });
-// };
 
 export const shopBuy = async (interaction: ButtonInteraction) => {
   const player = (await userNotFound({
@@ -199,6 +144,7 @@ export const shopBuy = async (interaction: ButtonInteraction) => {
       },
     ])
   );
+  invalidateWebsitePages(player.discordId);
 
   return interaction.editReply({
     content: identifyMsg(

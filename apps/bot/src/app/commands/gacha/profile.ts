@@ -20,7 +20,7 @@ export const profile = async (interaction: ChatInputCommandInteraction) => {
       rank.position === 1 ? 'er' : 'eme'
     }). Le prochain niveau est obtenable avec ${
       rank.level.xpNextLevel
-    }xp. Tu peux retrouver plus d'informations ici : https://lundprod.com/profile/${
+    }xp. Tu peux retrouver plus d'informations ici : https://lundprod.com/gacha/ranking/${
       interaction.user.id
     }`
   );

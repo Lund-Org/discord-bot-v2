@@ -1,6 +1,7 @@
 version: '3.1'
 
 services:
+  # dev-only
   mysql:
     container_name: discord_bot_mysql
     restart: always
@@ -9,4 +10,4 @@ services:
       MYSQL_DATABASE: discord_database
       MYSQL_ROOT_PASSWORD: root
     ports:
-      - "3307:3306"
+      - '3306:3306'
