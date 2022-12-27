@@ -27,11 +27,19 @@ import {
   isHomePage,
 } from '../utils/url';
 import { useRef, useState } from 'react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 
-type MenuUrlSingleItem = {
+type MenuUrlSingleItem = MenuUrlSingleItemOnClick | MenuUrlSingleItemLink;
+
+type MenuUrlSingleItemOnClick = {
   label: string;
-  href: string;
   isActive: (path: string) => boolean;
+  callback: () => void;
+};
+type MenuUrlSingleItemLink = {
+  label: string;
+  isActive: (path: string) => boolean;
+  href: string;
 };
 
 type MenuUrl = (
@@ -53,11 +61,12 @@ const activeProps = (isActive: boolean): Partial<BoxProps> =>
     : {};
 
 export const Header = () => {
+  const { data: session } = useSession();
   const isMobile = useBreakpointValue({
     base: true,
     md: false,
   });
-  // const { pathname } = useRouter();
+  const { pathname } = useRouter();
   const menuUrls: MenuUrl[] = [
     { label: 'Accueil', href: '/', isActive: isHomePage },
     {
@@ -75,14 +84,14 @@ export const Header = () => {
     { label: 'Blog', href: '/blog', isActive: isBlogPage },
   ];
 
-  // if (pathname.startsWith('/gacha')) {
-  //   menuUrls.push({
-  //     label: 'Login',
-  //     href: '/gacha/login',
-  //     isActive: () => false,
-  //     ml: 'auto',
-  //   });
-  // }
+  if (pathname.startsWith('/gacha')) {
+    menuUrls.push({
+      label: session ? 'Déconnexion' : 'Connexion',
+      callback: () => (session ? signIn() : signOut()),
+      isActive: () => false,
+      ml: 'auto',
+    });
+  }
 
   return (
     <Flex
@@ -133,11 +142,17 @@ const MenuElement = ({ menuUrl }: MenuElementProps) => {
   useClickAway(ref, () => setTimeout(() => setState(false), 100));
 
   if (isSingleItem(menuUrl)) {
-    const { label, href, isActive, ...rest } = menuUrl;
+    const { label, isActive, ...rest } = menuUrl;
 
     return (
       <Box color="orange.300" {...activeProps(isActive(pathname))} {...rest}>
-        <Link href={href}>{label}</Link>
+        {isMenuLink(menuUrl) ? (
+          <Link href={menuUrl.href}>{label}</Link>
+        ) : (
+          <Link href="#" scroll={false} onClick={menuUrl.callback}>
+            {label}
+          </Link>
+        )}
       </Box>
     );
   }
@@ -175,12 +190,18 @@ const MenuElementMobile = ({ menuUrl }: MenuElementProps) => {
   const { pathname } = useRouter();
 
   const SingleElement = ({ element }: { element: MenuUrlSingleItem }) => {
-    const { label, href, isActive } = element;
+    const { label, isActive } = element;
 
     return (
       <MenuItem bg="transparent">
         <Box py="5px" color="orange.300" {...activeProps(isActive(pathname))}>
-          <Link href={href}>{label}</Link>
+          {isMenuLink(element) ? (
+            <Link href={element.href}>{label}</Link>
+          ) : (
+            <Link href="#" scroll={false} onClick={element.callback}>
+              {label}
+            </Link>
+          )}
         </Box>
       </MenuItem>
     );
@@ -203,5 +224,9 @@ const MenuElementMobile = ({ menuUrl }: MenuElementProps) => {
 };
 
 function isSingleItem(item: MenuUrl): item is MenuUrlSingleItem {
+  return 'href' in item || 'callback' in item;
+}
+
+function isMenuLink(item: MenuUrlSingleItem): item is MenuUrlSingleItemLink {
   return 'href' in item;
 }

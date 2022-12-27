@@ -15,6 +15,12 @@ const app = (secure): RequestListener => {
       });
       res.end();
     }
+    if (req.headers.host?.startsWith('cdn.')) {
+      res.writeHead(302, {
+        Location: `https://${process.env.CDN_URL}${req.url}`,
+      });
+      res.end();
+    }
 
     const chunks: Buffer[] = [];
 
