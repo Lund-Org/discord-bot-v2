@@ -25,6 +25,10 @@ export function isGachaListPage(pathname: string) {
   return pathname === '/gacha';
 }
 
+export function isBlogPage(pathname: string) {
+  return pathname.startsWith('/blog');
+}
+
 export function isGachaRankingPage(pathname: string) {
   return pathname === getGachaRankingPage();
 }

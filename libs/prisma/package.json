@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "prisma:migrate": "dotenv -e ../../.env npx prisma migrate --"
+    "prisma:migrate": "dotenv -e ../../.env npx prisma migrate"
   },
   "prisma": {
     "schema": "src/schema.prisma",

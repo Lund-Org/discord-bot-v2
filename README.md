@@ -128,6 +128,14 @@ The informations from [the twitch console](https://dev.twitch.tv/console/apps) t
 
 The domain url (_ex: https://my-domain.com_) for the Let's Encrypt ssl folder. Not used in dev mode (because it's localhost so not https)
 
+> **WEBSITE_URL**
+
+The website url to generate links for the discord webhooks
+
+> **BLOGPOST_WEBHOOK**
+
+The webhook to post the link when a blog post is published
+
 #### Misc
 
 A docker image for a database is available in the config folder

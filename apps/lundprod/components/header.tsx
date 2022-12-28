@@ -20,6 +20,7 @@ import { HamburgerIcon, TriangleDownIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import {
+  isBlogPage,
   isGachaPage,
   isGachaListPage,
   isGachaRankingPage,
@@ -46,7 +47,7 @@ type MenuUrl = (
 const activeProps = (isActive: boolean): Partial<BoxProps> =>
   isActive
     ? {
-        color: 'blue.500',
+        color: 'orange.100',
         fontWeight: 'bold',
       }
     : {};
@@ -71,6 +72,7 @@ export const Header = () => {
         },
       ],
     },
+    { label: 'Blog', href: '/blog', isActive: isBlogPage },
   ];
 
   // if (pathname.startsWith('/gacha')) {
@@ -84,15 +86,13 @@ export const Header = () => {
 
   return (
     <Flex
-      bg="white"
+      bg="gray.700"
       borderBottom="1px solid"
       borderColor="gray.500"
       alignItems="center"
       w="100%"
       h="70px"
       px="20px"
-      position="sticky"
-      top={0}
       zIndex={9999}
     >
       <Box display={isMobile ? 'block' : 'none'}>
@@ -102,8 +102,9 @@ export const Header = () => {
             aria-label="Options"
             icon={<HamburgerIcon />}
             variant="outline"
+            bg="gray.200"
           />
-          <MenuList>
+          <MenuList bg="gray.800">
             {menuUrls.map((menuUrl, index) => (
               <MenuElementMobile key={index} menuUrl={menuUrl} />
             ))}
@@ -135,7 +136,7 @@ const MenuElement = ({ menuUrl }: MenuElementProps) => {
     const { label, href, isActive, ...rest } = menuUrl;
 
     return (
-      <Box {...activeProps(isActive(pathname))} {...rest}>
+      <Box color="orange.300" {...activeProps(isActive(pathname))} {...rest}>
         <Link href={href}>{label}</Link>
       </Box>
     );
@@ -146,9 +147,9 @@ const MenuElement = ({ menuUrl }: MenuElementProps) => {
       <PopoverTrigger>
         <Flex
           ref={ref}
-          onClick={() => setState(true)}
+          onClick={() => setState((s) => !s)}
           alignItems="center"
-          color="gray.600"
+          color="orange.300"
           cursor="pointer"
           {...activeProps(menuUrl.isActive(pathname))}
         >
@@ -156,8 +157,8 @@ const MenuElement = ({ menuUrl }: MenuElementProps) => {
           <TriangleDownIcon w="10px" h="10px" ml="3px" />
         </Flex>
       </PopoverTrigger>
-      <PopoverContent w="auto" p="10px">
-        <PopoverArrow />
+      <PopoverContent w="auto" p="10px" bg="gray.800">
+        <PopoverArrow bg="gray.800" />
         <PopoverBody>
           {menuUrl.menuChildren.map((child, index) => (
             <Box key={index} onClick={() => setState(false)}>
@@ -177,8 +178,8 @@ const MenuElementMobile = ({ menuUrl }: MenuElementProps) => {
     const { label, href, isActive } = element;
 
     return (
-      <MenuItem>
-        <Box py="5px" {...activeProps(isActive(pathname))}>
+      <MenuItem bg="transparent">
+        <Box py="5px" color="orange.300" {...activeProps(isActive(pathname))}>
           <Link href={href}>{label}</Link>
         </Box>
       </MenuItem>

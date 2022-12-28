@@ -23,3 +23,11 @@ export function formatDateTime(date: Date) {
     .toString()
     .padStart(2, '0')}h${date.getMinutes().toString().padStart(2, '0')}`;
 }
+
+export function formatBlogDate(date: Date) {
+  return new Intl.DateTimeFormat('fr-FR', {
+    dateStyle: 'full',
+    timeStyle: 'medium',
+    timeZone: 'Europe/Paris',
+  }).format(date);
+}
