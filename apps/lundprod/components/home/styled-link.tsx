@@ -7,6 +7,11 @@ export const LightStyledLink = styled(Link)`
   &:hover {
     color: var(--chakra-colors-orange-300);
   }
+
+  svg {
+    vertical-align: baseline;
+    margin-bottom: -2px;
+  }
 `;
 
 export const DarkStyledLink = styled(Link)`
@@ -14,5 +19,10 @@ export const DarkStyledLink = styled(Link)`
 
   &:hover {
     color: var(--chakra-colors-orange-800);
+  }
+
+  svg {
+    vertical-align: baseline;
+    margin-bottom: -2px;
   }
 `;

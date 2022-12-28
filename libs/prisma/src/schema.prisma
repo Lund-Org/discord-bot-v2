@@ -15,6 +15,18 @@ model Birthday {
   birthdayYear  Int
 }
 
+model BlogPost {
+  id           Int        @id @default(autoincrement())
+  filename     String     @unique @db.VarChar(255)
+  bannerUrl    String     @db.VarChar(255)
+  thumbnailUrl String     @db.VarChar(255)
+  category     Category
+  state        BlogStatus
+  postAt       DateTime
+  description  String     @db.Text()
+  tags         Tag[]
+}
+
 model CardType {
   id                 Int               @id @default(autoincrement())
   name               String            @unique @db.VarChar(255)
@@ -33,6 +45,44 @@ model Config {
   id    Int    @id @default(autoincrement())
   name  String @unique @db.VarChar(255)
   value Json
+}
+
+model DailyPurchase {
+  id              Int           @id @default(autoincrement())
+  playerId        Int
+  dailyShopItemId Int
+  dailyShopItem   DailyShopItem @relation(fields: [dailyShopItemId], references: [id])
+  player          Player        @relation(fields: [playerId], references: [id])
+
+  @@unique([playerId, dailyShopItemId])
+  @@index([dailyShopItemId])
+  @@index([playerId])
+}
+
+model DailyShop {
+  id             Int             @id @default(autoincrement())
+  shopDay        Int
+  shopMonth      Int
+  shopYear       Int
+  threadId       String
+  dailyShopItems DailyShopItem[]
+
+  @@unique([shopDay, shopMonth, shopYear])
+}
+
+model DailyShopItem {
+  id            Int             @id @default(autoincrement())
+  cardTypeId    Int
+  dailyShopId   Int
+  type          String          @db.VarChar(255)
+  price         Int
+  cardType      CardType        @relation(fields: [cardTypeId], references: [id])
+  dailyShop     DailyShop       @relation(fields: [dailyShopId], references: [id])
+  dailyPurchase DailyPurchase[]
+
+  @@unique([cardTypeId, dailyShopId])
+  @@index([dailyShopId])
+  @@index([cardTypeId])
 }
 
 model Gift {
@@ -79,40 +129,22 @@ model PlayerInventory {
   @@index([playerId])
 }
 
-model DailyShop {
-  id             Int             @id @default(autoincrement())
-  shopDay        Int
-  shopMonth      Int
-  shopYear       Int
-  threadId       String
-  dailyShopItems DailyShopItem[]
-
-  @@unique([shopDay, shopMonth, shopYear])
+model Tag {
+  id       Int        @id @default(autoincrement())
+  name     String     @unique @db.VarChar(255)
+  blogPost BlogPost[]
 }
 
-model DailyShopItem {
-  id            Int             @id @default(autoincrement())
-  cardTypeId    Int
-  dailyShopId   Int
-  type          String          @db.VarChar(255)
-  price         Int
-  cardType      CardType        @relation(fields: [cardTypeId], references: [id])
-  dailyShop     DailyShop       @relation(fields: [dailyShopId], references: [id])
-  dailyPurchase DailyPurchase[]
+//-- Enums
 
-  @@unique([cardTypeId, dailyShopId])
-  @@index([dailyShopId])
-  @@index([cardTypeId])
+enum BlogStatus {
+  PUBLISHED
+  NOT_PUBLISHED
 }
 
-model DailyPurchase {
-  id              Int           @id @default(autoincrement())
-  playerId        Int
-  dailyShopItemId Int
-  dailyShopItem   DailyShopItem @relation(fields: [dailyShopItemId], references: [id])
-  player          Player        @relation(fields: [playerId], references: [id])
-
-  @@unique([playerId, dailyShopItemId])
-  @@index([dailyShopItemId])
-  @@index([playerId])
+enum Category {
+  NEWS
+  TECH
+  VIDEO
+  OTHER
 }
