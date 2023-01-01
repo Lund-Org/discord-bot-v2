@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import { BlogArticle } from '../../components/blog/blog-article';
 import { CategoryWordingMapping } from '../../utils/blog';
 import { getManyBlogPosts } from '../../utils/api/blog';
-import { getParam } from '../../utils/next';
+import { getNumberParam } from '../../utils/next';
 
 type PropsType = {
   blogPosts: (BlogPost & {
@@ -24,14 +24,13 @@ type PropsType = {
 export const getServerSideProps: GetServerSideProps<PropsType> = async ({
   query,
 }) => {
-  const pageParam = getParam(query.page, '1');
+  const page = getNumberParam(query.page, 1);
   const categories =
     typeof query.category === 'string'
       ? [query.category]
       : query.category || [];
-  const page = parseInt(pageParam, 10) <= 0 ? 1 : parseInt(pageParam, 10);
   const blogPosts = await getManyBlogPosts({
-    page,
+    page: page <= 0 ? 1 : page,
     categories: categories as Category[],
   });
 

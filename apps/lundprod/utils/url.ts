@@ -25,6 +25,10 @@ export function isGachaListPage(pathname: string) {
   return pathname === '/gacha';
 }
 
+export function isUserGachaPage(userId: string, pathname: string) {
+  return pathname.replace('[discordId]', userId) === getGachaProfileUrl(userId);
+}
+
 export function isBlogPage(pathname: string) {
   return pathname.startsWith('/blog');
 }

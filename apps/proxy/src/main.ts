@@ -17,7 +17,7 @@ const app = (secure): RequestListener => {
     }
     if (req.headers.host?.startsWith('cdn.')) {
       res.writeHead(302, {
-        Location: `https://${process.env.CDN_URL}${req.url}`,
+        Location: `${process.env.CDN_URL}${req.url}`,
       });
       res.end();
     }
@@ -74,10 +74,10 @@ export const initServer = () => {
   return new Promise((resolve) => {
     const httpServer = httpCreateServer(app(false));
 
-    httpServer.listen(80, () => {
+    httpServer.listen(8000, () => {
       console.log(
         'Server is running at http://localhost:%d in %s mode',
-        80,
+        8000,
         process.env.ENV
       );
     });

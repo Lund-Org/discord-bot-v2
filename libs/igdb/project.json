@@ -1,20 +1,21 @@
 {
+  "name": "igdb",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/hltb/src",
+  "sourceRoot": "libs/igdb/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/hltb/**/*.ts"]
+        "lintFilePatterns": ["libs/igdb/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/hltb"],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/hltb/jest.config.ts",
+        "jestConfig": "libs/igdb/jest.config.ts",
         "passWithNoTests": true
       }
     }

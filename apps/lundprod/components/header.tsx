@@ -1,232 +1,62 @@
-import {
-  Box,
-  BoxProps,
-  Flex,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Popover,
-  PopoverContent,
-  PopoverArrow,
-  PopoverBody,
-  PopoverTrigger,
-  Text,
-  useBreakpointValue,
-} from '@chakra-ui/react';
+import { Button, Flex } from '@chakra-ui/react';
 import { useClickAway } from 'react-use';
-import { HamburgerIcon, TriangleDownIcon } from '@chakra-ui/icons';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import {
-  isBlogPage,
-  isGachaPage,
-  isGachaListPage,
-  isGachaRankingPage,
-  isHomePage,
-} from '../utils/url';
-import { useRef, useState } from 'react';
-import { signIn, signOut, useSession } from 'next-auth/react';
-
-type MenuUrlSingleItem = MenuUrlSingleItemOnClick | MenuUrlSingleItemLink;
-
-type MenuUrlSingleItemOnClick = {
-  label: string;
-  isActive: (path: string) => boolean;
-  callback: () => void;
-};
-type MenuUrlSingleItemLink = {
-  label: string;
-  isActive: (path: string) => boolean;
-  href: string;
-};
-
-type MenuUrl = (
-  | MenuUrlSingleItem
-  | {
-      label: string;
-      isActive: (path: string) => boolean;
-      menuChildren: MenuUrlSingleItem[];
-    }
-) &
-  Partial<BoxProps>;
-
-const activeProps = (isActive: boolean): Partial<BoxProps> =>
-  isActive
-    ? {
-        color: 'orange.100',
-        fontWeight: 'bold',
-      }
-    : {};
+import { HamburgerIcon } from '@chakra-ui/icons';
+import { useEffect, useRef, useState } from 'react';
+import { MobileBox } from './visibility';
+import { MENU_HEIGHT } from '../utils/constants';
+import { HomeMenu, GachaMenu, BlogMenu, SignMenu } from './navigation';
+import { MenuBox } from './navigation/styled-components';
 
 export const Header = () => {
-  const { data: session } = useSession();
-  const isMobile = useBreakpointValue({
-    base: true,
-    md: false,
-  });
-  const { pathname } = useRouter();
-  const menuUrls: MenuUrl[] = [
-    { label: 'Accueil', href: '/', isActive: isHomePage },
-    {
-      label: 'Gacha',
-      isActive: isGachaPage,
-      menuChildren: [
-        { label: 'Liste', href: '/gacha', isActive: isGachaListPage },
-        {
-          label: 'Classement',
-          href: '/gacha/ranking',
-          isActive: isGachaRankingPage,
-        },
-      ],
-    },
-    { label: 'Blog', href: '/blog', isActive: isBlogPage },
-  ];
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const Menus = [HomeMenu, GachaMenu, BlogMenu];
+  const ref = useRef();
 
-  if (pathname.startsWith('/gacha')) {
-    menuUrls.push({
-      label: session ? 'Déconnexion' : 'Connexion',
-      callback: () => (session ? signIn() : signOut()),
-      isActive: () => false,
-      ml: 'auto',
-    });
-  }
+  useClickAway(ref, () => setTimeout(() => setIsMenuOpen(false), 100));
+
+  // Autoclose the mobile menu on resize to desktop
+  useEffect(() => {
+    const onResize = () => {
+      if (isMenuOpen && window.innerWidth > 767) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+    };
+  });
 
   return (
     <Flex
       bg="gray.700"
       borderBottom="1px solid"
       borderColor="gray.500"
-      alignItems="center"
       w="100%"
-      h="70px"
+      zIndex={1300}
+      h={MENU_HEIGHT}
+      color="orange.300"
       px="20px"
-      zIndex={9999}
     >
-      <Box display={isMobile ? 'block' : 'none'}>
-        <Menu>
-          <MenuButton
-            as={IconButton}
-            aria-label="Options"
-            icon={<HamburgerIcon />}
+      <Flex ref={ref} flex={1} h="100%" alignItems="center" position="relative">
+        <MobileBox>
+          <Button
             variant="outline"
             bg="gray.200"
-          />
-          <MenuList bg="gray.800">
-            {menuUrls.map((menuUrl, index) => (
-              <MenuElementMobile key={index} menuUrl={menuUrl} />
-            ))}
-          </MenuList>
-        </Menu>
-      </Box>
-      <Flex w="100%" display={!isMobile ? 'flex' : 'none'} gap="35px">
-        {menuUrls.map((menuUrl, index) => (
-          <MenuElement key={index} menuUrl={menuUrl} />
-        ))}
+            onClick={() => setIsMenuOpen((v) => !v)}
+            color="gray.700"
+          >
+            <HamburgerIcon />
+          </Button>
+        </MobileBox>
+        <MenuBox isOpen={isMenuOpen}>
+          {Menus.map((Component, index) => (
+            <Component key={index} onClick={() => setIsMenuOpen(false)} />
+          ))}
+        </MenuBox>
       </Flex>
+      <SignMenu />
     </Flex>
   );
 };
-
-type MenuElementProps = {
-  menuUrl: MenuUrl;
-};
-
-const MenuElement = ({ menuUrl }: MenuElementProps) => {
-  const { pathname } = useRouter();
-  const ref = useRef(null);
-  const [state, setState] = useState(false);
-
-  // Debounce to keep the link working but close the popover
-  useClickAway(ref, () => setTimeout(() => setState(false), 100));
-
-  if (isSingleItem(menuUrl)) {
-    const { label, isActive, ...rest } = menuUrl;
-
-    return (
-      <Box color="orange.300" {...activeProps(isActive(pathname))} {...rest}>
-        {isMenuLink(menuUrl) ? (
-          <Link href={menuUrl.href}>{label}</Link>
-        ) : (
-          <Link href="#" scroll={false} onClick={menuUrl.callback}>
-            {label}
-          </Link>
-        )}
-      </Box>
-    );
-  }
-
-  return (
-    <Popover placement="bottom-start" isOpen={state} autoFocus={false}>
-      <PopoverTrigger>
-        <Flex
-          ref={ref}
-          onClick={() => setState((s) => !s)}
-          alignItems="center"
-          color="orange.300"
-          cursor="pointer"
-          {...activeProps(menuUrl.isActive(pathname))}
-        >
-          <Text>{menuUrl.label}</Text>
-          <TriangleDownIcon w="10px" h="10px" ml="3px" />
-        </Flex>
-      </PopoverTrigger>
-      <PopoverContent w="auto" p="10px" bg="gray.800">
-        <PopoverArrow bg="gray.800" />
-        <PopoverBody>
-          {menuUrl.menuChildren.map((child, index) => (
-            <Box key={index} onClick={() => setState(false)}>
-              <MenuElement key={index} menuUrl={child} />
-            </Box>
-          ))}
-        </PopoverBody>
-      </PopoverContent>
-    </Popover>
-  );
-};
-
-const MenuElementMobile = ({ menuUrl }: MenuElementProps) => {
-  const { pathname } = useRouter();
-
-  const SingleElement = ({ element }: { element: MenuUrlSingleItem }) => {
-    const { label, isActive } = element;
-
-    return (
-      <MenuItem bg="transparent">
-        <Box py="5px" color="orange.300" {...activeProps(isActive(pathname))}>
-          {isMenuLink(element) ? (
-            <Link href={element.href}>{label}</Link>
-          ) : (
-            <Link href="#" scroll={false} onClick={element.callback}>
-              {label}
-            </Link>
-          )}
-        </Box>
-      </MenuItem>
-    );
-  };
-
-  if (isSingleItem(menuUrl)) {
-    return <SingleElement element={menuUrl} />;
-  }
-
-  return (
-    <>
-      {menuUrl.menuChildren.map((child, index) => (
-        <SingleElement
-          key={index}
-          element={{ ...child, label: `${menuUrl.label} > ${child.label}` }}
-        />
-      ))}
-    </>
-  );
-};
-
-function isSingleItem(item: MenuUrl): item is MenuUrlSingleItem {
-  return 'href' in item || 'callback' in item;
-}
-
-function isMenuLink(item: MenuUrlSingleItem): item is MenuUrlSingleItemLink {
-  return 'href' in item;
-}
