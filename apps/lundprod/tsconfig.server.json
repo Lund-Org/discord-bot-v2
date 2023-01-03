@@ -5,7 +5,8 @@
     "noEmit": false,
     "incremental": true,
     "tsBuildInfoFile": "../..//tmp/buildcache/apps/lundprod/server",
-    "types": ["node"]
+    "types": ["node"],
+    "experimentalDecorators": true
   },
   "include": ["server/**/*.ts"]
 }

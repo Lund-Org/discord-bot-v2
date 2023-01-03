@@ -29,7 +29,7 @@ export const GeneralInformation = ({
           <Link
             href={`https://twitch.tv/${profile.twitchUsername}`}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
           >
             {profile.twitchUsername}
           </Link>
@@ -47,7 +47,7 @@ export const GeneralInformation = ({
       </CustomText>
       {profile.lastDailyDraw ? (
         <CustomText>
-          Dernier tirage de carte le{' '}
+          Dernier tirage de carte le&nbsp;
           {formatDateTime(new Date(profile.lastDailyDraw))}
         </CustomText>
       ) : null}

@@ -2,7 +2,7 @@ import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { Text } from '@chakra-ui/react';
 import { illustrationCodeThinking } from '../../assets';
 import { FullLinePresentation } from './full-line-presentation';
-import { DarkStyledLink } from './styled-link';
+import { DarkStyledLink } from '../styled-link';
 
 export const WebsitePresentation = () => {
   return (
@@ -22,7 +22,7 @@ export const WebsitePresentation = () => {
         et informations.
       </Text>
       <Text mt={5}>
-        Vous pouvez retrouver le code du site et le bot sur{' '}
+        Vous pouvez retrouver le code du site et le bot sur&nbsp;
         <DarkStyledLink
           href="https://github.com/Lund-Org/discord-bot-v2"
           target="_blank"

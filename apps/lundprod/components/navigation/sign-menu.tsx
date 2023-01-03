@@ -27,9 +27,9 @@ export const SignMenu = () => {
   }
 
   const drawerItems = [
-    { label: 'Ma page gacha', link: `/gacha/ranking/${session.userId}` },
-    { label: 'Mon backlog (à venir)', link: '#' },
-    { label: 'Mes jeux attendus', link: '#' },
+    { label: 'Ma page gacha', link: `/gacha/ranking/${session?.userId}` },
+    { label: 'Mon backlog', link: '/my-space/backlog' },
+    { label: 'Mes jeux attendus (à venir)', link: '#' },
   ];
 
   return (
@@ -38,19 +38,23 @@ export const SignMenu = () => {
         ml="auto"
         alignItems="center"
         cursor="pointer"
-        onClick={() => (session ? setIsOpen(true) : signIn())}
+        onClick={() =>
+          session
+            ? setIsOpen(true)
+            : signIn('credentials', { callbackUrl: '/' })
+        }
       >
         {session ? (
           <>
-            {session.user.image && (
+            {session?.user.image && (
               <Image
                 maxW="35px"
                 mr={4}
-                src={session.user.image}
-                alt={session.user?.name}
+                src={session?.user.image}
+                alt={session?.user?.name}
               />
             )}
-            <Text>{session.user?.name}</Text>
+            <Text>{session?.user?.name}</Text>
           </>
         ) : (
           'Connexion'
@@ -67,7 +71,7 @@ export const SignMenu = () => {
           borderLeft="1px solid var(--chakra-colors-gray-600)"
         >
           <DrawerCloseButton />
-          <DrawerHeader>{session.user?.name}</DrawerHeader>
+          <DrawerHeader>{session?.user?.name}</DrawerHeader>
 
           <DrawerBody>
             <Heading as="h3" variant="h3" color="gray.800">
@@ -94,6 +98,7 @@ export const SignMenu = () => {
                     style={{
                       transition: 'all .3s ease',
                     }}
+                    onClick={() => setIsOpen(false)}
                   >
                     {drawerItem.label}
                   </Link>

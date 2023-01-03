@@ -12,6 +12,10 @@ export const authOptions: AuthOptions = {
       clientSecret: process.env.DISCORD_OAUTH_SECRET_ID,
     }),
   ],
+  pages: {
+    signIn: '/auth/signin',
+    error: '/auth/error',
+  },
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       const dbUser = await prisma.player.findUnique({
@@ -26,7 +30,6 @@ export const authOptions: AuthOptions = {
           },
           data: {
             username: user.name,
-            // update avatar in DB (to add) (user.image)
           },
         });
       }

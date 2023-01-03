@@ -9,7 +9,13 @@ import {
 } from './constants';
 import { ConditionValue, IGDBQueryBuilder } from './igdb-query-builder';
 import { platForms } from './platforms';
-import { linkArrayData, linkEnumData, linkValueToArrayData } from './utils';
+import {
+  linkArrayData,
+  linkEnumData,
+  linkValueToArrayData,
+  translateGameType,
+  translateRegion,
+} from './utils';
 
 let twitchToken: {
   access_token: string;
@@ -97,6 +103,8 @@ export async function getGames(
     page = 1;
   }
 
+  const search = name.split(' ');
+
   const queryBuilder = new IGDBQueryBuilder();
   queryBuilder
     .setFields([
@@ -109,15 +117,27 @@ export async function getGames(
       'version_title',
       'platforms',
       'category',
-    ])
-    .where('name', QUERY_OPERATOR.MATCH, name.replace(/["']/g, ''))
-    .andWhere('category', QUERY_OPERATOR.EQ, [
-      GAME_TYPE.MAIN_GAME,
-      GAME_TYPE.DLC_ADDON,
+      'url',
     ])
     .setLimit(GAME_PER_PAGE)
     .setOffset((page - 1) * GAME_PER_PAGE)
     .sortBy('rating', 'desc');
+
+  search.forEach((searchChunk, index) => {
+    if (index === 0) {
+      queryBuilder.where(
+        'name',
+        QUERY_OPERATOR.MATCH,
+        searchChunk.replaceAll('"', '')
+      );
+    } else {
+      queryBuilder.andWhere(
+        'name',
+        QUERY_OPERATOR.MATCH,
+        searchChunk.replaceAll('"', '')
+      );
+    }
+  });
 
   filters.forEach(({ field, operator, value }) =>
     queryBuilder.andWhere(field, operator, value)
@@ -126,8 +146,11 @@ export async function getGames(
   return IGDBRequest('/games', queryBuilder.toString()).then((data) => {
     data.forEach((game) => {
       linkArrayData(game, platForms, 'platforms', 'platforms');
-      linkEnumData(game, GAME_TYPE, 'category', 'category');
+      linkEnumData(game, GAME_TYPE, 'category', 'category', translateGameType);
       linkEnumData(game, GAME_STATUS, 'status', 'status');
+
+      // To remove "null" values because some platforms are ignored
+      game.platforms = game.platforms.filter(Boolean);
     });
     return data;
   });
@@ -148,7 +171,7 @@ export async function getReleaseDates(ids: string[], page = 1) {
 
   return IGDBRequest('/release_dates', query).then((data) => {
     data.forEach((releaseDate) => {
-      linkEnumData(releaseDate, REGION, 'region', 'region');
+      linkEnumData(releaseDate, REGION, 'region', 'region', translateRegion);
       linkValueToArrayData(releaseDate, platForms, 'platform', 'platform');
     });
     return data;

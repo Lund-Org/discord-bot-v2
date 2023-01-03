@@ -6,12 +6,20 @@ import {
 } from '@discord-bot-v2/igdb';
 import { chunk } from 'lodash';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { unstable_getServerSession } from 'next-auth/next';
 import { getNumberParam, getParam } from '../../../utils/next';
+import { authOptions } from '../auth/[...nextauth]';
 
 export default async function listGames(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const session = await unstable_getServerSession(req, res, authOptions);
+
+  if (!session) {
+    return res.status(401).json({ games: [] });
+  }
+
   const releaseDateIds = [];
   const releaseDates = [];
   const search = getParam(req.body.search, '');
@@ -22,7 +30,7 @@ export default async function listGames(
     return res.status(400).json({ games: [] });
   }
 
-  if (search.length <= 3 || typeof search !== 'string') {
+  if (typeof search === 'string' && search.length <= 3) {
     return res.json({ games: [] });
   }
 
@@ -46,7 +54,5 @@ export default async function listGames(
     });
   }
 
-  res.json({
-    games: JSON.parse(JSON.stringify(games)),
-  });
+  res.json({ games });
 }

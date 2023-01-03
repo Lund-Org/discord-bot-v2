@@ -132,9 +132,21 @@ The domain url (_ex: https://my-domain.com_) for the Let's Encrypt ssl folder. N
 
 The website url to generate links for the discord webhooks
 
+> **NEXTAUTH_URL**
+
+Same value of WEBSITE_URL, used by Next-Auth to redirect to the right url, otherwise it's localhost:3000 which is used
+
 > **BLOGPOST_WEBHOOK**
 
 The webhook to post the link when a blog post is published
+
+> **CDN_URL**
+
+The CDN url to redirect to when calling the proxy with the cdn subdomain
+
+> **NEXTAUTH_SECRET**
+
+Secret used for the JWT. Mandatory otherwise unstable_get_session doesn't work
 
 #### Misc
 

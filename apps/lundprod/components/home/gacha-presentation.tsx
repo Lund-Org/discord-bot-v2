@@ -2,7 +2,7 @@ import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { Text } from '@chakra-ui/react';
 import { illustrationPlayingCards } from '../../assets';
 import { FullLinePresentation } from './full-line-presentation';
-import { DarkStyledLink } from './styled-link';
+import { DarkStyledLink } from '../styled-link';
 
 export const GachaPresentation = () => {
   return (
@@ -22,7 +22,7 @@ export const GachaPresentation = () => {
         tout est évidemment gratuit.
       </Text>
       <Text mt={5}>
-        Vous pouvez y accéder{' '}
+        Vous pouvez y accéder&nbsp;
         <DarkStyledLink
           href="https://discord.gg/gJyu9p2"
           target="_blank"
@@ -30,8 +30,8 @@ export const GachaPresentation = () => {
         >
           ici
           <ExternalLinkIcon ml="3px" />
-        </DarkStyledLink>{' '}
-        ou consulter les cartes & le classement{' '}
+        </DarkStyledLink>
+        &nbsp; ou consulter les cartes & le classement&nbsp;
         <DarkStyledLink href="/gacha">ici</DarkStyledLink>.
       </Text>
     </FullLinePresentation>
