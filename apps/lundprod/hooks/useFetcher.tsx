@@ -60,7 +60,7 @@ export const useFetcher = () => {
           });
         });
       },
-    [toast]
+    []
   );
 
   return fetcher;
