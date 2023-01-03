@@ -42,6 +42,8 @@ const app = (secure): RequestListener => {
           headers: req.headers,
           responseType: 'stream',
           decompress: false,
+          maxRedirects: 0,
+          validateStatus: (status) => status >= 200 && status <= 302,
         })
           .then((axiosResponse) => {
             res.writeHead(axiosResponse.status, axiosResponse.headers);
