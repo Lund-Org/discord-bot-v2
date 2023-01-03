@@ -1,5 +1,10 @@
 import { PrismaClient, CardType } from '@prisma/client';
-import { createCanvas, loadImage, registerFont } from 'canvas';
+import {
+  createCanvas,
+  loadImage,
+  registerFont,
+  CanvasRenderingContext2D,
+} from 'canvas';
 import { createWriteStream } from 'fs';
 import { join } from 'path';
 import {
@@ -130,7 +135,7 @@ async function setImage(
   size: readonly [number, number]
 ) {
   try {
-    const img = (await loadImage(imageUrl)) as unknown as CanvasImageSource;
+    const img = await loadImage(imageUrl);
     ctx.drawImage(img, position[0], position[1], size[0], size[1]);
   } catch (e) {
     console.log(e);
