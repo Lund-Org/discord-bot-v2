@@ -1,7 +1,7 @@
 import { Box, BoxProps } from '@chakra-ui/react';
-import { CardWithFusionDependencies } from '../../../utils/types';
+import { CardWithFusionDependencies } from '~/lundprod/utils/types';
 import { ScrollContainer } from '../../scroll-container';
-import { CardListElement } from '../card-list-element';
+import { CardListElement } from '../../gacha/card-list-element';
 
 type FusionListProps = {
   fusionCards: CardWithFusionDependencies[];

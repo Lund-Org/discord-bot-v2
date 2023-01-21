@@ -2,8 +2,8 @@ import { Button, Flex } from '@chakra-ui/react';
 import { useClickAway } from 'react-use';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { useEffect, useRef, useState } from 'react';
+import { MENU_HEIGHT } from '~/lundprod/utils/constants';
 import { MobileBox } from './visibility';
-import { MENU_HEIGHT } from '../utils/constants';
 import { HomeMenu, GachaMenu, BlogMenu, SignMenu } from './navigation';
 import { MenuBox } from './navigation/styled-components';
 

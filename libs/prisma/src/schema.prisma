@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["clientExtensions"]
 }
 
 datasource db {
@@ -16,12 +17,13 @@ model Birthday {
 }
 
 model BacklogItem {
-  id         Int    @id @default(autoincrement())
+  id         Int           @id @default(autoincrement())
   playerId   Int
   igdbGameId Int
   name       String
   category   String
   url        String
+  status     BacklogStatus @default(BACKLOG)
 
   player Player @relation(fields: [playerId], references: [id])
 
@@ -150,6 +152,12 @@ model Tag {
 }
 
 //-- Enums
+
+enum BacklogStatus {
+  BACKLOG
+  CURRENTLY
+  FINISHED
+}
 
 enum BlogStatus {
   PUBLISHED

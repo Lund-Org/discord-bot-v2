@@ -17,6 +17,7 @@ import {
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
+import { getUserProfileUrl } from '~/lundprod/utils/url';
 
 export const SignMenu = () => {
   const { data: session, status } = useSession();
@@ -27,7 +28,7 @@ export const SignMenu = () => {
   }
 
   const drawerItems = [
-    { label: 'Ma page gacha', link: `/gacha/ranking/${session?.userId}` },
+    { label: 'Ma page gacha', link: getUserProfileUrl(session?.userId) },
     { label: 'Mon backlog', link: '/my-space/backlog' },
     { label: 'Mes jeux attendus (à venir)', link: '#' },
   ];

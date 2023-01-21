@@ -4,8 +4,8 @@ import { resolve, join } from 'path';
 import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemote } from 'next-mdx-remote';
 
-import { components } from '../../components/mdx-components';
-import { MdxLayout } from '../../layouts/MdxLayout';
+import { components } from '~/lundprod/components/mdx-components';
+import { MdxLayout } from '~/lundprod/layouts/MdxLayout';
 
 export async function getStaticPaths() {
   const mdxList = await prisma.blogPost.findMany({

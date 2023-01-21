@@ -4,7 +4,7 @@ import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 import { getUserProfileUrl } from '~/lundprod/utils/url';
 
-export default async function addToBacklog(
+export default async function changeBacklogStatus(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -24,25 +24,16 @@ export default async function addToBacklog(
     return res.status(404).json({ success: false });
   }
 
-  await prisma.backlogItem.upsert({
+  await prisma.backlogItem.update({
     where: {
       playerId_igdbGameId: {
         playerId: player.id,
         igdbGameId: req.body.igdbGameId,
       },
     },
-    create: {
-      igdbGameId: req.body.igdbGameId,
-      name: req.body.name,
-      category: req.body.category,
-      url: req.body.url,
-      player: {
-        connect: {
-          id: player.id,
-        },
-      },
+    data: {
+      status: req.body.status,
     },
-    update: {},
   });
 
   res.revalidate(getUserProfileUrl(session.userId));

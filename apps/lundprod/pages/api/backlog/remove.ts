@@ -2,8 +2,9 @@ import { prisma } from '@discord-bot-v2/prisma';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
+import { getUserProfileUrl } from '~/lundprod/utils/url';
 
-export default async function listGames(
+export default async function removeFromBacklog(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -29,6 +30,8 @@ export default async function listGames(
       igdbGameId: req.body.id,
     },
   });
+
+  res.revalidate(getUserProfileUrl(session.userId));
 
   res.json({ success: true });
 }

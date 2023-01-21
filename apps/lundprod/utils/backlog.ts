@@ -1,4 +1,5 @@
 import { GAME_TYPE } from '@discord-bot-v2/igdb';
+import { BacklogStatus } from '@prisma/client';
 
 export enum TypeMap {
   GAME = 'GAME',
@@ -31,5 +32,26 @@ export function mapToTypeMap(categories: GAME_TYPE[]): TypeMap {
     return TypeMap.GAME;
   } else {
     return TypeMap.DLC;
+  }
+}
+
+export function getBacklogStatusTranslation(status: BacklogStatus) {
+  switch (status) {
+    case BacklogStatus.BACKLOG:
+      return 'Backlog';
+    case BacklogStatus.CURRENTLY:
+      return 'En cours';
+    case BacklogStatus.FINISHED:
+      return 'Fini';
+  }
+}
+export function getBacklogStatusColor(status: BacklogStatus) {
+  switch (status) {
+    case BacklogStatus.BACKLOG:
+      return 'orange';
+    case BacklogStatus.CURRENTLY:
+      return 'blue';
+    case BacklogStatus.FINISHED:
+      return 'green';
   }
 }

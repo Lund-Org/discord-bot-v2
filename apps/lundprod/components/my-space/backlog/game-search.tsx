@@ -13,8 +13,8 @@ import {
 } from '@chakra-ui/react';
 import { platForms } from '@discord-bot-v2/igdb';
 import { ChangeEventHandler, useState } from 'react';
-import { useBacklog } from '../../../contexts/backlog-context';
-import { TypeMap, mapToCategory, mapToTypeMap } from '../../../utils/backlog';
+import { useBacklog } from '~/lundprod/contexts/backlog-context';
+import { TypeMap, mapToCategory, mapToTypeMap } from '~/lundprod/utils/backlog';
 
 type GameSearchProps = {
   onSearch: () => Promise<void>;

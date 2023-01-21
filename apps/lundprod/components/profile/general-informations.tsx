@@ -2,8 +2,8 @@ import { Box, Divider, Heading, Text } from '@chakra-ui/react';
 import { RankByUser } from '@discord-bot-v2/common';
 import styled from '@emotion/styled';
 import Link from 'next/link';
-import { formatDate, formatDateTime } from '../../../utils/dates';
-import { ProfileType } from '../../../utils/types';
+import { formatDate, formatDateTime } from '~/lundprod/utils/dates';
+import { ProfileType } from '~/lundprod/utils/types';
 
 type GeneralInformationProps = {
   profile: ProfileType;

@@ -1,5 +1,5 @@
 import { Box, FormControl, FormLabel, Switch, Text } from '@chakra-ui/react';
-import { useGachaHome } from '../../../contexts/gacha-home-context';
+import { useGachaHome } from '~/lundprod/contexts/gacha-home-context';
 import Card from './card';
 import { FusionDetails } from './fusion-details';
 import { EmptyView } from './empty-view';

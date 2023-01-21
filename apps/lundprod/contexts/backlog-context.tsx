@@ -1,5 +1,6 @@
 import { GAME_TYPE, platForms } from '@discord-bot-v2/igdb';
-import { BacklogItem } from '@prisma/client';
+import { BacklogItem, BacklogStatus } from '@prisma/client';
+import { clone } from 'lodash';
 import { createContext, ReactNode, useContext, useState } from 'react';
 import { useFetcher } from '../hooks/useFetcher';
 import { mapToCategory, TypeMap } from '../utils/backlog';
@@ -8,7 +9,7 @@ import { ArrayElement, IGDBGame } from '../utils/types';
 type PlatForm = ArrayElement<typeof platForms>;
 export type BacklogItemLight = Pick<
   BacklogItem,
-  'igdbGameId' | 'name' | 'category' | 'url'
+  'igdbGameId' | 'name' | 'category' | 'url' | 'status'
 >;
 type IGDBGameLight = Pick<BacklogItem, 'id' | 'name' | 'category' | 'url'>;
 
@@ -23,6 +24,7 @@ type BacklogContextProvider = {
   backlog: BacklogItemLight[];
   addToBacklog: (backlogItem: IGDBGameLight) => void;
   removeFromBacklog: (id: number) => void;
+  updateBacklogStatus: (id: number, status: BacklogStatus) => void;
 };
 
 type BacklogContextProps = {
@@ -47,6 +49,8 @@ export const BacklogContext = createContext<BacklogContextProvider>({
   addToBacklog: () => {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   removeFromBacklog: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  updateBacklogStatus: () => {},
 });
 
 export const useBacklog = (): BacklogContextProvider =>
@@ -69,6 +73,7 @@ export const BacklogProvider = ({
       name: game.name,
       category: game.category,
       url: game.url,
+      status: BacklogStatus.BACKLOG,
     };
 
     setBacklog([...backlog, newItem]);
@@ -103,6 +108,25 @@ export const BacklogProvider = ({
       setBacklog((_backlog) => [..._backlog, backupItem]);
     });
   };
+  const updateBacklogStatus = (id: number, status: BacklogStatus) => {
+    const newBacklog = clone(backlog);
+    const itemToUpdate = newBacklog.find(({ igdbGameId }) => igdbGameId === id);
+    const oldStatus = itemToUpdate.status;
+
+    itemToUpdate.status = status;
+
+    setBacklog(newBacklog);
+    return fetcher(`/api/backlog/change-status`, undefined, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ igdbGameId: id, status }),
+    }).catch(() => {
+      itemToUpdate.status = oldStatus;
+      setBacklog(newBacklog);
+    });
+  };
 
   const providerParameters = {
     searchValue,
@@ -114,6 +138,7 @@ export const BacklogProvider = ({
     backlog,
     addToBacklog,
     removeFromBacklog,
+    updateBacklogStatus,
   };
 
   return (

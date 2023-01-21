@@ -1,7 +1,7 @@
 import { Category } from 'prisma/prisma-client';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getManyBlogPosts } from '../../../utils/api/blog';
-import { getNumberParam } from '../../../utils/next';
+import { getManyBlogPosts } from '~/lundprod/utils/api/blog';
+import { getNumberParam } from '~/lundprod/utils/next';
 
 export default async function listBlogPosts(
   req: NextApiRequest,

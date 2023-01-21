@@ -9,8 +9,8 @@ export function getGachaRankingPage() {
   return '/gacha/ranking';
 }
 
-export function getGachaProfileUrl(id: string) {
-  return `/gacha/ranking/${id}`;
+export function getUserProfileUrl(id: string) {
+  return `/u/${id}`;
 }
 
 export function isHomePage(pathname: string) {
@@ -26,7 +26,7 @@ export function isGachaListPage(pathname: string) {
 }
 
 export function isUserGachaPage(userId: string, pathname: string) {
-  return pathname.replace('[discordId]', userId) === getGachaProfileUrl(userId);
+  return pathname.replace('[discordId]', userId) === getUserProfileUrl(userId);
 }
 
 export function isBlogPage(pathname: string) {

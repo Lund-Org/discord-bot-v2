@@ -1,0 +1,34 @@
+import { Flex } from '@chakra-ui/react';
+import { FusionList } from './fusion-list';
+import { InventoryList } from './inventory-list';
+import { CardToGoldList } from './card-to-gold-list';
+import {
+  CardsToGoldType,
+  CardWithFusionDependencies,
+  ProfileType,
+} from '~/lundprod/utils/types';
+
+type GachaTabProps = {
+  profile: ProfileType;
+  cardsToGold: CardsToGoldType;
+  fusions: CardWithFusionDependencies[];
+};
+
+export const GachaTab = ({ profile, cardsToGold, fusions }: GachaTabProps) => {
+  return (
+    <Flex flexWrap="wrap" w="100%" justifyContent="center" gap={10} pt="20px">
+      <InventoryList
+        width={{ base: '100%', md: 'calc(50% - var(--chakra-space-10))' }}
+        profile={profile}
+      />
+      <CardToGoldList
+        width={{ base: '100%', md: 'calc(50% - var(--chakra-space-10))' }}
+        cardsToGold={cardsToGold}
+      />
+      <FusionList
+        width={{ base: '100%', md: 'calc(50% - var(--chakra-space-10))' }}
+        fusionCards={fusions}
+      />
+    </Flex>
+  );
+};

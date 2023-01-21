@@ -7,7 +7,7 @@ import {
 import { chunk } from 'lodash';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { unstable_getServerSession } from 'next-auth/next';
-import { getNumberParam, getParam } from '../../../utils/next';
+import { getNumberParam, getParam } from '~/lundprod/utils/next';
 import { authOptions } from '../auth/[...nextauth]';
 
 export default async function listGames(

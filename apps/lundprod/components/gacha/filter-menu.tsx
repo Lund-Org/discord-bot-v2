@@ -1,6 +1,6 @@
 import { Box, Checkbox, Flex, Input, Select, Text } from '@chakra-ui/react';
-import { options } from '../../utils/filters';
-import { Filters } from '../../utils/types';
+import { options } from '~/lundprod/utils/filters';
+import { Filters } from '~/lundprod/utils/types';
 
 type FilterMenuProps = {
   filters: Filters;

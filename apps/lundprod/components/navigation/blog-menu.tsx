@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { MenuLink } from './styled-components';
-import { isBlogPage } from '../../utils/url';
+import { isBlogPage } from '~/lundprod/utils/url';
 import Link from 'next/link';
 
 export const BlogMenu = ({ onClick }: { onClick: () => void }) => {

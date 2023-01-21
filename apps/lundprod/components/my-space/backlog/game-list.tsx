@@ -10,17 +10,15 @@ import {
   TagLabel,
   Flex,
   Button,
-  Box,
 } from '@chakra-ui/react';
-import { formatReleaseDate } from '../../../utils/dates';
-import { useMemo } from 'react';
-import { IGDBGame, IGDBReleaseDates } from '../../../utils/types';
 import { REGION } from '@discord-bot-v2/igdb';
+import { Fragment, useMemo } from 'react';
+import { formatReleaseDate } from '~/lundprod/utils/dates';
+import { IGDBGame, IGDBReleaseDates } from '~/lundprod/utils/types';
 import {
   BacklogItemLight,
   useBacklog,
-} from '../../../contexts/backlog-context';
-import React from 'react';
+} from '~/lundprod/contexts/backlog-context';
 
 type GameListProps = {
   games: IGDBGame[];
@@ -127,7 +125,7 @@ export const GameList = ({ games }: GameListProps) => {
             <Td>
               <Flex gap="5px" flexDir="column">
                 {row.platforms?.map(({ releaseDates }, index) => (
-                  <React.Fragment key={`fragment${index}`}>
+                  <Fragment key={`fragment${index}`}>
                     {releaseDates.map(([date, region], releaseDateIndex) => (
                       <Flex
                         key={`releaseDate${releaseDateIndex}`}
@@ -140,7 +138,7 @@ export const GameList = ({ games }: GameListProps) => {
                         </Tag>
                       </Flex>
                     ))}
-                  </React.Fragment>
+                  </Fragment>
                 ))}
               </Flex>
             </Td>
