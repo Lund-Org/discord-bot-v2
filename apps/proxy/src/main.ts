@@ -76,10 +76,10 @@ export const initServer = () => {
   return new Promise((resolve) => {
     const httpServer = httpCreateServer(app(false));
 
-    httpServer.listen(8000, () => {
+    httpServer.listen(80, () => {
       console.log(
         'Server is running at http://localhost:%d in %s mode',
-        8000,
+        80,
         process.env.ENV
       );
     });
