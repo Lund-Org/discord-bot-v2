@@ -15,6 +15,12 @@ const app = (secure): RequestListener => {
       });
       res.end();
     }
+    if (req.headers.host?.startsWith('cdn.')) {
+      res.writeHead(302, {
+        Location: `${process.env.CDN_URL}${req.url}`,
+      });
+      res.end();
+    }
 
     const chunks: Buffer[] = [];
 
@@ -36,6 +42,8 @@ const app = (secure): RequestListener => {
           headers: req.headers,
           responseType: 'stream',
           decompress: false,
+          maxRedirects: 0,
+          validateStatus: (status) => status >= 200 && status <= 302,
         })
           .then((axiosResponse) => {
             res.writeHead(axiosResponse.status, axiosResponse.headers);

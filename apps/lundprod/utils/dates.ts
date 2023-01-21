@@ -31,3 +31,11 @@ export function formatBlogDate(date: Date) {
     timeZone: 'Europe/Paris',
   }).format(date);
 }
+
+export function formatReleaseDate(date: Date) {
+  return new Intl.DateTimeFormat('fr-FR', {
+    dateStyle: 'short',
+    timeStyle: undefined,
+    timeZone: 'Europe/Paris',
+  }).format(date);
+}

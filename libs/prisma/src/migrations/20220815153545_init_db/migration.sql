@@ -122,3 +122,11 @@ ALTER TABLE `_GiftToPlayer` ADD CONSTRAINT `_GiftToPlayer_A_fkey` FOREIGN KEY (`
 
 -- AddForeignKey
 ALTER TABLE `_GiftToPlayer` ADD CONSTRAINT `_GiftToPlayer_B_fkey` FOREIGN KEY (`B`) REFERENCES `Player`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+INSERT INTO Config (name, value) VALUES ('DROP_CHANCES', '{"1": 50, "2": 30, "3": 15, "4": 5}');
+INSERT INTO Config (name, value) VALUES ('LEVELS', '{"1": 0, "2": 1500, "3": 2500, "4": 5000, "5": 7500, "6": 10000, "7": 13300, "8": 16600, "9": 20000, "10": 23300, "11": 26600, "12": 30000, "13": 33300, "14": 36600, "15": 40000, "16": 43300, "17": 46600, "18": 50000, "19": 55000, "20": 60000, "21": 65000, "22": 70000, "23": 75000, "24": 80000, "25": 85000, "26": 90000, "27": 95000, "28": 100000, "29": 105000, "30": 110000, "31": 115000, "32": 120000, "33": 125000, "34": 130000, "35": 135000, "36": 140000, "37": 145000, "38": 150000, "39": 155000, "40": 160000}');
+INSERT INTO Config (name, value) VALUES ('PRICE', '{"price": 1000}');
+INSERT INTO Config (name, value) VALUES ('TWITCH_REWARD', '{"points": 2500, "rewardName": "Points de gacha (Discord)"}');
+INSERT INTO Config (name, value) VALUES ('SELL', '{"gold": 300, "basic": 100}');
+INSERT INTO Config (name, value) VALUES ('CARD_XP', '{"gold": 500, "basic": 100}');

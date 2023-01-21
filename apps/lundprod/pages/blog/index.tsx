@@ -13,7 +13,8 @@ import { useEffect, useState } from 'react';
 import { BlogArticle } from '../../components/blog/blog-article';
 import { CategoryWordingMapping } from '../../utils/blog';
 import { getManyBlogPosts } from '../../utils/api/blog';
-import { getParam } from '../../utils/next';
+import { getNumberParam } from '../../utils/next';
+import { useFetcher } from '../../hooks/useFetcher';
 
 type PropsType = {
   blogPosts: (BlogPost & {
@@ -24,14 +25,13 @@ type PropsType = {
 export const getServerSideProps: GetServerSideProps<PropsType> = async ({
   query,
 }) => {
-  const pageParam = getParam(query.page, '1');
+  const page = getNumberParam(query.page, 1);
   const categories =
     typeof query.category === 'string'
       ? [query.category]
       : query.category || [];
-  const page = parseInt(pageParam, 10) <= 0 ? 1 : parseInt(pageParam, 10);
   const blogPosts = await getManyBlogPosts({
-    page,
+    page: page <= 0 ? 1 : page,
     categories: categories as Category[],
   });
 
@@ -45,20 +45,18 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
 export function BlogPage({ blogPosts }: PropsType) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadedBlogPosts, setLoadedBlogPosts] = useState(blogPosts);
+  const fetcher = useFetcher();
 
   useEffect(() => {
-    const queryParams = new URLSearchParams();
-
-    categories.forEach((category) => {
-      queryParams.append('category', category);
-    });
-
-    fetch(`/api/blogs?${queryParams.toString()}`)
-      .then((response) => response.json())
-      .then((json) => {
-        setLoadedBlogPosts(json.blogPosts);
+    fetcher('/api/blogs', { category: categories })
+      .then((response) => {
+        setLoadedBlogPosts(response.blogPosts);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoadedBlogPosts([]);
       });
-  }, [categories]);
+  }, [categories, fetcher]);
 
   const onToggle = (value: Category) => {
     setCategories(

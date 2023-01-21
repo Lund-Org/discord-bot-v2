@@ -27,7 +27,7 @@ export const printCard = async (
   offsetX: number,
   offsetY: number
 ) => {
-  const img = (await loadImage(
+  const img = await loadImage(
     join(
       __dirname,
       '..',
@@ -36,7 +36,7 @@ export const printCard = async (
       'card-images',
       `${card.isGold ? 'gold' : 'basic'}-${card.cardType.imageName}`
     )
-  )) as unknown as CanvasImageSource;
+  );
   ctx.drawImage(img, offsetX, offsetY, CARD_SIZE[0], CARD_SIZE[1]);
 };
 

@@ -12,7 +12,7 @@ import { ExternalLinkIcon } from '@chakra-ui/icons';
 import styled from '@emotion/styled';
 import { illustrationTrip } from '../../assets';
 import { networks } from '../../utils/url';
-import { LightStyledLink } from './styled-link';
+import { LightStyledLink } from '../styled-link';
 
 const InlineStyledLink = styled(LightStyledLink)`
   display: inline-block;
@@ -90,7 +90,7 @@ export const Footer = () => {
               maxH="100px"
             />
             <Text fontSize="10px" textAlign="right">
-              Site fonctionnant avec{' '}
+              Site fonctionnant avec&nbsp;
               <InlineStyledLink
                 href="https://nextjs.org/"
                 target="_blank"
@@ -98,8 +98,8 @@ export const Footer = () => {
               >
                 <Text as="span">Next</Text>
                 <ExternalLinkIcon ml="6px" />
-              </InlineStyledLink>{' '}
-              avec les illustrations de{' '}
+              </InlineStyledLink>
+              &nbsp; avec les illustrations de&nbsp;
               <InlineStyledLink
                 href="https://undraw.co/"
                 target="_blank"
