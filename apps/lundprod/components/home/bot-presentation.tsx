@@ -1,6 +1,6 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { Text } from '@chakra-ui/react';
-import { illustrationFirmware } from '../../assets';
+import { illustrationFirmware } from '~/lundprod/assets';
 import { FullLinePresentation } from './full-line-presentation';
 import { LightStyledLink } from '../styled-link';
 

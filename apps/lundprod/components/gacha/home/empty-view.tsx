@@ -1,6 +1,6 @@
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import { Box, Heading, Image } from '@chakra-ui/react';
-import { arrowRightUp } from '../../../assets';
+import { arrowRightUp } from '~/lundprod/assets';
 
 export const EmptyView = () => (
   <Box px="10%" flex={1} pt="30px">

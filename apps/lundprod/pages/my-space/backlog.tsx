@@ -10,13 +10,13 @@ import {
 } from '@chakra-ui/react';
 import { GetServerSideProps } from 'next';
 import { unstable_getServerSession } from 'next-auth/next';
-import { authOptions } from '../api/auth/[...nextauth]';
 import {
   BacklogItemLight,
   BacklogProvider,
-} from '../../contexts/backlog-context';
-import { GameChoiceTab } from '../../components/my-space/backlog/game-choice-tab';
-import { BacklogList } from '../../components/my-space/backlog/backlog-list';
+} from '~/lundprod/contexts/backlog-context';
+import { GameChoiceTab } from '~/lundprod/components/my-space/backlog/game-choice-tab';
+import { BacklogList } from '~/lundprod/components/my-space/backlog/backlog-list';
+import { authOptions } from '../api/auth/[...nextauth]';
 
 type PropsType = {
   backlog: BacklogItemLight[];
@@ -48,6 +48,9 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
           name: true,
           category: true,
           url: true,
+          status: true,
+          reason: true,
+          rating: true,
         },
       },
     },
@@ -84,13 +87,17 @@ export function BacklogWrapper({ backlog }: PropsType) {
         </Heading>
         <Tabs>
           <TabList>
-            <Tab _selected={selected}>Ma liste</Tab>
-            <Tab _selected={selected}>Trouver un jeu</Tab>
+            <Tab _selected={selected} _active={{}}>
+              Ma liste
+            </Tab>
+            <Tab _selected={selected} _active={{}}>
+              Trouver un jeu
+            </Tab>
           </TabList>
 
           <TabPanels>
             <TabPanel>
-              <BacklogList />
+              <BacklogList isReadOnly={false} />
             </TabPanel>
             <TabPanel>
               <GameChoiceTab />

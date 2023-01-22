@@ -10,8 +10,8 @@ import {
 } from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import styled from '@emotion/styled';
-import { illustrationTrip } from '../../assets';
-import { networks } from '../../utils/url';
+import { illustrationTrip } from '~/lundprod/assets';
+import { networks } from '~/lundprod/utils/url';
 import { LightStyledLink } from '../styled-link';
 
 const InlineStyledLink = styled(LightStyledLink)`

@@ -9,7 +9,10 @@ import {
   Image,
   Text,
 } from '@chakra-ui/react';
-import { illustration3DModeling, illustrationVideoGame } from '../../assets';
+import {
+  illustration3DModeling,
+  illustrationVideoGame,
+} from '~/lundprod/assets';
 
 const AccordionTitle = ({ children }: { children: string }) => (
   <Box as="span" flex="1" textAlign="left" color="gray.100" fontWeight="bold">

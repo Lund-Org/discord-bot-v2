@@ -1,18 +1,18 @@
 import { ListItem, OrderedList, Text } from '@chakra-ui/react';
 import Link from 'next/link';
-import { Rank } from '../../../utils/types';
-import { getGachaProfileUrl } from '../../../utils/url';
+import { Rank } from '~/lundprod/utils/types';
+import { getUserProfileUrl } from '~/lundprod/utils/url';
 
 type RankListProps = {
   ranks: Rank[];
 };
 
-const RankList = ({ ranks }: RankListProps) => {
+export const RankList = ({ ranks }: RankListProps) => {
   return (
     <OrderedList start={4} pt="35px" pl={{ base: '35px', md: '0' }}>
       {ranks.map((rank) => (
         <ListItem className="ranklist-item" key={rank.id} pl="15px" pb="10px">
-          <Link href={getGachaProfileUrl(rank.discordId)}>
+          <Link href={getUserProfileUrl(rank.discordId)}>
             <Text as="span" fontWeight="bold" _hover={{ color: 'blue.500' }}>
               {rank.username}
             </Text>
@@ -25,5 +25,3 @@ const RankList = ({ ranks }: RankListProps) => {
     </OrderedList>
   );
 };
-
-export default RankList;

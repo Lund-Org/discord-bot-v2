@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { MENU_HEIGHT } from '../../utils/constants';
+import { MENU_HEIGHT } from '~/lundprod/utils/constants';
 
 export const MenuBox = styled.div<{ isOpen: boolean }>((props) => ({
   display: 'flex',

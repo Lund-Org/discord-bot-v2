@@ -5,23 +5,6 @@ export type CardTypeWithFusionDependencies = CardType & {
   fusionDependencies: CardType[];
 };
 
-export async function getCardsToGold(discordId: string) {
-  try {
-    return prisma.playerInventory.findMany({
-      where: {
-        player: { discordId },
-        type: 'basic',
-        total: { gte: 5 },
-      },
-      include: { cardType: true },
-      orderBy: { cardType: { id: 'asc' } },
-    });
-  } catch (e) {
-    console.log(e);
-    return [];
-  }
-}
-
 export async function getCardsToFusion(discordId: string) {
   try {
     const fusionCards = await prisma.cardType.findMany({
@@ -55,52 +38,5 @@ export async function getCardsToFusion(discordId: string) {
   } catch (e) {
     console.log(e);
     return [];
-  }
-}
-
-export async function getProfile(discordId: string) {
-  try {
-    let player = await prisma.player.findFirst({
-      include: {
-        playerInventory: {
-          include: {
-            cardType: true,
-          },
-          orderBy: {
-            cardTypeId: 'asc',
-          },
-        },
-      },
-      where: {
-        discordId,
-        playerInventory: {
-          some: {
-            total: { gt: 0 },
-          },
-        },
-      },
-    });
-
-    if (!player) {
-      player = await prisma.player.findUnique({
-        where: { discordId },
-        include: {
-          playerInventory: {
-            include: {
-              cardType: true,
-            },
-          },
-        },
-      });
-
-      if (player) {
-        player.playerInventory = [];
-      }
-    }
-
-    return player;
-  } catch (e) {
-    console.log(e);
-    return null;
   }
 }

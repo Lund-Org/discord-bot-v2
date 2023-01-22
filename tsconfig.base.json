@@ -19,7 +19,8 @@
       "@discord-bot-v2/common": ["libs/common/src/index.ts"],
       "@discord-bot-v2/hltb": ["libs/hltb/src/index.ts"],
       "@discord-bot-v2/igdb": ["libs/igdb/src/index.ts"],
-      "@discord-bot-v2/prisma": ["libs/prisma/src/index.ts"]
+      "@discord-bot-v2/prisma": ["libs/prisma/src/index.ts"],
+      "~/lundprod/*": ["apps/lundprod/*"]
     }
   },
   "exclude": ["dist", "node_modules", "tmp"]

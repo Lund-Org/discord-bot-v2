@@ -1,5 +1,5 @@
 import { Box, Divider, Flex, Heading, Image, Text } from '@chakra-ui/react';
-import { illustrationBookReading } from '../../assets';
+import { illustrationBookReading } from '~/lundprod/assets';
 
 export const Welcome = () => {
   return (

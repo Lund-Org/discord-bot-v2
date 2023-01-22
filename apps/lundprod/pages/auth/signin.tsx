@@ -3,8 +3,8 @@ import styled from '@emotion/styled';
 import { GetServerSideProps } from 'next';
 import { getProviders, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { LightStyledLink } from '../../components/styled-link';
-import { networks } from '../../utils/url';
+import { LightStyledLink } from '~/lundprod/components/styled-link';
+import { networks } from '~/lundprod/utils/url';
 
 type Providers = Awaited<ReturnType<typeof getProviders>>;
 

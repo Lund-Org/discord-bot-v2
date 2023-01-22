@@ -1,7 +1,7 @@
 import { Box, BoxProps, Flex, Text } from '@chakra-ui/react';
 import Link from 'next/link';
-import { Rank as RankType } from '../../../utils/types';
-import { getGachaProfileUrl } from '../../../utils/url';
+import { Rank as RankType } from '~/lundprod/utils/types';
+import { getUserProfileUrl } from '~/lundprod/utils/url';
 
 type RankProps = {
   rank: RankType;
@@ -60,7 +60,7 @@ export const Rank = ({ rank, level }: RankProps) => {
     >
       <Box fontSize="3em">{getMedal()}</Box>
       <Text fontWeight="bold" _hover={{ color: 'blue.300' }}>
-        <Link href={getGachaProfileUrl(rank.discordId)}>{rank.username}</Link>
+        <Link href={getUserProfileUrl(rank.discordId)}>{rank.username}</Link>
       </Text>
       <Text>Niveau : {rank.level.currentLevel}</Text>
       <Text>XP : {rank.currentXP}</Text>

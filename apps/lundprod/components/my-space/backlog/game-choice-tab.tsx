@@ -1,12 +1,12 @@
 import { Box, Spinner, Text } from '@chakra-ui/react';
 import { QUERY_OPERATOR } from '@discord-bot-v2/igdb';
 import { useState } from 'react';
-import { GameSearch } from '../../../components/my-space/backlog/game-search';
-import { IGDBFilter, IGDBGame, ListGamesSearch } from '../../../utils/types';
-import { useBacklog } from '../../../contexts/backlog-context';
-import { GameList } from '../../../components/my-space/backlog/game-list';
-import { GamePagination } from '../../../components/my-space/backlog/game-pagination';
-import { useFetcher } from '../../../hooks/useFetcher';
+import { GameSearch } from '~/lundprod/components/my-space/backlog/game-search';
+import { IGDBFilter, IGDBGame, ListGamesSearch } from '~/lundprod/utils/types';
+import { useBacklog } from '~/lundprod/contexts/backlog-context';
+import { GameList } from '~/lundprod/components/my-space/backlog/game-list';
+import { GamePagination } from '~/lundprod/components/my-space/backlog/game-pagination';
+import { useFetcher } from '~/lundprod/hooks/useFetcher';
 
 export const GameChoiceTab = () => {
   const [loadedGames, setLoadedGames] = useState<IGDBGame[] | null>(null);

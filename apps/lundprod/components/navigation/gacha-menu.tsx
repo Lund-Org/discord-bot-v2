@@ -15,11 +15,13 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { useClickAway, useMedia } from 'react-use';
 import {
+  getGachaRankingPage,
+  getUserProfileUrl,
   isGachaListPage,
   isGachaPage,
   isGachaRankingPage,
   isUserGachaPage,
-} from '../../utils/url';
+} from '~/lundprod/utils/url';
 import { MenuLink } from './styled-components';
 
 export const GachaMenu = ({ onClick }: { onClick: () => void }) => {
@@ -33,14 +35,14 @@ export const GachaMenu = ({ onClick }: { onClick: () => void }) => {
     { label: 'Liste', href: '/gacha', isActive: isGachaListPage },
     {
       label: 'Classement',
-      href: '/gacha/ranking',
+      href: getGachaRankingPage(),
       isActive: isGachaRankingPage,
     },
     ...(session
       ? [
           {
             label: 'Ma page',
-            href: `/gacha/ranking/${session.userId}`,
+            href: getUserProfileUrl(session.userId),
             isActive: curry(isUserGachaPage)(session.userId),
           },
         ]

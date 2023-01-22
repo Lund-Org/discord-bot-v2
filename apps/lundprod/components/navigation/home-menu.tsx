@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { MenuLink } from './styled-components';
-import { isHomePage } from '../../utils/url';
+import { isHomePage } from '~/lundprod/utils/url';
 import Link from 'next/link';
 
 export const HomeMenu = ({ onClick }: { onClick: () => void }) => {
