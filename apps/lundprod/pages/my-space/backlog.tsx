@@ -49,6 +49,7 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
           category: true,
           url: true,
           status: true,
+          reason: true,
         },
       },
     },
@@ -85,8 +86,12 @@ export function BacklogWrapper({ backlog }: PropsType) {
         </Heading>
         <Tabs>
           <TabList>
-            <Tab _selected={selected}>Ma liste</Tab>
-            <Tab _selected={selected}>Trouver un jeu</Tab>
+            <Tab _selected={selected} _active={{}}>
+              Ma liste
+            </Tab>
+            <Tab _selected={selected} _active={{}}>
+              Trouver un jeu
+            </Tab>
           </TabList>
 
           <TabPanels>

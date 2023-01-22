@@ -44,7 +44,6 @@ export const GameList = ({ games }: GameListProps) => {
           name: game.name,
           category: game.category,
           platforms: [{ name: 'Inconnue', releaseDates: [] }],
-          // releaseDates: [],
           url: game.url,
         });
       } else {

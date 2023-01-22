@@ -43,6 +43,8 @@ export function getBacklogStatusTranslation(status: BacklogStatus) {
       return 'En cours';
     case BacklogStatus.FINISHED:
       return 'Fini';
+    case BacklogStatus.ABANDONED:
+      return 'Abandonné';
   }
 }
 export function getBacklogStatusColor(status: BacklogStatus) {
@@ -50,8 +52,10 @@ export function getBacklogStatusColor(status: BacklogStatus) {
     case BacklogStatus.BACKLOG:
       return 'orange';
     case BacklogStatus.CURRENTLY:
-      return 'blue';
+      return 'cyan';
     case BacklogStatus.FINISHED:
       return 'green';
+    case BacklogStatus.ABANDONED:
+      return 'red';
   }
 }

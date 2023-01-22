@@ -65,6 +65,7 @@ export const getStaticProps: GetStaticProps<UserProfilePageProps> = async (
       category: true,
       url: true,
       status: true,
+      reason: true,
     },
   });
   const cardsToGold = await prisma.playerInventory.getCardsToGold(discordId);
@@ -104,8 +105,12 @@ export function UserProfilePage({
       <GeneralInformation profile={profile} rank={rank} />
       <Tabs mt={6}>
         <TabList>
-          <Tab _selected={selected}>Gacha</Tab>
-          <Tab _selected={selected}>Backlog</Tab>
+          <Tab _selected={selected} _active={{}}>
+            Gacha
+          </Tab>
+          <Tab _selected={selected} _active={{}}>
+            Backlog
+          </Tab>
         </TabList>
 
         <TabPanels>
