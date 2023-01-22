@@ -1,10 +1,10 @@
 import { StarIcon } from '@chakra-ui/icons';
 import { Badge, Flex, Tooltip, Box } from '@chakra-ui/react';
+import { BacklogStatus } from '@prisma/client';
 import {
   getBacklogStatusColor,
   getBacklogStatusTranslation,
 } from '~/lundprod/utils/backlog';
-import { BacklogStatus } from '@prisma/client';
 
 type BacklogItemDetailsProps = {
   status: BacklogStatus;
