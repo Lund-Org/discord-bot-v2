@@ -34,6 +34,7 @@ export default async function changeBacklogStatus(
     data: {
       status: req.body.status,
       reason: null,
+      rating: 0,
     },
   });
 

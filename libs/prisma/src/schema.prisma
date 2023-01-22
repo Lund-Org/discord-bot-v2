@@ -25,6 +25,7 @@ model BacklogItem {
   url        String
   status     BacklogStatus @default(BACKLOG)
   reason     String?       @db.VarChar(255)
+  rating     Int           @default(0)
 
   player Player @relation(fields: [playerId], references: [id])
 

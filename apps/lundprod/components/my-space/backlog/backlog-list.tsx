@@ -1,6 +1,5 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
-  Badge,
   Button,
   Text,
   Table,
@@ -10,17 +9,15 @@ import {
   Th,
   Td,
   Flex,
-  Tooltip,
 } from '@chakra-ui/react';
+import { BacklogStatus } from '@prisma/client';
 import Link from 'next/link';
-import {
-  getBacklogStatusColor,
-  getBacklogStatusTranslation,
-} from '~/lundprod/utils/backlog';
+import { getBacklogStatusTranslation } from '~/lundprod/utils/backlog';
 import { useBacklog } from '~/lundprod/contexts/backlog-context';
 import { BacklogChangeStatus } from './backlog-change-status';
+import { BacklogItemDetails } from './backlog-item-details';
+import { BacklogSetDetails } from './backlog-set-details';
 import { DropdownButton } from '../../dropdown-button';
-import { BacklogStatus } from '@prisma/client';
 
 type BacklogListProps = {
   isReadOnly?: boolean;
@@ -45,7 +42,7 @@ export const BacklogList = ({ isReadOnly = true }: BacklogListProps) => {
           <Th color="gray.400">Nom</Th>
           <Th color="gray.400">Type</Th>
           <Th color="gray.400">Plus d&apos;information</Th>
-          <Th color="gray.400">
+          <Th color="gray.400" w="240px">
             <Flex>
               {isReadOnly ? 'Statut' : 'Actions'}
               <DropdownButton<BacklogStatus>
@@ -63,7 +60,10 @@ export const BacklogList = ({ isReadOnly = true }: BacklogListProps) => {
       </Thead>
       <Tbody>
         {backlog.map(
-          ({ igdbGameId, name, category, url, status, reason }, index) => (
+          (
+            { igdbGameId, name, category, url, status, reason, rating },
+            index
+          ) => (
             <Tr key={index} _hover={{ bg: 'gray.900' }}>
               <Td>
                 <Text>{name}</Text>
@@ -84,24 +84,25 @@ export const BacklogList = ({ isReadOnly = true }: BacklogListProps) => {
               </Td>
               <Td>
                 {isReadOnly ? (
-                  <Tooltip hasArrow label={reason} p={3}>
-                    <Badge
-                      variant="solid"
-                      colorScheme={getBacklogStatusColor(status)}
-                      px={3}
-                      py={1}
-                      cursor="pointer"
-                    >
-                      {getBacklogStatusTranslation(status)}
-                    </Badge>
-                  </Tooltip>
+                  <BacklogItemDetails
+                    status={status}
+                    reason={reason}
+                    rating={rating}
+                  />
                 ) : (
                   <Flex direction="column" alignItems="center" gap={3}>
-                    <BacklogChangeStatus
-                      igdbId={igdbGameId}
-                      status={status}
-                      reason={reason}
-                    />
+                    <Flex gap={2}>
+                      <BacklogChangeStatus
+                        igdbId={igdbGameId}
+                        status={status}
+                      />
+                      <BacklogSetDetails
+                        igdbId={igdbGameId}
+                        status={status}
+                        reason={reason}
+                        rating={rating}
+                      />
+                    </Flex>
                     <Button
                       size="sm"
                       colorScheme="red"

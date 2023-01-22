@@ -10,7 +10,7 @@ import { ArrayElement, IGDBGame } from '../utils/types';
 type PlatForm = ArrayElement<typeof platForms>;
 export type BacklogItemLight = Pick<
   BacklogItem,
-  'igdbGameId' | 'name' | 'category' | 'url' | 'status' | 'reason'
+  'igdbGameId' | 'name' | 'category' | 'url' | 'status' | 'reason' | 'rating'
 >;
 type IGDBGameLight = Pick<BacklogItem, 'id' | 'name' | 'category' | 'url'>;
 
@@ -26,7 +26,11 @@ type BacklogContextProvider = {
   addToBacklog: (backlogItem: IGDBGameLight) => void;
   removeFromBacklog: (id: number) => void;
   updateBacklogStatus: (id: number, status: BacklogStatus) => void;
-  updateAbandonedReason: (id: number, reason: string) => Promise<void>;
+  updateBacklogDetails: (
+    id: number,
+    reason: string,
+    rating: number
+  ) => Promise<void>;
   onSortByStatus: (status: BacklogStatus) => void;
 };
 
@@ -48,7 +52,7 @@ export const BacklogContext = createContext<BacklogContextProvider>({
   addToBacklog: () => {},
   removeFromBacklog: () => {},
   updateBacklogStatus: () => {},
-  updateAbandonedReason: async () => {},
+  updateBacklogDetails: async () => {},
   onSortByStatus: () => {},
 });
 
@@ -74,6 +78,7 @@ export const BacklogProvider = ({
       url: game.url,
       status: BacklogStatus.BACKLOG,
       reason: '',
+      rating: 0,
     };
 
     setBacklog([...backlog, newItem]);
@@ -134,7 +139,7 @@ export const BacklogProvider = ({
       setBacklog,
       fetcher,
     }),
-    updateAbandonedReason: curry(updateAbandonedReason)({
+    updateBacklogDetails: curry(updateBacklogDetails)({
       backlog,
       setBacklog,
       fetcher,
@@ -170,32 +175,56 @@ function updateBacklogStatus(
     '/api/backlog/change-status'
   );
 }
-function updateAbandonedReason(
+function updateBacklogDetails(
   curriedParam: UpdateBacklogCurriedParam,
   id: number,
-  reason: string
+  reason: string,
+  rating: number
 ) {
   return findItemChangePropertyAndRequestAPI(
     curriedParam,
     id,
-    reason,
-    'reason',
-    '/api/backlog/update-abandoned-reason'
+    [reason, rating],
+    ['reason', 'rating'],
+    '/api/backlog/update-backlog-details'
   );
 }
 
 function findItemChangePropertyAndRequestAPI<T>(
   { backlog, setBacklog, fetcher }: UpdateBacklogCurriedParam,
   id: number,
-  param: T,
-  name: string,
+  param: T | T[],
+  name: string | string[],
   url: string
 ) {
   const newBacklog = clone(backlog);
   const itemToUpdate = newBacklog.find(({ igdbGameId }) => igdbGameId === id);
-  const oldValue = itemToUpdate[name];
+  let oldValue;
+  let payload;
 
-  itemToUpdate[name] = param;
+  if (typeof name === 'string') {
+    oldValue = itemToUpdate[name];
+    itemToUpdate[name] = param;
+    payload = JSON.stringify({ igdbGameId: id, [name]: param });
+  } else {
+    oldValue = name.map((n, index) => {
+      itemToUpdate[n] = param[index];
+      return itemToUpdate[n];
+    });
+    payload = JSON.stringify(
+      name.reduce(
+        (acc, n, index) => {
+          return {
+            ...acc,
+            [n]: param[index],
+          };
+        },
+        { igdbGameId: id }
+      )
+    );
+  }
+
+  console.log(payload);
 
   setBacklog(newBacklog);
   return fetcher(url, undefined, {
@@ -203,9 +232,16 @@ function findItemChangePropertyAndRequestAPI<T>(
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ igdbGameId: id, [name]: param }),
+    body: payload,
   }).catch(() => {
-    itemToUpdate[name] = oldValue;
+    if (typeof name === 'string') {
+      itemToUpdate[name] = oldValue;
+    } else {
+      name.forEach((n, index) => {
+        itemToUpdate[n] = oldValue[index];
+      });
+    }
+
     setBacklog(newBacklog);
   });
 }

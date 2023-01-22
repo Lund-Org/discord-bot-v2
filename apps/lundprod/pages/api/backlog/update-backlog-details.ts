@@ -4,7 +4,7 @@ import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 import { getUserProfileUrl } from '~/lundprod/utils/url';
 
-export default async function updateAbandonedReason(
+export default async function updateBacklogDetails(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -33,6 +33,7 @@ export default async function updateAbandonedReason(
     },
     data: {
       reason: req.body.reason,
+      rating: req.body.rating,
     },
   });
 

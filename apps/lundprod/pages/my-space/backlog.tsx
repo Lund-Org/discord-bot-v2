@@ -50,6 +50,7 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
           url: true,
           status: true,
           reason: true,
+          rating: true,
         },
       },
     },

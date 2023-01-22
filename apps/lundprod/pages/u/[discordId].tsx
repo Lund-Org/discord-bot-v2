@@ -66,6 +66,7 @@ export const getStaticProps: GetStaticProps<UserProfilePageProps> = async (
       url: true,
       status: true,
       reason: true,
+      rating: true,
     },
   });
   const cardsToGold = await prisma.playerInventory.getCardsToGold(discordId);
