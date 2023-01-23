@@ -140,6 +140,10 @@ Same value of WEBSITE_URL, used by Next-Auth to redirect to the right url, other
 
 The webhook to post the link when a blog post is published
 
+> **BACKLOG_WEBHOOK**
+
+The webhook to post the updates on the backlog
+
 > **CDN_URL**
 
 The CDN url to redirect to when calling the proxy with the cdn subdomain

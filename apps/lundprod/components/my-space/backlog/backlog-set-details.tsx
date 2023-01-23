@@ -76,7 +76,7 @@ export const BacklogSetDetails = ({
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Ajouter une raison</ModalHeader>
+          <ModalHeader>Ajouter des détails</ModalHeader>
           <ModalCloseButton />
           <form onSubmit={submitForm}>
             <ModalBody>
