@@ -93,7 +93,7 @@ export const BacklogSetDetails = ({
                   ))}
                 </Flex>
               </FormControl>
-              <FormControl>
+              <FormControl mt={3}>
                 <FormLabel>Commentaire</FormLabel>
                 <Textarea
                   value={newReason || ''}
