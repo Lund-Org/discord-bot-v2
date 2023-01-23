@@ -94,7 +94,7 @@ export const BacklogSetDetails = ({
                 </Flex>
               </FormControl>
               <FormControl>
-                <FormLabel>Raison de l&apos;abandon</FormLabel>
+                <FormLabel>Commentaire</FormLabel>
                 <Textarea
                   value={newReason || ''}
                   onChange={(e) => setNewReason(e.target.value)}
