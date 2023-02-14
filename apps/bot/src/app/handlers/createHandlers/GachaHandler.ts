@@ -16,11 +16,9 @@ class GachaHandler extends Handler {
 }
 
 export const addPoints = async ({ msg }: { msg: Message }): Promise<void> => {
-  const player = await prisma.player.findUnique({
-    where: { discordId: msg.author.id },
-  });
+  const user = await prisma.user.getPlayer(msg.author.id);
 
-  if (!player) {
+  if (!user?.player) {
     return;
   }
 
@@ -29,12 +27,11 @@ export const addPoints = async ({ msg }: { msg: Message }): Promise<void> => {
   // if last message is in less than 1 minute
   // AND less than 15 000 points
   if (
-    player &&
-    Date.now() - new Date(player.lastMessageDate).getTime() > delay &&
-    player.points < 15000
+    Date.now() - new Date(user.player.lastMessageDate).getTime() > delay &&
+    user.player.points < 15000
   ) {
     await prisma.player.update({
-      where: { discordId: msg.author.id },
+      where: { id: user.player.id },
       data: {
         points: { increment: 50 },
         lastMessageDate: new Date(),

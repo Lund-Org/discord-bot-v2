@@ -1,0 +1,290 @@
+{
+  "teams": [
+    {
+      "name": "Avalanche Andretti",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe/fe-andretti-logo.jpg"
+    },
+    {
+      "name": "Tag Heuer Porsche",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe/fe-porsche-logo.jpg"
+    },
+    {
+      "name": "Neom Mclaren",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe/fe-mclaren-logo.jpg"
+    },
+    {
+      "name": "Envision Racing",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe/fe-envision-logo.jpg"
+    },
+    {
+      "name": "Jaguar TCS Racing",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe/fe-jaguar-logo.jpg"
+    },
+    {
+      "name": "Mahindra Racing",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe/fe-mahindra-logo.jpg"
+    },
+    {
+      "name": "DS Penske",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe/fe-ds-logo.jpg"
+    },
+    {
+      "name": "Nissan",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe/fe-nissan-logo.jpg"
+    },
+    {
+      "name": "Maserati MSG Racing",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe/fe-maserati-logo.jpg"
+    },
+    {
+      "name": "NIO 333",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe/fe-nio-logo.jpg"
+    },
+    {
+      "name": "ABT Cupra",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe/fe-cupra-logo.jpg"
+    }
+  ],
+  "races": [
+    {
+      "name": "Inde (Hyderabad) - Essais libres 1",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-02-10T10:55:00Z"
+    },
+    {
+      "name": "Inde (Hyderabad) - Essais libres 2",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-02-11T02:35:00Z"
+    },
+    {
+      "name": "Inde (Hyderabad) - Qualifications",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-02-11T05:10:00Z"
+    },
+    {
+      "name": "Inde (Hyderabad) - Course",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-02-11T09:30:00Z"
+    },
+    {
+      "name": "Afrique du sud (Cape Town) - Essais libres 1",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-02-24T14:55:00Z"
+    },
+    {
+      "name": "Afrique du sud (Cape Town) - Essais libres 2",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-02-25T07:05:00Z"
+    },
+    {
+      "name": "Afrique du sud (Cape Town) - Qualifications",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-02-25T09:40:00Z"
+    },
+    {
+      "name": "Afrique du sud (Cape Town) - Course",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-02-25T14:00:00Z"
+    },
+    {
+      "name": "Brésil (São Paulo) - Essais libres 1",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-03-24T19:25:00Z"
+    },
+    {
+      "name": "Brésil (São Paulo) - Essais libres 2",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-03-25T10:25:00Z"
+    },
+    {
+      "name": "Brésil (São Paulo) - Qualifications",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-03-25T12:40:00Z"
+    },
+    {
+      "name": "Brésil (São Paulo) - Course",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-03-25T17:00:00Z"
+    },
+    {
+      "name": "Allemagne (Berlin) - Essais libres 1",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-04-21T15:55:00Z"
+    },
+    {
+      "name": "Allemagne (Berlin) - Essais libres 2",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-04-22T07:05:00Z"
+    },
+    {
+      "name": "Allemagne (Berlin) - Qualifications",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-04-22T09:40:00Z"
+    },
+    {
+      "name": "Allemagne (Berlin) - Course",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-04-22T14:00:00Z"
+    },
+    {
+      "name": "Allemagne (Berlin) - Essais libres 3",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-04-23T07:05:00Z"
+    },
+    {
+      "name": "Allemagne (Berlin) - Qualifications 2",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-04-23T09:40:00Z"
+    },
+    {
+      "name": "Allemagne (Berlin) - Course 2",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-04-23T14:00:00Z"
+    },
+    {
+      "name": "Monaco - Essais libres 1",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-05-06T06:25:00Z"
+    },
+    {
+      "name": "Monaco - Essais libres 2",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-05-06T08:05:00Z"
+    },
+    {
+      "name": "Monaco - Qualifications",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-05-06T09:40:00Z"
+    },
+    {
+      "name": "Monaco - Course",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-05-06T14:00:00Z"
+    },
+    {
+      "name": "Indonésie (Jakarta) - Essais libres 1",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-06-02T09:25:00Z"
+    },
+    {
+      "name": "Indonésie (Jakarta) - Essais libres 2",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-06-03T02:05:00Z"
+    },
+    {
+      "name": "Indonésie (Jakarta) - Qualifications",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-06-03T04:40:00Z"
+    },
+    {
+      "name": "Indonésie (Jakarta) - Course",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-06-03T09:00:00Z"
+    },
+    {
+      "name": "Indonésie (Jakarta) - Essais libres 3",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-06-04T02:05:00Z"
+    },
+    {
+      "name": "Indonésie (Jakarta) - Qualifications 2",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-06-04T04:40:00Z"
+    },
+    {
+      "name": "Indonésie (Jakarta) - Course 2",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-06-04T09:00:00Z"
+    },
+    {
+      "name": "Etats-Unis (Portland) - Essais libres 1 - HORAIRE TEMPORAIRE",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-06-23T19:25:00Z"
+    },
+    {
+      "name": "Etats-Unis (Portland) - Essais libres 2 - HORAIRE TEMPORAIRE",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-06-24T10:25:00Z"
+    },
+    {
+      "name": "Etats-Unis (Portland) - Qualifications - HORAIRE TEMPORAIRE",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-06-24T12:40:00Z"
+    },
+    {
+      "name": "Etats-Unis (Portland) - Course - HORAIRE TEMPORAIRE",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-06-24T17:00:00Z"
+    },
+    {
+      "name": "Italie (Rome) - Essais libres 1",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-07-14T16:25:00Z"
+    },
+    {
+      "name": "Italie (Rome) - Essais libres 2",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-07-15T07:05:00Z"
+    },
+    {
+      "name": "Italie (Rome) - Qualifications",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-07-15T09:40:00Z"
+    },
+    {
+      "name": "Italie (Rome) - Course",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-07-15T14:00:00Z"
+    },
+    {
+      "name": "Italie (Rome) - Essais libres 3",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-07-16T07:05:00Z"
+    },
+    {
+      "name": "Italie (Rome) - Qualifications 2",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-07-16T09:40:00Z"
+    },
+    {
+      "name": "Italie (Rome) - Course 2",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-07-16T14:00:00Z"
+    },
+    {
+      "name": "Grande-Bretagne (Londres) - Essais libres 1",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-07-28T16:55:00Z"
+    },
+    {
+      "name": "Grande-Bretagne (Londres) - Essais libres 2",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-07-29T10:25:00Z"
+    },
+    {
+      "name": "Grande-Bretagne (Londres) - Qualifications",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-07-29T12:40:00Z"
+    },
+    {
+      "name": "Grande-Bretagne (Londres) - Course",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-07-29T17:00:00Z"
+    },
+    {
+      "name": "Grande-Bretagne (Londres) - Essais libres 3",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-07-30T10:25:00Z"
+    },
+    {
+      "name": "Grande-Bretagne (Londres) - Qualifications 2",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-07-30T12:40:00Z"
+    },
+    {
+      "name": "Grande-Bretagne (Londres) - Course 2",
+      "logo": "https://d18wazra96xhgb.cloudfront.net/sports/fe-logo.jpg",
+      "startAt": "2023-07-30T17:00:00Z"
+    }
+  ]
+}

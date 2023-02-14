@@ -1,10 +1,21 @@
-import { Box, FormControl, FormLabel, Switch, Text } from '@chakra-ui/react';
+import {
+  Box,
+  BoxProps,
+  FormControl,
+  FormLabel,
+  Switch,
+  Text,
+} from '@chakra-ui/react';
 import { useGachaHome } from '~/lundprod/contexts/gacha-home-context';
 import Card from './card';
 import { FusionDetails } from './fusion-details';
 import { EmptyView } from './empty-view';
 
-export const CardPreviewContainer = () => {
+type CardPreviewContainerProps = BoxProps;
+
+export const CardPreviewContainer = ({
+  ...rest
+}: CardPreviewContainerProps) => {
   const { cardSelected, filters, updateFilters } = useGachaHome();
 
   if (!cardSelected) {
@@ -12,7 +23,14 @@ export const CardPreviewContainer = () => {
   }
 
   return (
-    <Box flex={1} overflow="auto" maxH="calc(100vh - 70px)" p="20px" pb="80px">
+    <Box
+      flex={1}
+      overflow="auto"
+      maxH="calc(100vh - 70px)"
+      p="20px"
+      pb="80px"
+      {...rest}
+    >
       <Box>
         <Card
           imageUrl={cardSelected.imageName}

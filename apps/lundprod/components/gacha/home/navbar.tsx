@@ -1,8 +1,20 @@
 import { HamburgerIcon } from '@chakra-ui/icons';
-import { Box, Heading, IconButton, useBreakpointValue } from '@chakra-ui/react';
+import {
+  Box,
+  Heading,
+  IconButton,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  useBreakpointValue,
+} from '@chakra-ui/react';
 import { useGachaHome } from '~/lundprod/contexts/gacha-home-context';
 import { CardListElement } from '../card-list-element';
 import { FilterMenu } from '../filter-menu';
+import { CardPreviewContainer } from './card-preview-container';
 
 export const Navbar = () => {
   const isMobile = useBreakpointValue({
@@ -15,6 +27,7 @@ export const Navbar = () => {
     filterPanelState,
     toggleFilterPanelState,
     filteredCards,
+    cardSelected,
     selectCard,
   } = useGachaHome();
   const toggleFilter = () => {
@@ -65,6 +78,24 @@ export const Navbar = () => {
           <CardListElement key={filteredCard.id} card={filteredCard} />
         ))}
       </Box>
+      {isMobile && cardSelected && (
+        <Modal
+          isCentered
+          isOpen={!!cardSelected}
+          onClose={() => selectCard(null)}
+        >
+          <ModalOverlay />
+          <ModalContent bg="gray.700" color="white" maxH="75vh">
+            <ModalHeader>
+              #{cardSelected.id}- {cardSelected.name}
+            </ModalHeader>
+            <ModalCloseButton />
+            <ModalBody overflowY="auto">
+              <CardPreviewContainer overflow="visible" />
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )}
     </Box>
   );
 };

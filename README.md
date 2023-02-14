@@ -36,6 +36,20 @@ The bot provides several slash commands :
 | /pp            | Get the profile picture of someone                    |
 | /shifumi       | To play rock-paper-cissors with the bot               |
 
+You can be warn for some sports :
+
+| Command               | Description                                         |
+| --------------------- | --------------------------------------------------- |
+| /sport help           | Display the bot features for the sport commands     |
+| /sport followleague   | Allow to follow a league to be notified             |
+| /sport followteam     | Allow to follow a team to be notified               |
+| /sport unfollowleague | Allow to unfollow a league to be notified           |
+| /sport unfollowteam   | Allow to unfollow a team to be notified             |
+| /sport viewleagues    | Display all the leagues in the database             |
+| /sport viewteams      | Display all the teams from a league in the database |
+
+To fill the database with sport event, take a look at the README in the cli folder
+
 A game is also available thanks to this slash commands :
 |Command|Description|
 |---|---|
@@ -73,6 +87,19 @@ Your url should look like `https://discord.com/api/oauth2/authorize?client_id=<y
 ⚠ Be careful to have the `applications.commands` in the scope
 Copy the url and use it to add the bot to your server
 
+#### Setup the channel ids
+
+When we notify for some feature or monitor a channel, we need their channel id. They are set in the DiscordNotificationChannel table of the database. You have 6 cases :
+
+- BIRTHDAY : The channel where the birthday wish will be done
+- MEME : The meme channel we are monitoring to check the messages
+- SHOP : The shop channel for the gacha where the threads are created
+- FOOTBALL : The sport channel to warn for football events
+- NBA : The sport channel to warn for NBA events
+- MOTORSPORT : The sport channel to warn for motorsport events
+
+To enable the developper mode in your settings, then right click on the channel and copy the id
+
 #### Environment variables
 
 Copy the .env.dist as a .env
@@ -83,11 +110,21 @@ Copy the .env.dist as a .env
 
 The mysql url to connect to the database
 
+> **PORT**
+
+The port used by the proxy
+
+> **ENV**
+
+The env used for the proxy. If 'dev' => it ignores the https
+
 > **BOT_TOKEN**
 
 The token of your bot. Can be found [here](https://discord.com/developers/applications) > Select application > Bot
 
-> **DISCORD_CLIENT_ID**
+> **DISCORD_OAUTH_CLIENT_ID**
+
+> **DISCORD_OAUTH_SECRET_ID**
 
 The token of your bot. Can be found [here](https://discord.com/developers/applications) > Select application > OAuth2
 
@@ -95,26 +132,9 @@ The token of your bot. Can be found [here](https://discord.com/developers/applic
 
 Enable the developper mode in your settings, then right click on the name of your server and select "Copy ID"
 
-> **MEME_CHANNEL_ID**
-
-The id of the channel you want to attach the meme stuff
-Enable the developper mode in your settings, then right click on the channel and copy the id
-
 > **MEME_CHANNEL_NAME**
 
 The name of the meme channel if it's not found with the MEME_CHANNEL_ID. Be careful, the second time you start the bot, if you didn't register the MEME_CHANNEL_ID with the newly created channel, a new one will be created again.
-
-> **BIRTHDAY_CHANNEL_ID**
-
-The channel id where you want to wish happy birthday
-
-> **PORT**
-
-The port of the website
-
-> **ENV**
-
-The environnment name (test, prod...)
 
 > **TWITCH_CLIENT_ID**
 
@@ -151,6 +171,10 @@ The CDN url to redirect to when calling the proxy with the cdn subdomain
 > **NEXTAUTH_SECRET**
 
 Secret used for the JWT. Mandatory otherwise unstable_get_session doesn't work
+
+> **API_SPORT_IO_KEY**
+
+The API key from https://api-sports.io/
 
 #### Misc
 

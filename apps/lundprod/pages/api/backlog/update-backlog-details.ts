@@ -4,7 +4,7 @@ import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 import { getUserProfileUrl } from '~/lundprod/utils/url';
 import { EmbedBuilder, WebhookClient } from 'discord.js';
-import { BacklogItem, BacklogStatus, Player } from '@prisma/client';
+import { BacklogItem, BacklogStatus, User } from '@prisma/client';
 
 export default async function updateBacklogDetails(
   req: NextApiRequest,
@@ -16,20 +16,21 @@ export default async function updateBacklogDetails(
     return res.status(401).json({ success: false });
   }
 
-  const player = await prisma.player.findUnique({
+  const user = await prisma.user.findFirst({
     where: {
       discordId: session.userId,
+      isActive: true,
     },
   });
 
-  if (!player) {
+  if (!user) {
     return res.status(404).json({ success: false });
   }
 
   const backlogItem = await prisma.backlogItem.update({
     where: {
-      playerId_igdbGameId: {
-        playerId: player.id,
+      userId_igdbGameId: {
+        userId: user.id,
         igdbGameId: req.body.igdbGameId,
       },
     },
@@ -40,12 +41,12 @@ export default async function updateBacklogDetails(
   });
 
   res.revalidate(getUserProfileUrl(session.userId));
-  webhookNotification(player, backlogItem);
+  webhookNotification(user, backlogItem);
 
   res.json({ success: true });
 }
 
-function webhookNotification(player: Player, backlogItem: BacklogItem) {
+function webhookNotification(user: User, backlogItem: BacklogItem) {
   const colorMapping = {
     [BacklogStatus.ABANDONED]: 0xcc3333,
     [BacklogStatus.FINISHED]: 0x33cc33,
@@ -58,13 +59,13 @@ function webhookNotification(player: Player, backlogItem: BacklogItem) {
     .setTitle('Mise à jour du backlog')
     .setColor(colorMapping[backlogItem.status]);
 
-  embed.addFields({ name: 'Utilisateur', value: player.username });
+  embed.addFields({ name: 'Utilisateur', value: user.username });
   embed.addFields({ name: 'Titre', value: backlogItem.name });
   embed.addFields({ name: 'Note', value: `${backlogItem.rating}/5` });
   embed.addFields({ name: 'Commentaire', value: backlogItem.reason });
   embed.addFields({
     name: 'URL du profil',
-    value: `${process.env.WEBSITE_URL}${getUserProfileUrl(player.discordId)}`,
+    value: `${process.env.WEBSITE_URL}${getUserProfileUrl(user.discordId)}`,
   });
 
   webhookClient.send({

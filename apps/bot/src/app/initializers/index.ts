@@ -1,3 +1,4 @@
-import ChannelInitializer from './ChannelInitializer';
+import { ChannelInitializer } from './ChannelInitializer';
+import { UserInitializer } from './UserInitializer';
 
-export default [ChannelInitializer];
+export default [ChannelInitializer, UserInitializer];

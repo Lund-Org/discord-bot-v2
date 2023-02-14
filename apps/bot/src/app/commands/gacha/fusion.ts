@@ -1,16 +1,16 @@
 import {
   ChatInputCommandInteraction,
   ActionRowBuilder,
-  SelectMenuBuilder,
+  StringSelectMenuBuilder,
   APISelectMenuOption,
-  SelectMenuInteraction,
+  StringSelectMenuInteraction,
   CacheType,
 } from 'discord.js';
 import {
   generateSummaryEmbed,
   getCardEarnSummary,
   getCardLostSummary,
-  userNotFound,
+  userNotFoundWarning,
 } from './helper';
 import { getCardsToFusion } from '@discord-bot-v2/common';
 import { CardType, Player, PlayerInventory } from '@prisma/client';
@@ -62,22 +62,13 @@ async function createFusionCard(
   ]);
 }
 
-export const fusion = async (interaction: SelectMenuInteraction<CacheType>) => {
-  const player = (await userNotFound({
-    interaction,
-    relations: {
-      playerInventory: {
-        include: {
-          cardType: true,
-        },
-      },
-    },
-  })) as Player & {
-    playerInventory: (PlayerInventory & { cardType: CardType })[];
-  };
+export const fusion = async (
+  interaction: StringSelectMenuInteraction<CacheType>
+) => {
+  const user = await prisma.user.getPlayerWithInventory(interaction.user.id);
 
-  if (!player) {
-    return;
+  if (!user?.player) {
+    return userNotFoundWarning(interaction);
   }
 
   await interaction.deferReply();
@@ -99,15 +90,17 @@ export const fusion = async (interaction: SelectMenuInteraction<CacheType>) => {
   }
 
   const dependencyIds = cardToCreate.fusionDependencies.map((x) => x.id);
-  const cardInventoriesRequired = player.playerInventory.filter((inventory) => {
-    return (
-      dependencyIds.includes(inventory.cardType.id) &&
-      inventory.type === 'basic'
-    );
-  });
+  const cardInventoriesRequired = user.player.playerInventory.filter(
+    (inventory) => {
+      return (
+        dependencyIds.includes(inventory.cardType.id) &&
+        inventory.type === 'basic'
+      );
+    }
+  );
   const missingCards = dependencyIds.reduce(
     (acc: number[], val: number): number[] => {
-      const hasInventoryCard = player.playerInventory.find(
+      const hasInventoryCard = user.player.playerInventory.find(
         (x) => val == x.cardType.id && x.type === 'basic' && x.total > 0
       );
 
@@ -119,18 +112,16 @@ export const fusion = async (interaction: SelectMenuInteraction<CacheType>) => {
   if (missingCards.length === 0) {
     const embed = generateSummaryEmbed([
       ...getCardLostSummary(
-        player,
+        user,
         cardInventoriesRequired.map((x) => ({
           cardType: x.cardType,
           isGold: false,
         }))
       ),
-      ...getCardEarnSummary(player, [
-        { cardType: cardToCreate, isGold: false },
-      ]),
+      ...getCardEarnSummary(user, [{ cardType: cardToCreate, isGold: false }]),
     ]);
-    await createFusionCard(player, cardInventoriesRequired, cardToCreate);
-    invalidateWebsitePages(player.discordId);
+    await createFusionCard(user.player, cardInventoriesRequired, cardToCreate);
+    invalidateWebsitePages(user.discordId);
     return interaction.editReply({
       content: `Carte fusion #${cardToCreate.id} créée !`,
       embeds: [embed],
@@ -145,23 +136,21 @@ export const fusion = async (interaction: SelectMenuInteraction<CacheType>) => {
 };
 
 export async function fusionMenu(interaction: ChatInputCommandInteraction) {
-  const player = await userNotFound({
-    interaction,
-  });
+  const user = await prisma.user.getPlayer(interaction.user.id);
 
-  if (!player) {
-    return;
+  if (!user?.player) {
+    return userNotFoundWarning(interaction);
   }
 
   await interaction.deferReply({ ephemeral: true });
-  const possibleFusions = await getCardsToFusion(player.discordId);
+  const possibleFusions = await getCardsToFusion(user.discordId);
 
   if (!possibleFusions.length) {
     return interaction.editReply('Tu ne peux faire aucune fusion actuellement');
   }
 
-  const row = new ActionRowBuilder<SelectMenuBuilder>().addComponents(
-    new SelectMenuBuilder()
+  const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+    new StringSelectMenuBuilder()
       .setCustomId('fusion')
       .setPlaceholder('Selectionner')
       .addOptions(

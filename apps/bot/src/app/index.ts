@@ -49,6 +49,29 @@ export const startBot = (): Promise<Client> => {
       );
     });
 
+    client.on(Events.GuildMemberAdd, async (discordMember) => {
+      await prisma.user.upsert({
+        create: {
+          username: discordMember.user.username,
+          discordId: discordMember.user.id,
+        },
+        update: {
+          username: discordMember.user.username,
+          isActive: true,
+        },
+        where: { discordId: discordMember.user.id },
+      });
+    });
+
+    client.on(Events.GuildMemberRemove, async (discordMember) => {
+      await prisma.user.update({
+        data: {
+          isActive: false,
+        },
+        where: { discordId: discordMember.user.id },
+      });
+    });
+
     client.on(Events.MessageCreate, async (msg: Message) => {
       for (const handler of createHandlers) {
         const validation = await handler.validate(client, msg);
@@ -126,7 +149,7 @@ export const startBot = (): Promise<Client> => {
           }
         }
       }
-      if (interaction.isSelectMenu()) {
+      if (interaction.isStringSelectMenu()) {
         for (const menuCallback of menusCallback) {
           await menuCallback(interaction);
         }

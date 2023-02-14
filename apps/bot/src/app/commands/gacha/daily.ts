@@ -1,5 +1,5 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import { Player, PlayerInventory } from '@prisma/client';
+import { Player } from '@prisma/client';
 import { ChatInputCommandInteraction, AttachmentBuilder } from 'discord.js';
 import { generateDrawImage } from '../../helpers/canvas';
 import { invalidateWebsitePages } from '../../helpers/discordEvent';
@@ -8,7 +8,7 @@ import {
   drawCards,
   generateSummaryEmbed,
   getCardEarnSummary,
-  userNotFound,
+  userNotFoundWarning,
 } from './helper';
 
 function canDrawCard(player: Player): boolean {
@@ -30,24 +30,15 @@ async function setDailyDraw(date: Date, playerId: number) {
 }
 
 export const daily = async (interaction: ChatInputCommandInteraction) => {
-  const player = (await userNotFound({
-    interaction,
-    relations: {
-      playerInventory: {
-        include: {
-          cardType: true,
-        },
-      },
-    },
-  })) as Player & { playerInventory: PlayerInventory[] };
+  const user = await prisma.user.getPlayerWithInventory(interaction.user.id);
   const dailyDrawDate = new Date();
 
-  if (!player) {
-    return;
+  if (!user?.player) {
+    return userNotFoundWarning(interaction);
   }
 
   await interaction.deferReply();
-  const drawPossible = canDrawCard(player);
+  const drawPossible = canDrawCard(user.player);
 
   if (drawPossible) {
     const cards = await drawCards(1);
@@ -55,11 +46,11 @@ export const daily = async (interaction: ChatInputCommandInteraction) => {
     const attachment = new AttachmentBuilder(canvas.toBuffer(), {
       name: 'cards.png',
     });
-    const embed = generateSummaryEmbed(getCardEarnSummary(player, cards));
+    const embed = generateSummaryEmbed(getCardEarnSummary(user, cards));
 
-    await addCardsToInventory(player, cards, 0);
-    await setDailyDraw(dailyDrawDate, player.id);
-    invalidateWebsitePages(player.discordId);
+    await addCardsToInventory(user, cards, 0);
+    await setDailyDraw(dailyDrawDate, user.player.id);
+    invalidateWebsitePages(user.discordId);
     interaction.editReply({
       content: `Voici ton tirage quotidien GRA-TUIT`,
       files: [attachment],

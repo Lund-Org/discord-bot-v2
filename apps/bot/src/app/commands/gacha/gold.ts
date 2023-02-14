@@ -3,7 +3,7 @@ import {
   generateSummaryEmbed,
   getCardEarnSummary,
   getCardLostSummary,
-  userNotFound,
+  userNotFoundWarning,
 } from './helper';
 import { CardType, Player, PlayerInventory } from '@prisma/client';
 import { prisma } from '@discord-bot-v2/prisma';
@@ -48,22 +48,10 @@ async function decreaseBasic(inventoryCardBasic: PlayerInventory) {
 }
 
 export const gold = async (interaction: ChatInputCommandInteraction) => {
-  const player = (await userNotFound({
-    interaction,
-    relations: {
-      gifts: true,
-      playerInventory: {
-        include: {
-          cardType: true,
-        },
-      },
-    },
-  })) as Player & {
-    playerInventory: (PlayerInventory & { cardType: CardType })[];
-  };
+  const user = await prisma.user.getPlayerWithInventory(interaction.user.id);
 
-  if (!player) {
-    return;
+  if (!user?.player) {
+    return userNotFoundWarning(interaction);
   }
 
   await interaction.deferReply();
@@ -75,30 +63,30 @@ export const gold = async (interaction: ChatInputCommandInteraction) => {
     return interaction.editReply("La carte n'existe pas");
   }
 
-  const inventoryCardBasic = player.playerInventory.find((inventory) => {
+  const inventoryCardBasic = user.player.playerInventory.find((inventory) => {
     return inventory.cardType.id === cardToGold && inventory.type === 'basic';
   });
 
   if (inventoryCardBasic && inventoryCardBasic.total >= 5) {
     await Promise.all([
-      createOrUpdateGold(player, inventoryCardBasic.cardType),
+      createOrUpdateGold(user.player, inventoryCardBasic.cardType),
       decreaseBasic(inventoryCardBasic),
     ]);
 
     const embed = generateSummaryEmbed([
       ...getCardLostSummary(
-        player,
+        user,
         Array.from({ length: 5 }, () => ({
           cardType: inventoryCardBasic.cardType,
           isGold: false,
         }))
       ),
-      ...getCardEarnSummary(player, [
+      ...getCardEarnSummary(user, [
         { cardType: inventoryCardBasic.cardType, isGold: true },
       ]),
     ]);
 
-    invalidateWebsitePages(player.discordId);
+    invalidateWebsitePages(user.discordId);
     return interaction.editReply({
       content: `5 cartes basiques ont été transformées en une carte en or (#${cardToGold})`,
       embeds: [embed],

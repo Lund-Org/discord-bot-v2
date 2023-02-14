@@ -5,7 +5,7 @@ import {
   QUERY_OPERATOR,
   REGION,
 } from '@discord-bot-v2/igdb';
-import { CardType, Player, PlayerInventory } from '@prisma/client';
+import { CardType, Player, PlayerInventory, User } from '@prisma/client';
 
 export type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
@@ -23,10 +23,12 @@ export type Filters = {
   search: string;
 };
 
-export type ProfileType = Player & {
-  playerInventory: (PlayerInventory & {
-    cardType: CardType;
-  })[];
+export type ProfileType = User & {
+  player: Player & {
+    playerInventory: (PlayerInventory & {
+      cardType: CardType;
+    })[];
+  };
 };
 
 export type CardsToGoldType = (PlayerInventory & {
@@ -34,6 +36,8 @@ export type CardsToGoldType = (PlayerInventory & {
 })[];
 
 export type Rank = Player & {
+  username: string;
+  discordId: string;
   playerId: number;
   currentXP: number;
   level: { currentLevel: number; xpNextLevel: number };

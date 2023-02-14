@@ -14,19 +14,20 @@ export default async function removeFromBacklog(
     return res.status(401).json({ success: false });
   }
 
-  const player = await prisma.player.findUnique({
+  const user = await prisma.user.findFirst({
     where: {
       discordId: session.userId,
+      isActive: true,
     },
   });
 
-  if (!player) {
+  if (!user) {
     return res.status(404).json({ success: false });
   }
 
   await prisma.backlogItem.deleteMany({
     where: {
-      playerId: player.id,
+      userId: user.id,
       igdbGameId: req.body.id,
     },
   });

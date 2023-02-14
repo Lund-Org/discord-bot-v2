@@ -37,18 +37,18 @@ export const GeneralInformation = ({
         </Text>
       )}
       <Divider my={2} borderBottomWidth="2px" />
-      <CustomText>Points actuels : {profile.points}</CustomText>
+      <CustomText>Points actuels : {profile.player.points}</CustomText>
       <CustomText>Niveau actuel : {rank.level.currentLevel}</CustomText>
       <CustomText>Rang actuel : {rank.position}</CustomText>
       <CustomText>XP actuelle : {rank.currentXP}</CustomText>
       <CustomText>XP du prochain niveau : {rank.level.xpNextLevel}</CustomText>
       <CustomText>
-        A rejoint le Discord le {formatDate(new Date(profile.joinDate))}
+        A rejoint le Discord le {formatDate(new Date(profile.player.joinDate))}
       </CustomText>
-      {profile.lastDailyDraw ? (
+      {profile.player.lastDailyDraw ? (
         <CustomText>
           Dernier tirage de carte le&nbsp;
-          {formatDateTime(new Date(profile.lastDailyDraw))}
+          {formatDateTime(new Date(profile.player.lastDailyDraw))}
         </CustomText>
       ) : null}
     </Box>

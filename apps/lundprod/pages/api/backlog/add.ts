@@ -14,20 +14,21 @@ export default async function addToBacklog(
     return res.status(401).json({ success: false });
   }
 
-  const player = await prisma.player.findUnique({
+  const user = await prisma.user.findFirst({
     where: {
       discordId: session.userId,
+      isActive: true,
     },
   });
 
-  if (!player) {
+  if (!user) {
     return res.status(404).json({ success: false });
   }
 
   await prisma.backlogItem.upsert({
     where: {
-      playerId_igdbGameId: {
-        playerId: player.id,
+      userId_igdbGameId: {
+        userId: user.id,
         igdbGameId: req.body.igdbGameId,
       },
     },
@@ -36,9 +37,9 @@ export default async function addToBacklog(
       name: req.body.name,
       category: req.body.category,
       url: req.body.url,
-      player: {
+      user: {
         connect: {
-          id: player.id,
+          id: user.id,
         },
       },
     },

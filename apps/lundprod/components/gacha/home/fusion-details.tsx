@@ -20,7 +20,7 @@ export const FusionDetails = ({
   });
 
   return (
-    <Box pt="20px">
+    <Box py="20px">
       <Heading as="h5">Composants pour la fusion :</Heading>
       <UnorderedList listStyleType="none">
         {fusionDependencies.map((fusionDependency, index) => (

@@ -2,10 +2,16 @@ import {
   ButtonInteraction,
   ChatInputCommandInteraction,
   EmbedBuilder,
-  SelectMenuInteraction,
+  StringSelectMenuInteraction,
 } from 'discord.js';
 import { GachaConfigEnum } from '../../enums/GachaEnum';
-import { CardType, Player, PlayerInventory, Prisma } from '@prisma/client';
+import {
+  CardType,
+  Player,
+  PlayerInventory,
+  Prisma,
+  User,
+} from '@prisma/client';
 import { prisma } from '@discord-bot-v2/prisma';
 import { addPoints } from '@discord-bot-v2/common';
 import { CardDraw } from '../../helpers/types';
@@ -17,39 +23,19 @@ type ChancesConfig = {
   '4': number;
 };
 
-export const userNotFound = async ({
-  interaction,
-  withWarning = true,
-  relations = {},
-}: {
+export const userNotFoundWarning = async (
   interaction:
     | ChatInputCommandInteraction
-    | SelectMenuInteraction
-    | ButtonInteraction;
-  withWarning?: boolean;
-  relations?: Prisma.PlayerInclude;
-}) => {
-  const hasRelationsIncluded = Object.keys(relations).length > 0;
-  const userId = interaction.user.id;
-  const player = await prisma.player.findUnique({
-    where: { discordId: userId },
-    ...(hasRelationsIncluded ? { include: relations } : {}),
-  });
-
-  if (player) {
-    return player;
-  }
-
-  if (withWarning) {
-    interaction.reply(
-      `Avant de pouvoir jouer, crée un compte avec la commande "/gacha join"`
-    );
-  }
-  return null;
+    | StringSelectMenuInteraction
+    | ButtonInteraction
+) => {
+  interaction.reply(
+    `Avant de pouvoir jouer, crée un compte avec la commande "/gacha join"`
+  );
 };
 
 export async function addCardsToInventory(
-  player: Player & { playerInventory: PlayerInventory[] },
+  user: User & { player: Player & { playerInventory: PlayerInventory[] } },
   cardsToAdd: CardDraw[],
   totalPrice: number
 ) {
@@ -68,28 +54,28 @@ export async function addCardsToInventory(
 
   cardsToAdd.forEach((cardToAdd) => {
     const type = cardToAdd.isGold ? 'gold' : 'basic';
-    const inventoryItem = player.playerInventory.find(
+    const inventoryItem = user.player.playerInventory.find(
       (x) => x.cardTypeId === cardToAdd.cardType.id && x.type === type
     );
     const existingItem =
       groupedPlayerInventoryItems[
-        `${type}-${cardToAdd.cardType.id}-${player.id}`
+        `${type}-${cardToAdd.cardType.id}-${user.id}`
       ];
 
     if (existingItem && !isNewItem(existingItem)) {
       existingItem.incr++;
     } else if (inventoryItem) {
       groupedPlayerInventoryItems[
-        `${type}-${cardToAdd.cardType.id}-${player.id}`
+        `${type}-${cardToAdd.cardType.id}-${user.id}`
       ] = {
         id: inventoryItem.id,
         incr: 1,
       };
     } else {
       groupedPlayerInventoryItems[
-        `${type}-${cardToAdd.cardType.id}-${player.id}`
+        `${type}-${cardToAdd.cardType.id}-${user.id}`
       ] = {
-        playerId: player.id,
+        playerId: user.player.id,
         total: 1,
         type,
         cardTypeId: cardToAdd.cardType.id,
@@ -98,7 +84,7 @@ export async function addCardsToInventory(
   });
 
   await Promise.all([
-    addPoints(player.id, -totalPrice),
+    addPoints(user.player.id, -totalPrice),
     ...Object.values(groupedPlayerInventoryItems).map(
       async (groupedPlayerInventoryItem) => {
         return isNewItem(groupedPlayerInventoryItem)
@@ -156,7 +142,9 @@ export const drawCards = async (nbCardToDraw: number): Promise<CardDraw[]> => {
 };
 
 export function getCardEarnSummary(
-  playerWithInventory: Player & { playerInventory: PlayerInventory[] },
+  userWithInventory: User & {
+    player: Player & { playerInventory: PlayerInventory[] };
+  },
   cards: CardDraw[]
 ) {
   return cards.reduce((acc, card) => {
@@ -169,7 +157,7 @@ export function getCardEarnSummary(
       ++acc[existingFieldIndex].count;
       return acc;
     }
-    const inventoryLine = playerWithInventory.playerInventory.find(
+    const inventoryLine = userWithInventory.player.playerInventory.find(
       (x) => x.cardTypeId === card.cardType.id && x.type === type
     );
 
@@ -183,7 +171,9 @@ export function getCardEarnSummary(
 }
 
 export function getCardLostSummary(
-  playerWithInventory: Player & { playerInventory: PlayerInventory[] },
+  userWithInventory: User & {
+    player: Player & { playerInventory: PlayerInventory[] };
+  },
   cards: CardDraw[]
 ) {
   return cards.reduce((acc, card) => {
@@ -197,7 +187,7 @@ export function getCardLostSummary(
       return acc;
     }
     // inventoryLine should always be present, if not, there is an issue
-    const inventoryLine = playerWithInventory.playerInventory.find(
+    const inventoryLine = userWithInventory.player.playerInventory.find(
       (x) => x.cardTypeId === card.cardType.id && x.type === type
     );
 

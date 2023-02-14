@@ -1,18 +1,20 @@
 import { prisma } from '@discord-bot-v2/prisma';
 import { Player } from '@prisma/client';
 
-type XpByUser = Player & {
+type XpByPlayer = Player & {
   playerId: number;
   currentXP: number;
+  discordId: string;
+  username: string;
 };
-type EnrichXpByUser = XpByUser & { position: number };
+type EnrichXpByPlayer = XpByPlayer & { position: number };
 export type RankByUser = {
   level: { currentLevel: number; xpNextLevel: number };
-} & EnrichXpByUser;
+} & EnrichXpByPlayer;
 
-// To redo, optimize...
+// To redo, optimize, retype...
 export async function getGlobalRanking(
-  userToFilter: number[] = []
+  playerToFilter: number[] = []
 ): Promise<RankByUser[]> {
   const xpConfig = await prisma.config.findUnique({
     where: { name: 'CARD_XP' },
@@ -26,11 +28,13 @@ export async function getGlobalRanking(
   }
 
   const xpVal = xpConfig.value as { gold: number; basic: number };
-  const xpByUsers: XpByUser[] = await prisma.$queryRaw`
+  const xpByPlayers: XpByPlayer[] = await prisma.$queryRaw`
     SELECT
       t1.playerId,
       SUM(t1.price * t1.level) AS currentXP,
-      Player.*
+      Player.*,
+      User.discordId,
+      User.username
     FROM (
       SELECT
         PlayerInventory.playerId,
@@ -43,23 +47,26 @@ export async function getGlobalRanking(
       GROUP BY playerId, cardTypeId, type
     ) as t1
     LEFT JOIN Player on Player.id = t1.playerId
+    LEFT JOIN User on User.id = Player.userId
     GROUP BY playerId
     ORDER BY currentXP DESC`;
 
-  const enrichAndFilteredXpByUsers: EnrichXpByUser[] = xpByUsers
-    .map((xpByUser, index) => ({
-      ...xpByUser,
+  const enrichAndFilteredXpByPlayers: EnrichXpByPlayer[] = xpByPlayers
+    .map((xpByPlayer, index) => ({
+      ...xpByPlayer,
       position: index + 1,
     }))
-    .filter((xpByUser) => {
-      return userToFilter.length ? userToFilter.includes(xpByUser.id) : true;
+    .filter((xpByPlayer) => {
+      return playerToFilter.length
+        ? playerToFilter.includes(xpByPlayer.id)
+        : true;
     });
   const levelConfig = levelsConfig.value as Record<string, number>;
 
-  return enrichAndFilteredXpByUsers.map((xpByUser: EnrichXpByUser) => {
+  return enrichAndFilteredXpByPlayers.map((xpByPlayer: EnrichXpByPlayer) => {
     const level = Object.values(levelConfig).reduce(
       (acc, val: number, index: number) => {
-        if (val <= xpByUser.currentXP) {
+        if (val <= xpByPlayer.currentXP) {
           return {
             currentLevel: index + 1,
             xpNextLevel:
@@ -75,13 +82,13 @@ export async function getGlobalRanking(
     );
 
     return {
-      ...xpByUser,
+      ...xpByPlayer,
       level,
-      lastMessageDate: new Date(xpByUser.lastMessageDate),
-      lastDailyDraw: xpByUser.lastDailyDraw
-        ? new Date(xpByUser.lastDailyDraw)
+      lastMessageDate: new Date(xpByPlayer.lastMessageDate),
+      lastDailyDraw: xpByPlayer.lastDailyDraw
+        ? new Date(xpByPlayer.lastDailyDraw)
         : null,
-      joinDate: new Date(xpByUser.joinDate),
+      joinDate: new Date(xpByPlayer.joinDate),
     };
   });
 }

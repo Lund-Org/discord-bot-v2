@@ -10,6 +10,7 @@ import { pollCmd } from './poll';
 import { pongCmd } from './pong';
 import { ppCmd } from './pp';
 import { shifumiCmd } from './shifumi';
+import { sportCmd } from './sport';
 
 const commands = [
   birthdayCmd,
@@ -22,6 +23,7 @@ const commands = [
   pongCmd,
   ppCmd,
   shifumiCmd,
+  sportCmd,
 ];
 
 export async function initCommands() {
@@ -30,10 +32,10 @@ export async function initCommands() {
   await rest
     .put(
       Routes.applicationGuildCommands(
-        process.env.DISCORD_CLIENT_ID || '',
-        process.env.DISCORD_GUILD_ID || '',
+        process.env.DISCORD_OAUTH_CLIENT_ID || '',
+        process.env.DISCORD_GUILD_ID || ''
       ),
-      { body: commands },
+      { body: commands }
     )
     .catch((e) => {
       console.log(e);

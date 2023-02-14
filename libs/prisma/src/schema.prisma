@@ -18,7 +18,7 @@ model Birthday {
 
 model BacklogItem {
   id         Int           @id @default(autoincrement())
-  playerId   Int
+  userId     Int
   igdbGameId Int
   name       String
   category   String
@@ -26,10 +26,9 @@ model BacklogItem {
   status     BacklogStatus @default(BACKLOG)
   reason     String?       @db.VarChar(255)
   rating     Int           @default(0)
+  user       User          @relation(fields: [userId], references: [id])
 
-  player Player @relation(fields: [playerId], references: [id])
-
-  @@unique([playerId, igdbGameId])
+  @@unique([userId, igdbGameId])
 }
 
 model BlogPost {
@@ -102,6 +101,12 @@ model DailyShopItem {
   @@index([cardTypeId])
 }
 
+model DiscordNotificationChannel {
+  id               Int                 @id @default(autoincrement())
+  discordChannelId String
+  notificationType ChannelNotification @unique
+}
+
 model Gift {
   id                Int      @id @default(autoincrement())
   beginningDatetime DateTime @db.DateTime(0)
@@ -119,18 +124,17 @@ model Pagination {
 }
 
 model Player {
-  id              Int               @id @default(autoincrement())
-  discordId       String            @unique @db.VarChar(255)
+  id              Int       @id @default(autoincrement())
   points          Int
-  lastMessageDate DateTime          @default(now()) @db.DateTime(0)
-  lastDailyDraw   DateTime?         @db.DateTime(0)
-  joinDate        DateTime          @default(now()) @db.DateTime(0)
-  twitchUsername  String?           @unique @db.VarChar(255)
-  username        String            @db.VarChar(255)
+  lastMessageDate DateTime  @default(now()) @db.DateTime(0)
+  lastDailyDraw   DateTime? @db.DateTime(0)
+  joinDate        DateTime  @default(now()) @db.DateTime(0)
+  userId          Int       @unique
+
   gifts           Gift[]
-  backlogItems    BacklogItem[]
   playerInventory PlayerInventory[]
   dailyPurchase   DailyPurchase[]
+  user            User              @relation(fields: [userId], references: [id])
 }
 
 model PlayerInventory {
@@ -147,10 +151,67 @@ model PlayerInventory {
   @@index([playerId])
 }
 
+model SportEvent {
+  id       Int                @id @default(autoincrement())
+  name     String?
+  teamAId  Int?
+  teamBId  Int?
+  startAt  DateTime
+  imageUrl String
+  category SportEventCategory
+  leagueId Int
+  teamA    SportTeam?         @relation("TeamHome", fields: [teamAId], references: [id])
+  teamB    SportTeam?         @relation("TeamAway", fields: [teamBId], references: [id])
+  league   SportLeague        @relation(fields: [leagueId], references: [id])
+
+  @@index([teamAId])
+  @@index([teamBId])
+}
+
+model SportLeague {
+  id          Int          @id @default(autoincrement())
+  name        String
+  logoUrl     String
+  countryCode String
+  sportApiId  Int?
+  year        Int
+  teams       SportTeam[]
+  events      SportEvent[]
+  users       User[]
+
+  @@index([sportApiId])
+}
+
+model SportTeam {
+  id         Int           @id @default(autoincrement())
+  name       String
+  logoUrl    String
+  sportApiId Int?
+  year       Int
+  users      User[]
+  league     SportLeague[]
+  eventsHome SportEvent[]  @relation("TeamHome")
+  eventsAway SportEvent[]  @relation("TeamAway")
+
+  @@unique([name, sportApiId, year])
+}
+
 model Tag {
   id       Int        @id @default(autoincrement())
   name     String     @unique @db.VarChar(255)
   blogPost BlogPost[]
+}
+
+model User {
+  id             Int           @id @default(autoincrement())
+  discordId      String        @unique @db.VarChar(255)
+  twitchUsername String?       @unique @db.VarChar(255)
+  username       String        @db.VarChar(255)
+  isActive       Boolean       @default(true)
+  player         Player?
+  backlogItems   BacklogItem[]
+  teamFollowed   SportTeam[]
+  leagueFollowed SportLeague[]
 }
 
 //-- Enums
@@ -172,4 +233,19 @@ enum Category {
   TECH
   VIDEO
   OTHER
+}
+
+enum SportEventCategory {
+  FOOTBALL
+  BASKET
+  MOTORSPORT
+}
+
+enum ChannelNotification {
+  BIRTHDAY
+  MEME
+  SHOP
+  FOOTBALL
+  NBA
+  MOTORSPORT
 }

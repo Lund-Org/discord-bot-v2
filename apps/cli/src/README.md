@@ -1,0 +1,21 @@
+# Memo for the commands
+
+To build : `npx nx run cli:build`
+
+To fill the football events :
+
+> `node ./dist/cli/main.js generate-sport-events --sport football --year 2022`
+
+To fill the nba events :
+
+> `node ./dist/cli/main.js generate-sport-events --sport nba --year 2022`
+
+To fill the F1 events :
+
+> `node ./dist/cli/main.js generate-sport-events --sport f1 --year 2023 --fromFile --file apps/cli/src/resources/f1.json`
+
+_Could have been retrieved with the API but it doesn't provide F2, F3 and FE anyway so..._
+
+To fill the FE events :
+
+> `node ./dist/cli/main.js generate-sport-events --sport fe --year 2023 --fromFile --file apps/cli/src/resources/fe.json`

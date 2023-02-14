@@ -2,7 +2,7 @@ import { ChatInputCommandInteraction } from 'discord.js';
 import {
   generateSummaryEmbed,
   getCardLostSummary,
-  userNotFound,
+  userNotFoundWarning,
 } from './helper';
 import { GachaConfigEnum } from '../../enums/GachaEnum';
 import { CardType, Player, PlayerInventory } from '@prisma/client';
@@ -85,26 +85,15 @@ async function securityChecks({
 }
 
 export const sell = async (interaction: ChatInputCommandInteraction) => {
-  const player = (await userNotFound({
-    interaction,
-    relations: {
-      playerInventory: {
-        include: {
-          cardType: true,
-        },
-      },
-    },
-  })) as Player & {
-    playerInventory: PlayerInventory[];
-  };
+  const user = await prisma.user.getPlayerWithInventory(interaction.user.id);
 
-  if (!player) {
-    return;
+  if (!user?.player) {
+    return userNotFoundWarning(interaction);
   }
 
   await interaction.deferReply();
   const cardType = interaction.options.getString('type', true);
-  const data = await securityChecks({ interaction, player });
+  const data = await securityChecks({ interaction, player: user.player });
 
   if (data === null) {
     return;
@@ -121,22 +110,22 @@ export const sell = async (interaction: ChatInputCommandInteraction) => {
         },
       },
     }),
-    addPoints(player.id, data.earningPoints),
+    addPoints(user.player.id, data.earningPoints),
   ]);
 
   const embed = generateSummaryEmbed(
     getCardLostSummary(
-      player,
+      user,
       Array.from({ length: data.quantity }, () => ({
         cardType: data.cardToSell.cardType,
         isGold: cardType === 'gold',
       }))
     )
   );
-  invalidateWebsitePages(player.discordId);
+  invalidateWebsitePages(user.discordId);
   return interaction.editReply({
     content: `Tu as gagné ${data.earningPoints} points - Tu as ${
-      player.points + data.earningPoints
+      user.player.points + data.earningPoints
     } points`,
     embeds: [embed],
   });

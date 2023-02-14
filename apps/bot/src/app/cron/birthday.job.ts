@@ -11,6 +11,9 @@ export async function cronDefinition(discordClient: Client) {
   const date = new Date();
 
   try {
+    const BirthdayChannelId =
+      await prisma.discordNotificationChannel.getBirthdayChannelId();
+
     // get the birthday entities
     const birthdays = await prisma.birthday.findMany({
       where: {
@@ -30,9 +33,7 @@ export async function cronDefinition(discordClient: Client) {
 
         if (target) {
           const notifChannel: NonThreadGuildBasedChannel | null =
-            await guild.channels
-              .fetch(process.env.BIRTHDAY_CHANNEL_ID || '')
-              .catch(() => null);
+            await guild.channels.fetch(BirthdayChannelId).catch(() => null);
 
           // get the general channel
           if (notifChannel && notifChannel.isTextBased()) {

@@ -18,13 +18,13 @@ export const authOptions: AuthOptions = {
   },
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      const dbUser = await prisma.player.findUnique({
+      const dbUser = await prisma.user.findUnique({
         where: {
           discordId: user.id,
         },
       });
       if (dbUser) {
-        await prisma.player.update({
+        await prisma.user.update({
           where: {
             discordId: user.id,
           },
@@ -46,7 +46,10 @@ export const authOptions: AuthOptions = {
       // To not display the email in the network, since it's not used
       delete session.user.email;
 
+      const dbUser = await prisma.user.getPlayer(token.userId);
+
       session.userId = token.userId;
+      session.isPlayer = !!dbUser?.player;
       return session;
     },
   },
