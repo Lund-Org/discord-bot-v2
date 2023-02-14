@@ -3,11 +3,10 @@ import {
   addCardsToInventory,
   generateSummaryEmbed,
   getCardEarnSummary,
-  userNotFound,
+  userNotFoundWarning,
 } from './helper';
 import { GachaConfigEnum } from '../../enums/GachaEnum';
 import { prisma } from '@discord-bot-v2/prisma';
-import { CardType, Player, PlayerInventory } from '@prisma/client';
 import { invalidateWebsitePages } from '../../helpers/discordEvent';
 
 function getDailyShop(playerId: number) {
@@ -50,21 +49,10 @@ function identifyMsg(interaction: ButtonInteraction, msg: string) {
 }
 
 export const shopBuy = async (interaction: ButtonInteraction) => {
-  const player = (await userNotFound({
-    interaction,
-    relations: {
-      playerInventory: {
-        include: {
-          cardType: true,
-        },
-      },
-    },
-  })) as Player & {
-    playerInventory: (PlayerInventory & { cardType: CardType })[];
-  };
+  const user = await prisma.user.getPlayerWithInventory(interaction.user.id);
 
-  if (!player) {
-    return;
+  if (!user?.player) {
+    return userNotFoundWarning(interaction);
   }
 
   await interaction.deferReply();
@@ -74,7 +62,7 @@ export const shopBuy = async (interaction: ButtonInteraction) => {
     where: { name: GachaConfigEnum.SHOP_PRICES },
   });
   const shopPriceConfig = config?.value as { basic: number; gold: number };
-  const dailyShop = await getDailyShop(player.id);
+  const dailyShop = await getDailyShop(user.player.id);
 
   if (!dailyShop) {
     return interaction.editReply(
@@ -112,7 +100,7 @@ export const shopBuy = async (interaction: ButtonInteraction) => {
       identifyMsg(interaction, 'Carte indisponible')
     );
   }
-  if (player.points < price) {
+  if (user.player.points < price) {
     return interaction.editReply(
       identifyMsg(interaction, "Tu n'as pas assez de points")
     );
@@ -120,7 +108,7 @@ export const shopBuy = async (interaction: ButtonInteraction) => {
 
   await Promise.all([
     addCardsToInventory(
-      player,
+      user,
       [
         {
           cardType: selectedItem.cardType,
@@ -131,26 +119,26 @@ export const shopBuy = async (interaction: ButtonInteraction) => {
     ),
     prisma.dailyPurchase.create({
       data: {
-        playerId: player.id,
+        playerId: user.player.id,
         dailyShopItemId: selectedItem.id,
       },
     }),
   ]);
   const embed = generateSummaryEmbed(
-    getCardEarnSummary(player, [
+    getCardEarnSummary(user, [
       {
         cardType: selectedItem.cardType,
         isGold: selectedItem.type === 'gold',
       },
     ])
   );
-  invalidateWebsitePages(player.discordId);
+  invalidateWebsitePages(user.discordId);
 
   return interaction.editReply({
     content: identifyMsg(
       interaction,
       `Carte #${selectedItem.cardTypeId} achetée. Il te reste ${
-        player.points - price
+        user.player.points - price
       } points`
     ),
     embeds: [embed],

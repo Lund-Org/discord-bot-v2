@@ -7,6 +7,7 @@ import {
 import { buy } from './gacha/buy';
 import { cards } from './gacha/cards';
 import { daily } from './gacha/daily';
+import { dismantle } from './gacha/dismantle';
 import { fusion, fusionMenu } from './gacha/fusion';
 import { gift } from './gacha/gift';
 import { gold } from './gacha/gold';
@@ -63,6 +64,17 @@ export const gachaCmd = new SlashCommandBuilder()
     subcommand
       .setName('gold')
       .setDescription('Permet de transformer des cartes basiques en or')
+      .addNumberOption((option) =>
+        option
+          .setName('id')
+          .setDescription('Identifiant de la carte')
+          .setRequired(true)
+      )
+  )
+  .addSubcommand((subcommand) =>
+    subcommand
+      .setName('dismantle')
+      .setDescription('Permet de transformer un carte en or en carte basique')
       .addNumberOption((option) =>
         option
           .setName('id')
@@ -150,6 +162,8 @@ function gachaCallback(interaction: ChatInputCommandInteraction) {
       return cards(interaction);
     case 'daily':
       return daily(interaction);
+    case 'dismantle':
+      return dismantle(interaction);
     case 'fusion':
       return fusionMenu(interaction);
     case 'gift':

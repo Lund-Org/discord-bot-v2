@@ -37,9 +37,10 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
     };
   }
 
-  const player = await prisma.player.findUnique({
+  const user = await prisma.user.findFirst({
     where: {
       discordId: session.userId,
+      isActive: true,
     },
     select: {
       backlogItems: {
@@ -56,7 +57,7 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
     },
   });
 
-  if (!player) {
+  if (!user) {
     return {
       redirect: {
         destination: '/',
@@ -67,7 +68,7 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
 
   return {
     props: {
-      backlog: player.backlogItems,
+      backlog: user.backlogItems,
       session,
     },
   };

@@ -1,25 +1,25 @@
 import { prisma } from '@discord-bot-v2/prisma';
 import { ChatInputCommandInteraction } from 'discord.js';
 import { invalidateWebsitePages } from '../../helpers/discordEvent';
-import { userNotFound } from './helper';
+import { userNotFoundWarning } from './helper';
 
 export const twitch = async (interaction: ChatInputCommandInteraction) => {
-  const player = await userNotFound({ interaction });
+  const user = await prisma.user.getPlayer(interaction.user.id);
 
-  if (!player) {
-    return;
+  if (!user?.player) {
+    return userNotFoundWarning(interaction);
   }
 
   const twitchUsername = interaction.options.getString('username', true);
 
   try {
-    await prisma.player.update({
-      where: { id: player.id },
+    await prisma.user.update({
+      where: { id: user.id },
       data: {
         twitchUsername: twitchUsername.toLowerCase(),
       },
     });
-    invalidateWebsitePages(player.discordId);
+    invalidateWebsitePages(user.discordId);
     interaction.reply(`Pseudo twitch attaché`);
   } catch (e) {
     interaction.reply(

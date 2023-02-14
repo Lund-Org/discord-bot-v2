@@ -5,15 +5,18 @@ import {
   Collection,
   GuildBasedChannel,
 } from 'discord.js';
-import { DataStore } from '@discord-bot-v2/common';
+import { prisma } from '@discord-bot-v2/prisma';
+import { ChannelNotification } from '@prisma/client';
 
-export default function (client: Client) {
+export async function ChannelInitializer(client: Client) {
   const servers: Collection<string, Guild> = client.guilds.cache;
+  const MemeChannelId =
+    await prisma.discordNotificationChannel.getMemeChannelId();
 
   servers.every((server: Guild): boolean => {
     const hasMemeChannel = !!server.channels.cache.find(
       (channel: GuildBasedChannel) => {
-        return channel.id === process.env.MEME_CHANNEL_ID;
+        return channel.id === MemeChannelId;
       }
     );
 
@@ -23,14 +26,18 @@ export default function (client: Client) {
           name: process.env.MEME_CHANNEL_NAME,
           type: ChannelType.GuildText,
         })
-        .then((newChannel) => {
-          DataStore.setData('MEME_CHANNEL_ID', newChannel.id);
-        });
+        .then((newChannel) =>
+          prisma.discordNotificationChannel.create({
+            data: {
+              discordChannelId: newChannel.id,
+              notificationType: ChannelNotification.MEME,
+            },
+          })
+        );
     } else if (!hasMemeChannel) {
       console.log('Memes variables not set in the .env');
-    } else {
-      DataStore.setData('MEME_CHANNEL_ID', process.env.MEME_CHANNEL_ID || '');
     }
+
     return true;
   });
 }

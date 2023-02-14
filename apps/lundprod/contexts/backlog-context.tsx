@@ -224,8 +224,6 @@ function findItemChangePropertyAndRequestAPI<T>(
     );
   }
 
-  console.log(payload);
-
   setBacklog(newBacklog);
   return fetcher(url, undefined, {
     method: 'POST',

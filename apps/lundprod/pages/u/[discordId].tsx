@@ -28,13 +28,18 @@ type UserProfilePageProps = {
 };
 
 export async function getStaticPaths() {
-  const players = await prisma.player.findMany({
-    select: { discordId: true },
+  const users = await prisma.user.findMany({
+    include: {
+      player: true,
+    },
+    where: { isActive: true },
   });
 
-  const paths = players.map((player) => ({
-    params: { discordId: player.discordId },
-  }));
+  const paths = users
+    .filter(({ player }) => player)
+    .map((user) => ({
+      params: { discordId: user.discordId },
+    }));
 
   return { paths, fallback: 'blocking' };
 }
@@ -46,7 +51,7 @@ export const getStaticProps: GetStaticProps<UserProfilePageProps> = async (
   const discordId = Array.isArray(params.discordId)
     ? params.discordId[0]
     : params.discordId || '';
-  const profile = await prisma.player.getProfile(discordId);
+  const profile = await prisma.user.getProfile(discordId);
 
   if (!profile) {
     return {
@@ -58,7 +63,7 @@ export const getStaticProps: GetStaticProps<UserProfilePageProps> = async (
   }
 
   const backlogItems = await prisma.backlogItem.findMany({
-    where: { playerId: profile.id },
+    where: { userId: profile.id },
     select: {
       igdbGameId: true,
       name: true,
@@ -70,7 +75,7 @@ export const getStaticProps: GetStaticProps<UserProfilePageProps> = async (
     },
   });
   const cardsToGold = await prisma.playerInventory.getCardsToGold(discordId);
-  const [rank] = await getGlobalRanking([profile.id]);
+  const [rank] = await getGlobalRanking([profile.player.id]);
   const fusions = await getCardsToFusion(discordId);
 
   return {

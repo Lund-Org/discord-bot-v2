@@ -1,7 +1,7 @@
 import { Client, ChannelType, Message, TextChannel } from 'discord.js';
 import { parse, UrlWithStringQuery } from 'url';
 import { extname } from 'path';
-import { DataStore } from '@discord-bot-v2/common';
+import { prisma } from '@discord-bot-v2/prisma';
 
 export default {
   /**
@@ -29,11 +29,14 @@ export default {
    * Check if the message is in the meme channel
    * @param msg The message to analyse
    */
-  isMemeChannel(msg: Message): boolean {
+  async isMemeChannel(msg: Message): Promise<boolean> {
+    const MemeChannelId =
+      await prisma.discordNotificationChannel.getMemeChannelId();
+
     if (msg.channel.type === ChannelType.GuildText) {
       const channel: TextChannel = msg.channel as TextChannel;
 
-      return channel.id === DataStore.getData('MEME_CHANNEL_ID');
+      return channel.id === MemeChannelId;
     }
     return false;
   },

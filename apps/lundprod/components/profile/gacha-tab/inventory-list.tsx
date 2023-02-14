@@ -32,10 +32,10 @@ export const InventoryList = ({ profile, ...rest }: InventoryListProps) => {
   });
 
   const [basicCards, goldCards] = useMemo(() => {
-    const filteredBasicInventories = profile.playerInventory.filter(
+    const filteredBasicInventories = profile.player.playerInventory.filter(
       (x) => x.type === 'basic'
     );
-    const filteredGoldInventories = profile.playerInventory.filter(
+    const filteredGoldInventories = profile.player.playerInventory.filter(
       (x) => x.type === 'gold'
     );
 

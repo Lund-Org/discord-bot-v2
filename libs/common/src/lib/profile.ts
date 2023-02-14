@@ -19,7 +19,7 @@ export async function getCardsToFusion(discordId: string) {
         cardType: true,
       },
       where: {
-        player: { discordId },
+        player: { user: { discordId } },
         type: 'basic',
       },
     });

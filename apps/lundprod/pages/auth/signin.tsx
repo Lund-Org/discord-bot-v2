@@ -1,4 +1,4 @@
-import { Box, Button, Image, Kbd, Text } from '@chakra-ui/react';
+import { Box, Button, Image, Text } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { GetServerSideProps } from 'next';
 import { getProviders, signIn } from 'next-auth/react';
@@ -75,9 +75,6 @@ export default function SignIn({ providers }: SignInProps) {
         >
           {discordNetwork.title}
         </LightStyledLink>
-        <Text as="span">&nbsp;et le gacha avec la commande&nbsp;</Text>
-        <Kbd color="gray.900">/gacha join</Kbd>
-        <Text as="span">&nbsp;(dans le bon channel !)&nbsp;</Text>
         {query.error && (
           <Text color="red.400" mt="20px">
             Erreur : {query.error}

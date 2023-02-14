@@ -3,6 +3,7 @@ import { Client } from 'discord.js';
 
 import * as birthdayJob from './birthday.job';
 import * as dailyShopJob from './daily-shop.job';
+import * as sportJob from './sport-notifications.job';
 
 function setupCron(discordClient: Client) {
   const jobs = [
@@ -16,6 +17,13 @@ function setupCron(discordClient: Client) {
     new CronJob(
       dailyShopJob.cronTiming,
       () => dailyShopJob.cronDefinition(discordClient),
+      null,
+      true,
+      'Europe/Paris'
+    ),
+    new CronJob(
+      sportJob.cronTiming,
+      () => sportJob.cronDefinition(discordClient),
       null,
       true,
       'Europe/Paris'

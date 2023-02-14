@@ -99,9 +99,12 @@ async function backportThisYearPoints(
   const birthdayThisYear = new Date(new Date().getFullYear(), month - 1, day);
 
   if (birthdayThisYear.getTime() < Date.now()) {
-    const player = await prisma.player.findUnique({ where: { discordId } });
+    const user = await prisma.user.findFirst({
+      include: { player: true },
+      where: { discordId, isActive: true },
+    });
 
-    if (player) {
+    if (user?.player && user.isActive) {
       await giftPointsForBirthday(discordId);
     }
   }

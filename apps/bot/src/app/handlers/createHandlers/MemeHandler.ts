@@ -17,7 +17,8 @@ class MemeCheckerHandler extends Handler {
 
   async validate(client: Client, msg: Message): Promise<boolean> {
     const isValid =
-      (await super.validate(client, msg)) && messageHelper.isMemeChannel(msg);
+      (await super.validate(client, msg)) &&
+      (await messageHelper.isMemeChannel(msg));
 
     return isValid;
   }
@@ -35,7 +36,7 @@ class MemeCheckerHandler extends Handler {
       (messageHelper.isUrl(msg) &&
         messageHelper.isWhitelistedHostname(
           msg.content,
-          this.authorizedWebsites,
+          this.authorizedWebsites
         ));
 
     if (!keepMsg) {

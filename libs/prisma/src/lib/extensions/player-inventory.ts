@@ -1,11 +1,13 @@
 import { PrismaClient } from '@prisma/client';
 
-export const getPlayerInventoryExtensions = (prisma: PrismaClient) => ({
-  getCardsToGold(discordId: string) {
+export const PlayerInventoryExtension = (prisma: PrismaClient) => ({
+  getCardsToGold: async (discordId: string) => {
     try {
       return prisma.playerInventory.findMany({
         where: {
-          player: { discordId },
+          player: {
+            user: { discordId },
+          },
           type: 'basic',
           total: { gte: 5 },
         },
@@ -14,7 +16,7 @@ export const getPlayerInventoryExtensions = (prisma: PrismaClient) => ({
       });
     } catch (e) {
       console.log(e);
-      return [];
+      return Promise.resolve([]);
     }
   },
 });

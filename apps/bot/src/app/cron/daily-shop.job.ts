@@ -17,7 +17,7 @@ export const cronTiming = '0 0 0 * * *';
 
 export async function cronDefinition(discordClient: Client) {
   const date = new Date();
-  const shopChannel = findShopChannel(discordClient);
+  const shopChannel = await findShopChannel(discordClient);
   const config = await prisma.config.findUnique({
     where: { name: GachaConfigEnum.SHOP_PRICES },
   });
@@ -98,13 +98,17 @@ export async function cronDefinition(discordClient: Client) {
   }
 }
 
-function findShopChannel(discordClient: Client): TextChannel | null {
+async function findShopChannel(
+  discordClient: Client
+): Promise<TextChannel | null> {
   let shopChannel = null;
   const servers: Collection<string, Guild> = discordClient.guilds.cache;
+  const ShopChannelId =
+    await prisma.discordNotificationChannel.getShopChannelId();
 
   servers.some((server: Guild): boolean => {
     shopChannel = server.channels.cache.find((channel: TextChannel) => {
-      return channel.id === process.env.SHOP_CHANNEL_ID;
+      return channel.id === ShopChannelId;
     });
 
     if (shopChannel) {

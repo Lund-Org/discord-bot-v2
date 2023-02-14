@@ -5,8 +5,8 @@ import {
   MessageReaction,
   User,
 } from 'discord.js';
-import { userNotFound } from './helper';
-import { CardType, Pagination, Player, PlayerInventory } from '@prisma/client';
+import { userNotFoundWarning } from './helper';
+import { CardType, Pagination, PlayerInventory } from '@prisma/client';
 import { prisma } from '@discord-bot-v2/prisma';
 
 export const CARD_PER_PAGE = 10;
@@ -45,31 +45,33 @@ function buildSnippet(
 }
 
 export const cards = async (interaction: ChatInputCommandInteraction) => {
-  const player = (await userNotFound({
-    interaction,
-    relations: {
-      playerInventory: {
+  const user = await prisma.user.findFirst({
+    where: { discordId: interaction.user.id, isActive: true },
+    include: {
+      player: {
         include: {
-          cardType: true,
+          playerInventory: {
+            include: {
+              cardType: true,
+            },
+            orderBy: {
+              cardTypeId: 'asc',
+            },
+            skip: 0,
+            // +1 to see if we have a second page
+            take: CARD_PER_PAGE + 1,
+          },
         },
-        orderBy: {
-          cardTypeId: 'asc',
-        },
-        skip: 0,
-        // +1 to see if we have a second page
-        take: CARD_PER_PAGE + 1,
       },
     },
-  })) as Player & {
-    playerInventory: (PlayerInventory & { cardType: CardType })[];
-  };
+  });
 
-  if (!player) {
-    return;
+  if (!user?.player && user.isActive) {
+    return userNotFoundWarning(interaction);
   }
 
   await interaction.deferReply();
-  const tenFirstCards = player.playerInventory.slice(0, 10);
+  const tenFirstCards = user.player.playerInventory.slice(0, 10);
 
   if (!tenFirstCards.length) {
     return interaction.editReply(
@@ -81,7 +83,7 @@ export const cards = async (interaction: ChatInputCommandInteraction) => {
   await interaction.editReply({ embeds: [snippet] });
   const inventoryMessage = (await interaction.fetchReply()) as Message;
 
-  if (player.playerInventory.length > CARD_PER_PAGE) {
+  if (user.player.playerInventory.length > CARD_PER_PAGE) {
     await inventoryMessage.react('◀');
     await inventoryMessage.react('▶');
 
@@ -92,29 +94,36 @@ export const cards = async (interaction: ChatInputCommandInteraction) => {
 export const updateMessage = async (
   pagination: Pagination,
   reaction: MessageReaction,
-  user: User
+  discordUser: User
 ) => {
-  const player = await prisma.player.findUnique({
-    where: { discordId: user.id },
+  const user = await prisma.user.findFirst({
+    where: { discordId: discordUser.id, isActive: true },
     include: {
-      playerInventory: {
+      player: {
         include: {
-          cardType: true,
+          playerInventory: {
+            include: {
+              cardType: true,
+            },
+            orderBy: {
+              cardTypeId: 'asc',
+            },
+            skip: pagination.page * CARD_PER_PAGE,
+            take: CARD_PER_PAGE,
+          },
         },
-        orderBy: {
-          cardTypeId: 'asc',
-        },
-        skip: pagination.page * CARD_PER_PAGE,
-        take: CARD_PER_PAGE,
       },
     },
   });
 
-  if (!player) {
+  if (!user?.player && user.isActive) {
     return;
   }
 
-  const snippet = buildSnippet(user.username, player.playerInventory);
+  const snippet = buildSnippet(
+    discordUser.username,
+    user.player.playerInventory
+  );
 
   await reaction.message.edit({ embeds: [snippet] });
   await prisma.pagination.update({

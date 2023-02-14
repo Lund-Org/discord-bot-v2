@@ -10,7 +10,7 @@ import {
   drawCards,
   generateSummaryEmbed,
   getCardEarnSummary,
-  userNotFound,
+  userNotFoundWarning,
 } from './helper';
 
 type GiftSchema = { points: number } | { card: number } | { gold: number };
@@ -84,20 +84,10 @@ async function getGoldCards(
 /** Command */
 export const gift = async (interaction: ChatInputCommandInteraction) => {
   const code = interaction.options.getString('code', true);
-  const player = (await userNotFound({
-    interaction,
-    relations: {
-      gifts: true,
-      playerInventory: {
-        include: {
-          cardType: true,
-        },
-      },
-    },
-  })) as Player & { playerInventory: PlayerInventory[] };
+  const user = await prisma.user.getPlayerWithInventory(interaction.user.id);
 
-  if (!player) {
-    return;
+  if (!user?.player) {
+    return userNotFoundWarning(interaction);
   }
 
   await interaction.deferReply();
@@ -128,7 +118,7 @@ export const gift = async (interaction: ChatInputCommandInteraction) => {
       id: foundGift.id,
       players: {
         some: {
-          id: player.id,
+          id: user.player.id,
         },
       },
     },
@@ -146,7 +136,7 @@ export const gift = async (interaction: ChatInputCommandInteraction) => {
   ]);
   const unionCards = [...basicCards, ...goldCards];
   const embed = generateSummaryEmbed(
-    getCardEarnSummary(player, [
+    getCardEarnSummary(user, [
       ...basicCards.map(({ cardType }) => ({ cardType, isGold: false })),
       ...goldCards.map(({ cardType }) => ({ cardType, isGold: true })),
     ])
@@ -165,16 +155,16 @@ export const gift = async (interaction: ChatInputCommandInteraction) => {
   }
   if (actions.points) {
     additionalMessage = `Tu as maintenant ${
-      player.points + actions.points
+      user.player.points + actions.points
     } points`;
   }
 
   await Promise.all([
-    addPoints(player.id, pointsToAdd),
-    saveNewGift(foundGift, player),
-    addCardsToInventory(player, unionCards, 0),
+    addPoints(user.player.id, pointsToAdd),
+    saveNewGift(foundGift, user.player),
+    addCardsToInventory(user, unionCards, 0),
   ]);
-  invalidateWebsitePages(player.discordId);
+  invalidateWebsitePages(user.discordId);
   return attachment
     ? interaction.editReply({
         content: message + additionalMessage,

@@ -38,7 +38,7 @@ export const GachaMenu = ({ onClick }: { onClick: () => void }) => {
       href: getGachaRankingPage(),
       isActive: isGachaRankingPage,
     },
-    ...(session
+    ...(session?.isPlayer
       ? [
           {
             label: 'Ma page',

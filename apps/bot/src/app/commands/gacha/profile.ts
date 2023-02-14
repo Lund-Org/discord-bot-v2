@@ -1,17 +1,16 @@
 import { ChatInputCommandInteraction } from 'discord.js';
-import { userNotFound } from './helper';
+import { userNotFoundWarning } from './helper';
 import { getGlobalRanking } from '@discord-bot-v2/common';
+import { prisma } from '@discord-bot-v2/prisma';
 
 export const profile = async (interaction: ChatInputCommandInteraction) => {
-  const player = await userNotFound({
-    interaction,
-  });
+  const user = await prisma.user.getPlayer(interaction.user.id);
 
-  if (!player) {
-    return;
+  if (!user?.player) {
+    return userNotFoundWarning(interaction);
   }
 
-  const [rank] = await getGlobalRanking([player.id]);
+  const [rank] = await getGlobalRanking([user.player.id]);
 
   return interaction.reply(
     `Tu es niveau ${rank.level.currentLevel} avec ${rank.currentXP}xp (tu es ${

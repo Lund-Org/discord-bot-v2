@@ -4,11 +4,11 @@ import {
   drawCards,
   generateSummaryEmbed,
   getCardEarnSummary,
-  userNotFound,
+  userNotFoundWarning,
 } from './helper';
 import { GachaConfigEnum } from '../../enums/GachaEnum';
 import { prisma } from '@discord-bot-v2/prisma';
-import { Player, PlayerInventory } from '@prisma/client';
+import { Player, User } from '@prisma/client';
 import { generateDrawImage } from '../../helpers/canvas';
 import { invalidateWebsitePages } from '../../helpers/discordEvent';
 
@@ -16,10 +16,10 @@ type PriceConfig = { price: number };
 
 async function securityChecks({
   interaction,
-  player,
+  user,
 }: {
   interaction: ChatInputCommandInteraction;
-  player: Player;
+  user: User & { player: Player };
 }): Promise<{ cardNumberToBuy: number; totalPrice: number } | null> {
   const configPriceJSON = await prisma.config.findUnique({
     where: { name: GachaConfigEnum.PRICE },
@@ -34,10 +34,10 @@ async function securityChecks({
     return null;
   }
 
-  if (player.points < cardNumberToBuy * priceConfig.price) {
+  if (user.player.points < cardNumberToBuy * priceConfig.price) {
     await interaction.editReply(
       `Tu n'as pas assez de points (points actuels : ${
-        player.points
+        user.player.points
       }, points nécessaires : ${cardNumberToBuy * priceConfig.price})`
     );
     return null;
@@ -50,23 +50,14 @@ async function securityChecks({
 }
 
 export const buy = async (interaction: ChatInputCommandInteraction) => {
-  const player = (await userNotFound({
-    interaction,
-    relations: {
-      playerInventory: {
-        include: {
-          cardType: true,
-        },
-      },
-    },
-  })) as Player & { playerInventory: PlayerInventory[] };
+  const user = await prisma.user.getPlayerWithInventory(interaction.user.id);
 
-  if (!player) {
-    return;
+  if (!user?.player) {
+    return userNotFoundWarning(interaction);
   }
 
   await interaction.deferReply();
-  const cardToDraw = await securityChecks({ interaction, player });
+  const cardToDraw = await securityChecks({ interaction, user });
 
   if (cardToDraw === null) {
     return;
@@ -77,14 +68,14 @@ export const buy = async (interaction: ChatInputCommandInteraction) => {
   const attachment = new AttachmentBuilder(canvas.toBuffer(), {
     name: 'cards.png',
   });
-  const embed = generateSummaryEmbed(getCardEarnSummary(player, cards));
+  const embed = generateSummaryEmbed(getCardEarnSummary(user, cards));
 
-  await addCardsToInventory(player, cards, cardToDraw.totalPrice);
-  invalidateWebsitePages(player.discordId);
+  await addCardsToInventory(user, cards, cardToDraw.totalPrice);
+  invalidateWebsitePages(user.discordId);
   return interaction.editReply({
     content: getSuccessMessage(
       cardToDraw.cardNumberToBuy,
-      player.points - cardToDraw.totalPrice
+      user.player.points - cardToDraw.totalPrice
     ),
     files: [attachment],
     embeds: [embed],

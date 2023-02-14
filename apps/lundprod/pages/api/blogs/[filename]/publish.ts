@@ -17,8 +17,6 @@ export default async function listBlogPosts(
     },
   });
 
-  console.log(blogPost);
-
   if (!blogPost) {
     return res.status(404).json({ success: false });
   }

@@ -6,11 +6,11 @@ export const givenPointsForBirthday = 6000;
 export async function giftPointsForBirthday(
   discordId: string
 ): Promise<boolean> {
-  const player = await prisma.player.findUnique({ where: { discordId } });
+  const user = await prisma.user.getPlayer(discordId);
 
-  if (player) {
+  if (user?.player) {
     // to handle concurrency
-    await addPoints(player.id, givenPointsForBirthday);
+    await addPoints(user.player.id, givenPointsForBirthday);
     return true;
   }
   return false;
