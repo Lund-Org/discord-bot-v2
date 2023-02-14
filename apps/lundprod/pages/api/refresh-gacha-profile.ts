@@ -16,11 +16,9 @@ export default async function refreshGachaProfile(
     ? req.query.discordId[0]
     : req.query.discordId || '';
 
-  const player = prisma.player.findUnique({
-    where: { discordId },
-  });
+  const user = prisma.user.getPlayer(discordId);
 
-  if (!player) {
+  if (!user) {
     return res.status(404).send('Player not found');
   }
 
