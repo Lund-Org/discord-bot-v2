@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-namespace */
-export const FOOTBALL_COUNTRIES = ['FR', 'IT', 'ES', 'DE', 'UK'] as const;
-
 export type GeneratorArg = {
   year: string;
   file?: string;
@@ -10,7 +7,7 @@ export type FootballLeague = {
   leagueId: number;
   leagueName: string;
   leagueLogo: string;
-  countryCode: typeof FOOTBALL_COUNTRIES[number];
+  countryCode: string;
 };
 
 export type FootballTeam = {

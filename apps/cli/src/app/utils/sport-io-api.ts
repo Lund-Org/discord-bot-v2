@@ -3,7 +3,6 @@ import {
   FootballLeague,
   FootballMatch,
   FootballTeam,
-  FOOTBALL_COUNTRIES,
   NBAMatch,
   NBATeam,
 } from './types';
@@ -54,7 +53,6 @@ class SportFetcher {
 }
 
 export class FootballFetcher {
-  countries = FOOTBALL_COUNTRIES;
   footballFetcher: SportFetcher;
 
   constructor() {
