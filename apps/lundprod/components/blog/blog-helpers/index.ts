@@ -1,4 +1,7 @@
-export * as Script from 'next/script';
+import type { MDXComponents } from 'mdx/types';
+import * as NextScript from 'next/script';
+
+export const Script = NextScript as unknown as MDXComponents;
 
 export * from './center';
 export * from './collapse';
