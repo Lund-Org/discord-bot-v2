@@ -9,6 +9,7 @@ export const ColoredSpacer = ({
   ...rest
 }: ColoredSpacerProps) => (
   <Box
+    mx="auto"
     h="10px"
     bg={`repeating-linear-gradient(-45deg,hsla(0,0%,100%,0),hsla(0,0%,100%,0) 6px,${spacerBorder} 0,${spacerBorder} 8px)`}
     {...rest}

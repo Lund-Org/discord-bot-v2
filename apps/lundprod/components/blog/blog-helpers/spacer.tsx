@@ -1,3 +1,3 @@
-import { Box } from '@chakra-ui/react';
+import { Box, BoxProps } from '@chakra-ui/react';
 
-export const Spacer = () => <Box h="50px" />;
+export const Spacer = (boxProps: BoxProps) => <Box h="50px" {...boxProps} />;

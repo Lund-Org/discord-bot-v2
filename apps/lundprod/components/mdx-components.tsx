@@ -72,6 +72,7 @@ const BlockQuote = ({ children }: { children: ReactNode }) => (
     bg="gray.600"
     borderLeft="2px solid var(--chakra-colors-gray-100)"
     p={3}
+    sx={{ '& > p': { textIndent: '0px' } }}
   >
     {children}
   </Box>

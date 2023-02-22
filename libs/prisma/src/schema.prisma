@@ -231,7 +231,7 @@ enum BlogStatus {
 enum Category {
   NEWS
   TECH
-  VIDEO
+  VIDEOGAME
   OTHER
 }
 

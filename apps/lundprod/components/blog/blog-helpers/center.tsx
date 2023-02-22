@@ -1,8 +1,11 @@
-import { Flex } from '@chakra-ui/react';
+import { Flex, FlexProps } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
-export const Center = ({ children }: { children: ReactNode }) => (
-  <Flex textAlign="center" justifyContent="center">
+export const Center = ({
+  children,
+  ...rest
+}: { children: ReactNode } & FlexProps) => (
+  <Flex alignItems="center" justifyContent="center" {...rest}>
     {children}
   </Flex>
 );
