@@ -3,8 +3,8 @@ import { Category } from '@prisma/client';
 export const getTitleFromFilename = (filename: string) => {
   const formattedRouteFile = filename
     .replace(/^\/blog\//, '')
-    .replace(
-      /-[a-z0-9]/,
+    .replaceAll(
+      /-[a-z0-9]/g,
       (val: string) =>
         ` ${val.substring(1)[0].toUpperCase()}${val.substring(2)}`
     );
@@ -14,6 +14,6 @@ export const getTitleFromFilename = (filename: string) => {
 export const CategoryWordingMapping: Record<Category, string> = {
   NEWS: 'News',
   TECH: 'Tech',
-  VIDEO: 'Vidéo',
+  VIDEOGAME: 'Jeu Vidéo',
   OTHER: 'Autre',
 };
