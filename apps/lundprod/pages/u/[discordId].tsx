@@ -72,7 +72,9 @@ export const getStaticProps: GetStaticProps<UserProfilePageProps> = async (
       status: true,
       reason: true,
       rating: true,
+      order: true,
     },
+    orderBy: { order: 'asc' },
   });
   const cardsToGold = await prisma.playerInventory.getCardsToGold(discordId);
   const [rank] = await getGlobalRanking([profile.player.id]);

@@ -9,7 +9,7 @@ import {
   Tabs,
 } from '@chakra-ui/react';
 import { GetServerSideProps } from 'next';
-import { unstable_getServerSession } from 'next-auth/next';
+import { getServerSession } from 'next-auth/next';
 import {
   BacklogItemLight,
   BacklogProvider,
@@ -26,7 +26,7 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
   req,
   res,
 }) => {
-  const session = await unstable_getServerSession(req, res, authOptions);
+  const session = await getServerSession(req, res, authOptions);
 
   if (!session) {
     return {
@@ -52,6 +52,10 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
           status: true,
           reason: true,
           rating: true,
+          order: true,
+        },
+        orderBy: {
+          order: 'asc',
         },
       },
     },
