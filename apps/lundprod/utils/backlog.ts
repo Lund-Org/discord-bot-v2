@@ -1,5 +1,6 @@
 import { GAME_TYPE } from '@discord-bot-v2/igdb';
 import { BacklogStatus } from '@prisma/client';
+import { BacklogItemLight } from '../contexts/backlog-context';
 
 export enum TypeMap {
   GAME = 'GAME',
@@ -35,7 +36,7 @@ export function mapToTypeMap(categories: GAME_TYPE[]): TypeMap {
   }
 }
 
-export function getBacklogStatusTranslation(status: BacklogStatus) {
+export function getBacklogStatusTranslation(status: string) {
   switch (status) {
     case BacklogStatus.BACKLOG:
       return 'Backlog';
@@ -45,6 +46,8 @@ export function getBacklogStatusTranslation(status: BacklogStatus) {
       return 'Fini';
     case BacklogStatus.ABANDONED:
       return 'Abandonné';
+    default:
+      return 'Sans Filtre';
   }
 }
 export function getBacklogStatusColor(status: BacklogStatus) {
@@ -58,4 +61,23 @@ export function getBacklogStatusColor(status: BacklogStatus) {
     case BacklogStatus.ABANDONED:
       return 'red';
   }
+}
+
+export function sortByStatus(items: BacklogItemLight[]) {
+  return items.sort((a, b) => {
+    if (a.status === b.status) {
+      return 0;
+    }
+
+    if (
+      a.status === 'BACKLOG' ||
+      (a.status === 'CURRENTLY' &&
+        ['FINISHED', 'ABANDONNED'].includes(b.status)) ||
+      (a.status === 'FINISHED' && b.status === 'ABANDONED')
+    ) {
+      return -1;
+    }
+
+    return 1;
+  });
 }

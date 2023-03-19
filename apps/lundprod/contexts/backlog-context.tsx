@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { GAME_TYPE, platForms } from '@discord-bot-v2/igdb';
 import { BacklogItem, BacklogStatus } from '@prisma/client';
-import { clone, curry } from 'lodash';
+import { chain, clone, curry } from 'lodash';
 import { createContext, ReactNode, useContext, useState } from 'react';
 import { useFetcher } from '../hooks/useFetcher';
 import { mapToCategory, TypeMap } from '../utils/backlog';
@@ -10,9 +10,17 @@ import { ArrayElement, IGDBGame } from '../utils/types';
 type PlatForm = ArrayElement<typeof platForms>;
 export type BacklogItemLight = Pick<
   BacklogItem,
-  'igdbGameId' | 'name' | 'category' | 'url' | 'status' | 'reason' | 'rating'
+  | 'igdbGameId'
+  | 'name'
+  | 'category'
+  | 'url'
+  | 'status'
+  | 'reason'
+  | 'rating'
+  | 'order'
 >;
 type IGDBGameLight = Pick<BacklogItem, 'id' | 'name' | 'category' | 'url'>;
+type BacklogReorder = { oldOrder: number; newOrder: number; igdbId: number };
 
 //-- Types
 type BacklogContextProvider = {
@@ -31,7 +39,7 @@ type BacklogContextProvider = {
     reason: string,
     rating: number
   ) => Promise<void>;
-  onSortByStatus: (status: BacklogStatus) => void;
+  onReorder: (orderPayload: BacklogReorder) => void;
 };
 
 type BacklogContextProps = {
@@ -53,7 +61,7 @@ export const BacklogContext = createContext<BacklogContextProvider>({
   removeFromBacklog: () => {},
   updateBacklogStatus: () => {},
   updateBacklogDetails: async () => {},
-  onSortByStatus: () => {},
+  onReorder: () => {},
 });
 
 export const useBacklog = (): BacklogContextProvider =>
@@ -79,6 +87,7 @@ export const BacklogProvider = ({
       status: BacklogStatus.BACKLOG,
       reason: '',
       rating: 0,
+      order: backlog.length,
     };
 
     setBacklog([...backlog, newItem]);
@@ -113,15 +122,49 @@ export const BacklogProvider = ({
       setBacklog((_backlog) => [..._backlog, backupItem]);
     });
   };
-  const onSortByStatus = (sortStatus: BacklogStatus) => {
+  const onReorder = (payload: {
+    oldOrder: number;
+    newOrder: number;
+    igdbId: number;
+  }) => {
+    const backupBacklog = backlog;
+
     setBacklog(
-      clone(backlog).sort((a, b) => {
-        if (a.status !== b.status) {
-          return a.status === sortStatus ? -1 : 1;
-        }
-        return 0;
-      })
+      chain(backlog)
+        .map((backlogItem) => {
+          if (backlogItem.igdbGameId === payload.igdbId) {
+            return { ...backlogItem, order: payload.newOrder };
+          }
+
+          if (
+            payload.oldOrder < payload.newOrder &&
+            backlogItem.order >= payload.oldOrder &&
+            backlogItem.order <= payload.newOrder
+          ) {
+            return { ...backlogItem, order: backlogItem.order - 1 };
+          } else if (
+            payload.oldOrder > payload.newOrder &&
+            backlogItem.order <= payload.oldOrder &&
+            backlogItem.order >= payload.newOrder
+          ) {
+            return { ...backlogItem, order: backlogItem.order + 1 };
+          }
+
+          return backlogItem;
+        })
+        .sortBy(['order'])
+        .value()
     );
+
+    return fetcher(`/api/backlog/reorder`, undefined, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    }).catch(() => {
+      setBacklog(backupBacklog);
+    });
   };
 
   const providerParameters = {
@@ -144,7 +187,7 @@ export const BacklogProvider = ({
       setBacklog,
       fetcher,
     }),
-    onSortByStatus,
+    onReorder,
   };
 
   return (

@@ -1,6 +1,6 @@
 import { prisma } from '@discord-bot-v2/prisma';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { unstable_getServerSession } from 'next-auth/next';
+import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 import { getUserProfileUrl } from '~/lundprod/utils/url';
 
@@ -8,7 +8,7 @@ export default async function addToBacklog(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const session = await unstable_getServerSession(req, res, authOptions);
+  const session = await getServerSession(req, res, authOptions);
 
   if (!session) {
     return res.status(401).json({ success: false });
@@ -25,6 +25,10 @@ export default async function addToBacklog(
     return res.status(404).json({ success: false });
   }
 
+  const existingBiggestOrder = await prisma.backlogItem.findFirst({
+    where: { userId: user.id },
+    orderBy: { order: 'desc' },
+  });
   await prisma.backlogItem.upsert({
     where: {
       userId_igdbGameId: {
@@ -42,6 +46,7 @@ export default async function addToBacklog(
           id: user.id,
         },
       },
+      order: existingBiggestOrder.order + 1 || 1,
     },
     update: {},
   });
