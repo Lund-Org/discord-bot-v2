@@ -22,11 +22,11 @@ type GameSearchProps = {
 
 export function GameSearch({ onSearch }: GameSearchProps) {
   const [isSearching, setIsSearching] = useState(false);
-  const { category, setCategory, setSearchValue, platforms, setPlatforms } =
+  const { category, setCategory, searchValue, platforms, setPlatforms } =
     useBacklog();
 
   const onSearchChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setSearchValue(e.target.value);
+    searchValue.current = e.target.value;
   };
   const onSelectChange: ChangeEventHandler<HTMLSelectElement> = (e) => {
     const selectedPlatform = platForms.find(

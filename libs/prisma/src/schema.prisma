@@ -125,12 +125,14 @@ model Pagination {
 }
 
 model Player {
-  id              Int       @id @default(autoincrement())
-  points          Int
-  lastMessageDate DateTime  @default(now()) @db.DateTime(0)
-  lastDailyDraw   DateTime? @db.DateTime(0)
-  joinDate        DateTime  @default(now()) @db.DateTime(0)
-  userId          Int       @unique
+  id                 Int       @id @default(autoincrement())
+  points             Int
+  lastMessageDate    DateTime  @default(now()) @db.DateTime(0)
+  lastDailyDraw      DateTime? @db.DateTime(0)
+  lastPointsReminder DateTime? @db.DateTime(0)
+  wantToBeWarn       Boolean   @default(false)
+  joinDate           DateTime  @default(now()) @db.DateTime(0)
+  userId             Int       @unique
 
   gifts           Gift[]
   playerInventory PlayerInventory[]

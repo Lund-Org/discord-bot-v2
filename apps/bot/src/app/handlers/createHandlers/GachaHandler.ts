@@ -23,6 +23,7 @@ export const addPoints = async ({ msg }: { msg: Message }): Promise<void> => {
   }
 
   const delay = 60 * 1000; // one minute
+  const warnDelay = 6 * 3600 * 1000; // 6 hours
 
   // if last message is in less than 1 minute
   // AND less than 15 000 points
@@ -38,6 +39,29 @@ export const addPoints = async ({ msg }: { msg: Message }): Promise<void> => {
       },
     });
     invalidateWebsitePages(msg.author.id);
+
+    // if the player has more than 12000
+    // AND want to be warned
+    // AND last warn was more than 6h
+    if (
+      user.player.points >= 13000 &&
+      user.player.wantToBeWarn &&
+      (!user.player.lastPointsReminder ||
+        Date.now() - new Date(user.player.lastPointsReminder).getTime() >
+          warnDelay)
+    ) {
+      await Promise.all([
+        prisma.player.update({
+          where: { id: user.player.id },
+          data: {
+            lastPointsReminder: new Date(),
+          },
+        }),
+        msg.reply(
+          "⚠ Attention : Tu dépasses les 13k points, n'oublie pas que la limite est de 15k ;)"
+        ),
+      ]);
+    }
   }
 };
 

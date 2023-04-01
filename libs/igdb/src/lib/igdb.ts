@@ -1,21 +1,7 @@
 import axios from 'axios';
-import {
-  BASE_URL,
-  GAME_PER_PAGE,
-  GAME_STATUS,
-  GAME_TYPE,
-  QUERY_OPERATOR,
-  REGION,
-} from './constants';
+import { Game } from '../types';
+import { BASE_URL, GAME_PER_PAGE, QUERY_OPERATOR } from './constants';
 import { ConditionValue, IGDBQueryBuilder } from './igdb-query-builder';
-import { platForms } from './platforms';
-import {
-  linkArrayData,
-  linkEnumData,
-  linkValueToArrayData,
-  translateGameType,
-  translateRegion,
-} from './utils';
 
 let twitchToken: {
   access_token: string;
@@ -98,82 +84,41 @@ export async function getGames(
   name: string,
   filters: { field: string; operator: QUERY_OPERATOR; value: ConditionValue }[],
   page = 1
-) {
+): Promise<Game[]> {
   if (page < 1) {
     page = 1;
   }
-
-  const search = name.split(' ');
 
   const queryBuilder = new IGDBQueryBuilder();
   queryBuilder
     .setFields([
       'id',
-      'release_dates',
       'name',
       'status',
       'storyline',
       'summary',
       'version_title',
-      'platforms',
       'category',
       'url',
+      'platforms.id',
+      'platforms.name',
+      'release_dates.date',
+      'release_dates.platform',
+      'release_dates.region',
+      'release_dates.human',
+      'release_dates.platform.name',
     ])
+    .setSearch(name)
     .setLimit(GAME_PER_PAGE)
-    .setOffset((page - 1) * GAME_PER_PAGE)
-    .sortBy('rating', 'desc');
+    .setOffset((page - 1) * GAME_PER_PAGE);
 
-  search.forEach((searchChunk, index) => {
+  filters.forEach(({ field, operator, value }, index) => {
     if (index === 0) {
-      queryBuilder.where(
-        'name',
-        QUERY_OPERATOR.MATCH,
-        searchChunk.replaceAll('"', '')
-      );
+      queryBuilder.where(field, operator, value);
     } else {
-      queryBuilder.andWhere(
-        'name',
-        QUERY_OPERATOR.MATCH,
-        searchChunk.replaceAll('"', '')
-      );
+      queryBuilder.andWhere(field, operator, value);
     }
   });
 
-  filters.forEach(({ field, operator, value }) =>
-    queryBuilder.andWhere(field, operator, value)
-  );
-
-  return IGDBRequest('/games', queryBuilder.toString()).then((data) => {
-    data.forEach((game) => {
-      linkArrayData(game, platForms, 'platforms', 'platforms');
-      linkEnumData(game, GAME_TYPE, 'category', 'category', translateGameType);
-      linkEnumData(game, GAME_STATUS, 'status', 'status');
-
-      // To remove "null" values because some platforms are ignored
-      game.platforms = game.platforms.filter(Boolean);
-    });
-    return data;
-  });
-}
-
-export async function getReleaseDates(ids: string[], page = 1) {
-  if (page < 1) {
-    page = 1;
-  }
-
-  const queryBuilder = new IGDBQueryBuilder();
-  const query = queryBuilder
-    .setFields(['date', 'human', 'platform', 'region'])
-    .where('id', QUERY_OPERATOR.EQ, ids)
-    .setLimit(100)
-    .setOffset((page - 1) * 100)
-    .toString();
-
-  return IGDBRequest('/release_dates', query).then((data) => {
-    data.forEach((releaseDate) => {
-      linkEnumData(releaseDate, REGION, 'region', 'region', translateRegion);
-      linkValueToArrayData(releaseDate, platForms, 'platform', 'platform');
-    });
-    return data;
-  });
+  return IGDBRequest('/games', queryBuilder.toString());
 }

@@ -1,15 +1,15 @@
 import { Box, Spinner, Text } from '@chakra-ui/react';
-import { QUERY_OPERATOR } from '@discord-bot-v2/igdb';
+import { QUERY_OPERATOR, Game } from '@discord-bot-v2/igdb';
 import { useState } from 'react';
 import { GameSearch } from '~/lundprod/components/my-space/backlog/game-search';
-import { IGDBFilter, IGDBGame, ListGamesSearch } from '~/lundprod/utils/types';
+import { IGDBFilter, ListGamesSearch } from '~/lundprod/utils/types';
 import { useBacklog } from '~/lundprod/contexts/backlog-context';
 import { GameList } from '~/lundprod/components/my-space/backlog/game-list';
 import { GamePagination } from '~/lundprod/components/my-space/backlog/game-pagination';
 import { useFetcher } from '~/lundprod/hooks/useFetcher';
 
 export const GameChoiceTab = () => {
-  const [loadedGames, setLoadedGames] = useState<IGDBGame[] | null>(null);
+  const [loadedGames, setLoadedGames] = useState<Game[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
   const { category, searchValue, platforms } = useBacklog();
@@ -33,7 +33,7 @@ export const GameChoiceTab = () => {
     }
 
     const data: ListGamesSearch = {
-      search: searchValue,
+      search: searchValue.current,
       filters: filters,
     };
     setIsLoading(true);

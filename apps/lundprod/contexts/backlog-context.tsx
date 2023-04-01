@@ -1,31 +1,45 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { GAME_TYPE, platForms } from '@discord-bot-v2/igdb';
+import { GAME_TYPE, platForms, Game } from '@discord-bot-v2/igdb';
 import { BacklogItem, BacklogStatus } from '@prisma/client';
 import { chain, clone, curry } from 'lodash';
-import { createContext, ReactNode, useContext, useState } from 'react';
+import {
+  createContext,
+  MutableRefObject,
+  ReactNode,
+  useCallback,
+  useContext,
+  useRef,
+  useState,
+} from 'react';
 import { useFetcher } from '../hooks/useFetcher';
 import { mapToCategory, TypeMap } from '../utils/backlog';
-import { ArrayElement, IGDBGame } from '../utils/types';
+import { ArrayElement /*, IGDBGame*/ } from '../utils/types';
 
 type PlatForm = ArrayElement<typeof platForms>;
 export type BacklogItemLight = Pick<
   BacklogItem,
   | 'igdbGameId'
   | 'name'
-  | 'category'
+  // | 'category'
   | 'url'
   | 'status'
   | 'reason'
   | 'rating'
   | 'order'
->;
-type IGDBGameLight = Pick<BacklogItem, 'id' | 'name' | 'category' | 'url'>;
+> & {
+  category: GAME_TYPE | string;
+};
+type IGDBGameLight = Pick<
+  BacklogItem,
+  'id' | 'name' | /*'category' |*/ 'url'
+> & {
+  category: GAME_TYPE | string;
+};
 type BacklogReorder = { oldOrder: number; newOrder: number; igdbId: number };
 
 //-- Types
 type BacklogContextProvider = {
-  searchValue: string;
-  setSearchValue: (str: string) => void;
+  searchValue: MutableRefObject<string>;
   category: GAME_TYPE[];
   setCategory: (val: GAME_TYPE[]) => void;
   platforms: PlatForm[];
@@ -50,8 +64,7 @@ type BacklogContextProps = {
 //-- Context declaration
 
 export const BacklogContext = createContext<BacklogContextProvider>({
-  searchValue: '',
-  setSearchValue: () => {},
+  searchValue: { current: '' },
   category: [],
   setCategory: () => {},
   platforms: [],
@@ -74,102 +87,106 @@ export const BacklogProvider = ({
 }: BacklogContextProps) => {
   const [backlog, setBacklog] = useState(initialBacklog);
   const [category, setCategory] = useState(mapToCategory(TypeMap.GAME));
-  const [searchValue, setSearchValue] = useState('');
+  const searchValue = useRef('');
   const [platforms, setPlatforms] = useState<PlatForm[]>([]);
   const fetcher = useFetcher();
 
-  const addToBacklog = (game: IGDBGame) => {
-    const newItem: BacklogItemLight = {
-      igdbGameId: game.id,
-      name: game.name,
-      category: game.category,
-      url: game.url,
-      status: BacklogStatus.BACKLOG,
-      reason: '',
-      rating: 0,
-      order: backlog.length,
-    };
+  const addToBacklog = useCallback(
+    (game: Game) => {
+      const newItem: BacklogItemLight = {
+        igdbGameId: game.id,
+        name: game.name,
+        category: game.category,
+        url: game.url,
+        status: BacklogStatus.BACKLOG,
+        reason: '',
+        rating: 0,
+        order: backlog.length,
+      };
 
-    setBacklog([...backlog, newItem]);
-    return fetcher(`/api/backlog/add`, undefined, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newItem),
-    }).catch(() => {
-      setBacklog((_backlog) => {
-        const backlogCopy = [..._backlog];
-        backlogCopy.length -= 1;
-        return backlogCopy;
+      setBacklog([...backlog, newItem]);
+      return fetcher(`/api/backlog/add`, undefined, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newItem),
+      }).catch(() => {
+        setBacklog((_backlog) => {
+          const backlogCopy = [..._backlog];
+          backlogCopy.length -= 1;
+          return backlogCopy;
+        });
       });
-    });
-  };
-  const removeFromBacklog = (id: number) => {
-    // This logic is just for the catch if the request fails
-    const itemIndex = backlog.findIndex((item) => item.igdbGameId === id);
-    const newBacklog = [...backlog];
-    const [backupItem] = newBacklog.splice(itemIndex, 1);
+    },
+    [setBacklog, backlog, fetcher]
+  );
+  const removeFromBacklog = useCallback(
+    (id: number) => {
+      // This logic is just for the catch if the request fails
+      const itemIndex = backlog.findIndex((item) => item.igdbGameId === id);
+      const newBacklog = [...backlog];
+      const [backupItem] = newBacklog.splice(itemIndex, 1);
 
-    setBacklog(newBacklog);
-    return fetcher(`/api/backlog/remove`, undefined, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ id }),
-    }).catch(() => {
-      setBacklog((_backlog) => [..._backlog, backupItem]);
-    });
-  };
-  const onReorder = (payload: {
-    oldOrder: number;
-    newOrder: number;
-    igdbId: number;
-  }) => {
-    const backupBacklog = backlog;
+      setBacklog(newBacklog);
+      return fetcher(`/api/backlog/remove`, undefined, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id }),
+      }).catch(() => {
+        setBacklog((_backlog) => [..._backlog, backupItem]);
+      });
+    },
+    [setBacklog, backlog, fetcher]
+  );
+  const onReorder = useCallback(
+    (payload: { oldOrder: number; newOrder: number; igdbId: number }) => {
+      const backupBacklog = backlog;
 
-    setBacklog(
-      chain(backlog)
-        .map((backlogItem) => {
-          if (backlogItem.igdbGameId === payload.igdbId) {
-            return { ...backlogItem, order: payload.newOrder };
-          }
+      setBacklog(
+        chain(backlog)
+          .map((backlogItem) => {
+            if (backlogItem.igdbGameId === payload.igdbId) {
+              return { ...backlogItem, order: payload.newOrder };
+            }
 
-          if (
-            payload.oldOrder < payload.newOrder &&
-            backlogItem.order >= payload.oldOrder &&
-            backlogItem.order <= payload.newOrder
-          ) {
-            return { ...backlogItem, order: backlogItem.order - 1 };
-          } else if (
-            payload.oldOrder > payload.newOrder &&
-            backlogItem.order <= payload.oldOrder &&
-            backlogItem.order >= payload.newOrder
-          ) {
-            return { ...backlogItem, order: backlogItem.order + 1 };
-          }
+            if (
+              payload.oldOrder < payload.newOrder &&
+              backlogItem.order >= payload.oldOrder &&
+              backlogItem.order <= payload.newOrder
+            ) {
+              return { ...backlogItem, order: backlogItem.order - 1 };
+            } else if (
+              payload.oldOrder > payload.newOrder &&
+              backlogItem.order <= payload.oldOrder &&
+              backlogItem.order >= payload.newOrder
+            ) {
+              return { ...backlogItem, order: backlogItem.order + 1 };
+            }
 
-          return backlogItem;
-        })
-        .sortBy(['order'])
-        .value()
-    );
+            return backlogItem;
+          })
+          .sortBy(['order'])
+          .value()
+      );
 
-    return fetcher(`/api/backlog/reorder`, undefined, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    }).catch(() => {
-      setBacklog(backupBacklog);
-    });
-  };
+      return fetcher(`/api/backlog/reorder`, undefined, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      }).catch(() => {
+        setBacklog(backupBacklog);
+      });
+    },
+    [setBacklog, backlog, fetcher]
+  );
 
   const providerParameters = {
     searchValue,
-    setSearchValue,
     category,
     setCategory,
     platforms,

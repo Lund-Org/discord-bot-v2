@@ -58,23 +58,3 @@ export type ListGamesSearch = {
 };
 
 export type IGDBPlatform = ArrayElement<typeof platForms>;
-
-export type IGDBReleaseDates = {
-  date: number;
-  human: string;
-  platform: IGDBPlatform;
-  region: REGION;
-};
-
-export type IGDBGame = {
-  id: number;
-  name: string;
-  releaseDates?: IGDBReleaseDates[];
-  status: GAME_STATUS;
-  storyline?: string;
-  summary?: string;
-  version_title?: string;
-  platforms: IGDBPlatform[];
-  category: string;
-  url: string;
-};

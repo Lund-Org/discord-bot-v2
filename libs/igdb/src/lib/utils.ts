@@ -1,50 +1,6 @@
-import { GAME_TYPE, QUERY_OPERATOR, REGION } from './constants';
+import { QUERY_OPERATOR } from './constants';
+import { GAME_TYPE, REGION } from '../types';
 import { ConditionValue } from './igdb-query-builder';
-
-export function linkArrayData(
-  source,
-  target,
-  sourceKey: string,
-  targetKey: string,
-  deleteSource = true
-) {
-  source[targetKey] = (source[sourceKey] || []).map((_id) => {
-    return target.find(({ id }) => id === _id);
-  });
-  if (deleteSource && sourceKey !== targetKey) {
-    delete source[sourceKey];
-  }
-}
-export function linkValueToArrayData(
-  source,
-  target,
-  sourceKey: string,
-  targetKey: string,
-  deleteSource = true
-) {
-  source[targetKey] = target.find(({ id }) => id === source[sourceKey]);
-  if (deleteSource && sourceKey !== targetKey) {
-    delete source[sourceKey];
-  }
-}
-export function linkEnumData(
-  source,
-  target,
-  sourceKey: string,
-  targetKey: string,
-  translationFn?: (value) => string,
-  deleteSource = true
-) {
-  const targetArr = Object.entries(target);
-  const value = targetArr.find(([, value]) => value === source[sourceKey]);
-
-  source[targetKey] =
-    value && translationFn ? translationFn(value[1]) : value?.[0];
-
-  if (deleteSource && sourceKey !== targetKey) {
-    delete source[sourceKey];
-  }
-}
 
 export function validateFilters(filters: unknown): filters is {
   field: string;

@@ -11,76 +11,21 @@ import {
   Flex,
   Button,
 } from '@chakra-ui/react';
-import { REGION } from '@discord-bot-v2/igdb';
-import { Fragment, useMemo } from 'react';
+import { Game, translateGameType, translateRegion } from '@discord-bot-v2/igdb';
+import { Fragment } from 'react';
 import { formatReleaseDate } from '~/lundprod/utils/dates';
-import { IGDBGame, IGDBReleaseDates } from '~/lundprod/utils/types';
 import {
   BacklogItemLight,
   useBacklog,
 } from '~/lundprod/contexts/backlog-context';
+import { ArrayElement } from '~/lundprod/utils/types';
 
 type GameListProps = {
-  games: IGDBGame[];
-};
-
-type GameRow = {
-  id: number;
-  name: string;
-  category: string;
-  platforms: { name: string; releaseDates: [string, REGION][] }[];
-  url: string;
+  games: Game[];
 };
 
 export const GameList = ({ games }: GameListProps) => {
   const { backlog, addToBacklog, removeFromBacklog } = useBacklog();
-  const rows = useMemo<GameRow[]>(() => {
-    const builtRow: GameRow[] = [];
-
-    games.forEach((game) => {
-      if ((game.platforms || []).length === 0) {
-        builtRow.push({
-          id: game.id,
-          name: game.name,
-          category: game.category,
-          platforms: [{ name: 'Inconnue', releaseDates: [] }],
-          url: game.url,
-        });
-      } else {
-        const row = {
-          id: game.id,
-          name: game.name,
-          category: game.category,
-          platforms: [],
-          url: game.url,
-        };
-
-        game.platforms.forEach((platform) => {
-          // To ignore old platform not registered in my platforms
-          if (!platform) {
-            return;
-          }
-
-          const dates = game.releaseDates
-            .filter((releaseDate) => releaseDate.platform?.id === platform.id)
-            .map((releaseDatePerRegion): [string, REGION] => {
-              return [
-                getReleaseDateWording(releaseDatePerRegion),
-                releaseDatePerRegion.region,
-              ];
-            });
-
-          row.platforms.push({
-            name: platform.abbreviation || platform.name,
-            releaseDates: dates,
-          });
-        });
-        builtRow.push(row);
-      }
-    });
-
-    return builtRow;
-  }, [games]);
 
   return (
     <Table>
@@ -94,27 +39,33 @@ export const GameList = ({ games }: GameListProps) => {
         </Tr>
       </Thead>
       <Tbody>
-        {rows.map((row, index) => (
-          <Tr key={`row${index}`} _hover={{ bg: 'gray.900' }}>
+        {games.map((row, index) => (
+          <Tr key={row.id} _hover={{ bg: 'gray.900' }}>
             <Td maxW="500px" textOverflow="ellipsis">
               <Text noOfLines={1}>{row.name}</Text>
             </Td>
             <Td>
-              <Text>{row.category}</Text>
+              <Text>{translateGameType(row.category)}</Text>
             </Td>
             <Td>
               <Flex gap="5px" flexDir="column">
-                {row.platforms.map((platform, platformIndex) => (
+                {row.platforms?.map((platform) => (
                   <Flex
-                    key={`platform${platformIndex}`}
+                    key={`platform${platform.id}`}
                     gap="5px"
                     flexDir="column"
                   >
                     <Text>{platform.name}</Text>
                     {/* This is a hack to create empty lines and align platforms with dates */}
-                    {!!platform.releaseDates.length &&
+                    {!!row.release_dates.length &&
                       Array.from(
-                        { length: platform.releaseDates.length - 1 },
+                        {
+                          length:
+                            getReleaseFromPlatform(
+                              platform.id,
+                              row.release_dates
+                            ).length - 1,
+                        },
                         (_, i) => <Text key={`placeholder${i}`}>&nbsp;</Text>
                       )}
                   </Flex>
@@ -123,20 +74,24 @@ export const GameList = ({ games }: GameListProps) => {
             </Td>
             <Td>
               <Flex gap="5px" flexDir="column">
-                {row.platforms?.map(({ releaseDates }, index) => (
-                  <Fragment key={`fragment${index}`}>
-                    {releaseDates.map(([date, region], releaseDateIndex) => (
-                      <Flex
-                        key={`releaseDate${releaseDateIndex}`}
-                        gap="5px"
-                        whiteSpace="nowrap"
-                      >
-                        <Text>{date}</Text>
-                        <Tag variant="outline" size="sm">
-                          <TagLabel>{region}</TagLabel>
-                        </Tag>
-                      </Flex>
-                    ))}
+                {row.platforms?.map((platform) => (
+                  <Fragment key={`fragment${platform.id}`}>
+                    {getReleaseFromPlatform(platform.id, row.release_dates).map(
+                      (releaseDate, releaseDateIndex) => (
+                        <Flex
+                          key={`releaseDate${releaseDate.id}`}
+                          gap="5px"
+                          whiteSpace="nowrap"
+                        >
+                          <Text>{getReleaseDateWording(releaseDate)}</Text>
+                          <Tag variant="outline" size="sm">
+                            <TagLabel>
+                              {translateRegion(releaseDate.region)}
+                            </TagLabel>
+                          </Tag>
+                        </Flex>
+                      )
+                    )}
                   </Fragment>
                 ))}
               </Flex>
@@ -167,7 +122,9 @@ export const GameList = ({ games }: GameListProps) => {
   );
 };
 
-function getReleaseDateWording(releaseDate?: IGDBReleaseDates) {
+function getReleaseDateWording(
+  releaseDate?: ArrayElement<Game['release_dates']>
+) {
   return releaseDate
     ? releaseDate.date
       ? formatReleaseDate(new Date(releaseDate.date * 1000))
@@ -175,6 +132,13 @@ function getReleaseDateWording(releaseDate?: IGDBReleaseDates) {
     : 'Inconnue';
 }
 
-function isInBacklog(backlogList: BacklogItemLight[], game: GameRow) {
+function isInBacklog(backlogList: BacklogItemLight[], game: { id: number }) {
   return !!backlogList.find(({ igdbGameId }) => igdbGameId === game.id);
+}
+
+function getReleaseFromPlatform(
+  platformId: number,
+  releaseDates: Game['release_dates'] = []
+) {
+  return releaseDates.filter(({ platform }) => platform.id === platformId);
 }
