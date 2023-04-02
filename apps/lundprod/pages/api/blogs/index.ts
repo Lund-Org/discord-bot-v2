@@ -1,5 +1,6 @@
-import { Category } from 'prisma/prisma-client';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { Category } from 'prisma/prisma-client';
+
 import { getManyBlogPosts } from '~/lundprod/utils/api/blog';
 import { getNumberParam } from '~/lundprod/utils/next';
 

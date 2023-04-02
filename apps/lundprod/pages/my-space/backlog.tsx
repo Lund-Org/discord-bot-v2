@@ -1,4 +1,3 @@
-import { prisma } from '@discord-bot-v2/prisma';
 import {
   Box,
   Heading,
@@ -8,14 +7,17 @@ import {
   TabPanels,
   Tabs,
 } from '@chakra-ui/react';
+import { prisma } from '@discord-bot-v2/prisma';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth/next';
+
+import { BacklogList } from '~/lundprod/components/my-space/backlog/backlog-list';
+import { GameChoiceTab } from '~/lundprod/components/my-space/backlog/game-choice-tab';
 import {
   BacklogItemLight,
   BacklogProvider,
 } from '~/lundprod/contexts/backlog-context';
-import { GameChoiceTab } from '~/lundprod/components/my-space/backlog/game-choice-tab';
-import { BacklogList } from '~/lundprod/components/my-space/backlog/backlog-list';
+
 import { authOptions } from '../api/auth/[...nextauth]';
 
 type PropsType = {

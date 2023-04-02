@@ -1,7 +1,8 @@
-import { Client, Message } from 'discord.js';
-import { Handler } from '../Handler';
 import { prisma } from '@discord-bot-v2/prisma';
+import { Client, Message } from 'discord.js';
+
 import { invalidateWebsitePages } from '../../helpers/discordEvent';
+import { Handler } from '../Handler';
 
 class GachaHandler extends Handler {
   async validate(client: Client, msg: Message): Promise<boolean> {

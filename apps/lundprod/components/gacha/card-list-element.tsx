@@ -1,8 +1,9 @@
 import { StarIcon } from '@chakra-ui/icons';
 import { Box, Flex, FlexProps, Image, Text } from '@chakra-ui/react';
 import { CardType } from '@prisma/client';
-import { useGachaHome } from '~/lundprod/contexts/gacha-home-context';
+
 import { fusionIcon } from '~/lundprod/assets';
+import { useGachaHome } from '~/lundprod/contexts/gacha-home-context';
 import { CardWithFusionDependencies } from '~/lundprod/utils/types';
 
 type CardListElementProps = {

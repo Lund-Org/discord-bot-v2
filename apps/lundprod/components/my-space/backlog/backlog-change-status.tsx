@@ -1,6 +1,7 @@
-import { BacklogStatus } from '@prisma/client';
 import { Flex, Select } from '@chakra-ui/react';
+import { BacklogStatus } from '@prisma/client';
 import { ChangeEventHandler } from 'react';
+
 import { useBacklog } from '~/lundprod/contexts/backlog-context';
 import {
   getBacklogStatusColor,

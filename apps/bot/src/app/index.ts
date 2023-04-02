@@ -1,3 +1,4 @@
+import { prisma } from '@discord-bot-v2/prisma';
 import {
   Client,
   Events,
@@ -6,14 +7,14 @@ import {
   Partials,
   User,
 } from 'discord.js';
-import CreateHandlerClasses from './handlers/createHandlers';
-import UpdateHandlerClasses from './handlers/updateHandlers';
+
 import { buttonsCallback, commandsResponses, menusCallback } from './commands';
-import { Handler } from './handlers/Handler';
 import { initCommands } from './commands/initializer';
+import CreateHandlerClasses from './handlers/createHandlers';
+import { Handler } from './handlers/Handler';
+import UpdateHandlerClasses from './handlers/updateHandlers';
 import { manageGachaPagination } from './helpers/discordEvent';
 import initializers from './initializers';
-import { prisma } from '@discord-bot-v2/prisma';
 
 export const startBot = (): Promise<Client> => {
   return initCommands().then(() => {

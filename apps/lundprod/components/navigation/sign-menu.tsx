@@ -1,22 +1,23 @@
 import {
   Button,
   Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  DrawerHeader,
   DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
   DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
   Flex,
+  Heading,
   Image,
+  ListItem,
   Text,
   UnorderedList,
-  ListItem,
-  Heading,
 } from '@chakra-ui/react';
-import { signIn, signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import { useState } from 'react';
+
 import { getUserProfileUrl } from '~/lundprod/utils/url';
 
 export const SignMenu = () => {

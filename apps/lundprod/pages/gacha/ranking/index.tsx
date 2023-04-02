@@ -1,8 +1,9 @@
 import { Box } from '@chakra-ui/react';
 import { getGlobalRanking, RankByUser } from '@discord-bot-v2/common';
 import { GetStaticProps } from 'next';
-import { RankList } from '~/lundprod/components/gacha/ranking/rank-list';
+
 import { Rank } from '~/lundprod/components/gacha/ranking/rank';
+import { RankList } from '~/lundprod/components/gacha/ranking/rank-list';
 
 type GachaRankPageProps = {
   ranks: RankByUser[];

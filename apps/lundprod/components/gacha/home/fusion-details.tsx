@@ -1,6 +1,8 @@
-import { Box, Heading, UnorderedList, ListItem } from '@chakra-ui/react';
-import { CardWithFusionDependencies } from '~/lundprod/utils/types';
+import { Box, Heading, ListItem,UnorderedList } from '@chakra-ui/react';
+
 import { useGachaHome } from '~/lundprod/contexts/gacha-home-context';
+import { CardWithFusionDependencies } from '~/lundprod/utils/types';
+
 import { CardListElement } from '../card-list-element';
 
 export const FusionDetails = ({

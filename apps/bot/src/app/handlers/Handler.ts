@@ -1,4 +1,5 @@
 import { Client, Message } from 'discord.js';
+
 import messageHelper from '../helpers/messageHelper';
 
 export abstract class Handler {

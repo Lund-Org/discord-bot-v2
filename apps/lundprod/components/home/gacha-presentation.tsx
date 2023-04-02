@@ -1,8 +1,10 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { Text } from '@chakra-ui/react';
+
 import { illustrationPlayingCards } from '~/lundprod/assets';
-import { FullLinePresentation } from './full-line-presentation';
+
 import { DarkStyledLink } from '../styled-link';
+import { FullLinePresentation } from './full-line-presentation';
 
 export const GachaPresentation = () => {
   return (

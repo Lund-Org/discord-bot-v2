@@ -1,5 +1,7 @@
 import axios from 'axios';
+
 import { Game, IGDBConditionValue } from '../types';
+import { addGameToCache } from './cache';
 import {
   BASE_URL,
   GAME_FIELDS,
@@ -7,7 +9,6 @@ import {
   QUERY_OPERATOR,
 } from './constants';
 import { IGDBQueryBuilder } from './igdb-query-builder';
-import { addGameToCache } from './cache';
 
 let twitchToken: {
   access_token: string;

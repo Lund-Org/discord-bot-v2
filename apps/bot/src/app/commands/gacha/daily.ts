@@ -1,6 +1,7 @@
 import { prisma } from '@discord-bot-v2/prisma';
 import { Player } from '@prisma/client';
-import { ChatInputCommandInteraction, AttachmentBuilder } from 'discord.js';
+import { AttachmentBuilder,ChatInputCommandInteraction } from 'discord.js';
+
 import { generateDrawImage } from '../../helpers/canvas';
 import { invalidateWebsitePages } from '../../helpers/discordEvent';
 import {

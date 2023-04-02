@@ -1,3 +1,4 @@
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Box,
   Divider,
@@ -8,10 +9,11 @@ import {
   UnorderedList,
   useBreakpointValue,
 } from '@chakra-ui/react';
-import { ExternalLinkIcon } from '@chakra-ui/icons';
 import styled from '@emotion/styled';
+
 import { illustrationTrip } from '~/lundprod/assets';
 import { networks } from '~/lundprod/utils/url';
+
 import { LightStyledLink } from '../styled-link';
 
 const InlineStyledLink = styled(LightStyledLink)`

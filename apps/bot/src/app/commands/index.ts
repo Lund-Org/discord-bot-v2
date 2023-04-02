@@ -1,11 +1,11 @@
-import { gachaButtonResponse, gachaMenuResponse, gachaResponse } from './gacha';
 import { birthdayResponse } from './birthday';
+import { gachaButtonResponse, gachaMenuResponse, gachaResponse } from './gacha';
 import { googleResponse } from './google';
 import { howlongtobeatResponse } from './howlongtobeat';
 import { joinResponse } from './join';
 import { pingResponse } from './ping';
-import { pongResponse } from './pong';
 import { pollResponse } from './poll';
+import { pongResponse } from './pong';
 import { ppResponse } from './pp';
 import { shifumiResponse } from './shifumi';
 import { sportResponse } from './sport';

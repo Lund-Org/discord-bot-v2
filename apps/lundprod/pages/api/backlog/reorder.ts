@@ -1,9 +1,11 @@
 import { prisma } from '@discord-bot-v2/prisma';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '../auth/[...nextauth]';
-import { getUserProfileUrl } from '~/lundprod/utils/url';
 import { number, object } from 'yup';
+
+import { getUserProfileUrl } from '~/lundprod/utils/url';
+
+import { authOptions } from '../auth/[...nextauth]';
 
 const reorderBacklogSchema = object({
   oldOrder: number().min(1).required().positive().integer(),

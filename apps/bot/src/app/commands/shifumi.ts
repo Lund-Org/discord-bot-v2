@@ -1,5 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { ChatInputCommandInteraction } from 'discord.js';
+
 import ShifumiEnum from '../enums/ShifumiEnum';
 
 const availableValues = [

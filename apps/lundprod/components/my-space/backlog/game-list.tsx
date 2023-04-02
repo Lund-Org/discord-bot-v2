@@ -1,5 +1,6 @@
-import { Table, Thead, Tbody, Tr, Th } from '@chakra-ui/react';
+import { Table, Tbody, Th,Thead, Tr } from '@chakra-ui/react';
 import { Game } from '@discord-bot-v2/igdb-front';
+
 import { GameElement } from './game-element';
 
 type GameListProps = {

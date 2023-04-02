@@ -1,8 +1,9 @@
 import { Box, Button, Image, Text } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { GetServerSideProps } from 'next';
-import { getProviders, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { getProviders, signIn } from 'next-auth/react';
+
 import { LightStyledLink } from '~/lundprod/components/styled-link';
 import { networks } from '~/lundprod/utils/url';
 

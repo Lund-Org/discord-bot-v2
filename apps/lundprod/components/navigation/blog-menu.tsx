@@ -1,7 +1,9 @@
-import { useRouter } from 'next/router';
-import { MenuLink } from './styled-components';
-import { isBlogPage } from '~/lundprod/utils/url';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+
+import { isBlogPage } from '~/lundprod/utils/url';
+
+import { MenuLink } from './styled-components';
 
 export const BlogMenu = ({ onClick }: { onClick: () => void }) => {
   const { pathname } = useRouter();

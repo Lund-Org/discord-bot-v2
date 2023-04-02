@@ -1,6 +1,7 @@
 import { Client, Message } from 'discord.js';
-import { Handler } from '../Handler';
+
 import messageHelper from '../../helpers/messageHelper';
+import { Handler } from '../Handler';
 
 class MemeCheckerHandler extends Handler {
   authorizedWebsites: string[];

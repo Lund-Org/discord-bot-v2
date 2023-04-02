@@ -1,4 +1,5 @@
 import { Icon, IconProps } from '@chakra-ui/react';
+
 import { getColorStyle } from './utils';
 
 export const ListIcon = (props: IconProps) => {

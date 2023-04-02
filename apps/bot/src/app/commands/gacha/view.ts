@@ -1,5 +1,6 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import { ChatInputCommandInteraction, AttachmentBuilder } from 'discord.js';
+import { AttachmentBuilder,ChatInputCommandInteraction } from 'discord.js';
+
 import { generateDrawImage } from '../../helpers/canvas';
 
 export const view = async (interaction: ChatInputCommandInteraction) => {

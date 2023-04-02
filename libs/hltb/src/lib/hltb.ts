@@ -1,4 +1,5 @@
 import { Axios } from 'axios';
+
 import { DETAIL_URL, IMAGE_URL, SEARCH_URL } from './constants';
 
 type HLTBObj = {

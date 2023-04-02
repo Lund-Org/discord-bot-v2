@@ -2,6 +2,7 @@ import { prisma } from '@discord-bot-v2/prisma';
 import { SportEventCategory } from '@prisma/client';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+
 import { eventUpsert, leagueUpsert } from '../utils/prisma.helper';
 import { GeneratorArg, RaceEvent, RaceTeam } from '../utils/types';
 

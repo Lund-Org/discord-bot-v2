@@ -1,4 +1,5 @@
 import { prisma } from '@discord-bot-v2/prisma';
+
 import { Game } from '../types';
 
 export async function addGameToCache(games: Game[]) {

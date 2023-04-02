@@ -6,19 +6,20 @@ import {
 } from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
 import { GetStaticProps } from 'next';
+
+import { BacklogList } from '~/lundprod/components/my-space/backlog/backlog-list';
+import { GachaTab } from '~/lundprod/components/profile/gacha-tab';
 import { GeneralInformation } from '~/lundprod/components/profile/general-informations';
+import {
+  BacklogItemLight,
+  BacklogProvider,
+} from '~/lundprod/contexts/backlog-context';
+import { getParam } from '~/lundprod/utils/next';
 import {
   CardsToGoldType,
   CardWithFusionDependencies,
   ProfileType,
 } from '~/lundprod/utils/types';
-import { GachaTab } from '~/lundprod/components/profile/gacha-tab';
-import {
-  BacklogItemLight,
-  BacklogProvider,
-} from '~/lundprod/contexts/backlog-context';
-import { BacklogList } from '~/lundprod/components/my-space/backlog/backlog-list';
-import { getParam } from '~/lundprod/utils/next';
 
 type UserProfilePageProps = {
   cardsToGold: CardsToGoldType;

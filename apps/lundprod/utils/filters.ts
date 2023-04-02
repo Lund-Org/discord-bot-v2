@@ -1,4 +1,5 @@
 import { CardType } from '@prisma/client';
+
 import { Filters } from './types';
 
 export const AllCards = 'all';

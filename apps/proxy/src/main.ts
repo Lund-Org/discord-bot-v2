@@ -1,12 +1,12 @@
+import axios from 'axios';
+import { config as dotenvConfig } from 'dotenv';
+import { readFileSync } from 'fs';
 import {
   createServer as httpCreateServer,
   OutgoingHttpHeaders,
   RequestListener,
 } from 'http';
 import { createServer as httpsCreateServer } from 'https';
-import { readFileSync } from 'fs';
-import axios from 'axios';
-import { config as dotenvConfig } from 'dotenv';
 
 dotenvConfig();
 

@@ -1,10 +1,5 @@
-import {
-  ButtonInteraction,
-  ChatInputCommandInteraction,
-  EmbedBuilder,
-  StringSelectMenuInteraction,
-} from 'discord.js';
-import { GachaConfigEnum } from '../../enums/GachaEnum';
+import { addPoints } from '@discord-bot-v2/common';
+import { prisma } from '@discord-bot-v2/prisma';
 import {
   CardType,
   Player,
@@ -12,8 +7,14 @@ import {
   Prisma,
   User,
 } from '@prisma/client';
-import { prisma } from '@discord-bot-v2/prisma';
-import { addPoints } from '@discord-bot-v2/common';
+import {
+  ButtonInteraction,
+  ChatInputCommandInteraction,
+  EmbedBuilder,
+  StringSelectMenuInteraction,
+} from 'discord.js';
+
+import { GachaConfigEnum } from '../../enums/GachaEnum';
 import { CardDraw } from '../../helpers/types';
 
 type ChancesConfig = {

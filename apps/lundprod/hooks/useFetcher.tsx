@@ -1,4 +1,4 @@
-import { useToast, Text } from '@chakra-ui/react';
+import { Text, useToast } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useMemo } from 'react';
 
@@ -60,7 +60,7 @@ export const useFetcher = () => {
           });
         });
       },
-    []
+    [toast]
   );
 
   return fetcher;

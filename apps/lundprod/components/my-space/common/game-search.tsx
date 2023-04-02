@@ -3,18 +3,19 @@ import {
   Button,
   Flex,
   Input,
+  Radio,
+  RadioGroup,
   Select,
+  Stack,
   Tag,
   TagCloseButton,
   TagLabel,
-  RadioGroup,
-  Stack,
-  Radio,
 } from '@chakra-ui/react';
 import { platForms } from '@discord-bot-v2/igdb-front';
 import { ChangeEventHandler, useState } from 'react';
+
 import { useBacklog } from '~/lundprod/contexts/backlog-context';
-import { TypeMap, mapToCategory, mapToTypeMap } from '~/lundprod/utils/backlog';
+import { mapToCategory, mapToTypeMap,TypeMap } from '~/lundprod/utils/backlog';
 
 type GameSearchProps = {
   onSearch: () => Promise<void>;

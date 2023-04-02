@@ -4,6 +4,7 @@ import { prisma } from '@discord-bot-v2/prisma';
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
 import { useState } from 'react';
+
 import { GamepadIcon } from '~/lundprod/components/icons/gamepad';
 import { ListIcon } from '~/lundprod/components/icons/list';
 

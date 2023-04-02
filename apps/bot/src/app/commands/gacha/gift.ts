@@ -1,7 +1,8 @@
 import { addPoints } from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
-import { Gift, Player, PlayerInventory } from '@prisma/client';
-import { ChatInputCommandInteraction, AttachmentBuilder } from 'discord.js';
+import { Gift, Player } from '@prisma/client';
+import { AttachmentBuilder,ChatInputCommandInteraction } from 'discord.js';
+
 import { generateDrawImage } from '../../helpers/canvas';
 import { invalidateWebsitePages } from '../../helpers/discordEvent';
 import { CardDraw } from '../../helpers/types';

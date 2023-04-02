@@ -1,10 +1,11 @@
 import { Flex, useBreakpointValue } from '@chakra-ui/react';
 import { prisma } from '@discord-bot-v2/prisma';
 import { GetStaticProps } from 'next';
-import { CardWithFusionDependencies } from '~/lundprod/utils/types';
+
 import { CardPreviewContainer } from '~/lundprod/components/gacha/home/card-preview-container';
 import { Navbar } from '~/lundprod/components/gacha/home/navbar';
 import { GachaHomeProvider } from '~/lundprod/contexts/gacha-home-context';
+import { CardWithFusionDependencies } from '~/lundprod/utils/types';
 
 type GachaPageProps = {
   cardTypes: CardWithFusionDependencies[];

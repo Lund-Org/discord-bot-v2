@@ -7,10 +7,11 @@ import {
   Tag,
   Text,
 } from '@chakra-ui/react';
-import Link from 'next/link';
 import { BlogPost, Tag as BlogTag } from '@prisma/client';
-import { formatBlogDate } from '~/lundprod/utils/dates';
+import Link from 'next/link';
+
 import { getTitleFromFilename } from '~/lundprod/utils/blog';
+import { formatBlogDate } from '~/lundprod/utils/dates';
 
 type BlogArticleProps = {
   blogPost: BlogPost & {

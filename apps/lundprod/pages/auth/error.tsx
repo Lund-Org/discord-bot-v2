@@ -1,6 +1,7 @@
 import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import { GetServerSideProps } from 'next';
 import { signIn } from 'next-auth/react';
+
 import { getErrorMessage } from '~/lundprod/utils/auth';
 import { getParam } from '~/lundprod/utils/next';
 

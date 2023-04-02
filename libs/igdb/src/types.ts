@@ -1,4 +1,5 @@
 import { ValueOf } from '@discord-bot-v2/common';
+
 import { gameTypeMapping } from './lib/constants';
 
 export enum GAME_TYPE {

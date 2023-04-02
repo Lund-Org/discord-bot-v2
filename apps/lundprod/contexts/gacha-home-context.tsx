@@ -5,6 +5,7 @@ import {
   useEffect,
   useState,
 } from 'react';
+
 import { AllCards, filterCards } from '../utils/filters';
 import { CardWithFusionDependencies, Filters } from '../utils/types';
 

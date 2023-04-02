@@ -1,11 +1,13 @@
+import { Game, getGame } from '@discord-bot-v2/igdb';
 import { prisma } from '@discord-bot-v2/prisma';
+import { Prisma } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '../auth/[...nextauth]';
-import { getUserProfileUrl } from '~/lundprod/utils/url';
 import { boolean, number, object } from 'yup';
-import { Game, getGame } from '@discord-bot-v2/igdb';
-import { Prisma } from '@prisma/client';
+
+import { getUserProfileUrl } from '~/lundprod/utils/url';
+
+import { authOptions } from '../auth/[...nextauth]';
 
 const addExpectedGameSchema = object({
   igdbGameId: number().required().positive().integer(),

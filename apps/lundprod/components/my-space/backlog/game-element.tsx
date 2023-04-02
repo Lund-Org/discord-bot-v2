@@ -1,16 +1,17 @@
-import { Tag, Text, Tr, Td, TagLabel, Flex, Button } from '@chakra-ui/react';
+import { Button,Flex, Tag, TagLabel, Td, Text, Tr } from '@chakra-ui/react';
+import { ArrayElement } from '@discord-bot-v2/common';
 import {
   Game,
   translateGameType,
   translateRegion,
 } from '@discord-bot-v2/igdb-front';
 import { Fragment } from 'react';
-import { formatReleaseDate } from '~/lundprod/utils/dates';
+
 import {
   BacklogItemLight,
   useBacklog,
 } from '~/lundprod/contexts/backlog-context';
-import { ArrayElement } from '@discord-bot-v2/common';
+import { formatReleaseDate } from '~/lundprod/utils/dates';
 
 type GameElementProps = {
   element: Game;

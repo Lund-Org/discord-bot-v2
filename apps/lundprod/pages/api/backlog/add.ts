@@ -1,10 +1,12 @@
+import { gameTypeMapping } from '@discord-bot-v2/igdb';
 import { prisma } from '@discord-bot-v2/prisma';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '../auth/[...nextauth]';
-import { getUserProfileUrl } from '~/lundprod/utils/url';
 import { number, object, string } from 'yup';
-import { gameTypeMapping } from '@discord-bot-v2/igdb';
+
+import { getUserProfileUrl } from '~/lundprod/utils/url';
+
+import { authOptions } from '../auth/[...nextauth]';
 
 const addToBacklogSchema = object({
   igdbGameId: number().required().positive().integer(),

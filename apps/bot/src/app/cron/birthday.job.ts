@@ -1,9 +1,9 @@
-import { prisma } from '@discord-bot-v2/prisma';
-import { Client, NonThreadGuildBasedChannel, TextChannel } from 'discord.js';
 import {
   giftPointsForBirthday,
   givenPointsForBirthday,
 } from '@discord-bot-v2/common';
+import { prisma } from '@discord-bot-v2/prisma';
+import { Client, NonThreadGuildBasedChannel, TextChannel } from 'discord.js';
 
 export const cronTiming = '0 0 0 * * *';
 

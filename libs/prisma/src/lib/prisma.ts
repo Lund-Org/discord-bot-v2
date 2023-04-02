@@ -1,8 +1,9 @@
 import { PrismaClient } from '@prisma/client';
+
+import { DiscordNotificationChannelExtension } from './extensions/discord-notification-channel';
+import { PlayerInventoryExtension } from './extensions/player-inventory';
 import { SportLeagueExtension } from './extensions/sport-league';
 import { UserExtension } from './extensions/user';
-import { PlayerInventoryExtension } from './extensions/player-inventory';
-import { DiscordNotificationChannelExtension } from './extensions/discord-notification-channel';
 
 const prismaClient = new PrismaClient();
 

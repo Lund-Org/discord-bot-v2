@@ -1,10 +1,10 @@
-import { QUERY_OPERATOR } from './constants';
 import {
-  GameTypeTranslation,
   GAME_TYPE,
-  REGION,
+  GameTypeTranslation,
   IGDBConditionValue,
+  REGION,
 } from '../types';
+import { QUERY_OPERATOR } from './constants';
 
 export function validateFilters(filters: unknown): filters is {
   field: string;

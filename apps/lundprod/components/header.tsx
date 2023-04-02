@@ -1,12 +1,14 @@
-import { Button, Flex } from '@chakra-ui/react';
-import { useClickAway } from 'react-use';
 import { HamburgerIcon } from '@chakra-ui/icons';
+import { Button, Flex } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
+import { useClickAway } from 'react-use';
+
 import { MENU_HEIGHT } from '~/lundprod/utils/constants';
-import { MobileBox } from './visibility';
-import { HomeMenu, GachaMenu, BlogMenu, SignMenu } from './navigation';
+
+import { BlogMenu, GachaMenu, HomeMenu, SignMenu } from './navigation';
 import { MenuBox } from './navigation/styled-components';
 import { UserMenu } from './navigation/user-menu';
+import { MobileBox } from './visibility';
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

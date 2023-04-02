@@ -1,5 +1,6 @@
-import { loadImage, CanvasRenderingContext2D, createCanvas } from 'canvas';
+import { CanvasRenderingContext2D, createCanvas,loadImage } from 'canvas';
 import { join } from 'path';
+
 import { CardDraw } from './types';
 
 const CARD_SIZE = [475, 820] as const;
