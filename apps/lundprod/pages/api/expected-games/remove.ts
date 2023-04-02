@@ -1,15 +1,15 @@
 import { prisma } from '@discord-bot-v2/prisma';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { number, object } from 'yup';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 import { getUserProfileUrl } from '~/lundprod/utils/url';
-import { number, object } from 'yup';
 
-const removeFromBacklogSchema = object({
-  id: number().required().positive().integer(),
+const removeExpectedGameSchema = object({
+  igdbGameId: number().required().positive().integer(),
 });
 
-export default async function removeFromBacklog(
+export default async function removeExpectedGame(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -30,39 +30,16 @@ export default async function removeFromBacklog(
     return res.status(404).json({ success: false });
   }
 
-  const payload = await removeFromBacklogSchema.validate(req.body);
+  const payload = await removeExpectedGameSchema.validate(req.body);
 
-  const item = await prisma.backlogItem.findUnique({
+  await prisma.expectedGame.delete({
     where: {
-      userId_igdbGameId: {
+      igdbId_userId: {
+        igdbId: payload.igdbGameId,
         userId: user.id,
-        igdbGameId: payload.id,
       },
     },
   });
-
-  if (!item) {
-    return res.status(404).json({ success: false });
-  }
-
-  await prisma.$transaction([
-    prisma.backlogItem.delete({
-      where: {
-        id: item.id,
-      },
-    }),
-    prisma.backlogItem.updateMany({
-      where: {
-        userId: user.id,
-        order: { gt: item.order },
-      },
-      data: {
-        order: {
-          increment: -1,
-        },
-      },
-    }),
-  ]);
 
   res.revalidate(getUserProfileUrl(session.userId));
 

@@ -1,4 +1,4 @@
-import { GAME_TYPE } from '@discord-bot-v2/igdb';
+import { GAME_TYPE } from '@discord-bot-v2/igdb-front';
 import { BacklogStatus } from '@prisma/client';
 import { BacklogItemLight } from '../contexts/backlog-context';
 

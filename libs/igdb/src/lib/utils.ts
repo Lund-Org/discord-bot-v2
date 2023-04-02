@@ -1,11 +1,15 @@
 import { QUERY_OPERATOR } from './constants';
-import { GAME_TYPE, REGION } from '../types';
-import { ConditionValue } from './igdb-query-builder';
+import {
+  GameTypeTranslation,
+  GAME_TYPE,
+  REGION,
+  IGDBConditionValue,
+} from '../types';
 
 export function validateFilters(filters: unknown): filters is {
   field: string;
   operator: QUERY_OPERATOR;
-  value: ConditionValue;
+  value: IGDBConditionValue;
 }[] {
   if (!Array.isArray(filters)) {
     return null;
@@ -57,7 +61,7 @@ export const translateRegion = (region: REGION) => {
   }
 };
 
-export const translateGameType = (gameType: GAME_TYPE) => {
+export const translateGameType = (gameType: GAME_TYPE): GameTypeTranslation => {
   switch (gameType) {
     case GAME_TYPE.MAIN_GAME:
       return 'Jeu';

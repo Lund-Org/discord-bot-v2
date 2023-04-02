@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["clientExtensions"]
+  previewFeatures = ["clientExtensions", "extendedWhereUnique"]
 }
 
 datasource db {
@@ -108,6 +108,27 @@ model DiscordNotificationChannel {
   notificationType ChannelNotification @unique
 }
 
+model ExpectedGame {
+  id           Int                       @id @default(autoincrement())
+  igdbId       Int
+  name         String                    @db.VarChar(255)
+  url          String                    @db.VarChar(255)
+  platformId   Int?
+  addToBacklog Boolean
+  cancelled    Boolean?
+  userId       Int
+  releaseDates ExpectedGameReleaseDate[]
+  user         User                      @relation(fields: [userId], references: [id])
+
+  @@unique([igdbId, userId])
+}
+
+model GameCache {
+  id      Int  @id @default(autoincrement())
+  igdbId  Int  @unique
+  content Json
+}
+
 model Gift {
   id                Int      @id @default(autoincrement())
   beginningDatetime DateTime @db.DateTime(0)
@@ -152,6 +173,14 @@ model PlayerInventory {
   @@unique([playerId, cardTypeId, type])
   @@index([cardTypeId])
   @@index([playerId])
+}
+
+model ExpectedGameReleaseDate {
+  id             Int          @id @default(autoincrement())
+  date           DateTime
+  platformId     Int
+  expectedGameId Int
+  expectedGame   ExpectedGame @relation(fields: [expectedGameId], references: [id], onDelete: Cascade)
 }
 
 model SportEvent {
@@ -206,13 +235,14 @@ model Tag {
 }
 
 model User {
-  id             Int           @id @default(autoincrement())
-  discordId      String        @unique @db.VarChar(255)
-  twitchUsername String?       @unique @db.VarChar(255)
-  username       String        @db.VarChar(255)
-  isActive       Boolean       @default(true)
+  id             Int            @id @default(autoincrement())
+  discordId      String         @unique @db.VarChar(255)
+  twitchUsername String?        @unique @db.VarChar(255)
+  username       String         @db.VarChar(255)
+  isActive       Boolean        @default(true)
   player         Player?
   backlogItems   BacklogItem[]
+  expectedGames  ExpectedGame[]
   teamFollowed   SportTeam[]
   leagueFollowed SportLeague[]
 }

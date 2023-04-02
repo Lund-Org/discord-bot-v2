@@ -11,7 +11,7 @@ import {
   Stack,
   Radio,
 } from '@chakra-ui/react';
-import { platForms } from '@discord-bot-v2/igdb';
+import { platForms } from '@discord-bot-v2/igdb-front';
 import { ChangeEventHandler, useState } from 'react';
 import { useBacklog } from '~/lundprod/contexts/backlog-context';
 import { TypeMap, mapToCategory, mapToTypeMap } from '~/lundprod/utils/backlog';

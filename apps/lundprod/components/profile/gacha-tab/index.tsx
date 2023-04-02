@@ -15,6 +15,10 @@ type GachaTabProps = {
 };
 
 export const GachaTab = ({ profile, cardsToGold, fusions }: GachaTabProps) => {
+  if (!profile.player) {
+    return null;
+  }
+
   return (
     <Flex flexWrap="wrap" w="100%" justifyContent="center" gap={10} pt="20px">
       <InventoryList

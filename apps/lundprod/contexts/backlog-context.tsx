@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { GAME_TYPE, platForms, Game } from '@discord-bot-v2/igdb';
+import { GAME_TYPE, platForms, Game } from '@discord-bot-v2/igdb-front';
+import { ArrayElement } from '@discord-bot-v2/common';
 import { BacklogItem, BacklogStatus } from '@prisma/client';
 import { chain, clone, curry } from 'lodash';
 import {
@@ -13,7 +14,6 @@ import {
 } from 'react';
 import { useFetcher } from '../hooks/useFetcher';
 import { mapToCategory, TypeMap } from '../utils/backlog';
-import { ArrayElement /*, IGDBGame*/ } from '../utils/types';
 
 type PlatForm = ArrayElement<typeof platForms>;
 export type BacklogItemLight = Pick<

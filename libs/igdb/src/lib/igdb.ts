@@ -1,7 +1,13 @@
 import axios from 'axios';
-import { Game } from '../types';
-import { BASE_URL, GAME_PER_PAGE, QUERY_OPERATOR } from './constants';
-import { ConditionValue, IGDBQueryBuilder } from './igdb-query-builder';
+import { Game, IGDBConditionValue } from '../types';
+import {
+  BASE_URL,
+  GAME_FIELDS,
+  GAME_PER_PAGE,
+  QUERY_OPERATOR,
+} from './constants';
+import { IGDBQueryBuilder } from './igdb-query-builder';
+import { addGameToCache } from './cache';
 
 let twitchToken: {
   access_token: string;
@@ -43,7 +49,7 @@ async function twitchAuth() {
     });
 }
 
-async function IGDBRequest(path: string, query: string) {
+async function IGDBRequest<T>(path: string, query: string): Promise<T> {
   await twitchAuth();
 
   return axios({
@@ -82,7 +88,11 @@ export async function getPlatforms() {
 
 export async function getGames(
   name: string,
-  filters: { field: string; operator: QUERY_OPERATOR; value: ConditionValue }[],
+  filters: {
+    field: string;
+    operator: QUERY_OPERATOR;
+    value: IGDBConditionValue;
+  }[],
   page = 1
 ): Promise<Game[]> {
   if (page < 1) {
@@ -91,23 +101,7 @@ export async function getGames(
 
   const queryBuilder = new IGDBQueryBuilder();
   queryBuilder
-    .setFields([
-      'id',
-      'name',
-      'status',
-      'storyline',
-      'summary',
-      'version_title',
-      'category',
-      'url',
-      'platforms.id',
-      'platforms.name',
-      'release_dates.date',
-      'release_dates.platform',
-      'release_dates.region',
-      'release_dates.human',
-      'release_dates.platform.name',
-    ])
+    .setFields(GAME_FIELDS)
     .setSearch(name)
     .setLimit(GAME_PER_PAGE)
     .setOffset((page - 1) * GAME_PER_PAGE);
@@ -120,5 +114,24 @@ export async function getGames(
     }
   });
 
-  return IGDBRequest('/games', queryBuilder.toString());
+  const result = await IGDBRequest<Game[]>('/games', queryBuilder.toString());
+
+  await addGameToCache(result);
+
+  return result;
+}
+
+export async function getGame(id: number): Promise<Game> {
+  const queryBuilder = new IGDBQueryBuilder();
+  queryBuilder.setFields(GAME_FIELDS).where('id', QUERY_OPERATOR.EQ, id);
+
+  const result = await IGDBRequest<Game[]>('/games', queryBuilder.toString());
+
+  if (!result.length) {
+    throw new Error('Game not found');
+  }
+
+  await addGameToCache(result);
+
+  return result[0];
 }

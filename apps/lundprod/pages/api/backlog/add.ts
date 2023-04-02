@@ -3,6 +3,15 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 import { getUserProfileUrl } from '~/lundprod/utils/url';
+import { number, object, string } from 'yup';
+import { gameTypeMapping } from '@discord-bot-v2/igdb';
+
+const addToBacklogSchema = object({
+  igdbGameId: number().required().positive().integer(),
+  name: string().required(),
+  category: string().oneOf(Object.values(gameTypeMapping)).required(),
+  url: string().required(),
+});
 
 export default async function addToBacklog(
   req: NextApiRequest,
@@ -25,6 +34,8 @@ export default async function addToBacklog(
     return res.status(404).json({ success: false });
   }
 
+  const payload = await addToBacklogSchema.validate(req.body);
+
   const existingBiggestOrder = await prisma.backlogItem.findFirst({
     where: { userId: user.id },
     orderBy: { order: 'desc' },
@@ -33,14 +44,14 @@ export default async function addToBacklog(
     where: {
       userId_igdbGameId: {
         userId: user.id,
-        igdbGameId: req.body.igdbGameId,
+        igdbGameId: payload.igdbGameId,
       },
     },
     create: {
-      igdbGameId: req.body.igdbGameId,
-      name: req.body.name,
-      category: req.body.category,
-      url: req.body.url,
+      igdbGameId: payload.igdbGameId,
+      name: payload.name,
+      category: payload.category,
+      url: payload.url,
       user: {
         connect: {
           id: user.id,

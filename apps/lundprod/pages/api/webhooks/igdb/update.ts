@@ -1,10 +1,17 @@
+import { getGame } from '@discord-bot-v2/igdb';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function updateIGDB(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const game = await getGame(req.body.id);
+
+  // get the expected games
+  // check the release dates to update them
+
   console.log(req.body);
+
   /**
    {
       id: 112874,

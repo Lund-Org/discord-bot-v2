@@ -1,3 +1,6 @@
+import { ValueOf } from '@discord-bot-v2/common';
+import { gameTypeMapping } from './lib/constants';
+
 export enum GAME_TYPE {
   MAIN_GAME = 0,
   DLC_ADDON = 1,
@@ -62,3 +65,7 @@ export type Game = {
     };
   }>;
 };
+
+export type GameTypeTranslation = ValueOf<typeof gameTypeMapping> | 'Autre';
+
+export type IGDBConditionValue = string[] | number[] | string | number;

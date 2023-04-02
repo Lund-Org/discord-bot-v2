@@ -1,4 +1,5 @@
 {
+  "name": "common",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/common/src",
   "projectType": "library",
@@ -16,6 +17,12 @@
       "options": {
         "jestConfig": "libs/common/jest.config.ts",
         "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
       }
     }
   },

@@ -18,11 +18,12 @@ import {
   BacklogProvider,
 } from '~/lundprod/contexts/backlog-context';
 import { BacklogList } from '~/lundprod/components/my-space/backlog/backlog-list';
+import { getParam } from '~/lundprod/utils/next';
 
 type UserProfilePageProps = {
   cardsToGold: CardsToGoldType;
   profile: ProfileType;
-  rank: RankByUser;
+  rank: RankByUser | null;
   fusions: CardWithFusionDependencies[];
   backlogItems: BacklogItemLight[];
 };
@@ -48,9 +49,7 @@ export const getStaticProps: GetStaticProps<UserProfilePageProps> = async (
   context
 ) => {
   const { params = {} } = context;
-  const discordId = Array.isArray(params.discordId)
-    ? params.discordId[0]
-    : params.discordId || '';
+  const discordId = getParam(params.discordId, '');
   const profile = await prisma.user.getProfile(discordId);
 
   if (!profile) {
@@ -77,7 +76,9 @@ export const getStaticProps: GetStaticProps<UserProfilePageProps> = async (
     orderBy: { order: 'asc' },
   });
   const cardsToGold = await prisma.playerInventory.getCardsToGold(discordId);
-  const [rank] = await getGlobalRanking([profile.player.id]);
+  const [rank] = profile.player
+    ? await getGlobalRanking([profile.player.id])
+    : [null];
   const fusions = await getCardsToFusion(discordId);
 
   return {
@@ -89,7 +90,7 @@ export const getStaticProps: GetStaticProps<UserProfilePageProps> = async (
     props: {
       profile: JSON.parse(JSON.stringify(profile)),
       cardsToGold,
-      rank: JSON.parse(JSON.stringify(rank)),
+      rank: rank ? JSON.parse(JSON.stringify(rank)) : null,
       fusions,
       backlogItems,
     },
@@ -111,9 +112,9 @@ export function UserProfilePage({
   return (
     <Box px="20px" pb="50px" pt="20px" color="gray.300">
       <GeneralInformation profile={profile} rank={rank} />
-      <Tabs mt={6}>
+      <Tabs mt={6} defaultIndex={profile.player ? 0 : 1}>
         <TabList>
-          <Tab _selected={selected} _active={{}}>
+          <Tab _selected={selected} _active={{}} isDisabled={!profile.player}>
             Gacha
           </Tab>
           <Tab _selected={selected} _active={{}}>

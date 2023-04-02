@@ -5,6 +5,13 @@ import { authOptions } from '../auth/[...nextauth]';
 import { getUserProfileUrl } from '~/lundprod/utils/url';
 import { EmbedBuilder, WebhookClient } from 'discord.js';
 import { BacklogItem, BacklogStatus, User } from '@prisma/client';
+import { number, object, string } from 'yup';
+
+const updateBacklogDetailsSchema = object({
+  igdbGameId: number().required().positive().integer(),
+  reason: string().max(255).required(),
+  rating: number().min(1).max(5).required().integer(),
+});
 
 export default async function updateBacklogDetails(
   req: NextApiRequest,
@@ -26,17 +33,18 @@ export default async function updateBacklogDetails(
   if (!user) {
     return res.status(404).json({ success: false });
   }
+  const payload = await updateBacklogDetailsSchema.validate(req.body);
 
   const backlogItem = await prisma.backlogItem.update({
     where: {
       userId_igdbGameId: {
         userId: user.id,
-        igdbGameId: req.body.igdbGameId,
+        igdbGameId: payload.igdbGameId,
       },
     },
     data: {
-      reason: req.body.reason,
-      rating: req.body.rating,
+      reason: payload.reason,
+      rating: payload.rating,
     },
   });
 

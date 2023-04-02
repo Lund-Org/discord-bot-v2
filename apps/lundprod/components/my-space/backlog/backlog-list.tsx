@@ -1,27 +1,17 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons';
-import {
-  Button,
-  Text,
-  Table,
-  Thead,
-  Tr,
-  Th,
-  Td,
-  Flex,
-  RadioGroup,
-  Stack,
-  Radio,
-} from '@chakra-ui/react';
+import { Button, Flex, Table, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 import { BacklogStatus } from '@prisma/client';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import { getBacklogStatusTranslation } from '~/lundprod/utils/backlog';
+
 import { useBacklog } from '~/lundprod/contexts/backlog-context';
+
+import { GameTypeFilter } from '../common/game-type-filters';
 import { BacklogChangeStatus } from './backlog-change-status';
-import { BacklogItemDetails } from './backlog-item-details';
-import { BacklogSetDetails } from './backlog-set-details';
 import { DragAndDropWrapper } from './backlog-drag-and-drop-wrapper';
 import { DraggableRow } from './backlog-draggable-row';
+import { BacklogItemDetails } from './backlog-item-details';
+import { BacklogSetDetails } from './backlog-set-details';
 
 type BacklogListProps = {
   isReadOnly?: boolean;
@@ -38,30 +28,10 @@ export const BacklogList = ({ isReadOnly = true }: BacklogListProps) => {
     return backlog.filter((item) => item.status === activeStatus);
   }, [activeStatus, backlog]);
 
-  const options = ['', ...Object.values(BacklogStatus)].map((status) => ({
-    label: getBacklogStatusTranslation(status),
-    value: status,
-  }));
-
-  const filters = (
-    <RadioGroup
-      value={activeStatus}
-      onChange={(value: BacklogStatus) => setActiveStatus(value)}
-    >
-      <Stack spacing={4} direction="row" mb="10px">
-        {options.map(({ label, value }) => (
-          <Radio value={value} key={value}>
-            {label}
-          </Radio>
-        ))}
-      </Stack>
-    </RadioGroup>
-  );
-
   if (!refinedList.length) {
     return (
       <>
-        {filters}
+        <GameTypeFilter value={activeStatus} onChange={setActiveStatus} />
         {getEmptyListWording(isReadOnly)}
       </>
     );
@@ -69,7 +39,7 @@ export const BacklogList = ({ isReadOnly = true }: BacklogListProps) => {
 
   return (
     <>
-      {filters}
+      <GameTypeFilter value={activeStatus} onChange={setActiveStatus} />
       <Table>
         <Thead>
           <Tr>
