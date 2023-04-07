@@ -7,6 +7,7 @@ import {
   RequestListener,
 } from 'http';
 import { createServer as httpsCreateServer } from 'https';
+import { Readable } from 'stream';
 
 dotenvConfig();
 
@@ -44,30 +45,43 @@ const app = (secure): RequestListener => {
           baseURL: `http://localhost:${process.env.PORT}`,
           data: body,
           headers: req.headers,
-          responseType: 'stream',
-          decompress: false,
           maxRedirects: 0,
           validateStatus: (status) => status >= 200 && status <= 302,
         })
           .then((axiosResponse) => {
+            const dataStream = new Readable();
+            dataStream.push(
+              typeof axiosResponse.data === 'string'
+                ? axiosResponse.data
+                : JSON.stringify(axiosResponse.data)
+            );
+            dataStream.push(null);
+
             res.writeHead(
               axiosResponse.status,
               undefined,
               axiosResponse.headers as OutgoingHttpHeaders
             );
-            axiosResponse.data.on('end', () => {
+            dataStream.on('end', () => {
               res.end();
             });
-            axiosResponse.data.pipe(res);
+            dataStream.pipe(res);
           })
           .catch((error) => {
             if (axios.isAxiosError(error)) {
               res.writeHead(error.response?.status || 500, error.message);
               if (error.response) {
-                error.response.data.on('end', () => {
+                const dataStream = new Readable();
+                dataStream.push(
+                  typeof error.response.data === 'string'
+                    ? error.response.data
+                    : JSON.stringify(error.response.data)
+                );
+                dataStream.push(null);
+                dataStream.on('end', () => {
                   res.end();
                 });
-                error.response.data.pipe(res);
+                dataStream.pipe(res);
               } else {
                 res.end();
               }
