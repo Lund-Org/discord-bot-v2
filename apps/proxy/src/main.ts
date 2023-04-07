@@ -1,13 +1,8 @@
 import axios from 'axios';
 import { config as dotenvConfig } from 'dotenv';
 import { readFileSync } from 'fs';
-import {
-  createServer as httpCreateServer,
-  OutgoingHttpHeaders,
-  RequestListener,
-} from 'http';
+import { createServer as httpCreateServer, RequestListener } from 'http';
 import { createServer as httpsCreateServer } from 'https';
-import { Readable } from 'stream';
 
 dotenvConfig();
 
@@ -45,43 +40,26 @@ const app = (secure): RequestListener => {
           baseURL: `http://localhost:${process.env.PORT}`,
           data: body,
           headers: req.headers,
+          responseType: 'stream',
+          decompress: false,
           maxRedirects: 0,
           validateStatus: (status) => status >= 200 && status <= 302,
         })
           .then((axiosResponse) => {
-            const dataStream = new Readable();
-            dataStream.push(
-              typeof axiosResponse.data === 'string'
-                ? axiosResponse.data
-                : JSON.stringify(axiosResponse.data)
-            );
-            dataStream.push(null);
-
-            res.writeHead(
-              axiosResponse.status,
-              undefined,
-              axiosResponse.headers as OutgoingHttpHeaders
-            );
-            dataStream.on('end', () => {
+            res.writeHead(axiosResponse.status, axiosResponse.headers);
+            axiosResponse.data.on('end', () => {
               res.end();
             });
-            dataStream.pipe(res);
+            axiosResponse.data.pipe(res);
           })
           .catch((error) => {
             if (axios.isAxiosError(error)) {
               res.writeHead(error.response?.status || 500, error.message);
               if (error.response) {
-                const dataStream = new Readable();
-                dataStream.push(
-                  typeof error.response.data === 'string'
-                    ? error.response.data
-                    : JSON.stringify(error.response.data)
-                );
-                dataStream.push(null);
-                dataStream.on('end', () => {
+                error.response.data.on('end', () => {
                   res.end();
                 });
-                dataStream.pipe(res);
+                error.response.data.pipe(res);
               } else {
                 res.end();
               }
