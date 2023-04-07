@@ -1,6 +1,6 @@
 import { Text, useToast } from '@chakra-ui/react';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 export const useFetcher = () => {
   const toast = useToast();
@@ -63,5 +63,34 @@ export const useFetcher = () => {
     [toast]
   );
 
-  return fetcher;
+  const get = useCallback(
+    (url: string, queryParams?: Record<string, unknown | unknown[]>) => {
+      return fetcher(url, queryParams, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    },
+    [fetcher]
+  );
+
+  const post = useCallback(
+    (
+      url: string,
+      queryParams?: Record<string, unknown | unknown[]>,
+      body?: BodyInit
+    ) => {
+      return fetcher(url, queryParams, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body,
+      });
+    },
+    [fetcher]
+  );
+
+  return { get, post };
 };

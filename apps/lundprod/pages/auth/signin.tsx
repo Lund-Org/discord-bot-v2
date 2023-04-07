@@ -66,9 +66,7 @@ export default function SignIn({ providers }: SignInProps) {
         ))}
       </Fieldset>
       <Box mt="50px" textAlign="center">
-        <Text as="span">
-          Pour s&apos;inscrire, il faut pour l&apos;instant rejoindre le&nbsp;
-        </Text>
+        <Text as="span">Pour s&apos;inscrire, il faut rejoindre le&nbsp;</Text>
         <LightStyledLink
           href={discordNetwork.url}
           target="_blank"

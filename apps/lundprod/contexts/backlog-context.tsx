@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { ArrayElement } from '@discord-bot-v2/common';
-import { Game,GAME_TYPE, platForms } from '@discord-bot-v2/igdb-front';
+import { Game, GAME_TYPE, PlatFormType } from '@discord-bot-v2/igdb-front';
 import { BacklogItem, BacklogStatus } from '@prisma/client';
 import { chain, clone, curry } from 'lodash';
 import {
   createContext,
-  MutableRefObject,
   ReactNode,
   useCallback,
   useContext,
@@ -14,19 +12,13 @@ import {
 } from 'react';
 
 import { useFetcher } from '../hooks/useFetcher';
+import { BacklogItemFields } from '../utils/api/backlog';
 import { mapToCategory, TypeMap } from '../utils/backlog';
+import { ContextWithGameSearch } from '../utils/types';
 
-type PlatForm = ArrayElement<typeof platForms>;
 export type BacklogItemLight = Pick<
   BacklogItem,
-  | 'igdbGameId'
-  | 'name'
-  // | 'category'
-  | 'url'
-  | 'status'
-  | 'reason'
-  | 'rating'
-  | 'order'
+  Exclude<BacklogItemFields, 'category'>
 > & {
   category: GAME_TYPE | string;
 };
@@ -39,12 +31,7 @@ type IGDBGameLight = Pick<
 type BacklogReorder = { oldOrder: number; newOrder: number; igdbId: number };
 
 //-- Types
-type BacklogContextProvider = {
-  searchValue: MutableRefObject<string>;
-  category: GAME_TYPE[];
-  setCategory: (val: GAME_TYPE[]) => void;
-  platforms: PlatForm[];
-  setPlatforms: (platforms: PlatForm[]) => void;
+type BacklogContextProvider = ContextWithGameSearch & {
   backlog: BacklogItemLight[];
   addToBacklog: (backlogItem: IGDBGameLight) => void;
   removeFromBacklog: (id: number) => void;
@@ -89,8 +76,8 @@ export const BacklogProvider = ({
   const [backlog, setBacklog] = useState(initialBacklog);
   const [category, setCategory] = useState(mapToCategory(TypeMap.GAME));
   const searchValue = useRef('');
-  const [platforms, setPlatforms] = useState<PlatForm[]>([]);
-  const fetcher = useFetcher();
+  const [platforms, setPlatforms] = useState<PlatFormType[]>([]);
+  const { post } = useFetcher();
 
   const addToBacklog = useCallback(
     (game: Game) => {
@@ -106,21 +93,17 @@ export const BacklogProvider = ({
       };
 
       setBacklog([...backlog, newItem]);
-      return fetcher(`/api/backlog/add`, undefined, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newItem),
-      }).catch(() => {
-        setBacklog((_backlog) => {
-          const backlogCopy = [..._backlog];
-          backlogCopy.length -= 1;
-          return backlogCopy;
-        });
-      });
+      return post(`/api/backlog/add`, undefined, JSON.stringify(newItem)).catch(
+        () => {
+          setBacklog((_backlog) => {
+            const backlogCopy = [..._backlog];
+            backlogCopy.length -= 1;
+            return backlogCopy;
+          });
+        }
+      );
     },
-    [setBacklog, backlog, fetcher]
+    [setBacklog, backlog, post]
   );
   const removeFromBacklog = useCallback(
     (id: number) => {
@@ -130,17 +113,15 @@ export const BacklogProvider = ({
       const [backupItem] = newBacklog.splice(itemIndex, 1);
 
       setBacklog(newBacklog);
-      return fetcher(`/api/backlog/remove`, undefined, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id }),
-      }).catch(() => {
+      return post(
+        `/api/backlog/remove`,
+        undefined,
+        JSON.stringify({ id })
+      ).catch(() => {
         setBacklog((_backlog) => [..._backlog, backupItem]);
       });
     },
-    [setBacklog, backlog, fetcher]
+    [setBacklog, backlog, post]
   );
   const onReorder = useCallback(
     (payload: { oldOrder: number; newOrder: number; igdbId: number }) => {
@@ -173,17 +154,15 @@ export const BacklogProvider = ({
           .value()
       );
 
-      return fetcher(`/api/backlog/reorder`, undefined, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      }).catch(() => {
+      return post(
+        `/api/backlog/reorder`,
+        undefined,
+        JSON.stringify(payload)
+      ).catch(() => {
         setBacklog(backupBacklog);
       });
     },
-    [setBacklog, backlog, fetcher]
+    [setBacklog, backlog, post]
   );
 
   const providerParameters = {
@@ -198,12 +177,12 @@ export const BacklogProvider = ({
     updateBacklogStatus: curry(updateBacklogStatus)({
       backlog,
       setBacklog,
-      fetcher,
+      post,
     }),
     updateBacklogDetails: curry(updateBacklogDetails)({
       backlog,
       setBacklog,
-      fetcher,
+      post,
     }),
     onReorder,
   };
@@ -220,7 +199,7 @@ export const BacklogProvider = ({
 type UpdateBacklogCurriedParam = {
   backlog: BacklogItemLight[];
   setBacklog: (newBacklog: BacklogItemLight[]) => void;
-  fetcher: ReturnType<typeof useFetcher>;
+  post: ReturnType<typeof useFetcher>['post'];
 };
 
 function updateBacklogStatus(
@@ -252,7 +231,7 @@ function updateBacklogDetails(
 }
 
 function findItemChangePropertyAndRequestAPI<T>(
-  { backlog, setBacklog, fetcher }: UpdateBacklogCurriedParam,
+  { backlog, setBacklog, post }: UpdateBacklogCurriedParam,
   id: number,
   param: T | T[],
   name: string | string[],
@@ -286,13 +265,7 @@ function findItemChangePropertyAndRequestAPI<T>(
   }
 
   setBacklog(newBacklog);
-  return fetcher(url, undefined, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: payload,
-  }).catch(() => {
+  return post(url, undefined, payload).catch(() => {
     if (typeof name === 'string') {
       itemToUpdate[name] = oldValue;
     } else {

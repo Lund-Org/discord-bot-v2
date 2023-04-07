@@ -1,4 +1,4 @@
-import { ChevronRightIcon } from '@chakra-ui/icons';
+import { ChevronRightIcon, TimeIcon } from '@chakra-ui/icons';
 import { Box, Button, Flex, Heading, Text, Tooltip } from '@chakra-ui/react';
 import { prisma } from '@discord-bot-v2/prisma';
 import { GetStaticProps } from 'next';
@@ -7,6 +7,7 @@ import { useState } from 'react';
 
 import { GamepadIcon } from '~/lundprod/components/icons/gamepad';
 import { ListIcon } from '~/lundprod/components/icons/list';
+import { TooltipIconIndicator } from '~/lundprod/components/users/tooltip-icon-indicator';
 
 type UsersPageProps = {
   users: Array<{
@@ -14,6 +15,7 @@ type UsersPageProps = {
     username: string;
     isPlayer: boolean;
     backlogItemsCount: number;
+    expectedGamesCount: number;
   }>;
 };
 
@@ -28,6 +30,11 @@ export const getStaticProps: GetStaticProps<UsersPageProps> = async () => {
           id: true,
         },
       },
+      expectedGames: {
+        select: {
+          id: true,
+        },
+      },
     },
     where: {
       isActive: true,
@@ -38,13 +45,14 @@ export const getStaticProps: GetStaticProps<UsersPageProps> = async () => {
   });
 
   const users = DBUsers.map((user) => {
-    const { backlogItems, player, username, discordId } = user;
+    const { backlogItems, expectedGames, player, username, discordId } = user;
 
     return {
       username,
       discordId,
       isPlayer: !!player,
       backlogItemsCount: backlogItems.length,
+      expectedGamesCount: expectedGames.length,
     };
   });
 
@@ -69,9 +77,11 @@ export function UserProfilePage({ users }: UsersPageProps) {
       <Flex flexDir="column" gap="16px" mt="30px" maxW="800px">
         {users.map((user, index) => (
           <Link key={user.discordId} href={`/u/${user.discordId}`}>
-            <Flex
+            <Box
+              display={['block', 'flex']}
               borderRadius="4px"
-              p="4px 20px"
+              p={['4px', '4px 20px']}
+              w={['fit-content', 'auto']}
               border="1px solid"
               borderColor="gray.700"
               alignItems="center"
@@ -84,7 +94,7 @@ export function UserProfilePage({ users }: UsersPageProps) {
               onMouseEnter={() => setUserOverId(index)}
               onMouseLeave={() => setUserOverId(null)}
             >
-              <Text>{user.username}</Text>
+              <Text pl={[2, 0]}>{user.username}</Text>
               <Box ml="auto" mr={0}>
                 <Tooltip
                   label="Joueur de gacha"
@@ -93,54 +103,42 @@ export function UserProfilePage({ users }: UsersPageProps) {
                   isDisabled={!user.isPlayer}
                   hasArrow
                 >
-                  <Button variant="third">
+                  <Button variant="third" px={[2, 4]}>
                     <GamepadIcon
-                      boxSize={8}
+                      boxSize={[6, 8]}
                       {...iconColorFn(user.isPlayer, index)}
                     />
                   </Button>
                 </Tooltip>
-                <Tooltip
-                  label="A un backlog"
-                  bg="gray.200"
-                  color="gray.900"
-                  isDisabled={!user.backlogItemsCount}
-                  hasArrow
-                >
-                  <Button variant="third" position="relative">
+                <TooltipIconIndicator
+                  tooltipLabel="A un backlog"
+                  icon={
                     <ListIcon
-                      boxSize={8}
+                      boxSize={[6, 8]}
                       {...iconColorFn(!!user.backlogItemsCount, index)}
                     />
-                    <Flex
-                      className="count"
-                      position="absolute"
-                      borderRadius="20px"
-                      bottom={0}
-                      right={0}
-                      bg="gray.200"
-                      color="gray.900"
-                      w="20px"
-                      h="20px"
-                      fontSize="12px"
-                      alignItems="center"
-                      justifyContent="center"
-                      {...(userOverId === index && user.backlogItemsCount
-                        ? {
-                            bg: 'orange.700',
-                            color: 'gray.200',
-                          }
-                        : {})}
-                    >
-                      <span>{user.backlogItemsCount}</span>
-                    </Flex>
-                  </Button>
-                </Tooltip>
-                <Button variant="third">
+                  }
+                  count={user.backlogItemsCount}
+                  hover={!!(userOverId === index && user.backlogItemsCount)}
+                  isDisabled={!user.backlogItemsCount}
+                />
+                <TooltipIconIndicator
+                  tooltipLabel="Attend des jeux"
+                  icon={
+                    <TimeIcon
+                      boxSize={[6, 8]}
+                      {...iconColorFn(!!user.expectedGamesCount, index)}
+                    />
+                  }
+                  count={user.expectedGamesCount}
+                  hover={!!(userOverId === index && user.expectedGamesCount)}
+                  isDisabled={!user.expectedGamesCount}
+                />
+                <Button variant="third" px={[2, 4]}>
                   <ChevronRightIcon boxSize={8} />
                 </Button>
               </Box>
-            </Flex>
+            </Box>
           </Link>
         ))}
       </Flex>

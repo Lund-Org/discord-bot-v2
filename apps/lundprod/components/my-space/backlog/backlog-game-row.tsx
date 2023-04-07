@@ -1,4 +1,4 @@
-import { Button,Flex, Tag, TagLabel, Td, Text, Tr } from '@chakra-ui/react';
+import { Button, Flex, Tag, TagLabel, Td, Text, Tr } from '@chakra-ui/react';
 import { ArrayElement } from '@discord-bot-v2/common';
 import {
   Game,
@@ -13,11 +13,11 @@ import {
 } from '~/lundprod/contexts/backlog-context';
 import { formatReleaseDate } from '~/lundprod/utils/dates';
 
-type GameElementProps = {
+type BacklogGameRowProps = {
   element: Game;
 };
 
-export const GameElement = ({ element }: GameElementProps) => {
+export const BacklogGameRow = ({ element }: BacklogGameRowProps) => {
   const { backlog, addToBacklog, removeFromBacklog } = useBacklog();
 
   return (

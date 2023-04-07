@@ -1,12 +1,20 @@
 import { prisma } from '@discord-bot-v2/prisma';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
+import { boolean, number, object } from 'yup';
 
 import { getUserProfileUrl } from '~/lundprod/utils/url';
 
 import { authOptions } from '../auth/[...nextauth]';
 
-export default async function listExpectedGame(
+const updateExpectedGameSchema = object({
+  igdbGameId: number().required().positive().integer(),
+  data: object({
+    addToBacklog: boolean().required(),
+  }).required(),
+});
+
+export default async function addExpectedGame(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -27,12 +35,21 @@ export default async function listExpectedGame(
     return res.status(404).json({ success: false });
   }
 
-  const expectedGames = await prisma.expectedGame.findMany({
-    where: { userId: user.id },
-    include: { releaseDates: true },
+  const payload = await updateExpectedGameSchema.validate(req.body);
+
+  await prisma.expectedGame.update({
+    where: {
+      igdbId_userId: {
+        igdbId: payload.igdbGameId,
+        userId: user.id,
+      },
+    },
+    data: {
+      addToBacklog: payload.data.addToBacklog,
+    },
   });
 
   res.revalidate(getUserProfileUrl(session.userId));
 
-  res.json({ expectedGames });
+  res.json({ success: true });
 }

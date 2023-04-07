@@ -1,3 +1,5 @@
+import { ArrayElement } from '@discord-bot-v2/common';
+
 export const platForms = [
   {
     id: 6,
@@ -194,6 +196,16 @@ export const platForms = [
     name: 'Web browser',
   },
   {
+    id: 3,
+    abbreviation: 'Linux',
+    name: 'Linux',
+  },
+  {
+    id: 14,
+    abbreviation: 'Mac',
+    name: 'Mac',
+  },
+  {
     id: 162,
     abbreviation: 'Oculus VR',
     name: 'Oculus VR',
@@ -215,18 +227,34 @@ export const platForms = [
   },
   {
     id: 387,
+    abbreviation: 'Oculus Go',
     name: 'Oculus Go',
   },
   {
     id: 385,
+    abbreviation: 'Oculus Rift',
     name: 'Oculus Rift',
   },
   {
     id: 384,
+    abbreviation: 'Oculus Quest',
     name: 'Oculus Quest',
   },
   {
     id: 386,
+    abbreviation: 'Meta Quest 2',
     name: 'Meta Quest 2',
   },
 ];
+
+export type PlatFormType = ArrayElement<typeof platForms>;
+
+export const getPlatformLabel = (platformId: number | undefined) => {
+  const platform = platForms.find((p) => p.id === platformId);
+
+  if (!platformId || !platform) {
+    return undefined;
+  }
+
+  return platform.abbreviation;
+};

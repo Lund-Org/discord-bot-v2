@@ -34,13 +34,14 @@ export default async function removeExpectedGame(
 
   const payload = await removeExpectedGameSchema.validate(req.body);
 
-  await prisma.expectedGame.delete({
+  const expectedGame = await prisma.expectedGame.findFirstOrThrow({
     where: {
-      igdbId_userId: {
-        igdbId: payload.igdbGameId,
-        userId: user.id,
-      },
+      igdbId: payload.igdbGameId,
     },
+  });
+
+  await prisma.expectedGame.delete({
+    where: { id: expectedGame.id },
   });
 
   res.revalidate(getUserProfileUrl(session.userId));

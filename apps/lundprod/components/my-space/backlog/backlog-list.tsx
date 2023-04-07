@@ -1,5 +1,15 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { Button, Flex, Table, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Table,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tr,
+} from '@chakra-ui/react';
 import { BacklogStatus } from '@prisma/client';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
@@ -40,78 +50,87 @@ export const BacklogList = ({ isReadOnly = true }: BacklogListProps) => {
   return (
     <>
       <GameTypeFilter value={activeStatus} onChange={setActiveStatus} />
-      <Table>
-        <Thead>
-          <Tr>
-            {!isReadOnly && activeStatus === '' && <Th />}
-            <Th color="gray.400">Nom</Th>
-            <Th color="gray.400">Type</Th>
-            <Th color="gray.400">Plus d&apos;information</Th>
-            <Th color="gray.400" w="240px">
-              <Flex>{isReadOnly ? 'Statut' : 'Actions'}</Flex>
-            </Th>
-          </Tr>
-        </Thead>
-        <DragAndDropWrapper isReadOnly={isReadOnly} isFiltered={!!activeStatus}>
-          {refinedList.map((item, index) => (
-            <DraggableRow
-              key={index}
-              isReadOnly={isReadOnly}
-              isFiltered={!!activeStatus}
-              item={item}
-            >
-              <Td>
-                <Text>{item.name}</Text>
-              </Td>
-              <Td>
-                <Text>{item.category}</Text>
-              </Td>
-              <Td>
-                <Link href={item.url} target="_blank" rel="noopener noreferrer">
-                  <Button
-                    size="sm"
-                    color="gray.700"
-                    rightIcon={<ExternalLinkIcon />}
+      <Box overflow="auto" py={2}>
+        <Table>
+          <Thead>
+            <Tr>
+              {!isReadOnly && activeStatus === '' && <Th />}
+              <Th color="gray.400">Nom</Th>
+              <Th color="gray.400">Type</Th>
+              <Th color="gray.400">Plus d&apos;information</Th>
+              <Th color="gray.400" w="240px">
+                <Flex>{isReadOnly ? 'Statut' : 'Actions'}</Flex>
+              </Th>
+            </Tr>
+          </Thead>
+          <DragAndDropWrapper
+            isReadOnly={isReadOnly}
+            isFiltered={!!activeStatus}
+          >
+            {refinedList.map((item, index) => (
+              <DraggableRow
+                key={index}
+                isReadOnly={isReadOnly}
+                isFiltered={!!activeStatus}
+                item={item}
+              >
+                <Td>
+                  <Text>{item.name}</Text>
+                </Td>
+                <Td>
+                  <Text>{item.category}</Text>
+                </Td>
+                <Td>
+                  <Link
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    Info
-                  </Button>
-                </Link>
-              </Td>
-              <Td>
-                {isReadOnly ? (
-                  <BacklogItemDetails
-                    status={item.status}
-                    reason={item.reason}
-                    rating={item.rating}
-                  />
-                ) : (
-                  <Flex direction="column" alignItems="center" gap={3}>
-                    <Flex gap={2}>
-                      <BacklogChangeStatus
-                        igdbId={item.igdbGameId}
-                        status={item.status}
-                      />
-                      <BacklogSetDetails
-                        igdbId={item.igdbGameId}
-                        status={item.status}
-                        reason={item.reason}
-                        rating={item.rating}
-                      />
-                    </Flex>
                     <Button
                       size="sm"
-                      colorScheme="red"
-                      onClick={() => removeFromBacklog(item.igdbGameId)}
+                      color="gray.700"
+                      rightIcon={<ExternalLinkIcon />}
                     >
-                      Supprimer
+                      Info
                     </Button>
-                  </Flex>
-                )}
-              </Td>
-            </DraggableRow>
-          ))}
-        </DragAndDropWrapper>
-      </Table>
+                  </Link>
+                </Td>
+                <Td>
+                  {isReadOnly ? (
+                    <BacklogItemDetails
+                      status={item.status}
+                      reason={item.reason}
+                      rating={item.rating}
+                    />
+                  ) : (
+                    <Flex direction="column" alignItems="center" gap={3}>
+                      <Flex gap={2}>
+                        <BacklogChangeStatus
+                          igdbId={item.igdbGameId}
+                          status={item.status}
+                        />
+                        <BacklogSetDetails
+                          igdbId={item.igdbGameId}
+                          status={item.status}
+                          reason={item.reason}
+                          rating={item.rating}
+                        />
+                      </Flex>
+                      <Button
+                        size="sm"
+                        colorScheme="red"
+                        onClick={() => removeFromBacklog(item.igdbGameId)}
+                      >
+                        Supprimer
+                      </Button>
+                    </Flex>
+                  )}
+                </Td>
+              </DraggableRow>
+            ))}
+          </DragAndDropWrapper>
+        </Table>
+      </Box>
     </>
   );
 };

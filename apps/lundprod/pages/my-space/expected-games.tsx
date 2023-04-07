@@ -11,18 +11,18 @@ import { prisma } from '@discord-bot-v2/prisma';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth/next';
 
-import { BacklogGameSearchView } from '~/lundprod/components/my-space/backlog/backlog-game-search-view';
-import { BacklogList } from '~/lundprod/components/my-space/backlog/backlog-list';
+import { ExpectedGamesSearchView } from '~/lundprod/components/my-space/expected-games/expected-games-search-view';
+import { ExpectedGamesView } from '~/lundprod/components/my-space/expected-games/expected-games-view';
+import { ExpectedGameProvider } from '~/lundprod/contexts/expected-games-context';
 import {
-  BacklogItemLight,
-  BacklogProvider,
-} from '~/lundprod/contexts/backlog-context';
-import { backlogItemPrismaFields } from '~/lundprod/utils/api/backlog';
+  ExpectedGame,
+  expectedGamesPrismaSelect,
+} from '~/lundprod/utils/api/expected-games';
 
 import { authOptions } from '../api/auth/[...nextauth]';
 
 type PropsType = {
-  backlog: BacklogItemLight[];
+  expectedGames: ExpectedGame[];
 };
 
 export const getServerSideProps: GetServerSideProps<PropsType> = async ({
@@ -46,11 +46,8 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
       isActive: true,
     },
     select: {
-      backlogItems: {
-        select: backlogItemPrismaFields,
-        orderBy: {
-          order: 'asc',
-        },
+      expectedGames: {
+        select: expectedGamesPrismaSelect,
       },
     },
   });
@@ -66,28 +63,28 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
 
   return {
     props: {
-      backlog: user.backlogItems,
+      expectedGames: JSON.parse(JSON.stringify(user.expectedGames)),
       session,
     },
   };
 };
 
-export function BacklogWrapper({ backlog }: PropsType) {
+export function ExpectedGamesWrapper({ expectedGames }: PropsType) {
   const selected = {
     color: 'orange.400',
     borderBottomColor: 'orange.400',
   };
 
   return (
-    <BacklogProvider backlog={backlog}>
+    <ExpectedGameProvider expectedGames={expectedGames}>
       <Box maxW="1200px" m="auto" py="30px" px="15px">
         <Heading as="h1" variant="h1">
-          Backlog
+          Jeux attendus
         </Heading>
         <Tabs>
           <TabList>
             <Tab _selected={selected} _active={{}}>
-              Ma liste
+              Mes jeux
             </Tab>
             <Tab _selected={selected} _active={{}}>
               Trouver un jeu
@@ -96,16 +93,16 @@ export function BacklogWrapper({ backlog }: PropsType) {
 
           <TabPanels>
             <TabPanel>
-              <BacklogList isReadOnly={false} />
+              <ExpectedGamesView />
             </TabPanel>
             <TabPanel>
-              <BacklogGameSearchView />
+              <ExpectedGamesSearchView />
             </TabPanel>
           </TabPanels>
         </Tabs>
       </Box>
-    </BacklogProvider>
+    </ExpectedGameProvider>
   );
 }
 
-export default BacklogWrapper;
+export default ExpectedGamesWrapper;

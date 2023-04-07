@@ -1,4 +1,12 @@
-import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import {
+  Box,
+  Spinner,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+} from '@chakra-ui/react';
 import {
   getCardsToFusion,
   getGlobalRanking,
@@ -6,14 +14,19 @@ import {
 } from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
 import { GetStaticProps } from 'next';
+import { useEffect, useState } from 'react';
 
 import { BacklogList } from '~/lundprod/components/my-space/backlog/backlog-list';
+import { ExpectedGamesListView } from '~/lundprod/components/my-space/expected-games/expected-games-list-view';
 import { GachaTab } from '~/lundprod/components/profile/gacha-tab';
 import { GeneralInformation } from '~/lundprod/components/profile/general-informations';
 import {
   BacklogItemLight,
   BacklogProvider,
 } from '~/lundprod/contexts/backlog-context';
+import { ExpectedGameProvider } from '~/lundprod/contexts/expected-games-context';
+import { useFetcher } from '~/lundprod/hooks/useFetcher';
+import { ExpectedGame } from '~/lundprod/utils/api/expected-games';
 import { getParam } from '~/lundprod/utils/next';
 import {
   CardsToGoldType,
@@ -26,7 +39,6 @@ type UserProfilePageProps = {
   profile: ProfileType;
   rank: RankByUser | null;
   fusions: CardWithFusionDependencies[];
-  backlogItems: BacklogItemLight[];
 };
 
 export async function getStaticPaths() {
@@ -62,20 +74,6 @@ export const getStaticProps: GetStaticProps<UserProfilePageProps> = async (
     };
   }
 
-  const backlogItems = await prisma.backlogItem.findMany({
-    where: { userId: profile.id },
-    select: {
-      igdbGameId: true,
-      name: true,
-      category: true,
-      url: true,
-      status: true,
-      reason: true,
-      rating: true,
-      order: true,
-    },
-    orderBy: { order: 'asc' },
-  });
   const cardsToGold = await prisma.playerInventory.getCardsToGold(discordId);
   const [rank] = profile.player
     ? await getGlobalRanking([profile.player.id])
@@ -93,7 +91,6 @@ export const getStaticProps: GetStaticProps<UserProfilePageProps> = async (
       cardsToGold,
       rank: rank ? JSON.parse(JSON.stringify(rank)) : null,
       fusions,
-      backlogItems,
     },
   };
 };
@@ -103,12 +100,47 @@ export function UserProfilePage({
   rank,
   cardsToGold,
   fusions,
-  backlogItems,
 }: UserProfilePageProps) {
+  const [isLoadingBacklog, setIsLoadingBacklog] = useState(true);
+  const [isLoadingExpectedGames, setIsLoadingExpectedGames] = useState(true);
+  const [initialBacklog, setInitialBacklog] = useState<BacklogItemLight[]>([]);
+  const [expectedGames, setExpectedGames] = useState<ExpectedGame[]>([]);
   const selected = {
     color: 'orange.400',
     borderBottomColor: 'orange.400',
   };
+  const { get } = useFetcher();
+
+  useEffect(() => {
+    get(`/api/backlog/list/${profile.discordId}`)
+      .then((response) => {
+        setInitialBacklog(response.backlogItems);
+      })
+      .catch((err) => {
+        console.error(err);
+        setInitialBacklog([]);
+      })
+      .finally(() => setIsLoadingBacklog(false));
+    get(`/api/expected-games/list/${profile.discordId}`)
+      .then((response) => {
+        setExpectedGames(response.expectedGames);
+      })
+      .catch((err) => {
+        console.error(err);
+        setExpectedGames([]);
+      })
+      .finally(() => setIsLoadingExpectedGames(false));
+  }, [get, profile]);
+
+  const loader = (
+    <Spinner
+      thickness="4px"
+      speed="0.65s"
+      emptyColor="gray.200"
+      color="orange.400"
+      size="xl"
+    />
+  );
 
   return (
     <Box px="20px" pb="50px" pt="20px" color="gray.300">
@@ -121,6 +153,9 @@ export function UserProfilePage({
           <Tab _selected={selected} _active={{}}>
             Backlog
           </Tab>
+          <Tab _selected={selected} _active={{}}>
+            Jeux attendus
+          </Tab>
         </TabList>
 
         <TabPanels>
@@ -132,9 +167,22 @@ export function UserProfilePage({
             />
           </TabPanel>
           <TabPanel>
-            <BacklogProvider backlog={backlogItems}>
-              <BacklogList />
-            </BacklogProvider>
+            {isLoadingBacklog ? (
+              loader
+            ) : (
+              <BacklogProvider backlog={initialBacklog}>
+                <BacklogList />
+              </BacklogProvider>
+            )}
+          </TabPanel>
+          <TabPanel>
+            {isLoadingExpectedGames ? (
+              loader
+            ) : (
+              <ExpectedGameProvider expectedGames={expectedGames}>
+                <ExpectedGamesListView readOnly />
+              </ExpectedGameProvider>
+            )}
           </TabPanel>
         </TabPanels>
       </Tabs>

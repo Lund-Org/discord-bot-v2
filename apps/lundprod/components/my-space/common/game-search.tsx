@@ -12,19 +12,24 @@ import {
   TagLabel,
 } from '@chakra-ui/react';
 import { platForms } from '@discord-bot-v2/igdb-front';
-import { ChangeEventHandler, useState } from 'react';
+import { ChangeEventHandler, Context, useContext, useState } from 'react';
 
-import { useBacklog } from '~/lundprod/contexts/backlog-context';
-import { mapToCategory, mapToTypeMap,TypeMap } from '~/lundprod/utils/backlog';
+// import { useBacklog } from '~/lundprod/contexts/backlog-context';
+import { mapToCategory, mapToTypeMap, TypeMap } from '~/lundprod/utils/backlog';
+import { ContextWithGameSearch } from '~/lundprod/utils/types';
 
-type GameSearchProps = {
+type GameSearchProps<T extends ContextWithGameSearch> = {
   onSearch: () => Promise<void>;
+  context: Context<T>;
 };
 
-export function GameSearch({ onSearch }: GameSearchProps) {
+export function GameSearch<T extends ContextWithGameSearch>({
+  context,
+  onSearch,
+}: GameSearchProps<T>) {
   const [isSearching, setIsSearching] = useState(false);
   const { category, setCategory, searchValue, platforms, setPlatforms } =
-    useBacklog();
+    useContext<T>(context);
 
   const onSearchChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     searchValue.current = e.target.value;

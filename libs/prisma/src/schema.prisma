@@ -109,18 +109,26 @@ model DiscordNotificationChannel {
 }
 
 model ExpectedGame {
-  id           Int                       @id @default(autoincrement())
+  id           Int                      @id @default(autoincrement())
   igdbId       Int
-  name         String                    @db.VarChar(255)
-  url          String                    @db.VarChar(255)
-  platformId   Int?
+  name         String                   @db.VarChar(255)
+  url          String                   @db.VarChar(255)
   addToBacklog Boolean
   cancelled    Boolean?
   userId       Int
-  releaseDates ExpectedGameReleaseDate[]
-  user         User                      @relation(fields: [userId], references: [id])
+  releaseDate  ExpectedGameReleaseDate?
+  user         User                     @relation(fields: [userId], references: [id])
 
   @@unique([igdbId, userId])
+}
+
+model ExpectedGameReleaseDate {
+  id             Int          @id @default(autoincrement())
+  date           DateTime
+  platformId     Int
+  region         Int
+  expectedGameId Int          @unique
+  expectedGame   ExpectedGame @relation(fields: [expectedGameId], references: [id], onDelete: Cascade)
 }
 
 model GameCache {
@@ -173,14 +181,6 @@ model PlayerInventory {
   @@unique([playerId, cardTypeId, type])
   @@index([cardTypeId])
   @@index([playerId])
-}
-
-model ExpectedGameReleaseDate {
-  id             Int          @id @default(autoincrement())
-  date           DateTime
-  platformId     Int
-  expectedGameId Int
-  expectedGame   ExpectedGame @relation(fields: [expectedGameId], references: [id], onDelete: Cascade)
 }
 
 model SportEvent {

@@ -4,12 +4,23 @@ CREATE TABLE `ExpectedGame` (
     `igdbId` INTEGER NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `url` VARCHAR(255) NOT NULL,
-    `platformId` INTEGER NULL,
     `addToBacklog` BOOLEAN NOT NULL,
     `cancelled` BOOLEAN NULL,
     `userId` INTEGER NOT NULL,
 
     UNIQUE INDEX `ExpectedGame_igdbId_userId_key`(`igdbId`, `userId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ExpectedGameReleaseDate` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `date` DATETIME(3) NOT NULL,
+    `platformId` INTEGER NOT NULL,
+    `region` INTEGER NOT NULL,
+    `expectedGameId` INTEGER NOT NULL,
+
+    UNIQUE INDEX `ExpectedGameReleaseDate_expectedGameId_key`(`expectedGameId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -20,16 +31,6 @@ CREATE TABLE `GameCache` (
     `content` JSON NOT NULL,
 
     UNIQUE INDEX `GameCache_igdbId_key`(`igdbId`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `ExpectedGameReleaseDate` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `date` DATETIME(3) NOT NULL,
-    `platformId` INTEGER NOT NULL,
-    `expectedGameId` INTEGER NOT NULL,
-
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

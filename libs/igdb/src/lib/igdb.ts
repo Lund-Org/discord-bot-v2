@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { Game, IGDBConditionValue } from '../types';
+import { Game, IGDBConditionValue, Webhook } from '../types';
 import { addGameToCache } from './cache';
 import {
   BASE_URL,
@@ -50,16 +50,22 @@ async function twitchAuth() {
     });
 }
 
-async function IGDBRequest<T>(path: string, query: string): Promise<T> {
+async function IGDBRequest<T>(
+  path: string,
+  query: string | URLSearchParams,
+  headers: Record<string, string> = {},
+  method = 'POST'
+): Promise<T> {
   await twitchAuth();
 
   return axios({
     url: `${BASE_URL}${path}`,
-    method: 'POST',
+    method,
     headers: {
       Accept: 'application/json',
       'Client-ID': process.env.TWITCH_CLIENT_ID,
       Authorization: `Bearer ${twitchToken.access_token}`,
+      ...headers,
     },
     data: query,
   })
@@ -135,4 +141,24 @@ export async function getGame(id: number): Promise<Game> {
   await addGameToCache(result);
 
   return result[0];
+}
+
+export async function getWebhooks(): Promise<Webhook[]> {
+  return IGDBRequest('/webhooks', undefined, undefined, 'GET');
+}
+
+export async function addWebhooks() {
+  const params = new URLSearchParams();
+  params.append('url', process.env.WEBSITE_URL + '/api/webhooks/igdb/update');
+  params.append('method', 'update');
+  params.append('secret', process.env.IGDB_WEBHOOK_SECRET);
+
+  return IGDBRequest(
+    '/games/webhooks',
+    params,
+    {
+      'content-type': 'application/x-www-form-urlencoded',
+    },
+    'POST'
+  );
 }

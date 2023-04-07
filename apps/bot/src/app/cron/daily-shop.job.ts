@@ -17,6 +17,7 @@ import { generateDrawImage } from '../helpers/canvas';
 export const cronTiming = '0 0 0 * * *';
 
 export async function cronDefinition(discordClient: Client) {
+  console.log('daily shop', new Date());
   const date = new Date();
   const shopChannel = await findShopChannel(discordClient);
   const config = await prisma.config.findUnique({

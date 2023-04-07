@@ -67,6 +67,20 @@ export type Game = {
   }>;
 };
 
+export type LightGame = Pick<Game, 'id' | 'name'>;
+
 export type GameTypeTranslation = ValueOf<typeof gameTypeMapping> | 'Autre';
 
 export type IGDBConditionValue = string[] | number[] | string | number;
+
+export type Webhook = {
+  id: number;
+  url: string;
+  category: number;
+  sub_category: number;
+  active: boolean;
+  api_key: string;
+  secret: string;
+  created_at: string;
+  updated_at: string;
+};

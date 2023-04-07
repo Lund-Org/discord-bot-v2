@@ -41,7 +41,7 @@ export const addPoints = async ({ msg }: { msg: Message }): Promise<void> => {
     });
     invalidateWebsitePages(msg.author.id);
 
-    // if the player has more than 12000
+    // if the player has more than 13000
     // AND want to be warned
     // AND last warn was more than 6h
     if (

@@ -1,6 +1,7 @@
 import { Command } from 'commander';
-import { football, nba, f1, f2, f3, fe } from './app';
 import { config as dotenvConfig } from 'dotenv';
+
+import { f1, f2, f3, fe, football, initLundprod, nba } from './app';
 
 dotenvConfig();
 
@@ -44,5 +45,10 @@ program
       );
     }
   });
+
+program
+  .command('lundprod-init')
+  .description('CLI for lundprod website init actions')
+  .action(initLundprod);
 
 program.parse();

@@ -46,10 +46,10 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
 export function BlogPage({ blogPosts }: PropsType) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadedBlogPosts, setLoadedBlogPosts] = useState(blogPosts);
-  const fetcher = useFetcher();
+  const { get } = useFetcher();
 
   useEffect(() => {
-    fetcher('/api/blogs', { category: categories })
+    get('/api/blogs', { category: categories })
       .then((response) => {
         setLoadedBlogPosts(response.blogPosts);
       })
@@ -57,7 +57,7 @@ export function BlogPage({ blogPosts }: PropsType) {
         console.error(err);
         setLoadedBlogPosts([]);
       });
-  }, [categories, fetcher]);
+  }, [categories, get]);
 
   const onToggle = (value: Category) => {
     setCategories(

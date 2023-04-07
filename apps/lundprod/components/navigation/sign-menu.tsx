@@ -11,6 +11,7 @@ import {
   Heading,
   Image,
   ListItem,
+  Tag,
   Text,
   UnorderedList,
 } from '@chakra-ui/react';
@@ -33,7 +34,22 @@ export const SignMenu = () => {
       ? [{ label: 'Ma page gacha', link: getUserProfileUrl(session?.userId) }]
       : []),
     { label: 'Mon backlog', link: '/my-space/backlog' },
-    { label: 'Mes jeux attendus (à venir)', link: '#' },
+    {
+      label: (
+        <>
+          <Text as="span">Mes jeux attendus</Text>
+          <Tag
+            ml="4px"
+            size="sm"
+            colorScheme="messenger"
+            verticalAlign="baseline"
+          >
+            New !
+          </Tag>
+        </>
+      ),
+      link: '/my-space/expected-games',
+    },
   ];
 
   return (
@@ -71,14 +87,14 @@ export const SignMenu = () => {
       >
         <DrawerOverlay />
         <DrawerContent
-          bg="gray.200"
+          bg="gray.100"
           borderLeft="1px solid var(--chakra-colors-gray-600)"
         >
           <DrawerCloseButton />
           <DrawerHeader>{session?.user?.name}</DrawerHeader>
 
           <DrawerBody>
-            <Heading as="h3" variant="h3" color="gray.800">
+            <Heading as="h4" variant="h4" color="gray.800">
               Mes pages
             </Heading>
             <UnorderedList
