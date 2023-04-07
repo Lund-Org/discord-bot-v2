@@ -1,8 +1,9 @@
 import { Box, Button, Image, Text } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { GetServerSideProps } from 'next';
-import { getProviders, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { getProviders, signIn } from 'next-auth/react';
+
 import { LightStyledLink } from '~/lundprod/components/styled-link';
 import { networks } from '~/lundprod/utils/url';
 
@@ -65,9 +66,7 @@ export default function SignIn({ providers }: SignInProps) {
         ))}
       </Fieldset>
       <Box mt="50px" textAlign="center">
-        <Text as="span">
-          Pour s&apos;inscrire, il faut pour l&apos;instant rejoindre le&nbsp;
-        </Text>
+        <Text as="span">Pour s&apos;inscrire, il faut rejoindre le&nbsp;</Text>
         <LightStyledLink
           href={discordNetwork.url}
           target="_blank"

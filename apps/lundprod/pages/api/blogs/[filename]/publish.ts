@@ -1,9 +1,10 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import { BlogStatus } from 'prisma/prisma-client';
-import { NextApiRequest, NextApiResponse } from 'next';
 import { EmbedBuilder, WebhookClient } from 'discord.js';
-import { getParam } from '~/lundprod/utils/next';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { BlogStatus } from 'prisma/prisma-client';
+
 import { getTitleFromFilename } from '~/lundprod/utils/blog';
+import { getParam } from '~/lundprod/utils/next';
 
 export default async function listBlogPosts(
   req: NextApiRequest,

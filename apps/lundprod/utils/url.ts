@@ -33,6 +33,10 @@ export function isBlogPage(pathname: string) {
   return pathname.startsWith('/blog');
 }
 
+export function isUsersPage(pathname: string) {
+  return pathname === '/u/list';
+}
+
 export function isGachaRankingPage(pathname: string) {
   return pathname === getGachaRankingPage();
 }

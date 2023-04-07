@@ -49,6 +49,12 @@
       "options": {
         "jestConfig": "apps/lundprod/jest.config.ts",
         "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
       }
     },
     "lint": {

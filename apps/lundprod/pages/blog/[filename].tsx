@@ -1,8 +1,8 @@
 import { prisma } from '@discord-bot-v2/prisma';
 import { readFileSync } from 'fs';
-import { resolve, join } from 'path';
-import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemote } from 'next-mdx-remote';
+import { serialize } from 'next-mdx-remote/serialize';
+import { join, resolve } from 'path';
 
 import { components } from '~/lundprod/components/mdx-components';
 import { MdxLayout } from '~/lundprod/layouts/MdxLayout';
@@ -30,7 +30,7 @@ export async function getStaticProps({ params }) {
     props: {
       blogPost: JSON.parse(JSON.stringify(blogPost)),
       mdxSource: await serialize(mdxContent, {
-        mdxOptions: { development: false },
+        // mdxOptions: { development: false },
       }),
     },
   };

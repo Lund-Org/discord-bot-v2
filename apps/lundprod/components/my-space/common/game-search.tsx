@@ -3,30 +3,36 @@ import {
   Button,
   Flex,
   Input,
+  Radio,
+  RadioGroup,
   Select,
+  Stack,
   Tag,
   TagCloseButton,
   TagLabel,
-  RadioGroup,
-  Stack,
-  Radio,
 } from '@chakra-ui/react';
-import { platForms } from '@discord-bot-v2/igdb';
-import { ChangeEventHandler, useState } from 'react';
-import { useBacklog } from '~/lundprod/contexts/backlog-context';
-import { TypeMap, mapToCategory, mapToTypeMap } from '~/lundprod/utils/backlog';
+import { platForms } from '@discord-bot-v2/igdb-front';
+import { ChangeEventHandler, Context, useContext, useState } from 'react';
 
-type GameSearchProps = {
+// import { useBacklog } from '~/lundprod/contexts/backlog-context';
+import { mapToCategory, mapToTypeMap, TypeMap } from '~/lundprod/utils/backlog';
+import { ContextWithGameSearch } from '~/lundprod/utils/types';
+
+type GameSearchProps<T extends ContextWithGameSearch> = {
   onSearch: () => Promise<void>;
+  context: Context<T>;
 };
 
-export function GameSearch({ onSearch }: GameSearchProps) {
+export function GameSearch<T extends ContextWithGameSearch>({
+  context,
+  onSearch,
+}: GameSearchProps<T>) {
   const [isSearching, setIsSearching] = useState(false);
-  const { category, setCategory, setSearchValue, platforms, setPlatforms } =
-    useBacklog();
+  const { category, setCategory, searchValue, platforms, setPlatforms } =
+    useContext<T>(context);
 
   const onSearchChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setSearchValue(e.target.value);
+    searchValue.current = e.target.value;
   };
   const onSelectChange: ChangeEventHandler<HTMLSelectElement> = (e) => {
     const selectedPlatform = platForms.find(

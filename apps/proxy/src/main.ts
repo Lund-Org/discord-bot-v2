@@ -1,8 +1,12 @@
-import { createServer as httpCreateServer, RequestListener } from 'http';
-import { createServer as httpsCreateServer } from 'https';
-import { readFileSync } from 'fs';
 import axios from 'axios';
 import { config as dotenvConfig } from 'dotenv';
+import { readFileSync } from 'fs';
+import {
+  createServer as httpCreateServer,
+  OutgoingHttpHeaders,
+  RequestListener,
+} from 'http';
+import { createServer as httpsCreateServer } from 'https';
 
 dotenvConfig();
 
@@ -46,7 +50,11 @@ const app = (secure): RequestListener => {
           validateStatus: (status) => status >= 200 && status <= 302,
         })
           .then((axiosResponse) => {
-            res.writeHead(axiosResponse.status, axiosResponse.headers);
+            res.writeHead(
+              axiosResponse.status,
+              undefined,
+              axiosResponse.headers as OutgoingHttpHeaders
+            );
             axiosResponse.data.on('end', () => {
               res.end();
             });

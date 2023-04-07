@@ -1,6 +1,8 @@
 //@ts-check
 
+const webpackConfig = require('./webpack.config');
 const { withNx } = require('@nrwl/next/plugins/with-nx');
+
 const withMdx = require('@next/mdx')({
   extension: /\.mdx?$/,
   options: {
@@ -18,9 +20,18 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
+  experimental: {
+    esmExternals: false,
+  },
 };
 
-module.exports = withMdx({
+const mdxConfig = withMdx({
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
-  ...withNx(nextConfig),
+});
+
+module.exports = withNx({
+  ...mdxConfig,
+  ...nextConfig,
+  webpack: (config, context) =>
+    webpackConfig(config, mdxConfig.webpack, context),
 });

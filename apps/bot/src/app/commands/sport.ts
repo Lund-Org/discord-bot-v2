@@ -1,5 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { ChatInputCommandInteraction } from 'discord.js';
+
 import { followLeague } from './sport/follow-league';
 import { followTeam } from './sport/follow-team';
 import { help } from './sport/help';

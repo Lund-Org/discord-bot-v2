@@ -1,5 +1,5 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import NextAuth, { AuthOptions } from 'next-auth';
+import NextAuth, { AuthOptions, Session } from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
 
 export const authOptions: AuthOptions = {
@@ -48,9 +48,13 @@ export const authOptions: AuthOptions = {
 
       const dbUser = await prisma.user.getPlayer(token.userId);
 
-      session.userId = token.userId;
-      session.isPlayer = !!dbUser?.player;
-      return session;
+      const newSession: Session = {
+        ...session,
+        userId: token.userId,
+        isPlayer: !!dbUser?.player,
+      };
+
+      return newSession;
     },
   },
 };

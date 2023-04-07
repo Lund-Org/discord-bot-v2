@@ -4,13 +4,24 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/node:webpack",
+      "executor": "@nrwl/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
       "options": {
+        "platform": "node",
         "outputPath": "dist/bot",
+        "format": ["cjs"],
+        "bundle": false,
         "main": "apps/bot/src/main.ts",
         "tsConfig": "apps/bot/tsconfig.app.json",
-        "assets": ["apps/bot/src/assets"]
+        "assets": ["apps/bot/src/assets"],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
       },
       "configurations": {
         "production": {
@@ -27,7 +38,8 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/node:node",
+      "executor": "@nrwl/js:node",
+      "defaultConfiguration": "development",
       "options": {
         "buildTarget": "bot:build"
       },

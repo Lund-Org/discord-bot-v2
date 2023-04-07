@@ -1,5 +1,7 @@
-import { loadImage, CanvasRenderingContext2D, createCanvas } from 'canvas';
+import { CanvasRenderingContext2D, createCanvas, loadImage } from 'canvas';
 import { join } from 'path';
+import { cwd } from 'process';
+
 import { CardDraw } from './types';
 
 const CARD_SIZE = [475, 820] as const;
@@ -29,9 +31,7 @@ export const printCard = async (
 ) => {
   const img = await loadImage(
     join(
-      __dirname,
-      '..',
-      '..',
+      cwd(),
       'public',
       'card-images',
       `${card.isGold ? 'gold' : 'basic'}-${card.cardType.imageName}`

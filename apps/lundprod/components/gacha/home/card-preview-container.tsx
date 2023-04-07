@@ -6,10 +6,12 @@ import {
   Switch,
   Text,
 } from '@chakra-ui/react';
+
 import { useGachaHome } from '~/lundprod/contexts/gacha-home-context';
+
 import Card from './card';
-import { FusionDetails } from './fusion-details';
 import { EmptyView } from './empty-view';
+import { FusionDetails } from './fusion-details';
 
 type CardPreviewContainerProps = BoxProps;
 

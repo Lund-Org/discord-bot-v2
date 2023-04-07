@@ -4,7 +4,7 @@ import {
   ChevronRightIcon,
 } from '@chakra-ui/icons';
 import { Box, Button, Flex } from '@chakra-ui/react';
-import { GAME_PER_PAGE } from '@discord-bot-v2/igdb';
+import { GAME_PER_PAGE } from '@discord-bot-v2/igdb-front';
 
 type GamePaginationProps = {
   currentGameCount: number;

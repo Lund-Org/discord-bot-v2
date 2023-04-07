@@ -4,14 +4,16 @@ import {
   Heading,
   IconButton,
   Modal,
-  ModalOverlay,
+  ModalBody,
+  ModalCloseButton,
   ModalContent,
   ModalHeader,
-  ModalCloseButton,
-  ModalBody,
+  ModalOverlay,
   useBreakpointValue,
 } from '@chakra-ui/react';
+
 import { useGachaHome } from '~/lundprod/contexts/gacha-home-context';
+
 import { CardListElement } from '../card-list-element';
 import { FilterMenu } from '../filter-menu';
 import { CardPreviewContainer } from './card-preview-container';

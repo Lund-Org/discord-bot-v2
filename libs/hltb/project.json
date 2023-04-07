@@ -1,4 +1,5 @@
 {
+  "name": "hltb",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/hltb/src",
   "projectType": "library",
@@ -16,6 +17,12 @@
       "options": {
         "jestConfig": "libs/hltb/jest.config.ts",
         "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
       }
     }
   },

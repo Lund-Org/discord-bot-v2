@@ -32,71 +32,22 @@ export const UserExtension = (prisma: PrismaClient) => ({
   },
 
   getProfile: async (discordId: string) => {
-    const userPlayer = await prisma.user.findUnique({
+    return prisma.user.findUnique({
       include: {
-        player: true,
-      },
-      where: { discordId },
-    });
-
-    if (!userPlayer?.player) {
-      return null;
-    }
-
-    try {
-      let user = await prisma.user.findFirst({
-        include: {
-          player: {
-            include: {
-              playerInventory: {
-                include: {
-                  cardType: true,
-                },
-                orderBy: {
-                  cardTypeId: 'asc',
-                },
-              },
-            },
-          },
-        },
-        where: {
-          discordId,
-          isActive: true,
-          player: {
-            playerInventory: {
-              some: {
-                total: { gt: 0 },
-              },
-            },
-          },
-        },
-      });
-
-      if (!user) {
-        user = await prisma.user.findFirst({
-          where: { discordId, isActive: true },
+        player: {
           include: {
-            player: {
+            playerInventory: {
               include: {
-                playerInventory: {
-                  include: {
-                    cardType: true,
-                  },
-                },
+                cardType: true,
+              },
+              orderBy: {
+                cardTypeId: 'asc',
               },
             },
           },
-        });
-
-        if (user) {
-          user.player!.playerInventory = [];
-        }
-      }
-
-      return user;
-    } catch (e) {
-      console.log(e);
-      return null;
-    }
+        },
+      },
+      where: { discordId, isActive: true },
+    });
   },
 });

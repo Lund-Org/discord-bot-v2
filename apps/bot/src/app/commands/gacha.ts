@@ -4,6 +4,7 @@ import {
   ChatInputCommandInteraction,
   SelectMenuInteraction,
 } from 'discord.js';
+
 import { buy } from './gacha/buy';
 import { cards } from './gacha/cards';
 import { daily } from './gacha/daily';
@@ -19,6 +20,7 @@ import { sell } from './gacha/sell';
 import { shopBuy } from './gacha/shop-buy';
 import { twitch } from './gacha/twitch';
 import { view } from './gacha/view';
+import { warn } from './gacha/warn';
 
 const CMD_NAME = 'gacha' as const;
 
@@ -147,6 +149,17 @@ export const gachaCmd = new SlashCommandBuilder()
           .setRequired(true)
       )
   )
+  .addSubcommand((subcommand) =>
+    subcommand
+      .setName('warn')
+      .setDescription('Prévient si le joueur approche de la limite de points')
+      .addBooleanOption((option) =>
+        option
+          .setName('choice')
+          .setDescription("Le choix si l'utilisateur veut être prévenu ou non")
+          .setRequired(true)
+      )
+  )
   .toJSON();
 
 export const gachaResponse = {
@@ -184,6 +197,8 @@ function gachaCallback(interaction: ChatInputCommandInteraction) {
       return twitch(interaction);
     case 'view':
       return view(interaction);
+    case 'warn':
+      return warn(interaction);
     default:
       return Promise.resolve();
   }

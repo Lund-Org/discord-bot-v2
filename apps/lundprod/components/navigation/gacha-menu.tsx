@@ -1,19 +1,20 @@
+import { TriangleDownIcon } from '@chakra-ui/icons';
 import {
   Flex,
   Popover,
-  PopoverContent,
   PopoverArrow,
   PopoverBody,
+  PopoverContent,
   PopoverTrigger,
   Text,
 } from '@chakra-ui/react';
-import { TriangleDownIcon } from '@chakra-ui/icons';
 import { curry } from 'lodash';
-import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 import { useEffect, useRef, useState } from 'react';
 import { useClickAway, useMedia } from 'react-use';
+
 import {
   getGachaRankingPage,
   getUserProfileUrl,
@@ -22,6 +23,7 @@ import {
   isGachaRankingPage,
   isUserGachaPage,
 } from '~/lundprod/utils/url';
+
 import { MenuLink } from './styled-components';
 
 export const GachaMenu = ({ onClick }: { onClick: () => void }) => {

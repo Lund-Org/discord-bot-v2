@@ -1,5 +1,6 @@
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import { Box, Heading, Image } from '@chakra-ui/react';
+
 import { arrowRightUp } from '~/lundprod/assets';
 
 export const EmptyView = () => (

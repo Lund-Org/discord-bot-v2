@@ -1,5 +1,6 @@
 import { prisma } from '@discord-bot-v2/prisma';
 import { Prisma, SportEventCategory } from '@prisma/client';
+
 import { eventUpsert, leagueUpsert } from '../utils/prisma.helper';
 import { FootballFetcher } from '../utils/sport-io-api';
 import { GeneratorArg } from '../utils/types';

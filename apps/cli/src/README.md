@@ -2,6 +2,10 @@
 
 To build : `npx nx run cli:build`
 
+To initialize the lundprod project before starting it :
+
+> `node ./dist/cli/main.js lundprod-init`
+
 To fill the football events :
 
 > `node ./dist/cli/main.js generate-sport-events --sport football --year 2022`

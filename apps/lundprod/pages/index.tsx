@@ -1,17 +1,18 @@
 import { Box, Divider, Grid } from '@chakra-ui/react';
+
 import {
   socialDiscord,
   socialTwitch,
   socialTwitter,
   socialYoutube,
 } from '../assets';
-import { GachaPresentation } from '../components/home/gacha-presentation';
-import { WebsitePresentation } from '../components/home/website-presentation';
-import { SocialNetworkCard } from '../components/home/social-network-card';
-import { Welcome } from '../components/home/welcome';
 import { BotPresentation } from '../components/home/bot-presentation';
 import { ComingProjects } from '../components/home/coming-projects';
 import { Footer } from '../components/home/footer';
+import { GachaPresentation } from '../components/home/gacha-presentation';
+import { SocialNetworkCard } from '../components/home/social-network-card';
+import { WebsitePresentation } from '../components/home/website-presentation';
+import { Welcome } from '../components/home/welcome';
 
 const networks = [
   {

@@ -1,5 +1,6 @@
 import { prisma } from '@discord-bot-v2/prisma';
 import { ChatInputCommandInteraction } from 'discord.js';
+
 import { userNotFoundWarning } from './helper';
 
 export const points = async (interaction: ChatInputCommandInteraction) => {

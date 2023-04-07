@@ -1,12 +1,12 @@
+import { prisma } from '@discord-bot-v2/prisma';
+import { ChannelNotification } from '@prisma/client';
 import {
   ChannelType,
   Client,
-  Guild,
   Collection,
+  Guild,
   GuildBasedChannel,
 } from 'discord.js';
-import { prisma } from '@discord-bot-v2/prisma';
-import { ChannelNotification } from '@prisma/client';
 
 export async function ChannelInitializer(client: Client) {
   const servers: Collection<string, Guild> = client.guilds.cache;

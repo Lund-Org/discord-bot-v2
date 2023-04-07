@@ -9,6 +9,7 @@ import {
   Image,
   Text,
 } from '@chakra-ui/react';
+
 import {
   illustration3DModeling,
   illustrationVideoGame,

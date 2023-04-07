@@ -1,14 +1,13 @@
+import { ArrayElement } from '@discord-bot-v2/common';
 import {
-  ConditionValue,
-  GAME_STATUS,
+  GAME_TYPE,
+  IGDBConditionValue,
   platForms,
+  PlatFormType,
   QUERY_OPERATOR,
-  REGION,
-} from '@discord-bot-v2/igdb';
+} from '@discord-bot-v2/igdb-front';
 import { CardType, Player, PlayerInventory, User } from '@prisma/client';
-
-export type ArrayElement<ArrayType extends readonly unknown[]> =
-  ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
+import { MutableRefObject } from 'react';
 
 //-- Gacha types
 
@@ -24,8 +23,8 @@ export type Filters = {
 };
 
 export type ProfileType = User & {
-  player: Player & {
-    playerInventory: (PlayerInventory & {
+  player?: Player & {
+    playerInventory?: (PlayerInventory & {
       cardType: CardType;
     })[];
   };
@@ -49,7 +48,7 @@ export type Rank = Player & {
 export type IGDBFilter = {
   field: string;
   operator: QUERY_OPERATOR;
-  value: ConditionValue;
+  value: IGDBConditionValue;
 };
 
 export type ListGamesSearch = {
@@ -59,22 +58,10 @@ export type ListGamesSearch = {
 
 export type IGDBPlatform = ArrayElement<typeof platForms>;
 
-export type IGDBReleaseDates = {
-  date: number;
-  human: string;
-  platform: IGDBPlatform;
-  region: REGION;
-};
-
-export type IGDBGame = {
-  id: number;
-  name: string;
-  releaseDates?: IGDBReleaseDates[];
-  status: GAME_STATUS;
-  storyline?: string;
-  summary?: string;
-  version_title?: string;
-  platforms: IGDBPlatform[];
-  category: string;
-  url: string;
+export type ContextWithGameSearch = {
+  searchValue: MutableRefObject<string>;
+  category: GAME_TYPE[];
+  setCategory: (val: GAME_TYPE[]) => void;
+  platforms: PlatFormType[];
+  setPlatforms: (platforms: PlatFormType[]) => void;
 };

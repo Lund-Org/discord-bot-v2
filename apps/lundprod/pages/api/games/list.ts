@@ -1,13 +1,9 @@
-import {
-  getGames,
-  getReleaseDates,
-  linkArrayData,
-  validateFilters,
-} from '@discord-bot-v2/igdb';
-import { chunk } from 'lodash';
+import { getGames, validateFilters } from '@discord-bot-v2/igdb';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
+
 import { getNumberParam, getParam } from '~/lundprod/utils/next';
+
 import { authOptions } from '../auth/[...nextauth]';
 
 export default async function listGames(
@@ -20,8 +16,6 @@ export default async function listGames(
     return res.status(401).json({ games: [] });
   }
 
-  const releaseDateIds = [];
-  const releaseDates = [];
   const search = getParam(req.body.search, '');
   const page = getNumberParam(req.query.page, 1);
   const filters = req.body.filters || [];
@@ -35,24 +29,6 @@ export default async function listGames(
   }
 
   const games = await getGames(search, filters, page < 1 ? 1 : page);
-
-  if (games.length) {
-    games.forEach((game) => {
-      releaseDateIds.push(...(game.release_dates || []));
-    });
-    const releaseDateChunkIds = chunk([...new Set(releaseDateIds)], 100);
-    const releaseDatesPromises = releaseDateChunkIds.map((releaseDateChunk) =>
-      getReleaseDates(releaseDateChunk)
-    );
-
-    await Promise.all(releaseDatesPromises).then((chunk) => {
-      chunk.forEach((data) => releaseDates.push(...data));
-    });
-
-    games.forEach((game) => {
-      linkArrayData(game, releaseDates, 'release_dates', 'releaseDates');
-    });
-  }
 
   res.json({ games });
 }

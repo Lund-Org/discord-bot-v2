@@ -1,4 +1,3 @@
-import { prisma } from '@discord-bot-v2/prisma';
 import {
   Box,
   Heading,
@@ -8,14 +7,18 @@ import {
   TabPanels,
   Tabs,
 } from '@chakra-ui/react';
+import { prisma } from '@discord-bot-v2/prisma';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth/next';
+
+import { BacklogGameSearchView } from '~/lundprod/components/my-space/backlog/backlog-game-search-view';
+import { BacklogList } from '~/lundprod/components/my-space/backlog/backlog-list';
 import {
   BacklogItemLight,
   BacklogProvider,
 } from '~/lundprod/contexts/backlog-context';
-import { GameChoiceTab } from '~/lundprod/components/my-space/backlog/game-choice-tab';
-import { BacklogList } from '~/lundprod/components/my-space/backlog/backlog-list';
+import { backlogItemPrismaFields } from '~/lundprod/utils/api/backlog';
+
 import { authOptions } from '../api/auth/[...nextauth]';
 
 type PropsType = {
@@ -44,16 +47,7 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
     },
     select: {
       backlogItems: {
-        select: {
-          igdbGameId: true,
-          name: true,
-          category: true,
-          url: true,
-          status: true,
-          reason: true,
-          rating: true,
-          order: true,
-        },
+        select: backlogItemPrismaFields,
         orderBy: {
           order: 'asc',
         },
@@ -105,7 +99,7 @@ export function BacklogWrapper({ backlog }: PropsType) {
               <BacklogList isReadOnly={false} />
             </TabPanel>
             <TabPanel>
-              <GameChoiceTab />
+              <BacklogGameSearchView />
             </TabPanel>
           </TabPanels>
         </Tabs>

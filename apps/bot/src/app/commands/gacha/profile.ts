@@ -1,7 +1,8 @@
-import { ChatInputCommandInteraction } from 'discord.js';
-import { userNotFoundWarning } from './helper';
 import { getGlobalRanking } from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
+import { ChatInputCommandInteraction } from 'discord.js';
+
+import { userNotFoundWarning } from './helper';
 
 export const profile = async (interaction: ChatInputCommandInteraction) => {
   const user = await prisma.user.getPlayer(interaction.user.id);

@@ -1,5 +1,6 @@
 import { ListItem, OrderedList, Text } from '@chakra-ui/react';
 import Link from 'next/link';
+
 import { Rank } from '~/lundprod/utils/types';
 import { getUserProfileUrl } from '~/lundprod/utils/url';
 

@@ -1,4 +1,5 @@
 {
+  "name": "prisma",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/prisma/src",
   "projectType": "library",
@@ -16,6 +17,12 @@
       "options": {
         "jestConfig": "libs/prisma/jest.config.ts",
         "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
       }
     },
     "db-seed": {

@@ -1,21 +1,22 @@
+import { getCardsToFusion } from '@discord-bot-v2/common';
+import { prisma } from '@discord-bot-v2/prisma';
+import { CardType, Player, PlayerInventory } from '@prisma/client';
 import {
-  ChatInputCommandInteraction,
   ActionRowBuilder,
-  StringSelectMenuBuilder,
   APISelectMenuOption,
-  StringSelectMenuInteraction,
   CacheType,
+  ChatInputCommandInteraction,
+  StringSelectMenuBuilder,
+  StringSelectMenuInteraction,
 } from 'discord.js';
+
+import { invalidateWebsitePages } from '../../helpers/discordEvent';
 import {
   generateSummaryEmbed,
   getCardEarnSummary,
   getCardLostSummary,
   userNotFoundWarning,
 } from './helper';
-import { getCardsToFusion } from '@discord-bot-v2/common';
-import { CardType, Player, PlayerInventory } from '@prisma/client';
-import { prisma } from '@discord-bot-v2/prisma';
-import { invalidateWebsitePages } from '../../helpers/discordEvent';
 
 async function createFusionCard(
   player: Player & {

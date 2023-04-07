@@ -1,5 +1,5 @@
-import { Client } from 'discord.js';
 import { prisma } from '@discord-bot-v2/prisma';
+import { Client } from 'discord.js';
 
 export async function UserInitializer(client: Client) {
   const servers = await client.guilds.fetch();

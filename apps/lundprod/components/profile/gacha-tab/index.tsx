@@ -1,12 +1,14 @@
 import { Flex } from '@chakra-ui/react';
-import { FusionList } from './fusion-list';
-import { InventoryList } from './inventory-list';
-import { CardToGoldList } from './card-to-gold-list';
+
 import {
   CardsToGoldType,
   CardWithFusionDependencies,
   ProfileType,
 } from '~/lundprod/utils/types';
+
+import { CardToGoldList } from './card-to-gold-list';
+import { FusionList } from './fusion-list';
+import { InventoryList } from './inventory-list';
 
 type GachaTabProps = {
   profile: ProfileType;
@@ -15,6 +17,10 @@ type GachaTabProps = {
 };
 
 export const GachaTab = ({ profile, cardsToGold, fusions }: GachaTabProps) => {
+  if (!profile.player) {
+    return null;
+  }
+
   return (
     <Flex flexWrap="wrap" w="100%" justifyContent="center" gap={10} pt="20px">
       <InventoryList

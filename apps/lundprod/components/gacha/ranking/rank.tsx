@@ -1,5 +1,6 @@
 import { Box, BoxProps, Flex, Text } from '@chakra-ui/react';
 import Link from 'next/link';
+
 import { Rank as RankType } from '~/lundprod/utils/types';
 import { getUserProfileUrl } from '~/lundprod/utils/url';
 

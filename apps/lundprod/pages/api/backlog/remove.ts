@@ -1,8 +1,15 @@
 import { prisma } from '@discord-bot-v2/prisma';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '../auth/[...nextauth]';
+import { number, object } from 'yup';
+
 import { getUserProfileUrl } from '~/lundprod/utils/url';
+
+import { authOptions } from '../auth/[...nextauth]';
+
+const removeFromBacklogSchema = object({
+  id: number().required().positive().integer(),
+});
 
 export default async function removeFromBacklog(
   req: NextApiRequest,
@@ -20,16 +27,23 @@ export default async function removeFromBacklog(
       isActive: true,
     },
   });
+
+  if (!user) {
+    return res.status(404).json({ success: false });
+  }
+
+  const payload = await removeFromBacklogSchema.validate(req.body);
+
   const item = await prisma.backlogItem.findUnique({
     where: {
       userId_igdbGameId: {
         userId: user.id,
-        igdbGameId: req.body.id,
+        igdbGameId: payload.id,
       },
     },
   });
 
-  if (!user || !item) {
+  if (!item) {
     return res.status(404).json({ success: false });
   }
 

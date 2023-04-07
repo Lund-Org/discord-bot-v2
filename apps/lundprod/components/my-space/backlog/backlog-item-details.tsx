@@ -1,8 +1,9 @@
 import { StarIcon } from '@chakra-ui/icons';
-import { Badge, Flex, Tooltip, Box } from '@chakra-ui/react';
+import { Badge, Box,Flex, Tooltip } from '@chakra-ui/react';
 import { BacklogStatus } from '@prisma/client';
 import { useMemo, useRef, useState } from 'react';
 import { useClickAway } from 'react-use';
+
 import {
   getBacklogStatusColor,
   getBacklogStatusTranslation,

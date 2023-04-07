@@ -1,8 +1,10 @@
 import { Tbody } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
-import { StrictModeDroppable } from '../../helpers/strict-mode-droppable';
+
 import { useBacklog } from '~/lundprod/contexts/backlog-context';
+
+import { StrictModeDroppable } from '../../helpers/strict-mode-droppable';
 
 type DragAndDropWrapperProps = {
   children: ReactNode;

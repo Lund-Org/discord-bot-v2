@@ -1,4 +1,5 @@
 import { Box, Checkbox, Flex, Input, Select, Text } from '@chakra-ui/react';
+
 import { options } from '~/lundprod/utils/filters';
 import { Filters } from '~/lundprod/utils/types';
 

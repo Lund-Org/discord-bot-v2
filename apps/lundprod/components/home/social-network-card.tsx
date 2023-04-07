@@ -1,6 +1,6 @@
 import { Card, CardBody, Heading, Image } from '@chakra-ui/react';
-import Link from 'next/link';
 import styled from '@emotion/styled';
+import Link from 'next/link';
 
 type SocialNetworkCardProps = {
   imgSrc: string;

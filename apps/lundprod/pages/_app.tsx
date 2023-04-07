@@ -1,11 +1,11 @@
 import { Box, ChakraProvider, Flex } from '@chakra-ui/react';
 import { MDXProvider } from '@mdx-js/react';
-import { SessionProvider } from 'next-auth/react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import { SessionProvider } from 'next-auth/react';
+
 import { Header } from '../components/header';
 import { components } from '../components/mdx-components';
-
 import { theme } from '../theme';
 
 function CustomApp({ Component, pageProps }: AppProps) {

@@ -1,10 +1,10 @@
+import { IGDBConditionValue } from '../types';
 import { QUERY_OPERATOR } from './constants';
-
-export type ConditionValue = string[] | number[] | string | number;
 
 export class IGDBQueryBuilder {
   private fields: string[];
   private query: string;
+  private search: string;
   private sort: string;
   private limit: number;
   private offset: number;
@@ -50,6 +50,10 @@ export class IGDBQueryBuilder {
     if (this.query) {
       str += `where ${this.query};`;
     }
+
+    if (this.search) {
+      str += `search "${this.search}";`;
+    }
     if (this.sort) {
       str += `sort ${this.sort};`;
     }
@@ -62,6 +66,11 @@ export class IGDBQueryBuilder {
 
   setFields(fields: string[]) {
     this.fields = fields;
+    return this;
+  }
+
+  setSearch(search: string) {
+    this.search = search.replaceAll('"', '');
     return this;
   }
 
@@ -84,7 +93,7 @@ export class IGDBQueryBuilder {
     return this;
   }
 
-  where(field: string, operator: QUERY_OPERATOR, value: ConditionValue) {
+  where(field: string, operator: QUERY_OPERATOR, value: IGDBConditionValue) {
     let conditionValue = '';
 
     if (Array.isArray(value) && typeof value[0] === 'string') {
@@ -103,14 +112,14 @@ export class IGDBQueryBuilder {
     return this;
   }
 
-  andWhere(field: string, operator: QUERY_OPERATOR, value: ConditionValue) {
+  andWhere(field: string, operator: QUERY_OPERATOR, value: IGDBConditionValue) {
     this.and((subQueryBuilder) =>
       subQueryBuilder.where(field, operator, value)
     );
     return this;
   }
 
-  orWhere(field: string, operator: QUERY_OPERATOR, value: ConditionValue) {
+  orWhere(field: string, operator: QUERY_OPERATOR, value: IGDBConditionValue) {
     this.or((subQueryBuilder) => subQueryBuilder.where(field, operator, value));
     return this;
   }

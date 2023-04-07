@@ -10,11 +10,12 @@ import {
 import { BlogPost, Category, Tag } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import { useEffect, useState } from 'react';
+
 import { BlogArticle } from '~/lundprod/components/blog/blog-article';
-import { CategoryWordingMapping } from '~/lundprod/utils/blog';
-import { getManyBlogPosts } from '~/lundprod/utils/api/blog';
-import { getNumberParam } from '~/lundprod/utils/next';
 import { useFetcher } from '~/lundprod/hooks/useFetcher';
+import { getManyBlogPosts } from '~/lundprod/utils/api/blog';
+import { CategoryWordingMapping } from '~/lundprod/utils/blog';
+import { getNumberParam } from '~/lundprod/utils/next';
 
 type PropsType = {
   blogPosts: (BlogPost & {
@@ -45,10 +46,10 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
 export function BlogPage({ blogPosts }: PropsType) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadedBlogPosts, setLoadedBlogPosts] = useState(blogPosts);
-  const fetcher = useFetcher();
+  const { get } = useFetcher();
 
   useEffect(() => {
-    fetcher('/api/blogs', { category: categories })
+    get('/api/blogs', { category: categories })
       .then((response) => {
         setLoadedBlogPosts(response.blogPosts);
       })
@@ -56,7 +57,7 @@ export function BlogPage({ blogPosts }: PropsType) {
         console.error(err);
         setLoadedBlogPosts([]);
       });
-  }, [categories, fetcher]);
+  }, [categories, get]);
 
   const onToggle = (value: Category) => {
     setCategories(

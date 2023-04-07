@@ -1,5 +1,6 @@
 import { AspectRatio, Box, Heading, Image, Tag, Text } from '@chakra-ui/react';
 import { BlogPost, Tag as TagType } from '@prisma/client';
+
 import { ColoredSpacer } from './blog-helpers/colored-spacer';
 
 type BlogHeaderProps = {

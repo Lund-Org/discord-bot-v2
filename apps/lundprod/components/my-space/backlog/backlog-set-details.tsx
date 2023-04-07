@@ -1,21 +1,22 @@
-import { BacklogStatus } from '@prisma/client';
 import { AddIcon, StarIcon } from '@chakra-ui/icons';
 import {
   Button,
   Flex,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
   FormControl,
   FormHelperText,
   FormLabel,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Textarea,
 } from '@chakra-ui/react';
+import { BacklogStatus } from '@prisma/client';
 import { FormEventHandler, useEffect, useState } from 'react';
+
 import { useBacklog } from '~/lundprod/contexts/backlog-context';
 
 type BacklogSetDetailsProps = {

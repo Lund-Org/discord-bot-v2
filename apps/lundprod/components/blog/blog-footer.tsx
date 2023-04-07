@@ -1,5 +1,6 @@
 import { Text } from '@chakra-ui/react';
 import { BlogPost, Tag as TagType } from '@prisma/client';
+
 import { formatBlogDate } from '~/lundprod/utils/dates';
 
 type BlogFooterProps = {

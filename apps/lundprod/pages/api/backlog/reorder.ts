@@ -1,10 +1,19 @@
 import { prisma } from '@discord-bot-v2/prisma';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '../auth/[...nextauth]';
+import { number, object } from 'yup';
+
 import { getUserProfileUrl } from '~/lundprod/utils/url';
 
-export default async function addToBacklog(
+import { authOptions } from '../auth/[...nextauth]';
+
+const reorderBacklogSchema = object({
+  oldOrder: number().min(1).required().positive().integer(),
+  newOrder: number().min(1).required().positive().integer(),
+  igdbId: number().required().positive().integer(),
+});
+
+export default async function reorderBacklog(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -25,14 +34,18 @@ export default async function addToBacklog(
     return res.status(404).json({ success: false });
   }
 
-  const payload = req.body;
+  const payload = await reorderBacklogSchema.validate(req.body);
 
   const existingBiggestOrder = await prisma.backlogItem.findFirst({
     where: { userId: user.id },
     orderBy: { order: 'desc' },
   });
 
-  if (!validateReorder(payload, existingBiggestOrder.order)) {
+  if (
+    payload.oldOrder <= existingBiggestOrder.order &&
+    payload.newOrder <= existingBiggestOrder.order &&
+    payload.oldOrder !== payload.newOrder
+  ) {
     return res.status(400).json({ success: false });
   }
 
@@ -78,24 +91,4 @@ export default async function addToBacklog(
   res.revalidate(getUserProfileUrl(session.userId));
 
   res.json({ success: true });
-}
-
-function validateReorder(
-  data: unknown,
-  maxOrder: number
-): data is { oldOrder: number; newOrder: number; igdbId: number } {
-  return !!(
-    typeof data === 'object' &&
-    'oldOrder' in data &&
-    'newOrder' in data &&
-    'igdbId' in data &&
-    typeof data.oldOrder === 'number' &&
-    typeof data.newOrder === 'number' &&
-    typeof data.igdbId === 'number' &&
-    data.oldOrder !== data.newOrder &&
-    data.oldOrder >= 1 &&
-    data.oldOrder <= maxOrder &&
-    data.newOrder >= 1 &&
-    data.newOrder <= maxOrder
-  );
 }

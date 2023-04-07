@@ -1,10 +1,18 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import { NextApiRequest, NextApiResponse } from 'next';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '../auth/[...nextauth]';
-import { getUserProfileUrl } from '~/lundprod/utils/url';
 import { BacklogItem, BacklogStatus, User } from '@prisma/client';
 import { EmbedBuilder, WebhookClient } from 'discord.js';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { getServerSession } from 'next-auth/next';
+import { number, object, string } from 'yup';
+
+import { getUserProfileUrl } from '~/lundprod/utils/url';
+
+import { authOptions } from '../auth/[...nextauth]';
+
+const changeBacklogStatusSchema = object({
+  igdbGameId: number().required().positive().integer(),
+  status: string().oneOf(Object.values(BacklogStatus)).required(),
+});
 
 export default async function changeBacklogStatus(
   req: NextApiRequest,
@@ -27,15 +35,17 @@ export default async function changeBacklogStatus(
     return res.status(404).json({ success: false });
   }
 
+  const payload = await changeBacklogStatusSchema.validate(req.body);
+
   const backlogItem = await prisma.backlogItem.update({
     where: {
       userId_igdbGameId: {
         userId: user.id,
-        igdbGameId: req.body.igdbGameId,
+        igdbGameId: payload.igdbGameId,
       },
     },
     data: {
-      status: req.body.status,
+      status: payload.status,
       reason: null,
       rating: 0,
     },

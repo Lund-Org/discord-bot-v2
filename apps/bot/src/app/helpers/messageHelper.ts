@@ -1,7 +1,7 @@
-import { Client, ChannelType, Message, TextChannel } from 'discord.js';
-import { parse, UrlWithStringQuery } from 'url';
-import { extname } from 'path';
 import { prisma } from '@discord-bot-v2/prisma';
+import { ChannelType, Client, Message, TextChannel } from 'discord.js';
+import { extname } from 'path';
+import { parse, UrlWithStringQuery } from 'url';
 
 export default {
   /**

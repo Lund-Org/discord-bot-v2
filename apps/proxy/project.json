@@ -3,31 +3,47 @@
   "sourceRoot": "apps/proxy/src",
   "projectType": "application",
   "targets": {
-    "start": {
-      "executor": "nx:run-commands",
-      "options": {
-        "parallel": false,
-        "commands": ["node dist/proxy/main.js"]
-      }
-    },
     "build": {
-      "executor": "@nrwl/node:webpack",
+      "executor": "@nrwl/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
       "options": {
+        "platform": "node",
         "outputPath": "dist/proxy",
+        "format": ["cjs"],
+        "bundle": false,
         "main": "apps/proxy/src/main.ts",
-        "tsConfig": "apps/proxy/tsconfig.app.json"
+        "tsConfig": "apps/proxy/tsconfig.app.json",
+        "assets": ["apps/proxy/src/assets"],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
       },
       "configurations": {
+        "development": {},
         "production": {
-          "optimization": true,
-          "extractLicenses": true,
-          "inspect": false
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          },
+          "fileReplacements": [
+            {
+              "replace": "apps/proxy/src/environments/environment.ts",
+              "with": "apps/proxy/src/environments/environment.prod.ts"
+            }
+          ]
         }
       }
     },
-    "serve": {
-      "executor": "@nrwl/node:node",
+    "start": {
+      "executor": "@nrwl/js:node",
+      "defaultConfiguration": "development",
       "options": {
         "buildTarget": "proxy:build"
       },
