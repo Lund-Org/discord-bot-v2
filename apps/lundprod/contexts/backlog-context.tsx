@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Game, GAME_TYPE, PlatFormType } from '@discord-bot-v2/igdb-front';
+import {
+  Game,
+  GAME_TYPE,
+  gameTypeMapping,
+  PlatFormType,
+} from '@discord-bot-v2/igdb-front';
 import { BacklogItem, BacklogStatus } from '@prisma/client';
 import { chain, clone, curry } from 'lodash';
 import {
@@ -84,7 +89,7 @@ export const BacklogProvider = ({
       const newItem: BacklogItemLight = {
         igdbGameId: game.id,
         name: game.name,
-        category: game.category,
+        category: gameTypeMapping[game.category],
         url: game.url,
         status: BacklogStatus.BACKLOG,
         reason: '',
