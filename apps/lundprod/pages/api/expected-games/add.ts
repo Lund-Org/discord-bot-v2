@@ -5,7 +5,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
 import { boolean, number, object } from 'yup';
 
-import { getUserProfileUrl } from '~/lundprod/utils/url';
+import { getUserListUrl, getUserProfileUrl } from '~/lundprod/utils/url';
 
 import { authOptions } from '../auth/[...nextauth]';
 
@@ -111,6 +111,7 @@ export default async function addExpectedGame(
     return res.json({ success: false });
   }
 
+  res.revalidate(getUserListUrl());
   res.revalidate(getUserProfileUrl(session.userId));
 
   res.json({ success: true });

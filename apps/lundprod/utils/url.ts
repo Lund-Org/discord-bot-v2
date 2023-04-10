@@ -13,6 +13,10 @@ export function getUserProfileUrl(id: string) {
   return `/u/${id}`;
 }
 
+export function getUserListUrl() {
+  return `/u/list`;
+}
+
 export function isHomePage(pathname: string) {
   return pathname === '/';
 }

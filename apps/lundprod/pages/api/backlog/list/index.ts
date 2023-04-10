@@ -30,7 +30,7 @@ export default async function listOwnBacklogItems(
   const backlogItems = await prisma.backlogItem.findMany({
     select: backlogItemPrismaFields,
     where: { userId: user.id },
-    orderBy: { order: 'desc' },
+    orderBy: { order: 'asc' },
   });
 
   res.json({ backlogItems });

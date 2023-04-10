@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
 import { number, object, string } from 'yup';
 
-import { getUserProfileUrl } from '~/lundprod/utils/url';
+import { getUserListUrl, getUserProfileUrl } from '~/lundprod/utils/url';
 
 import { authOptions } from '../auth/[...nextauth]';
 
@@ -64,6 +64,7 @@ export default async function addToBacklog(
     update: {},
   });
 
+  res.revalidate(getUserListUrl());
   res.revalidate(getUserProfileUrl(session.userId));
 
   res.json({ success: true });

@@ -1,7 +1,11 @@
 import { prisma } from '@discord-bot-v2/prisma';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { getGachaRankingPage,getUserProfileUrl } from '~/lundprod/utils/url';
+import {
+  getGachaRankingPage,
+  getUserListUrl,
+  getUserProfileUrl,
+} from '~/lundprod/utils/url';
 
 export default async function refreshGachaProfile(
   req: NextApiRequest,
@@ -24,6 +28,7 @@ export default async function refreshGachaProfile(
   }
 
   Promise.all([
+    res.revalidate(getUserListUrl()),
     res.revalidate(getGachaRankingPage()),
     res.revalidate(getUserProfileUrl(discordId)),
   ]);

@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
 import { number, object } from 'yup';
 
-import { getUserProfileUrl } from '~/lundprod/utils/url';
+import { getUserListUrl, getUserProfileUrl } from '~/lundprod/utils/url';
 
 import { authOptions } from '../auth/[...nextauth]';
 
@@ -42,9 +42,9 @@ export default async function reorderBacklog(
   });
 
   if (
-    payload.oldOrder <= existingBiggestOrder.order &&
-    payload.newOrder <= existingBiggestOrder.order &&
-    payload.oldOrder !== payload.newOrder
+    payload.oldOrder > existingBiggestOrder.order ||
+    payload.newOrder > existingBiggestOrder.order ||
+    payload.oldOrder === payload.newOrder
   ) {
     return res.status(400).json({ success: false });
   }
@@ -88,6 +88,7 @@ export default async function reorderBacklog(
     }),
   ]);
 
+  res.revalidate(getUserListUrl());
   res.revalidate(getUserProfileUrl(session.userId));
 
   res.json({ success: true });
