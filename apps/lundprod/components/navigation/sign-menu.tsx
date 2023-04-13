@@ -13,6 +13,7 @@ import {
   ListItem,
   Tag,
   Text,
+  Tooltip,
   UnorderedList,
 } from '@chakra-ui/react';
 import Link from 'next/link';
@@ -72,6 +73,23 @@ export const SignMenu = () => {
                 mr={4}
                 src={session?.user.image}
                 alt={session?.user?.name}
+                fallback={
+                  <Tooltip
+                    label="Impossible de charger l'avatar. Cela arrive si tu as changé d'avatar. Déco/reco pour l'actualiser"
+                    placement="bottom-end"
+                    border="1px solid"
+                    borderColor="gray.500"
+                  >
+                    <Image
+                      maxW="35px"
+                      mr={4}
+                      src={`https://via.placeholder.com/100x100/ffae00/333333?text=${
+                        session?.user?.name.at(0) || 'Ø'
+                      }`}
+                      alt={session?.user?.name}
+                    />
+                  </Tooltip>
+                }
               />
             )}
             <Text>{session?.user?.name}</Text>
