@@ -5,6 +5,7 @@ import * as birthdayJob from './birthday.job';
 import * as dailyShopJob from './daily-shop.job';
 import * as gameReleaseJob from './game-release.job';
 import * as sportJob from './sport-notifications.job';
+import * as sportSyncJob from './sport-sync.job';
 
 function setupCron(discordClient: Client) {
   const jobs = [
@@ -32,6 +33,13 @@ function setupCron(discordClient: Client) {
     new CronJob(
       gameReleaseJob.cronTiming,
       () => gameReleaseJob.cronDefinition(),
+      null,
+      true,
+      'Europe/Paris'
+    ),
+    new CronJob(
+      sportSyncJob.cronTiming,
+      () => sportSyncJob.cronDefinition(),
       null,
       true,
       'Europe/Paris'
