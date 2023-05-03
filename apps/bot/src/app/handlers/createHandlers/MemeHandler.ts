@@ -13,6 +13,8 @@ class MemeCheckerHandler extends Handler {
       'imgur.com',
       'giphy.com',
       'twitter.com',
+      'instagram.com',
+      'tiktok.com',
     ];
   }
 
