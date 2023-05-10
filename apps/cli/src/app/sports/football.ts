@@ -1,7 +1,7 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import { Prisma, SportEventCategory } from '@prisma/client';
+import { SportEventCategory } from '@prisma/client';
 
-import { eventUpsert, leagueUpsert } from '../utils/prisma.helper';
+import { leagueUpsert } from '../utils/prisma.helper';
 import { FootballFetcher } from '../utils/sport-io-api';
 import { GeneratorArg } from '../utils/types';
 
@@ -89,27 +89,14 @@ export const generate = async ({ year }: GeneratorArg) => {
           ({ sportApiId }) => sportApiId === match.teamB
         );
 
-        const matchData: Pick<
-          Prisma.SportEventCreateInput,
-          'teamA' | 'teamB' | 'category' | 'startAt' | 'imageUrl' | 'league'
-        > = {
-          teamA: { connect: { id: teamA.id } },
-          teamB: { connect: { id: teamB.id } },
-          category: SportEventCategory.FOOTBALL,
-          startAt: new Date(match.startAt),
-          imageUrl: match.logo,
-          league: { connect: { id: DBleague.id } },
-        };
-
-        return eventUpsert({
-          create: matchData,
-          update: matchData,
-          where: {
+        return prisma.sportEvent.create({
+          data: {
+            teamA: { connect: { id: teamA.id } },
+            teamB: { connect: { id: teamB.id } },
             category: SportEventCategory.FOOTBALL,
-            leagueId: DBleague.id,
-            teamAId: teamA.id,
-            teamBId: teamB.id,
             startAt: new Date(match.startAt),
+            imageUrl: match.logo,
+            league: { connect: { id: DBleague.id } },
           },
         });
       })

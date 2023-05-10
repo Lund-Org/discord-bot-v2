@@ -78,6 +78,7 @@ async function generate(year: string, file: string, name: string) {
         imageUrl: logo,
         league: { connect: { id: championship.id } },
       };
+
       return eventUpsert({
         create: event,
         update: event,
