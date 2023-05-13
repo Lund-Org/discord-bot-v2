@@ -22,6 +22,7 @@ import { DragAndDropWrapper } from './backlog-drag-and-drop-wrapper';
 import { DraggableRow } from './backlog-draggable-row';
 import { BacklogItemDetails } from './backlog-item-details';
 import { BacklogSetDetails } from './backlog-set-details';
+import { BacklogSetNote } from './backlog-set-note';
 
 type BacklogListProps = {
   isReadOnly?: boolean;
@@ -101,6 +102,7 @@ export const BacklogList = ({ isReadOnly = true }: BacklogListProps) => {
                       status={item.status}
                       reason={item.reason}
                       rating={item.rating}
+                      note={item.note}
                     />
                   ) : (
                     <Flex direction="column" alignItems="center" gap={3}>
@@ -108,6 +110,11 @@ export const BacklogList = ({ isReadOnly = true }: BacklogListProps) => {
                         <BacklogChangeStatus
                           igdbId={item.igdbGameId}
                           status={item.status}
+                        />
+                        <BacklogSetNote
+                          igdbId={item.igdbGameId}
+                          status={item.status}
+                          note={item.note}
                         />
                         <BacklogSetDetails
                           igdbId={item.igdbGameId}

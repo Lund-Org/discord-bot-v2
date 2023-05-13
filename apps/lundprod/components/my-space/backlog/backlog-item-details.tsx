@@ -1,5 +1,5 @@
-import { StarIcon } from '@chakra-ui/icons';
-import { Badge, Box,Flex, Tooltip } from '@chakra-ui/react';
+import { QuestionIcon, StarIcon } from '@chakra-ui/icons';
+import { Badge, Box, Flex, Tooltip } from '@chakra-ui/react';
 import { BacklogStatus } from '@prisma/client';
 import { useMemo, useRef, useState } from 'react';
 import { useClickAway } from 'react-use';
@@ -12,6 +12,7 @@ import {
 type BacklogItemDetailsProps = {
   status: BacklogStatus;
   reason: string;
+  note?: string;
   rating: number;
 };
 
@@ -19,17 +20,29 @@ const STATUS_WITH_DETAILS: BacklogStatus[] = [
   BacklogStatus.ABANDONED,
   BacklogStatus.FINISHED,
 ];
+const STATUS_WITH_NOTE: BacklogStatus[] = [
+  BacklogStatus.CURRENTLY,
+  BacklogStatus.BACKLOG,
+  BacklogStatus.WISHLIST,
+];
 
 export const BacklogItemDetails = ({
   status,
   reason,
   rating,
+  note,
 }: BacklogItemDetailsProps) => {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+  const [isNoteTooltipOpen, setIsNoteTooltipOpen] = useState(false);
   const ref = useRef<HTMLSpanElement>(null);
+  const refNote = useRef<HTMLSpanElement>(null);
 
   useClickAway(ref, () => {
     setIsTooltipOpen(false);
+  });
+
+  useClickAway(refNote, () => {
+    setIsNoteTooltipOpen(false);
   });
 
   const statusBadge = useMemo(() => {
@@ -68,6 +81,26 @@ export const BacklogItemDetails = ({
           {Array.from({ length: 5 - rating }, (_, index) => (
             <StarIcon key={index} color="gray.300" />
           ))}
+        </Box>
+      )}
+      {STATUS_WITH_NOTE.includes(status) && note && (
+        <Box ml="25%">
+          <Tooltip
+            hasArrow
+            label={note}
+            p={3}
+            isOpen={isNoteTooltipOpen}
+            placement="left"
+          >
+            <span ref={refNote}>
+              <QuestionIcon
+                boxSize="20px"
+                onMouseEnter={() => setIsNoteTooltipOpen(true)}
+                onClick={() => setIsNoteTooltipOpen(!isNoteTooltipOpen)}
+                onMouseLeave={() => setIsNoteTooltipOpen(false)}
+              />
+            </span>
+          </Tooltip>
         </Box>
       )}
     </Flex>
