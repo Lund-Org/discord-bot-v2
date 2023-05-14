@@ -7,6 +7,7 @@ export const backlogItemFields = [
   'url',
   'status',
   'reason',
+  'note',
   'rating',
   'order',
 ] as const;

@@ -25,6 +25,7 @@ model BacklogItem {
   url        String
   status     BacklogStatus @default(BACKLOG)
   reason     String?       @db.VarChar(255)
+  note       String?       @db.VarChar(255)
   rating     Int           @default(0)
   order      Int           @default(0)
   user       User          @relation(fields: [userId], references: [id])
@@ -254,6 +255,7 @@ enum BacklogStatus {
   CURRENTLY
   FINISHED
   ABANDONED
+  WISHLIST
 }
 
 enum BlogStatus {

@@ -46,6 +46,7 @@ type BacklogContextProvider = ContextWithGameSearch & {
     reason: string,
     rating: number
   ) => Promise<void>;
+  updateBacklogNote: (id: number, note: string) => Promise<void>;
   onReorder: (orderPayload: BacklogReorder) => void;
 };
 
@@ -67,6 +68,7 @@ export const BacklogContext = createContext<BacklogContextProvider>({
   removeFromBacklog: () => {},
   updateBacklogStatus: () => {},
   updateBacklogDetails: async () => {},
+  updateBacklogNote: async () => {},
   onReorder: () => {},
 });
 
@@ -92,6 +94,7 @@ export const BacklogProvider = ({
         category: gameTypeMapping[game.category],
         url: game.url,
         status: BacklogStatus.BACKLOG,
+        note: undefined,
         reason: '',
         rating: 0,
         order: backlog.length,
@@ -189,6 +192,11 @@ export const BacklogProvider = ({
       setBacklog,
       post,
     }),
+    updateBacklogNote: curry(updateBacklogNote)({
+      backlog,
+      setBacklog,
+      post,
+    }),
     onReorder,
   };
 
@@ -232,6 +240,19 @@ function updateBacklogDetails(
     [reason, rating],
     ['reason', 'rating'],
     '/api/backlog/update-backlog-details'
+  );
+}
+function updateBacklogNote(
+  curriedParam: UpdateBacklogCurriedParam,
+  id: number,
+  note: string
+) {
+  return findItemChangePropertyAndRequestAPI(
+    curriedParam,
+    id,
+    [note],
+    ['note'],
+    '/api/backlog/update-backlog-note'
   );
 }
 

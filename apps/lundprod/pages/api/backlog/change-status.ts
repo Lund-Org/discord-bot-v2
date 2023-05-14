@@ -52,7 +52,10 @@ export default async function changeBacklogStatus(
   });
 
   res.revalidate(getUserProfileUrl(session.userId));
-  webhookNotification(user, backlogItem);
+
+  if (payload.status !== BacklogStatus.WISHLIST) {
+    webhookNotification(user, backlogItem);
+  }
 
   res.json({ success: true });
 }
