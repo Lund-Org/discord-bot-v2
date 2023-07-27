@@ -1,9 +1,8 @@
-import { addPoints } from '@discord-bot-v2/common';
+import { addPoints, GachaConfigEnum, SellConfig } from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
 import { CardType, Player, PlayerInventory } from '@prisma/client';
 import { ChatInputCommandInteraction } from 'discord.js';
 
-import { GachaConfigEnum } from '../../enums/GachaEnum';
 import { invalidateWebsitePages } from '../../helpers/discordEvent';
 import {
   generateSummaryEmbed,
@@ -11,7 +10,6 @@ import {
   userNotFoundWarning,
 } from './helper';
 
-type SellConfig = { basic: number; gold: number };
 type CardRarity = 'basic' | 'gold';
 type StructuredData = {
   cardToSell: PlayerInventory & { cardType: CardType };

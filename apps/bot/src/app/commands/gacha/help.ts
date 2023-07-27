@@ -1,7 +1,6 @@
+import { GachaConfigEnum } from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
 import { ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
-
-import { GachaConfigEnum } from '../../enums/GachaEnum';
 
 type PriceConfig = { price: number };
 

@@ -1,4 +1,8 @@
-import { addPoints } from '@discord-bot-v2/common';
+import {
+  addPoints,
+  ChancesConfig,
+  GachaConfigEnum,
+} from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
 import {
   CardType,
@@ -14,15 +18,7 @@ import {
   StringSelectMenuInteraction,
 } from 'discord.js';
 
-import { GachaConfigEnum } from '../../enums/GachaEnum';
 import { CardDraw } from '../../helpers/types';
-
-type ChancesConfig = {
-  '1': number;
-  '2': number;
-  '3': number;
-  '4': number;
-};
 
 export const userNotFoundWarning = async (
   interaction:

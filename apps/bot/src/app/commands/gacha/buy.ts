@@ -1,8 +1,8 @@
+import { GachaConfigEnum, PriceConfig } from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
 import { Player, User } from '@prisma/client';
-import { AttachmentBuilder,ChatInputCommandInteraction } from 'discord.js';
+import { AttachmentBuilder, ChatInputCommandInteraction } from 'discord.js';
 
-import { GachaConfigEnum } from '../../enums/GachaEnum';
 import { generateDrawImage } from '../../helpers/canvas';
 import { invalidateWebsitePages } from '../../helpers/discordEvent';
 import {
@@ -12,8 +12,6 @@ import {
   getCardEarnSummary,
   userNotFoundWarning,
 } from './helper';
-
-type PriceConfig = { price: number };
 
 async function securityChecks({
   interaction,

@@ -54,7 +54,10 @@ export const getStaticProps: GetStaticProps<UsersPageProps> = async () => {
       backlogItemsCount: backlogItems.length,
       expectedGamesCount: expectedGames.length,
     };
-  });
+  }).filter(
+    ({ isPlayer, backlogItemsCount, expectedGamesCount }) =>
+      isPlayer || backlogItemsCount || expectedGamesCount
+  );
 
   return {
     revalidate: 3600,

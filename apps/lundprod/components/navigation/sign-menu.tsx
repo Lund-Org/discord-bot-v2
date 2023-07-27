@@ -11,7 +11,6 @@ import {
   Heading,
   Image,
   ListItem,
-  Tag,
   Text,
   Tooltip,
   UnorderedList,
@@ -36,19 +35,7 @@ export const SignMenu = () => {
       : []),
     { label: 'Mon backlog', link: '/my-space/backlog' },
     {
-      label: (
-        <>
-          <Text as="span">Mes jeux attendus</Text>
-          <Tag
-            ml="4px"
-            size="sm"
-            colorScheme="messenger"
-            verticalAlign="baseline"
-          >
-            New !
-          </Tag>
-        </>
-      ),
+      label: 'Mes jeux attendus',
       link: '/my-space/expected-games',
     },
   ];
@@ -92,7 +79,7 @@ export const SignMenu = () => {
                 }
               />
             )}
-            <Text>{session?.user?.name}</Text>
+            <Text textTransform="capitalize">{session?.user?.name}</Text>
           </>
         ) : (
           'Connexion'
@@ -109,7 +96,9 @@ export const SignMenu = () => {
           borderLeft="1px solid var(--chakra-colors-gray-600)"
         >
           <DrawerCloseButton />
-          <DrawerHeader>{session?.user?.name}</DrawerHeader>
+          <DrawerHeader color="gray.800" textTransform="capitalize">
+            {session?.user?.name}
+          </DrawerHeader>
 
           <DrawerBody>
             <Heading as="h4" variant="h4" color="gray.800">
@@ -146,7 +135,11 @@ export const SignMenu = () => {
           </DrawerBody>
 
           <DrawerFooter>
-            <Button mr={3} onClick={() => setIsOpen(false)}>
+            <Button
+              mr={3}
+              onClick={() => setIsOpen(false)}
+              colorScheme="blackAlpha"
+            >
               Fermer
             </Button>
             <Button colorScheme="orange" onClick={() => signOut()}>
