@@ -10,7 +10,6 @@ import {
   Flex,
   Heading,
   Image,
-  LightMode,
   ListItem,
   Text,
   Tooltip,
@@ -96,59 +95,57 @@ export const SignMenu = () => {
           bg="gray.100"
           borderLeft="1px solid var(--chakra-colors-gray-600)"
         >
-          <LightMode>
-            <DrawerCloseButton />
-            <DrawerHeader color="gray.800" textTransform="capitalize">
-              {session?.user?.name}
-            </DrawerHeader>
+          <DrawerCloseButton />
+          <DrawerHeader color="gray.800" textTransform="capitalize">
+            {session?.user?.name}
+          </DrawerHeader>
 
-            <DrawerBody>
-              <Heading as="h4" variant="h4" color="gray.800">
-                Mes pages
-              </Heading>
-              <UnorderedList
-                listStyleType="none"
-                color="gray.600"
-                fontWeight="600"
-                ml={3}
-              >
-                {drawerItems.map((drawerItem, index) => (
-                  <ListItem
-                    key={index}
-                    sx={{
-                      '&:hover a': {
-                        paddingLeft: '5px',
-                      },
+          <DrawerBody>
+            <Heading as="h4" variant="h4" color="gray.800">
+              Mes pages
+            </Heading>
+            <UnorderedList
+              listStyleType="none"
+              color="gray.600"
+              fontWeight="600"
+              ml={3}
+            >
+              {drawerItems.map((drawerItem, index) => (
+                <ListItem
+                  key={index}
+                  sx={{
+                    '&:hover a': {
+                      paddingLeft: '5px',
+                    },
+                  }}
+                  py="6px"
+                >
+                  <Link
+                    href={drawerItem.link}
+                    style={{
+                      transition: 'all .3s ease',
                     }}
-                    py="6px"
+                    onClick={() => setIsOpen(false)}
                   >
-                    <Link
-                      href={drawerItem.link}
-                      style={{
-                        transition: 'all .3s ease',
-                      }}
-                      onClick={() => setIsOpen(false)}
-                    >
-                      {drawerItem.label}
-                    </Link>
-                  </ListItem>
-                ))}
-              </UnorderedList>
-            </DrawerBody>
+                    {drawerItem.label}
+                  </Link>
+                </ListItem>
+              ))}
+            </UnorderedList>
+          </DrawerBody>
 
-            <DrawerFooter>
-              <Button
-                mr={3}
-                onClick={() => setIsOpen(false)}
-                colorScheme="blackAlpha"
-              >
-                Fermer
-              </Button>
-              <Button colorScheme="orange" onClick={() => signOut()}>
-                Deconnexion
-              </Button>
-            </DrawerFooter>
-          </LightMode>
+          <DrawerFooter>
+            <Button
+              mr={3}
+              onClick={() => setIsOpen(false)}
+              colorScheme="blackAlpha"
+            >
+              Fermer
+            </Button>
+            <Button colorScheme="orange" onClick={() => signOut()}>
+              Deconnexion
+            </Button>
+          </DrawerFooter>
         </DrawerContent>
       </Drawer>
     </>

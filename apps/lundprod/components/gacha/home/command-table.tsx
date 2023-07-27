@@ -1,6 +1,6 @@
 import {
   Box,
-  Code,
+  Code as ChakraCode,
   Table as ChakraTable,
   Tbody,
   Td as ChakraTd,
@@ -29,6 +29,9 @@ const Table = styled(ChakraTable)`
 const Td = styled(ChakraTd)`
   padding-left: 12px;
   padding-right: 12px;
+`;
+const Code = styled(ChakraCode)`
+  background: var(--chakra-colors-gray-300);
 `;
 
 export const CommandTable = ({

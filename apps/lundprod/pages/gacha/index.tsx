@@ -122,6 +122,8 @@ export function GachaPage({
           mb="20px"
           pb="5px"
           borderBottom="1px solid var(--chakra-colors-orange-500)"
+          display="flex"
+          alignItems="center"
         >
           <QuestionOutlineIcon mr="12px" />
           Comment ça marche ?
@@ -172,7 +174,7 @@ export function GachaPage({
           </ListItem>
           <ListItem>
             Pour créer une carte fusion dorée, comme pour les autres cartes, il
-            faut 5 fois la version basique pour pouvoir la golder.
+            faut 5 fois la version basique pour pouvoir la golder
           </ListItem>
           <ListItem>L&apos;XP est calculé de la manière suivante : </ListItem>
           <UnorderedList listStyleType="disclosure-closed" ml="50px">
@@ -185,7 +187,7 @@ export function GachaPage({
             </ListItem>
             <ListItem>
               Les cartes comptent une fois par type, ainsi si vous avez 14
-              cartes basiques n°3 et 5 cartes dorées n°3, vous aurez uniquement
+              cartes basiques n°3 et 5 cartes dorées n°3, vous aurez uniquement{' '}
               {configCardXP.basic + configCardXP.gold}xp ({configCardXP.basic} +
               {configCardXP.gold})
             </ListItem>

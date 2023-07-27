@@ -4,11 +4,6 @@ import * as components from './components';
 
 export const theme = extendTheme({
   ...chakraTheme,
-  config: {
-    ...chakraTheme.config,
-    initialColorMode: 'dark',
-    useSystemColorMode: false,
-  },
   components: {
     ...chakraTheme.components,
     ...components,
