@@ -72,9 +72,9 @@ export const ComingProjects = () => {
         color="orange.500"
       >
         <AccordionLine
-          title="Ride & Hide"
+          title="Projets de jeux"
           illustration={illustrationVideoGame}
-          description="Projet Unity de jeu mobile et PC. Il sera disponible gratuitement. Détails à venir..."
+          description="Plusieurs idées en tête, l'un est un Dofus like solo, l'autre un jeu sur Unity. Détails à venir et progression à suivre sur Discord..."
         />
         <AccordionLine
           title="Projet 3D"

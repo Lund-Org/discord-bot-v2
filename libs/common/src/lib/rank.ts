@@ -1,6 +1,9 @@
 import { prisma } from '@discord-bot-v2/prisma';
 import { Player } from '@prisma/client';
 
+import { GachaConfigEnum } from './gacha-enum';
+import { CardXPConfig } from './types';
+
 type XpByPlayer = Player & {
   playerId: number;
   currentXP: number;
@@ -17,17 +20,17 @@ export async function getGlobalRanking(
   playerToFilter: number[] = []
 ): Promise<RankByUser[]> {
   const xpConfig = await prisma.config.findUnique({
-    where: { name: 'CARD_XP' },
+    where: { name: GachaConfigEnum.CARD_XP },
   });
   const levelsConfig = await prisma.config.findUnique({
-    where: { name: 'LEVELS' },
+    where: { name: GachaConfigEnum.LEVELS },
   });
 
   if (!xpConfig || !levelsConfig) {
     return [];
   }
 
-  const xpVal = xpConfig.value as { gold: number; basic: number };
+  const xpVal = xpConfig.value as CardXPConfig;
   const xpByPlayers: XpByPlayer[] = await prisma.$queryRaw`
     SELECT
       t1.playerId,

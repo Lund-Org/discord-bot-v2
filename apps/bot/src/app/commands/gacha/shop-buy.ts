@@ -1,7 +1,7 @@
+import { GachaConfigEnum } from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
 import { ButtonInteraction } from 'discord.js';
 
-import { GachaConfigEnum } from '../../enums/GachaEnum';
 import { invalidateWebsitePages } from '../../helpers/discordEvent';
 import {
   addCardsToInventory,

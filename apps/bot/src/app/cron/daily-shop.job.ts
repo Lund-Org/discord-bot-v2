@@ -1,3 +1,4 @@
+import { GachaConfigEnum } from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
 import { CardType } from '@prisma/client';
 import {
@@ -11,7 +12,6 @@ import {
   TextChannel,
 } from 'discord.js';
 
-import { GachaConfigEnum } from '../enums/GachaEnum';
 import { generateDrawImage } from '../helpers/canvas';
 
 export const cronTiming = '0 0 0 * * *';

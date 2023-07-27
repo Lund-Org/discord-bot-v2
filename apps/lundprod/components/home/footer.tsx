@@ -48,10 +48,13 @@ export const Footer = () => {
             <StyledLink href="/">Accueil</StyledLink>
           </ListItem>
           <ListItem>
-            <StyledLink href="/gacha">Gacha &gt; Liste</StyledLink>
+            <StyledLink href="/gacha">Gacha</StyledLink>
           </ListItem>
           <ListItem>
-            <StyledLink href="/gacha/ranking">Gacha &gt; Classement</StyledLink>
+            <StyledLink href="/blog">Blog</StyledLink>
+          </ListItem>
+          <ListItem>
+            <StyledLink href="/u/list">Utilisateurs</StyledLink>
           </ListItem>
         </UnorderedList>
         <Divider

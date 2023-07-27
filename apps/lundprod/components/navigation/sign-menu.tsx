@@ -10,8 +10,8 @@ import {
   Flex,
   Heading,
   Image,
+  LightMode,
   ListItem,
-  Tag,
   Text,
   Tooltip,
   UnorderedList,
@@ -36,19 +36,7 @@ export const SignMenu = () => {
       : []),
     { label: 'Mon backlog', link: '/my-space/backlog' },
     {
-      label: (
-        <>
-          <Text as="span">Mes jeux attendus</Text>
-          <Tag
-            ml="4px"
-            size="sm"
-            colorScheme="messenger"
-            verticalAlign="baseline"
-          >
-            New !
-          </Tag>
-        </>
-      ),
+      label: 'Mes jeux attendus',
       link: '/my-space/expected-games',
     },
   ];
@@ -92,7 +80,7 @@ export const SignMenu = () => {
                 }
               />
             )}
-            <Text>{session?.user?.name}</Text>
+            <Text textTransform="capitalize">{session?.user?.name}</Text>
           </>
         ) : (
           'Connexion'
@@ -108,51 +96,59 @@ export const SignMenu = () => {
           bg="gray.100"
           borderLeft="1px solid var(--chakra-colors-gray-600)"
         >
-          <DrawerCloseButton />
-          <DrawerHeader>{session?.user?.name}</DrawerHeader>
+          <LightMode>
+            <DrawerCloseButton />
+            <DrawerHeader color="gray.800" textTransform="capitalize">
+              {session?.user?.name}
+            </DrawerHeader>
 
-          <DrawerBody>
-            <Heading as="h4" variant="h4" color="gray.800">
-              Mes pages
-            </Heading>
-            <UnorderedList
-              listStyleType="none"
-              color="gray.600"
-              fontWeight="600"
-              ml={3}
-            >
-              {drawerItems.map((drawerItem, index) => (
-                <ListItem
-                  key={index}
-                  sx={{
-                    '&:hover a': {
-                      paddingLeft: '5px',
-                    },
-                  }}
-                  py="6px"
-                >
-                  <Link
-                    href={drawerItem.link}
-                    style={{
-                      transition: 'all .3s ease',
+            <DrawerBody>
+              <Heading as="h4" variant="h4" color="gray.800">
+                Mes pages
+              </Heading>
+              <UnorderedList
+                listStyleType="none"
+                color="gray.600"
+                fontWeight="600"
+                ml={3}
+              >
+                {drawerItems.map((drawerItem, index) => (
+                  <ListItem
+                    key={index}
+                    sx={{
+                      '&:hover a': {
+                        paddingLeft: '5px',
+                      },
                     }}
-                    onClick={() => setIsOpen(false)}
+                    py="6px"
                   >
-                    {drawerItem.label}
-                  </Link>
-                </ListItem>
-              ))}
-            </UnorderedList>
-          </DrawerBody>
+                    <Link
+                      href={drawerItem.link}
+                      style={{
+                        transition: 'all .3s ease',
+                      }}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {drawerItem.label}
+                    </Link>
+                  </ListItem>
+                ))}
+              </UnorderedList>
+            </DrawerBody>
 
-          <DrawerFooter>
-            <Button mr={3} onClick={() => setIsOpen(false)}>
-              Fermer
-            </Button>
-            <Button colorScheme="orange" onClick={() => signOut()}>
-              Deconnexion
-            </Button>
-          </DrawerFooter>
+            <DrawerFooter>
+              <Button
+                mr={3}
+                onClick={() => setIsOpen(false)}
+                colorScheme="blackAlpha"
+              >
+                Fermer
+              </Button>
+              <Button colorScheme="orange" onClick={() => signOut()}>
+                Deconnexion
+              </Button>
+            </DrawerFooter>
+          </LightMode>
         </DrawerContent>
       </Drawer>
     </>

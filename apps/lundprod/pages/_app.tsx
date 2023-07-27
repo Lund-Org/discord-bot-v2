@@ -1,4 +1,4 @@
-import { Box, ChakraProvider, Flex } from '@chakra-ui/react';
+import { Box, ChakraProvider, ColorModeScript, Flex } from '@chakra-ui/react';
 import { MDXProvider } from '@mdx-js/react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -9,6 +9,10 @@ import { components } from '../components/mdx-components';
 import { theme } from '../theme';
 
 function CustomApp({ Component, pageProps }: AppProps) {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('chakra-ui-color-mode');
+  }
+
   return (
     <>
       <Head>
@@ -18,6 +22,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <SessionProvider session={pageProps.session}>
           <MDXProvider components={components}>
             <ChakraProvider theme={theme}>
+              <ColorModeScript initialColorMode="dark" />
               <Flex h="100vh" minH="100vh" flexDir="column">
                 <Header />
                 <Box flex={1} overflow="auto" bg="gray.800" color="gray.100">

@@ -21,12 +21,12 @@ export function isHomePage(pathname: string) {
   return pathname === '/';
 }
 
-export function isGachaPage(pathname: string) {
-  return pathname.startsWith('/gacha');
+export function isGachaPage(pathname: string, strict = true) {
+  return strict ? pathname === '/gacha' : pathname.startsWith('/gacha');
 }
 
 export function isGachaListPage(pathname: string) {
-  return pathname === '/gacha';
+  return pathname === '/gacha/list';
 }
 
 export function isUserGachaPage(userId: string, pathname: string) {

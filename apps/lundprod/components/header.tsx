@@ -6,13 +6,14 @@ import { useClickAway } from 'react-use';
 import { MENU_HEIGHT } from '~/lundprod/utils/constants';
 
 import { BlogMenu, GachaMenu, HomeMenu, SignMenu } from './navigation';
+import { ProjectMenu } from './navigation/project-menu';
 import { MenuBox } from './navigation/styled-components';
 import { UserMenu } from './navigation/user-menu';
 import { MobileBox } from './visibility';
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const Menus = [HomeMenu, GachaMenu, BlogMenu, UserMenu];
+  const Menus = [HomeMenu, GachaMenu, BlogMenu, UserMenu, ProjectMenu];
   const ref = useRef();
 
   useClickAway(ref, () => setTimeout(() => setIsMenuOpen(false), 100));

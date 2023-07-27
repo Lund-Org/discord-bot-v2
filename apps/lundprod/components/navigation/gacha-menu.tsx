@@ -34,7 +34,8 @@ export const GachaMenu = ({ onClick }: { onClick: () => void }) => {
   // Don't use useBreakpointValue to have a default value as false
   const isMobile = useMedia('(max-width: 768px)', false);
   const gachaEntries = [
-    { label: 'Liste', href: '/gacha', isActive: isGachaListPage },
+    { label: 'Introduction', href: '/gacha', isActive: isGachaPage },
+    { label: 'Liste', href: '/gacha/list', isActive: isGachaListPage },
     {
       label: 'Classement',
       href: getGachaRankingPage(),
@@ -86,7 +87,7 @@ export const GachaMenu = ({ onClick }: { onClick: () => void }) => {
   return (
     <Popover placement="bottom-start" isOpen={state} autoFocus={false}>
       <PopoverTrigger>
-        <MenuLink isActive={isGachaPage(pathname)}>
+        <MenuLink isActive={isGachaPage(pathname, false)}>
           <Flex
             ref={ref}
             onClick={() => setState((s) => !s)}
