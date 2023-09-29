@@ -1,16 +1,16 @@
-import { Text } from '@chakra-ui/react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+
+import { isProjectPage } from '~/lundprod/utils/url';
 
 import { MenuLink } from './styled-components';
 
 export const ProjectMenu = ({ onClick }: { onClick: () => void }) => {
+  const { pathname } = useRouter();
+
   return (
-    <MenuLink isActive={false}>
-      <Link href="#">
-        <Text as="span" color="orange.600" cursor="not-allowed">
-          Projets (à venir)
-        </Text>
-      </Link>
+    <MenuLink isActive={isProjectPage(pathname)}>
+      <Link href="/projects">Projets</Link>
     </MenuLink>
   );
 };

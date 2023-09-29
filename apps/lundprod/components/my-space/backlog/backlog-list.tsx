@@ -2,6 +2,7 @@ import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
+  chakra,
   Flex,
   Table,
   Td,
@@ -52,11 +53,27 @@ export const BacklogList = ({ isReadOnly = true }: BacklogListProps) => {
     <>
       <GameTypeFilter value={activeStatus} onChange={setActiveStatus} />
       <Box overflow="auto" py={2}>
-        <Table>
+        <Table
+          sx={{
+            '&': {
+              'table-layout': 'fixed',
+            },
+          }}
+        >
+          <chakra.colgroup>
+            {!isReadOnly && activeStatus === '' && <chakra.col w="65px" />}
+            <chakra.col />
+            <chakra.col w="200px" />
+            <chakra.col w="120px" />
+            <chakra.col w="180px" />
+            <chakra.col w="250px" />
+          </chakra.colgroup>
           <Thead>
             <Tr>
               {!isReadOnly && activeStatus === '' && <Th />}
-              <Th color="gray.400">Nom</Th>
+              <Th colSpan={2} color="gray.400">
+                Nom
+              </Th>
               <Th color="gray.400">Type</Th>
               <Th color="gray.400">Plus d&apos;information</Th>
               <Th color="gray.400" w="240px">
@@ -75,8 +92,8 @@ export const BacklogList = ({ isReadOnly = true }: BacklogListProps) => {
                 isFiltered={!!activeStatus}
                 item={item}
               >
-                <Td>
-                  <Text>{item.name}</Text>
+                <Td colSpan={2}>
+                  <Text title={item.name}>{item.name}</Text>
                 </Td>
                 <Td>
                   <Text>{item.category}</Text>
