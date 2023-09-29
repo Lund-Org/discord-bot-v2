@@ -41,6 +41,10 @@ export function isUsersPage(pathname: string) {
   return pathname === '/u/list';
 }
 
+export function isProjectPage(pathname: string) {
+  return pathname.startsWith('/projects');
+}
+
 export function isGachaRankingPage(pathname: string) {
   return pathname === getGachaRankingPage();
 }

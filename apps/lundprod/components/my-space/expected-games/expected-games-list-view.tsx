@@ -48,7 +48,9 @@ export const ExpectedGamesListView = ({
                   </Tag>
                 )}
                 <Text>
-                  {formatReleaseDate(new Date(expectedGame.releaseDate.date))}
+                  {expectedGame.releaseDate.date
+                    ? formatReleaseDate(new Date(expectedGame.releaseDate.date))
+                    : 'TBD'}
                 </Text>
               </Flex>
               {expectedGame.addToBacklog && (

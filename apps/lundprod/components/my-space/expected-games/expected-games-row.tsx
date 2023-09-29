@@ -71,8 +71,10 @@ export const ExpectedGamesRow = ({ element }: ExpectedGamesRowProps) => {
 
   return (
     <Tr key={element.id} _hover={{ bg: 'gray.900' }}>
-      <Td maxW="500px" textOverflow="ellipsis">
-        <Text noOfLines={1}>{element.name}</Text>
+      <Td colSpan={2}>
+        <Text noOfLines={1} textOverflow="ellipsis">
+          {element.name}
+        </Text>
       </Td>
       <Td>
         <Text>{translateGameType(element.category)}</Text>

@@ -125,7 +125,7 @@ model ExpectedGame {
 
 model ExpectedGameReleaseDate {
   id             Int          @id @default(autoincrement())
-  date           DateTime
+  date           DateTime?
   platformId     Int
   region         Int
   expectedGameId Int          @unique

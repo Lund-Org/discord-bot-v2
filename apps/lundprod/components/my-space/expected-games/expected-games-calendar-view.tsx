@@ -33,8 +33,8 @@ const localizer = dateFnsLocalizer({
 
 type Event = {
   id: number;
-  start: Date;
-  end: Date;
+  start: Date | undefined;
+  end: Date | undefined;
   title: string;
   cancelled: boolean;
 };
@@ -46,14 +46,16 @@ export const ExpectedGamesCalendarView = () => {
     return chain(expectedGames)
       .flatMap((expectedGame) => {
         const platformWording = getPlatformLabel(
-          expectedGame.releaseDate?.platformId
+          expectedGame.releaseDate.platformId
         );
-        const startDate = new Date(expectedGame.releaseDate.date);
+        const startDate = expectedGame.releaseDate.date
+          ? new Date(expectedGame.releaseDate.date)
+          : undefined;
 
         return {
           id: expectedGame.igdbId,
           start: startDate,
-          end: addHours(startDate, 1),
+          end: startDate ? addHours(startDate, 1) : undefined,
           title: `${expectedGame.name} - ${platformWording}`,
           cancelled: expectedGame.cancelled,
         };
@@ -143,7 +145,7 @@ export const ExpectedGamesCalendarView = () => {
       />
       <Calendar
         localizer={localizer}
-        events={events}
+        events={events.filter(({ start }) => start)}
         view="month"
         views={['month']}
         startAccessor="start"

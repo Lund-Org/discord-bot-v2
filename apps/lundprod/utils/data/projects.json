@@ -1,0 +1,31 @@
+[
+  {
+    "title": "Gacha",
+    "description": "Le jeu de carte sur Discord",
+    "to": "/gacha",
+    "bgImg": "https://d18wazra96xhgb.cloudfront.net/projects/project-gacha.png",
+    "date": "2021 - Maintenant"
+  },
+  {
+    "title": "Lundprod.com",
+    "description": "Le site sur lequel vous êtes",
+    "to": "#",
+    "bgImg": "https://d18wazra96xhgb.cloudfront.net/projects/project-lundprod.png",
+    "date": "2022 - Maintenant"
+  },
+  {
+    "title": "Pizza Jam",
+    "description": "Le résultat d'une GameJam",
+    "to": "https://www.youtube.com/watch?v=_3uPvKxog2A",
+    "newTab": true,
+    "bgImg": "https://d18wazra96xhgb.cloudfront.net/projects/project-pizza.png",
+    "date": "Avril 2023"
+  },
+  {
+    "title": "3D",
+    "description": "Les rendus faits avec Blender",
+    "to": "/projects/3D",
+    "bgImg": "https://d18wazra96xhgb.cloudfront.net/projects/project-3d.png",
+    "date": "2023 - Maintenant"
+  }
+]

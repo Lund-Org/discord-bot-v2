@@ -12,7 +12,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 
 const GalleryButtonStyle: FlexProps = {
   position: 'absolute',
@@ -36,7 +36,7 @@ type ImageItem = {
 
 type GalleryProps = {
   images: ImageItem[];
-  aspectRatio: number;
+  aspectRatio?: number | null;
 };
 
 export const Gallery = ({ images, aspectRatio = 16 / 9 }: GalleryProps) => {
@@ -73,14 +73,17 @@ export const Gallery = ({ images, aspectRatio = 16 / 9 }: GalleryProps) => {
     }, 1000);
   };
   const selectImg = (index: number) => {
+    console.log(step, index);
+    console.log(typeof step, typeof index);
     if (index === step) {
+      console.log(images[step]);
       setFullscreenImg(images[step]);
     }
   };
 
   return (
     <>
-      <AspectRatio maxW="800px" ratio={aspectRatio} mx="auto">
+      <RatioWrapper aspectRatio={aspectRatio}>
         <Flex w="100%" position="relative" overflow="hidden">
           <Flex
             {...GalleryButtonStyle}
@@ -130,14 +133,25 @@ export const Gallery = ({ images, aspectRatio = 16 / 9 }: GalleryProps) => {
                   transition: 'margin-left 1s ease',
                 })}
                 cursor="pointer"
-                onClick={() => selectImg(index)}
+                onClick={() =>
+                  image.src.endsWith('mp4') ? undefined : selectImg(index)
+                }
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
               >
-                <Image src={image.src} alt={image.description} />
+                {image.src.endsWith('mp4') ? (
+                  <video controls width="100%">
+                    <source src={image.src} type="video/mp4" />
+                  </video>
+                ) : (
+                  <Image src={image.src} alt={image.description} />
+                )}
               </Box>
             ))}
           </Flex>
         </Flex>
-      </AspectRatio>
+      </RatioWrapper>
       <Modal
         size="6xl"
         isOpen={!!fullscreenImg}
@@ -149,7 +163,13 @@ export const Gallery = ({ images, aspectRatio = 16 / 9 }: GalleryProps) => {
           <ModalCloseButton />
           {fullscreenImg && (
             <ModalBody>
-              <Image src={fullscreenImg.src} alt={fullscreenImg.description} />
+              <Box textAlign="center">
+                <Image
+                  display="inline-block"
+                  src={fullscreenImg.src}
+                  alt={fullscreenImg.description}
+                />
+              </Box>
               <Box textAlign="center" py="10px" fontWeight="bold">
                 {fullscreenImg.description}
               </Box>
@@ -168,3 +188,19 @@ function getPrevious(current: number, size: number) {
 function getNext(current: number, size: number) {
   return current + 1 === size ? 0 : current + 1;
 }
+
+const RatioWrapper = ({
+  children,
+  aspectRatio,
+}: {
+  children: ReactNode;
+  aspectRatio: number | null;
+}) => {
+  return aspectRatio ? (
+    <AspectRatio maxW="800px" ratio={aspectRatio} mx="auto">
+      {children}
+    </AspectRatio>
+  ) : (
+    <Box w="fit-content">{children}</Box>
+  );
+};
