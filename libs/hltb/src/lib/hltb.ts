@@ -11,6 +11,14 @@ type HLTBObj = {
   comp_100: number;
 };
 
+const hltbHeaders = {
+  origin: 'https://howlongtobeat.com',
+  referer: 'https://howlongtobeat.com',
+  host: 'howlongtobeat.com',
+  'user-agent':
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
+};
+
 const payload: any = {
   searchType: 'games',
   searchTerms: [],
@@ -48,10 +56,6 @@ export class HowLongToBeatService {
 
   constructor() {
     this.axios = new Axios({
-      headers: {
-        origin: 'https://howlongtobeat.com',
-        referer: 'https://howlongtobeat.com',
-      },
       timeout: 20000,
     });
   }
@@ -60,10 +64,13 @@ export class HowLongToBeatService {
     const search = { ...payload };
     search.searchTerms = searchQuery.split(' ');
 
+    const searchData = JSON.stringify(search);
     try {
-      const result = await this.axios.post(SEARCH_URL, JSON.stringify(search), {
+      const result = await this.axios.post(SEARCH_URL, searchData, {
         headers: {
+          ...hltbHeaders,
           'content-type': 'application/json',
+          'content-length': searchData.length,
         },
       });
 
@@ -73,7 +80,7 @@ export class HowLongToBeatService {
         return this.getFormattedData(data[0]);
       }
 
-      return null;
+      return undefined;
     } catch (e) {
       return null;
     }
@@ -85,8 +92,7 @@ export class HowLongToBeatService {
   async details(gameId: string) {
     const detailContent = await this.axios.get(`${DETAIL_URL}${gameId}`, {
       headers: {
-        'user-agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
+        ...hltbHeaders,
       },
     });
 

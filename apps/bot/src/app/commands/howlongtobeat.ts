@@ -45,6 +45,12 @@ async function howlongtobeatCallback(interaction: ChatInputCommandInteraction) {
       });
 
       return interaction.reply({ embeds: [embed] });
+    } else if (typeof searchResult === 'undefined') {
+      return interaction.reply({
+        content: `Aucun résultat trouvé, peut-être dû à un probleme interne, vous pouvez tout de même aller voir sur https://howlongtobeat.com/?q=${encodeURI(
+          name
+        )}`,
+      });
     }
 
     return interaction.reply('Aucun jeu trouvé');
