@@ -35,6 +35,7 @@ The bot provides several slash commands :
 | /poll          | Create a poll (10 answers max.)                       |
 | /pp            | Get the profile picture of someone                    |
 | /shifumi       | To play rock-paper-cissors with the bot               |
+| /tellme        | To ask a question to Maurice (OpenAI integration)     |
 
 You can be warn for some sports :
 
@@ -175,6 +176,14 @@ Secret used for the JWT. Mandatory otherwise unstable_get_session doesn't work
 > **API_SPORT_IO_KEY**
 
 The API key from https://api-sports.io/
+
+> **EXPECTED_GAMES_WEBHOOK**
+
+The webhook to post when an expected game is released
+
+> **OPEN_AI_API_KEY**
+
+The API key from https://openai.com/
 
 #### Misc
 

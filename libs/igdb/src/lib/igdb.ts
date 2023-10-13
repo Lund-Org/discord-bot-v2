@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { Game, IGDBConditionValue, Webhook } from '../types';
+import { Game, IGDBConditionValue } from '../types';
 import { addGameToCache } from './cache';
 import {
   BASE_URL,
@@ -141,24 +141,4 @@ export async function getGame(id: number): Promise<Game> {
   await addGameToCache(result);
 
   return result[0];
-}
-
-export async function getWebhooks(): Promise<Webhook[]> {
-  return IGDBRequest('/webhooks', undefined, undefined, 'GET');
-}
-
-export async function addWebhooks() {
-  const params = new URLSearchParams();
-  params.append('url', process.env.WEBSITE_URL + '/api/webhooks/igdb/update');
-  params.append('method', 'update');
-  params.append('secret', process.env.IGDB_WEBHOOK_SECRET);
-
-  return IGDBRequest(
-    '/games/webhooks',
-    params,
-    {
-      'content-type': 'application/x-www-form-urlencoded',
-    },
-    'POST'
-  );
 }
