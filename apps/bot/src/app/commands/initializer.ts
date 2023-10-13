@@ -12,6 +12,7 @@ import { pongCmd } from './pong';
 import { ppCmd } from './pp';
 import { shifumiCmd } from './shifumi';
 import { sportCmd } from './sport';
+import { tellmeCmd } from './tellme';
 
 const commands = [
   birthdayCmd,
@@ -25,6 +26,7 @@ const commands = [
   ppCmd,
   shifumiCmd,
   sportCmd,
+  tellmeCmd,
 ];
 
 export async function initCommands() {

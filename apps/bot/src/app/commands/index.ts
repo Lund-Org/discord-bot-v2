@@ -9,6 +9,7 @@ import { pongResponse } from './pong';
 import { ppResponse } from './pp';
 import { shifumiResponse } from './shifumi';
 import { sportResponse } from './sport';
+import { tellmeResponse } from './tellme';
 
 export const commandsResponses = [
   birthdayResponse,
@@ -22,6 +23,7 @@ export const commandsResponses = [
   ppResponse,
   shifumiResponse,
   sportResponse,
+  tellmeResponse,
 ];
 
 export const menusCallback = [gachaMenuResponse];

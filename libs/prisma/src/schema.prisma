@@ -246,6 +246,15 @@ model User {
   expectedGames  ExpectedGame[]
   teamFollowed   SportTeam[]
   leagueFollowed SportLeague[]
+  aiAttempts     AiAttempt[]
+}
+
+model AiAttempt {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  createdAt DateTime
+
+  user User @relation(fields: [userId], references: [id])
 }
 
 //-- Enums
