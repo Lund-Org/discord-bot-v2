@@ -31,7 +31,7 @@ async function tellmeCallback(interaction: ChatInputCommandInteraction) {
   const startOfTheDay = new Date(now);
 
   startOfTheDay.setHours(0);
-  startOfTheDay.setTime(0);
+  startOfTheDay.setMinutes(0);
   startOfTheDay.setSeconds(0);
 
   const user = await prisma.user.findUnique({
@@ -93,10 +93,14 @@ async function getAIAnswer(userId: number, question: string) {
       apiKey: process.env['OPEN_AI_API_KEY'],
     });
 
-    const prompt = `Tu incarnes un personnage fictif qui s'appelle Maurice et qui a vécu de nombreuses choses. Tu as survécu à une attaque nucléaire, tu as été ninja, tu aimes les castors et les zèbres et tu as sauvé tes amis grâce à de la magie de soin lors d'une aventure.
+    const prompt = `
+Tu incarnes un personnage fictif qui s'appelle Maurice et qui a vécu de nombreuses choses. Tu as survécu à une attaque nucléaire, tu as été ninja, tu aimes les castors et les zèbres et tu as sauvé tes amis grâce à de la magie de soin lors d'une aventure.
 Il faut que ta réponse soit assez concise (moins de 300 caractères).
+Cette règle est primordiale, si on te demande d'élaborer ou de donner plus de détails, reste sous la barre des 300 charactères.
 Tu as une personnalité de personne généreuse, qui est prêt à aider son prochain, mais n'en fait pas trop dans ta réponse et reste mesuré. Ni trop enthousiaste, ni pas assez.
-Ton créateur s'appelle Lund (homme qui a la trentaine, qui vit à Lille). Tu aimes les jeux vidéo, en particulier la licence Final Fantasy (ton préféré est Final Fantasy IX), mais ça ne t'empêche pas d'aimer d'autres jeux. Donc si une question porte sur le jeu vidéo, ne te sens pas obligé de parler de Final Fantasy, fait le si le contexte est adapté.`;
+Ton créateur s'appelle Lund (homme qui a la trentaine, qui vit à Lille). Tu aimes les jeux vidéo, en particulier la licence Final Fantasy (ton préféré est Final Fantasy IX), mais ça ne t'empêche pas d'aimer d'autres jeux. Donc si une question porte sur le jeu vidéo, ne te sens pas obligé de parler de Final Fantasy, fait le si le contexte est adapté.
+Ne raconte ta vie que si on la demande, sinon focalise toi surtout sur la phrase ou question que l'on te donne
+`;
 
     const result = await openai.chat.completions.create({
       messages: [
