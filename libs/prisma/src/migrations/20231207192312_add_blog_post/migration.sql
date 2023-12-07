@@ -1,4 +1,4 @@
-INSERT INTO `discord_database`.`BlogPost`
+INSERT INTO `BlogPost`
 (
 `filename`,
 `category`,
