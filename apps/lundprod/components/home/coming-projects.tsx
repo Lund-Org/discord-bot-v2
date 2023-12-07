@@ -9,11 +9,14 @@ import {
   Image,
   Text,
 } from '@chakra-ui/react';
+import { ReactNode } from 'react';
 
 import {
   illustration3DModeling,
   illustrationVideoGame,
 } from '~/lundprod/assets';
+
+import { LightStyledLink } from '../styled-link';
 
 const AccordionTitle = ({ children }: { children: string }) => (
   <Box as="span" flex="1" textAlign="left" color="gray.100" fontWeight="bold">
@@ -24,7 +27,7 @@ const AccordionTitle = ({ children }: { children: string }) => (
 type AccordionLineProps = {
   title: string;
   illustration: { src: string } | null;
-  description: string;
+  description: string | ReactNode;
 };
 
 const AccordionLine = ({
@@ -74,12 +77,27 @@ export const ComingProjects = () => {
         <AccordionLine
           title="Projets de jeux"
           illustration={illustrationVideoGame}
-          description="Plusieurs idées en tête, l'un est un Dofus like solo, l'autre un jeu sur Unity. Détails à venir et progression à suivre sur Discord..."
+          description={
+            <>
+              <Text as="span">
+                Création d&apos;un jeu, tactical RPG avec un gameplay proche de
+                Dofus, mais en solo. Le jeu sera fait avec Godot, Blender pour
+                générer les sprites. Pour plus d&apos;info :{' '}
+              </Text>
+              <LightStyledLink
+                href="https://www.twitch.tv/videos/1960153338"
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                cliquez ici
+              </LightStyledLink>
+            </>
+          }
         />
         <AccordionLine
           title="Projet 3D"
           illustration={illustration3DModeling}
-          description="Apprendre la 3D, pour pouvoir créer ses propres assets graphiques pour de futurs jeux vidéos."
+          description="Continuer d'apprendre la 3D et se perfectionner."
         />
         <AccordionLine
           title="Autres"

@@ -9,7 +9,13 @@ import {
   Link,
   ListItem,
   OrderedList,
+  Table,
+  Tbody,
+  Td,
   Text,
+  Th,
+  Thead,
+  Tr,
   UnorderedList,
 } from '@chakra-ui/react';
 import styled from '@emotion/styled';
@@ -169,6 +175,24 @@ const MdxText = ({ children }: { children: ReactNode }) => (
     {children}
   </Text>
 );
+const MdxTable = ({ children }: { children: ReactNode }) => {
+  return <Table>{children}</Table>;
+};
+const MdxTbody = ({ children }: { children: ReactNode }) => {
+  return <Tbody>{children}</Tbody>;
+};
+const MdxThead = ({ children }: { children: ReactNode }) => {
+  return <Thead>{children}</Thead>;
+};
+const MdxTh = ({ children }: { children: ReactNode }) => {
+  return <Th color="orange.300">{children}</Th>;
+};
+const MdxTr = ({ children }: { children: ReactNode }) => {
+  return <Tr>{children}</Tr>;
+};
+const MdxTd = ({ children }: { children: ReactNode }) => {
+  return <Td>{children}</Td>;
+};
 
 // https://mdxjs.com/table-of-components/
 export const components = {
@@ -190,5 +214,11 @@ export const components = {
   pre: Pre,
   strong: Strong,
   ul: UnorderedList,
+  table: MdxTable,
+  tbody: MdxTbody,
+  thead: MdxThead,
+  th: MdxTh,
+  tr: MdxTr,
+  td: MdxTd,
   ...helpers,
 };

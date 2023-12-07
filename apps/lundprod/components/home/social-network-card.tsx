@@ -25,6 +25,7 @@ export const SocialNetworkCard = ({
       w={{ base: '8rem', md: '10rem' }}
       h="100%"
       m="auto"
+      bg="transparent"
       _hover={{ bg: 'gray.900' }}
       textAlign="center"
     >

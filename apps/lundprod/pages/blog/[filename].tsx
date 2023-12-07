@@ -3,6 +3,7 @@ import { readFileSync } from 'fs';
 import { MDXRemote } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import { join, resolve } from 'path';
+import remarkGfm from 'remark-gfm';
 
 import { components } from '~/lundprod/components/mdx-components';
 import { MdxLayout } from '~/lundprod/layouts/MdxLayout';
@@ -31,6 +32,9 @@ export async function getStaticProps({ params }) {
       blogPost: JSON.parse(JSON.stringify(blogPost)),
       mdxSource: await serialize(mdxContent, {
         // mdxOptions: { development: false },
+        mdxOptions: {
+          remarkPlugins: [remarkGfm],
+        },
       }),
     },
   };
