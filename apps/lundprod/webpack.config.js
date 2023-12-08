@@ -1,4 +1,4 @@
-// const nrwlConfig = require('@nrwl/next/plugins/webpack.js');
+// const nrwlConfig = require('@nx/next/plugins/webpack.js');
 const { merge } = require('webpack-merge');
 
 module.exports = (config, mdxFn, context) => {
@@ -13,8 +13,8 @@ module.exports = (config, mdxFn, context) => {
           rules: [],
         },
       },
-      context
-    )
+      context,
+    ),
   );
 
   return mergedConfig;

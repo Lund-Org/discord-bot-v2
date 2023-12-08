@@ -4,24 +4,27 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nrwl/js:tsc",
+      "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/card-generator",
         "main": "libs/card-generator/src/index.ts",
         "tsConfig": "libs/card-generator/tsconfig.lib.json",
-        "assets": ["libs/card-generator/*.md", "libs/card-generator/src/assets/**/*"]
+        "assets": [
+          "libs/card-generator/*.md",
+          "libs/card-generator/src/assets/**/*"
+        ]
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["libs/card-generator/**/*.ts"]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": ["coverage/libs/card-generator"],
       "options": {
         "jestConfig": "libs/card-generator/jest.config.ts",

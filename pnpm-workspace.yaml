@@ -1,0 +1,7 @@
+# https://pnpm.io/pnpm-workspace_yaml
+
+packages:
+  # exclude these folders
+  - '!**/dist/**'
+  - '!**/tmp/**'
+  - '!**/node_modules/**'

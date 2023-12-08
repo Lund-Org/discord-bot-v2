@@ -17,7 +17,7 @@ export async function ChannelInitializer(client: Client) {
     const hasMemeChannel = !!server.channels.cache.find(
       (channel: GuildBasedChannel) => {
         return channel.id === MemeChannelId;
-      }
+      },
     );
 
     if (!hasMemeChannel && process.env.MEME_CHANNEL_NAME) {
@@ -27,12 +27,18 @@ export async function ChannelInitializer(client: Client) {
           type: ChannelType.GuildText,
         })
         .then((newChannel) =>
-          prisma.discordNotificationChannel.create({
-            data: {
+          prisma.discordNotificationChannel.upsert({
+            where: {
+              notificationType: ChannelNotification.MEME,
+            },
+            create: {
               discordChannelId: newChannel.id,
               notificationType: ChannelNotification.MEME,
             },
-          })
+            update: {
+              discordChannelId: newChannel.id,
+            },
+          }),
         );
     } else if (!hasMemeChannel) {
       console.log('Memes variables not set in the .env');

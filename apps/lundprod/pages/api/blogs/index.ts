@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Category } from 'prisma/prisma-client';
+import { Category } from '@prisma/client';
 
 import { getManyBlogPosts } from '~/lundprod/utils/api/blog';
 import { getNumberParam } from '~/lundprod/utils/next';
 
 export default async function listBlogPosts(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const page = getNumberParam(req.query.page, 1);
   const categories =

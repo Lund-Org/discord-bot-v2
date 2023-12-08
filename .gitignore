@@ -1,6 +1,7 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
+/.nx
 /dist
 /tmp
 /out-tsc
@@ -40,6 +41,7 @@ Thumbs.db
 
 public/card-images/*
 apps/lundprod/public/card-images/*
+apps/lundprod/public/mdx/*
 .env
 .vscode
 
