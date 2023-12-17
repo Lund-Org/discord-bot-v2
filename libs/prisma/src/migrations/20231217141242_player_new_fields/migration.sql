@@ -5,7 +5,7 @@
 
 */
 -- AlterTable
-ALTER TABLE `player` ADD COLUMN `finishRank` INTEGER NULL;
+ALTER TABLE `Player` ADD COLUMN `finishRank` INTEGER NULL;
 
 -- CreateIndex
 CREATE UNIQUE INDEX `Player_finishRank_key` ON `Player`(`finishRank`);

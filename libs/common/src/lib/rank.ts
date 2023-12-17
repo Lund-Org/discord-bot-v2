@@ -94,6 +94,7 @@ export async function getGlobalRanking(
 
     return {
       ...xpByPlayer,
+      totalCards: Number(xpByPlayer.totalCards), // because it's a bigint
       level,
       hasFinishGame: Number(totalCardsInGame) === Number(xpByPlayer.totalCards),
       lastMessageDate: new Date(xpByPlayer.lastMessageDate),
