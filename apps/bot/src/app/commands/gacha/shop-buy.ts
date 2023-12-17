@@ -5,6 +5,7 @@ import { ButtonInteraction } from 'discord.js';
 import { invalidateWebsitePages } from '../../helpers/discordEvent';
 import {
   addCardsToInventory,
+  checkEndGame,
   generateSummaryEmbed,
   getCardEarnSummary,
   userNotFoundWarning,
@@ -67,7 +68,7 @@ export const shopBuy = async (interaction: ButtonInteraction) => {
 
   if (!dailyShop) {
     return interaction.editReply(
-      identifyMsg(interaction, 'Aucun shop disponible')
+      identifyMsg(interaction, 'Aucun shop disponible'),
     );
   }
 
@@ -79,17 +80,20 @@ export const shopBuy = async (interaction: ButtonInteraction) => {
 
   if (!availableShopItems.length) {
     return interaction.editReply(
-      identifyMsg(interaction, 'Tu as déjà acheté toutes les cartes du magasin')
+      identifyMsg(
+        interaction,
+        'Tu as déjà acheté toutes les cartes du magasin',
+      ),
     );
   }
 
   const selectedItem = availableShopItems.find(
-    (shopItem) => shopItem.cardTypeId === id
+    (shopItem) => shopItem.cardTypeId === id,
   );
 
   if (!selectedItem) {
     return interaction.editReply(
-      identifyMsg(interaction, `La carte #${id} a déjà été acheté aujourd'hui`)
+      identifyMsg(interaction, `La carte #${id} a déjà été acheté aujourd'hui`),
     );
   }
 
@@ -98,12 +102,12 @@ export const shopBuy = async (interaction: ButtonInteraction) => {
 
   if (!selectedItem) {
     return interaction.editReply(
-      identifyMsg(interaction, 'Carte indisponible')
+      identifyMsg(interaction, 'Carte indisponible'),
     );
   }
   if (user.player.points < price) {
     return interaction.editReply(
-      identifyMsg(interaction, "Tu n'as pas assez de points")
+      identifyMsg(interaction, "Tu n'as pas assez de points"),
     );
   }
 
@@ -116,7 +120,7 @@ export const shopBuy = async (interaction: ButtonInteraction) => {
           isGold: selectedItem.type === 'gold',
         },
       ],
-      price
+      price,
     ),
     prisma.dailyPurchase.create({
       data: {
@@ -131,16 +135,17 @@ export const shopBuy = async (interaction: ButtonInteraction) => {
         cardType: selectedItem.cardType,
         isGold: selectedItem.type === 'gold',
       },
-    ])
+    ]),
   );
   invalidateWebsitePages(user.discordId);
+  await checkEndGame(user.id);
 
   return interaction.editReply({
     content: identifyMsg(
       interaction,
       `Carte #${selectedItem.cardTypeId} achetée. Il te reste ${
         user.player.points - price
-      } points`
+      } points`,
     ),
     embeds: [embed],
   });

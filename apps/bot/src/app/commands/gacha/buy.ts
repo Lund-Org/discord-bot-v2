@@ -7,6 +7,7 @@ import { generateDrawImage } from '../../helpers/canvas';
 import { invalidateWebsitePages } from '../../helpers/discordEvent';
 import {
   addCardsToInventory,
+  checkEndGame,
   drawCards,
   generateSummaryEmbed,
   getCardEarnSummary,
@@ -28,7 +29,7 @@ async function securityChecks({
 
   if (cardNumberToBuy < 1 || cardNumberToBuy > 6) {
     await interaction.editReply(
-      'Erreur, le nombre de cartes achetable doit être entre 1 et 6'
+      'Erreur, le nombre de cartes achetable doit être entre 1 et 6',
     );
     return null;
   }
@@ -37,7 +38,7 @@ async function securityChecks({
     await interaction.editReply(
       `Tu n'as pas assez de points (points actuels : ${
         user.player.points
-      }, points nécessaires : ${cardNumberToBuy * priceConfig.price})`
+      }, points nécessaires : ${cardNumberToBuy * priceConfig.price})`,
     );
     return null;
   }
@@ -71,10 +72,11 @@ export const buy = async (interaction: ChatInputCommandInteraction) => {
 
   await addCardsToInventory(user, cards, cardToDraw.totalPrice);
   invalidateWebsitePages(user.discordId);
+  await checkEndGame(user.id);
   return interaction.editReply({
     content: getSuccessMessage(
       cardToDraw.cardNumberToBuy,
-      user.player.points - cardToDraw.totalPrice
+      user.player.points - cardToDraw.totalPrice,
     ),
     files: [attachment],
     embeds: [embed],

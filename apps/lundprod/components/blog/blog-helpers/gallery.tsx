@@ -73,10 +73,7 @@ export const Gallery = ({ images, aspectRatio = 16 / 9 }: GalleryProps) => {
     }, 1000);
   };
   const selectImg = (index: number) => {
-    console.log(step, index);
-    console.log(typeof step, typeof index);
     if (index === step) {
-      console.log(images[step]);
       setFullscreenImg(images[step]);
     }
   };

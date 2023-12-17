@@ -5,6 +5,7 @@ import { ChatInputCommandInteraction } from 'discord.js';
 
 import { invalidateWebsitePages } from '../../helpers/discordEvent';
 import {
+  checkEndGame,
   generateSummaryEmbed,
   getCardLostSummary,
   userNotFoundWarning,
@@ -33,7 +34,7 @@ async function securityChecks({
 
   if (quantity <= 0) {
     await interaction.editReply(
-      'Erreur, la quantité doit être un nombre supérieur à 0'
+      'Erreur, la quantité doit être un nombre supérieur à 0',
     );
     return null;
   }
@@ -68,7 +69,7 @@ async function securityChecks({
   }
   if (cardInPlayerInventory.total < quantity) {
     await interaction.editReply(
-      `Erreur, tu n'as pas assez de cartes (${cardInPlayerInventory.total} possédées)`
+      `Erreur, tu n'as pas assez de cartes (${cardInPlayerInventory.total} possédées)`,
     );
     return null;
   }
@@ -118,10 +119,11 @@ export const sell = async (interaction: ChatInputCommandInteraction) => {
       Array.from({ length: data.quantity }, () => ({
         cardType: data.cardToSell.cardType,
         isGold: cardType === 'gold',
-      }))
-    )
+      })),
+    ),
   );
   invalidateWebsitePages(user.discordId);
+  await checkEndGame(user.id);
   return interaction.editReply({
     content: `Tu as gagné ${data.earningPoints} points - Tu as ${
       user.player.points + data.earningPoints

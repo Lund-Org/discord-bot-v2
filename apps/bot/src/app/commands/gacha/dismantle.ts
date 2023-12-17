@@ -4,6 +4,7 @@ import { ChatInputCommandInteraction } from 'discord.js';
 
 import { invalidateWebsitePages } from '../../helpers/discordEvent';
 import {
+  checkEndGame,
   generateSummaryEmbed,
   getCardEarnSummary,
   getCardLostSummary,
@@ -84,7 +85,7 @@ export const dismantle = async (interaction: ChatInputCommandInteraction) => {
         Array.from({ length: 4 }, () => ({
           cardType: inventoryCardBasic.cardType,
           isGold: false,
-        }))
+        })),
       ),
       ...getCardLostSummary(user, [
         { cardType: inventoryCardBasic.cardType, isGold: true },
@@ -92,13 +93,14 @@ export const dismantle = async (interaction: ChatInputCommandInteraction) => {
     ]);
 
     invalidateWebsitePages(user.discordId);
+    await checkEndGame(user.id);
     return interaction.editReply({
       content: `Une carte en or a été transformé en 4 cartes basiques (#${cardToDismantle})`,
       embeds: [embed],
     });
   } else if (inventoryCardBasic) {
     return interaction.editReply(
-      'Tu ne possèdes pas la carte dorée (1 carte dorée = 4 cartes basiques)'
+      'Tu ne possèdes pas la carte dorée (1 carte dorée = 4 cartes basiques)',
     );
   } else {
     return interaction.editReply('Tu ne possèdes pas la carte');
