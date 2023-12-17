@@ -43,7 +43,7 @@ export async function getGlobalRanking(
       Player.*,
       User.discordId,
       User.username,
-		  COUNT(playerId) as totalCards
+      COUNT(playerId) as totalCards
     FROM (
       SELECT
         PlayerInventory.playerId,
