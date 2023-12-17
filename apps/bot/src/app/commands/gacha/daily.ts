@@ -1,11 +1,12 @@
 import { prisma } from '@discord-bot-v2/prisma';
 import { Player } from '@prisma/client';
-import { AttachmentBuilder,ChatInputCommandInteraction } from 'discord.js';
+import { AttachmentBuilder, ChatInputCommandInteraction } from 'discord.js';
 
 import { generateDrawImage } from '../../helpers/canvas';
 import { invalidateWebsitePages } from '../../helpers/discordEvent';
 import {
   addCardsToInventory,
+  checkEndGame,
   drawCards,
   generateSummaryEmbed,
   getCardEarnSummary,
@@ -52,6 +53,7 @@ export const daily = async (interaction: ChatInputCommandInteraction) => {
     await addCardsToInventory(user, cards, 0);
     await setDailyDraw(dailyDrawDate, user.player.id);
     invalidateWebsitePages(user.discordId);
+    await checkEndGame(user.id);
     interaction.editReply({
       content: `Voici ton tirage quotidien GRA-TUIT`,
       files: [attachment],

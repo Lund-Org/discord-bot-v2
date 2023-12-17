@@ -2,6 +2,7 @@ import {
   addPoints,
   ChancesConfig,
   GachaConfigEnum,
+  getGlobalRanking,
 } from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
 import {
@@ -24,22 +25,22 @@ export const userNotFoundWarning = async (
   interaction:
     | ChatInputCommandInteraction
     | StringSelectMenuInteraction
-    | ButtonInteraction
+    | ButtonInteraction,
 ) => {
   interaction.reply(
-    `Avant de pouvoir jouer, crée un compte avec la commande "/gacha join"`
+    `Avant de pouvoir jouer, crée un compte avec la commande "/gacha join"`,
   );
 };
 
 export async function addCardsToInventory(
   user: User & { player: Player & { playerInventory: PlayerInventory[] } },
   cardsToAdd: CardDraw[],
-  totalPrice: number
+  totalPrice: number,
 ) {
   const isNewItem = (
     item:
       | Prisma.PlayerInventoryCreateArgs['data']
-      | { id: number; incr: number }
+      | { id: number; incr: number },
   ): item is Prisma.PlayerInventoryCreateArgs['data'] => {
     return !('id' in item);
   };
@@ -52,7 +53,7 @@ export async function addCardsToInventory(
   cardsToAdd.forEach((cardToAdd) => {
     const type = cardToAdd.isGold ? 'gold' : 'basic';
     const inventoryItem = user.player.playerInventory.find(
-      (x) => x.cardTypeId === cardToAdd.cardType.id && x.type === type
+      (x) => x.cardTypeId === cardToAdd.cardType.id && x.type === type,
     );
     const existingItem =
       groupedPlayerInventoryItems[
@@ -94,7 +95,7 @@ export async function addCardsToInventory(
                 total: { increment: groupedPlayerInventoryItem.incr },
               },
             });
-      }
+      },
     ),
   ]);
 }
@@ -142,12 +143,12 @@ export function getCardEarnSummary(
   userWithInventory: User & {
     player: Player & { playerInventory: PlayerInventory[] };
   },
-  cards: CardDraw[]
+  cards: CardDraw[],
 ) {
   return cards.reduce((acc, card) => {
     const type = card.isGold ? 'gold' : 'basic';
     const existingFieldIndex = acc.findIndex(
-      (x) => x.id === card.cardType.id && x.type === type
+      (x) => x.id === card.cardType.id && x.type === type,
     );
 
     if (existingFieldIndex !== -1) {
@@ -155,7 +156,7 @@ export function getCardEarnSummary(
       return acc;
     }
     const inventoryLine = userWithInventory.player.playerInventory.find(
-      (x) => x.cardTypeId === card.cardType.id && x.type === type
+      (x) => x.cardTypeId === card.cardType.id && x.type === type,
     );
 
     acc.push({
@@ -171,12 +172,12 @@ export function getCardLostSummary(
   userWithInventory: User & {
     player: Player & { playerInventory: PlayerInventory[] };
   },
-  cards: CardDraw[]
+  cards: CardDraw[],
 ) {
   return cards.reduce((acc, card) => {
     const type = card.isGold ? 'gold' : 'basic';
     const existingFieldIndex = acc.findIndex(
-      (x) => x.id === card.cardType.id && x.type === type
+      (x) => x.id === card.cardType.id && x.type === type,
     );
 
     if (existingFieldIndex !== -1) {
@@ -185,7 +186,7 @@ export function getCardLostSummary(
     }
     // inventoryLine should always be present, if not, there is an issue
     const inventoryLine = userWithInventory.player.playerInventory.find(
-      (x) => x.cardTypeId === card.cardType.id && x.type === type
+      (x) => x.cardTypeId === card.cardType.id && x.type === type,
     );
 
     acc.push({
@@ -198,7 +199,7 @@ export function getCardLostSummary(
 }
 
 export function generateSummaryEmbed(
-  summary: { id: number; count: number; type: 'basic' | 'gold' }[]
+  summary: { id: number; count: number; type: 'basic' | 'gold' }[],
 ) {
   const snippet = new EmbedBuilder({
     title: `Résumé :`,
@@ -222,4 +223,30 @@ export function generateSummaryEmbed(
     });
 
   return snippet;
+}
+
+export async function checkEndGame(userId: number) {
+  const [rank] = await getGlobalRanking([userId]);
+  const player = await prisma.player.findUnique({ where: { userId } });
+  const lastRank =
+    (await prisma.player.count({ where: { finishRank: { not: null } } })) + 1;
+
+  if (rank.hasFinishGame && player.finishRank === null) {
+    await prisma.player.update({
+      where: { id: player.id },
+      data: { finishRank: lastRank },
+    });
+  }
+  if (!rank.hasFinishGame && player.finishRank !== null) {
+    await prisma.$transaction([
+      prisma.player.update({
+        where: { id: player.id },
+        data: { finishRank: null },
+      }),
+      prisma.player.updateMany({
+        where: { finishRank: { gt: player.finishRank } },
+        data: { finishRank: { decrement: 1 } },
+      }),
+    ]);
+  }
 }

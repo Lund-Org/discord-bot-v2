@@ -4,6 +4,7 @@ import { ChatInputCommandInteraction } from 'discord.js';
 
 import { invalidateWebsitePages } from '../../helpers/discordEvent';
 import {
+  checkEndGame,
   generateSummaryEmbed,
   getCardEarnSummary,
   getCardLostSummary,
@@ -80,7 +81,7 @@ export const gold = async (interaction: ChatInputCommandInteraction) => {
         Array.from({ length: 5 }, () => ({
           cardType: inventoryCardBasic.cardType,
           isGold: false,
-        }))
+        })),
       ),
       ...getCardEarnSummary(user, [
         { cardType: inventoryCardBasic.cardType, isGold: true },
@@ -88,13 +89,14 @@ export const gold = async (interaction: ChatInputCommandInteraction) => {
     ]);
 
     invalidateWebsitePages(user.discordId);
+    await checkEndGame(user.id);
     return interaction.editReply({
       content: `5 cartes basiques ont été transformées en une carte en or (#${cardToGold})`,
       embeds: [embed],
     });
   } else if (inventoryCardBasic) {
     return interaction.editReply(
-      'Tu ne possèdes pas assez de cartes basiques (5 cartes basiques = 1 carte en or)'
+      'Tu ne possèdes pas assez de cartes basiques (5 cartes basiques = 1 carte en or)',
     );
   } else {
     return interaction.editReply('Tu ne possèdes pas la carte');

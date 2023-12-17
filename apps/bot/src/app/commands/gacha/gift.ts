@@ -1,13 +1,14 @@
 import { addPoints } from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
 import { Gift, Player } from '@prisma/client';
-import { AttachmentBuilder,ChatInputCommandInteraction } from 'discord.js';
+import { AttachmentBuilder, ChatInputCommandInteraction } from 'discord.js';
 
 import { generateDrawImage } from '../../helpers/canvas';
 import { invalidateWebsitePages } from '../../helpers/discordEvent';
 import { CardDraw } from '../../helpers/types';
 import {
   addCardsToInventory,
+  checkEndGame,
   drawCards,
   generateSummaryEmbed,
   getCardEarnSummary,
@@ -68,12 +69,12 @@ async function getPointsToAdd(points: number | undefined) {
   return Promise.resolve(points || 0);
 }
 async function getBasicCards(
-  numberOfCards: number | undefined
+  numberOfCards: number | undefined,
 ): Promise<CardDraw[]> {
   return numberOfCards ? drawCards(numberOfCards) : Promise.resolve([]);
 }
 async function getGoldCards(
-  numberOfCards: number | undefined
+  numberOfCards: number | undefined,
 ): Promise<CardDraw[]> {
   return numberOfCards
     ? drawCards(numberOfCards).then((cards) => {
@@ -110,7 +111,7 @@ export const gift = async (interaction: ChatInputCommandInteraction) => {
 
   if (!foundGift) {
     return interaction.editReply(
-      "Le cadeau n'existe pas ou tu n'es pas dans sa période de validité"
+      "Le cadeau n'existe pas ou tu n'es pas dans sa période de validité",
     );
   }
 
@@ -140,7 +141,7 @@ export const gift = async (interaction: ChatInputCommandInteraction) => {
     getCardEarnSummary(user, [
       ...basicCards.map(({ cardType }) => ({ cardType, isGold: false })),
       ...goldCards.map(({ cardType }) => ({ cardType, isGold: true })),
-    ])
+    ]),
   );
   let attachment;
   let additionalMessage = '';
@@ -148,7 +149,7 @@ export const gift = async (interaction: ChatInputCommandInteraction) => {
   if (unionCards.length) {
     const canvas = await generateDrawImage(
       interaction.user.username,
-      unionCards
+      unionCards,
     );
     attachment = new AttachmentBuilder(canvas.toBuffer(), {
       name: 'cards.png',
@@ -166,6 +167,7 @@ export const gift = async (interaction: ChatInputCommandInteraction) => {
     addCardsToInventory(user, unionCards, 0),
   ]);
   invalidateWebsitePages(user.discordId);
+  await checkEndGame(user.id);
   return attachment
     ? interaction.editReply({
         content: message + additionalMessage,

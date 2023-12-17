@@ -12,6 +12,7 @@ import {
 
 import { invalidateWebsitePages } from '../../helpers/discordEvent';
 import {
+  checkEndGame,
   generateSummaryEmbed,
   getCardEarnSummary,
   getCardLostSummary,
@@ -23,7 +24,7 @@ async function createFusionCard(
     playerInventory: (PlayerInventory & { cardType: CardType })[];
   },
   cardsRequired: (PlayerInventory & { cardType: CardType })[],
-  fusionCard: CardType
+  fusionCard: CardType,
 ) {
   await Promise.all([
     prisma.playerInventory.updateMany({
@@ -64,7 +65,7 @@ async function createFusionCard(
 }
 
 export const fusion = async (
-  interaction: StringSelectMenuInteraction<CacheType>
+  interaction: StringSelectMenuInteraction<CacheType>,
 ) => {
   const user = await prisma.user.getPlayerWithInventory(interaction.user.id);
 
@@ -86,7 +87,7 @@ export const fusion = async (
   }
   if (!cardToCreate.isFusion) {
     return interaction.editReply(
-      "La carte que tu veux créer n'est pas une carte fusion"
+      "La carte que tu veux créer n'est pas une carte fusion",
     );
   }
 
@@ -97,17 +98,17 @@ export const fusion = async (
         dependencyIds.includes(inventory.cardType.id) &&
         inventory.type === 'basic'
       );
-    }
+    },
   );
   const missingCards = dependencyIds.reduce(
     (acc: number[], val: number): number[] => {
       const hasInventoryCard = user.player.playerInventory.find(
-        (x) => val == x.cardType.id && x.type === 'basic' && x.total > 0
+        (x) => val == x.cardType.id && x.type === 'basic' && x.total > 0,
       );
 
       return [...acc, ...(hasInventoryCard ? [] : [val])];
     },
-    []
+    [],
   );
 
   if (missingCards.length === 0) {
@@ -117,12 +118,13 @@ export const fusion = async (
         cardInventoriesRequired.map((x) => ({
           cardType: x.cardType,
           isGold: false,
-        }))
+        })),
       ),
       ...getCardEarnSummary(user, [{ cardType: cardToCreate, isGold: false }]),
     ]);
     await createFusionCard(user.player, cardInventoriesRequired, cardToCreate);
     invalidateWebsitePages(user.discordId);
+    await checkEndGame(user.id);
     return interaction.editReply({
       content: `Carte fusion #${cardToCreate.id} créée !`,
       embeds: [embed],
@@ -131,7 +133,7 @@ export const fusion = async (
     return interaction.editReply(
       `Tu ne possèdes pas tous les réactifs nécessaires. Cartes manquantes : ${missingCards
         .map((id) => `#${id}`)
-        .join(', ')}`
+        .join(', ')}`,
     );
   }
 };
@@ -160,8 +162,8 @@ export async function fusionMenu(interaction: ChatInputCommandInteraction) {
             label: `#${fusionCard.id} - ${fusionCard.name}`,
             value: String(fusionCard.id),
           };
-        })
-      )
+        }),
+      ),
   );
 
   return interaction.editReply({

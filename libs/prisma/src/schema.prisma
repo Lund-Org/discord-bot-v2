@@ -163,6 +163,7 @@ model Player {
   wantToBeWarn       Boolean   @default(false)
   joinDate           DateTime  @default(now()) @db.DateTime(0)
   userId             Int       @unique
+  finishRank         Int?      @unique
 
   gifts           Gift[]
   playerInventory PlayerInventory[]

@@ -7,17 +7,22 @@ import { CardXPConfig } from './types';
 type XpByPlayer = Player & {
   playerId: number;
   currentXP: number;
+  totalCards: number;
   discordId: string;
   username: string;
 };
 type EnrichXpByPlayer = XpByPlayer & { position: number };
 export type RankByUser = {
-  level: { currentLevel: number; xpNextLevel: number };
+  level: {
+    currentLevel: number;
+    xpNextLevel: number;
+  };
+  hasFinishGame: boolean;
 } & EnrichXpByPlayer;
 
 // To redo, optimize, retype...
 export async function getGlobalRanking(
-  playerToFilter: number[] = []
+  playerToFilter: number[] = [],
 ): Promise<RankByUser[]> {
   const xpConfig = await prisma.config.findUnique({
     where: { name: GachaConfigEnum.CARD_XP },
@@ -37,7 +42,8 @@ export async function getGlobalRanking(
       SUM(t1.price * t1.level) AS currentXP,
       Player.*,
       User.discordId,
-      User.username
+      User.username,
+      COUNT(playerId) as totalCards
     FROM (
       SELECT
         PlayerInventory.playerId,
@@ -47,12 +53,14 @@ export async function getGlobalRanking(
         CardType.level
       FROM PlayerInventory
       LEFT JOIN CardType ON CardType.id = PlayerInventory.cardTypeId
+      WHERE total > 0
       GROUP BY playerId, cardTypeId, type
     ) as t1
     LEFT JOIN Player on Player.id = t1.playerId
     LEFT JOIN User on User.id = Player.userId
     GROUP BY playerId
-    ORDER BY currentXP DESC`;
+    ORDER BY currentXP DESC, finishRank ASC`;
+  const totalCardsInGame = (await prisma.cardType.count()) * 2;
 
   const enrichAndFilteredXpByPlayers: EnrichXpByPlayer[] = xpByPlayers
     .map((xpByPlayer, index) => ({
@@ -81,12 +89,13 @@ export async function getGlobalRanking(
 
         return acc;
       },
-      { currentLevel: 1, xpNextLevel: 0 }
+      { currentLevel: 1, xpNextLevel: 0 },
     );
 
     return {
       ...xpByPlayer,
       level,
+      hasFinishGame: Number(totalCardsInGame) === Number(xpByPlayer.totalCards),
       lastMessageDate: new Date(xpByPlayer.lastMessageDate),
       lastDailyDraw: xpByPlayer.lastDailyDraw
         ? new Date(xpByPlayer.lastDailyDraw)
