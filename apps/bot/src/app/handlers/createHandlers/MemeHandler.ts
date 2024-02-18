@@ -12,9 +12,11 @@ class MemeCheckerHandler extends Handler {
       'tenor.com',
       'imgur.com',
       'giphy.com',
+      'x.com',
       'twitter.com',
       'instagram.com',
       'tiktok.com',
+      'bsky.app',
     ];
   }
 
@@ -29,18 +31,17 @@ class MemeCheckerHandler extends Handler {
   async process(client: Client, msg: Message): Promise<boolean> {
     let keepMsg = false;
 
-    keepMsg = keepMsg || (msg.attachments.size > 0 && msg.content === '');
-    keepMsg =
-      keepMsg ||
-      (messageHelper.isUrl(msg) &&
-        messageHelper.isValidImageFormat(msg.content));
-    keepMsg =
-      keepMsg ||
-      (messageHelper.isUrl(msg) &&
-        messageHelper.isWhitelistedHostname(
-          msg.content,
-          this.authorizedWebsites
-        ));
+    keepMsg ||= msg.attachments.size > 0 && msg.content === '';
+    keepMsg ||=
+      messageHelper.isUrl(msg) && messageHelper.isValidImageFormat(msg.content);
+    keepMsg ||=
+      messageHelper.isUrl(msg) &&
+      messageHelper.isWhitelistedHostname(msg.content, this.authorizedWebsites);
+
+    // vocal message
+    if (msg.attachments.some(({ name }) => name === 'voice-message.ogg')) {
+      keepMsg = false;
+    }
 
     if (!keepMsg) {
       msg.delete();

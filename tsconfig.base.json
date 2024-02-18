@@ -8,6 +8,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "esModuleInterop": true,
+    "resolveJsonModule": true,
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
@@ -18,6 +19,7 @@
     "paths": {
       "@discord-bot-v2/card-generator": ["libs/card-generator/src/index.ts"],
       "@discord-bot-v2/common": ["libs/common/src/index.ts"],
+      "@discord-bot-v2/common/*": ["libs/common/src/*"],
       "@discord-bot-v2/hltb": ["libs/hltb/src/index.ts"],
       "@discord-bot-v2/igdb": ["libs/igdb/src/index.ts"],
       "@discord-bot-v2/igdb-front": ["libs/igdb/src/frontend.ts"],

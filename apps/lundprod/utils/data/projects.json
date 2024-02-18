@@ -27,5 +27,12 @@
     "to": "/projects/3D",
     "bgImg": "https://d18wazra96xhgb.cloudfront.net/projects/project-3d.png",
     "date": "2023 - Maintenant"
+  },
+  {
+    "title": "Devine le Pal",
+    "description": "Petit jeu pour les fans de Palworld",
+    "to": "/projects/guess-the-pal",
+    "bgImg": "https://d18wazra96xhgb.cloudfront.net/projects/project-guess-the-pal.png",
+    "date": "Février 2024"
   }
 ]
