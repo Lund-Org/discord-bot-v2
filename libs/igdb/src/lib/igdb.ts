@@ -34,7 +34,7 @@ async function twitchAuth() {
         headers: {
           'content-type': 'application/json',
         },
-      }
+      },
     )
     .then(({ data }) => {
       twitchToken = {
@@ -54,7 +54,7 @@ async function IGDBRequest<T>(
   path: string,
   query: string | URLSearchParams,
   headers: Record<string, string> = {},
-  method = 'POST'
+  method = 'POST',
 ): Promise<T> {
   await twitchAuth();
 
@@ -100,7 +100,7 @@ export async function getGames(
     operator: QUERY_OPERATOR;
     value: IGDBConditionValue;
   }[],
-  page = 1
+  page = 1,
 ): Promise<Game[]> {
   if (page < 1) {
     page = 1;

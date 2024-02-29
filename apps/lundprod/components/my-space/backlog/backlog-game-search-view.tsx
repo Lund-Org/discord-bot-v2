@@ -23,6 +23,17 @@ export const BacklogGameSearchView = () => {
         operator: QUERY_OPERATOR.EQ,
         value: category,
       },
+      // To be sure the game has been released at least once
+      {
+        field: 'first_release_date',
+        operator: QUERY_OPERATOR.GT,
+        value: 1,
+      },
+      {
+        field: 'first_release_date',
+        operator: QUERY_OPERATOR.LTE,
+        value: new Date().getTime(),
+      },
     ];
 
     if (platforms.length) {
