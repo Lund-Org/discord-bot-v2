@@ -14,7 +14,7 @@ export const tellmeCmd = new SlashCommandBuilder()
     option
       .setName('query')
       .setDescription(`Votre phrase (${LENGTH_LIMIT} caractères maximums)`)
-      .setRequired(true)
+      .setRequired(true),
   )
   .toJSON();
 
@@ -107,7 +107,7 @@ Ne raconte ta vie que si on la demande, sinon focalise toi surtout sur la phrase
         { role: 'system', content: prompt },
         { role: 'user', content: question },
       ],
-      model: 'gpt-3.5-turbo-16k',
+      model: 'gpt-3.5-turbo',
       max_tokens: 2000,
     });
 
