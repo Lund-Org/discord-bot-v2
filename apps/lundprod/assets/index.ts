@@ -1,12 +1,12 @@
 export { default as arrowRightUp } from './arrow-right-up.svg';
 export { default as fusionIcon } from './fusion.svg';
-export { default as illustration3DModeling } from './illustration-3d-modeling.svg';
 export { default as illustrationBookReading } from './illustration-book-reading.svg';
 export { default as illustrationCodeThinking } from './illustration-code-thinking.svg';
 export { default as illustrationFirmware } from './illustration-firmware.svg';
 export { default as illustrationPlayingCards } from './illustration-playing-cards.svg';
+export { default as illustrationSketching } from './illustration-sketching.svg';
 export { default as illustrationTrip } from './illustration-trip.svg';
-export { default as illustrationVideoGame } from './illustration-video-game.svg';
+export { default as socialBluesky } from './social-bluesky.svg';
 export { default as socialDiscord } from './social-discord.svg';
 export { default as socialTwitch } from './social-twitch.svg';
 export { default as socialTwitter } from './social-twitter.svg';

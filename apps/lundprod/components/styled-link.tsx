@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 export const LightStyledLink = styled(Link)`
   text-decoration: underline;
+  white-space: nowrap;
 
   &:hover {
     color: var(--chakra-colors-orange-300);
@@ -16,6 +17,7 @@ export const LightStyledLink = styled(Link)`
 
 export const DarkStyledLink = styled(Link)`
   text-decoration: underline;
+  white-space: nowrap;
 
   &:hover {
     color: var(--chakra-colors-orange-800);

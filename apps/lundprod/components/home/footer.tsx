@@ -36,87 +36,42 @@ export const Footer = () => {
 
   return (
     <Box w="100%" bg="blackAlpha.600">
-      <Flex
-        h={{ base: 'auto', md: '200px' }}
-        maxW="1200px"
-        m="auto"
-        p="30px"
-        flexDirection={{ base: 'column', md: 'row' }}
-      >
-        <UnorderedList listStyleType="none">
-          <ListItem>
-            <StyledLink href="/">Accueil</StyledLink>
-          </ListItem>
-          <ListItem>
-            <StyledLink href="/gacha">Gacha</StyledLink>
-          </ListItem>
-          <ListItem>
-            <StyledLink href="/blog">Blog</StyledLink>
-          </ListItem>
-          <ListItem>
-            <StyledLink href="/u/list">Utilisateurs</StyledLink>
-          </ListItem>
-        </UnorderedList>
-        <Divider
-          orientation={isMobile ? 'horizontal' : 'vertical'}
-          mx={{ base: 0, md: '60px' }}
-          my={{ base: '30px', md: 0 }}
-        />
-        <UnorderedList listStyleType="none">
+      <Box maxW="1200px" m="auto" p="30px" textAlign="center" w="fit-content">
+        <Flex gap={2} justifyContent="center">
           {networks.map((network, index) => (
-            <ListItem key={index}>
+            <Box key={index}>
               <StyledLink
                 href={network.url}
                 target="_blank"
                 rel="noreferrer noopener"
               >
-                <Text as="span">{network.title}</Text>
-                <ExternalLinkIcon ml="6px" />
+                <Image src={network.imgSrc} alt={network.title} h="20px" />
               </StyledLink>
-            </ListItem>
+            </Box>
           ))}
-        </UnorderedList>
-        <Divider
-          orientation={isMobile ? 'horizontal' : 'vertical'}
-          mx={{ base: 0, md: '60px' }}
-          my={{ base: '30px', md: 0 }}
-        />
-        <Flex flex={1}>
-          <Flex
-            flex={1}
-            justifyContent={{ base: 'flex-end', md: 'space-between' }}
-            alignItems={{ base: 'center', md: 'flex-end' }}
-            flexDirection="column"
-          >
-            <Image
-              src={illustrationTrip.src}
-              alt="Good bye"
-              ml="auto"
-              maxH="100px"
-            />
-            <Text fontSize="10px" textAlign="right">
-              Site fonctionnant avec&nbsp;
-              <InlineStyledLink
-                href="https://nextjs.org/"
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                <Text as="span">Next</Text>
-                <ExternalLinkIcon ml="6px" />
-              </InlineStyledLink>
-              &nbsp; avec les illustrations de&nbsp;
-              <InlineStyledLink
-                href="https://undraw.co/"
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                <Text as="span">Undraw</Text>
-                <ExternalLinkIcon ml="6px" />
-              </InlineStyledLink>
-            </Text>
-          </Flex>
         </Flex>
-      </Flex>
+
+        <Text fontSize="10px" mt="15px">
+          Site fonctionnant avec&nbsp;
+          <InlineStyledLink
+            href="https://nextjs.org/"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            <Text as="span">Next</Text>
+            <ExternalLinkIcon ml="6px" />
+          </InlineStyledLink>
+          &nbsp; avec les illustrations de&nbsp;
+          <InlineStyledLink
+            href="https://undraw.co/"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            <Text as="span">Undraw</Text>
+            <ExternalLinkIcon ml="6px" />
+          </InlineStyledLink>
+        </Text>
+      </Box>
     </Box>
   );
 };
