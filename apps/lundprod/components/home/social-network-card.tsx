@@ -22,7 +22,7 @@ export const SocialNetworkCard = ({
 }: SocialNetworkCardProps) => {
   return (
     <Card
-      w={{ base: '8rem', md: '10rem' }}
+      w={{ base: '6rem', md: '8rem' }}
       h="100%"
       m="auto"
       bg="transparent"
@@ -32,7 +32,7 @@ export const SocialNetworkCard = ({
       <CardBody color="gray.200">
         <StyledLink href={url} target="_blank" rel="noreferrer noopener">
           <Image src={imgSrc} alt={title} />
-          <Heading fontSize={{ base: 'md', md: '3xl' }}>{title}</Heading>
+          <Heading fontSize={{ base: 'sm', md: 'xl' }}>{title}</Heading>
         </StyledLink>
       </CardBody>
     </Card>

@@ -30,7 +30,7 @@ export const Welcome = () => {
         <Heading color="orange.300">Bienvenue</Heading>
         <Divider mb={10} />
         <Text mt={5}>
-          Je suis Florian, Lund sur internet, j&apos;ai 29 ans et je suis
+          Je suis Florian, Lund sur internet, j&apos;ai 30 ans et je suis
           développeur.
         </Text>
         <Text mt={5}>

@@ -14,7 +14,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
 export function ProjectListPage() {
   return (
-    <Box py="30px">
+    <Box pt="30px">
       <Heading px="50px" variant="h3" mb="20px">
         Projets
       </Heading>

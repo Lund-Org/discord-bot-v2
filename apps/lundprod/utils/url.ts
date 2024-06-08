@@ -1,4 +1,5 @@
 import {
+  socialBluesky,
   socialDiscord,
   socialTwitch,
   socialTwitter,
@@ -61,13 +62,18 @@ export const networks = [
     url: 'https://www.twitch.tv/lundprod',
   },
   {
-    imgSrc: socialTwitter.src,
-    title: 'Twitter',
-    url: 'https://twitter.com/LundProd',
+    imgSrc: socialBluesky.src,
+    title: 'Bluesky',
+    url: 'https://bsky.app/profile/lund.bsky.social',
   },
   {
     imgSrc: socialYoutube.src,
     title: 'Youtube',
     url: 'https://youtube.com/c/lundprod',
+  },
+  {
+    imgSrc: socialTwitter.src,
+    title: 'Twitter',
+    url: 'https://twitter.com/LundProd',
   },
 ];

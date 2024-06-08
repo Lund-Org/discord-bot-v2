@@ -1,41 +1,12 @@
 import { Box, Divider, Grid } from '@chakra-ui/react';
 
-import {
-  socialDiscord,
-  socialTwitch,
-  socialTwitter,
-  socialYoutube,
-} from '../assets';
 import { BotPresentation } from '../components/home/bot-presentation';
-import { ComingProjects } from '../components/home/coming-projects';
-import { Footer } from '../components/home/footer';
 import { GachaPresentation } from '../components/home/gacha-presentation';
 import { SocialNetworkCard } from '../components/home/social-network-card';
 import { WebsitePresentation } from '../components/home/website-presentation';
 import { Welcome } from '../components/home/welcome';
-
-const networks = [
-  {
-    imgSrc: socialDiscord.src,
-    title: 'Discord',
-    url: 'https://discord.gg/gJyu9p2',
-  },
-  {
-    imgSrc: socialTwitch.src,
-    title: 'Twitch',
-    url: 'https://www.twitch.tv/lundprod',
-  },
-  {
-    imgSrc: socialTwitter.src,
-    title: 'Twitter',
-    url: 'https://twitter.com/LundProd',
-  },
-  {
-    imgSrc: socialYoutube.src,
-    title: 'Youtube',
-    url: 'https://youtube.com/c/lundprod',
-  },
-];
+import { OtherProjectsPresentation } from '../components/home/other-projects-presentation';
+import { networks } from '../utils/url';
 
 export function Index() {
   return (
@@ -44,9 +15,11 @@ export function Index() {
         <Welcome />
         <Divider my={20} />
         <Grid
-          templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }}
+          templateColumns={{ base: 'repeat(3, 1fr)', md: 'repeat(5, 1fr)' }}
           gridAutoRows="auto"
           gridGap={4}
+          w="fit-content"
+          mx="auto"
         >
           {networks.map((network, index) => (
             <SocialNetworkCard key={index} {...network} />
@@ -56,10 +29,7 @@ export function Index() {
       <GachaPresentation />
       <BotPresentation />
       <WebsitePresentation />
-      <Box maxW="1200px" p="30px 30px 80px 30px" m="auto">
-        <ComingProjects />
-      </Box>
-      <Footer />
+      <OtherProjectsPresentation />
     </Box>
   );
 }
