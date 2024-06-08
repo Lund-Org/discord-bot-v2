@@ -57,12 +57,12 @@ function CustomApp({ Component, pageProps }: AppProps) {
           </MDXProvider>
         </SessionProvider>
       </main>
-      {!!process.env.GOOGLE_ANALYTICS_ID && (
+      {!!process.env.NX_GOOGLE_ANALYTICS_ID && (
         <>
           {/* Google tag (gtag.js) */}
           <Script
             async
-            src={`https://www.googletagmanager.com/gtag/js?id=${process.env.GOOGLE_ANALYTICS_ID}`}
+            src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NX_GOOGLE_ANALYTICS_ID}`}
           />
           <Script
             dangerouslySetInnerHTML={{
@@ -70,7 +70,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
-        gtag('config', '${process.env.GOOGLE_ANALYTICS_ID}');`,
+        gtag('config', '${process.env.NX_GOOGLE_ANALYTICS_ID}');`,
             }}
           />
         </>
