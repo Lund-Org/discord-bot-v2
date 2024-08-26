@@ -51,5 +51,5 @@ SELECT `id`, `rating`, `reason`, null, null FROM `BacklogItem`
 WHERE `status` IN ('FINISHED', 'ABANDONED');
 
 -- AlterTable
-ALTER TABLE `backlogitem` DROP COLUMN `rating`,
+ALTER TABLE `BacklogItem` DROP COLUMN `rating`,
     DROP COLUMN `reason`;

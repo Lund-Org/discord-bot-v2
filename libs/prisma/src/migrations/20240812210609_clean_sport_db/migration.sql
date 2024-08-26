@@ -11,53 +11,53 @@
 
 */
 -- DropForeignKey
-ALTER TABLE `_sportleaguetosportteam` DROP FOREIGN KEY `_SportLeagueToSportTeam_A_fkey`;
+ALTER TABLE `_SportLeagueToSportTeam` DROP FOREIGN KEY `_SportLeagueToSportTeam_A_fkey`;
 
 -- DropForeignKey
-ALTER TABLE `_sportleaguetosportteam` DROP FOREIGN KEY `_SportLeagueToSportTeam_B_fkey`;
+ALTER TABLE `_SportLeagueToSportTeam` DROP FOREIGN KEY `_SportLeagueToSportTeam_B_fkey`;
 
 -- DropForeignKey
-ALTER TABLE `_sportleaguetouser` DROP FOREIGN KEY `_SportLeagueToUser_A_fkey`;
+ALTER TABLE `_SportLeagueToUser` DROP FOREIGN KEY `_SportLeagueToUser_A_fkey`;
 
 -- DropForeignKey
-ALTER TABLE `_sportleaguetouser` DROP FOREIGN KEY `_SportLeagueToUser_B_fkey`;
+ALTER TABLE `_SportLeagueToUser` DROP FOREIGN KEY `_SportLeagueToUser_B_fkey`;
 
 -- DropForeignKey
-ALTER TABLE `_sportteamtouser` DROP FOREIGN KEY `_SportTeamToUser_A_fkey`;
+ALTER TABLE `_SportTeamToUser` DROP FOREIGN KEY `_SportTeamToUser_A_fkey`;
 
 -- DropForeignKey
-ALTER TABLE `_sportteamtouser` DROP FOREIGN KEY `_SportTeamToUser_B_fkey`;
+ALTER TABLE `_SportTeamToUser` DROP FOREIGN KEY `_SportTeamToUser_B_fkey`;
 
 -- DropForeignKey
-ALTER TABLE `sportevent` DROP FOREIGN KEY `SportEvent_leagueId_fkey`;
+ALTER TABLE `SportEvent` DROP FOREIGN KEY `SportEvent_leagueId_fkey`;
 
 -- DropForeignKey
-ALTER TABLE `sportevent` DROP FOREIGN KEY `SportEvent_teamAId_fkey`;
+ALTER TABLE `SportEvent` DROP FOREIGN KEY `SportEvent_teamAId_fkey`;
 
 -- DropForeignKey
-ALTER TABLE `sportevent` DROP FOREIGN KEY `SportEvent_teamBId_fkey`;
+ALTER TABLE `SportEvent` DROP FOREIGN KEY `SportEvent_teamBId_fkey`;
 
 -- Clean notification channels
-DELETE FROM `discordnotificationchannel` WHERE `notificationType` IN ('FOOTBALL', 'NBA', 'MOTORSPORT');
+DELETE FROM `DiscordNotificationChannel` WHERE `notificationType` IN ('FOOTBALL', 'NBA', 'MOTORSPORT');
 
 -- AlterTable
-ALTER TABLE `discordnotificationchannel` MODIFY `notificationType` ENUM('BIRTHDAY', 'MEME', 'SHOP') NOT NULL;
+ALTER TABLE `DiscordNotificationChannel` MODIFY `notificationType` ENUM('BIRTHDAY', 'MEME', 'SHOP') NOT NULL;
 
 -- DropTable
-DROP TABLE `_sportleaguetosportteam`;
+DROP TABLE `_SportLeagueToSportTeam`;
 
 -- DropTable
-DROP TABLE `_sportleaguetouser`;
+DROP TABLE `_SportLeagueToUser`;
 
 -- DropTable
-DROP TABLE `_sportteamtouser`;
+DROP TABLE `_SportTeamToUser`;
 
 -- DropTable
-DROP TABLE `sportevent`;
+DROP TABLE `SportEvent`;
 
 -- DropTable
-DROP TABLE `sportleague`;
+DROP TABLE `SportLeague`;
 
 -- DropTable
-DROP TABLE `sportteam`;
+DROP TABLE `SportTeam`;
 
