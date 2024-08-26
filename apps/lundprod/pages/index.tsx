@@ -84,9 +84,6 @@ export function Index({
             {t('welcome.lastVideoLundprodGamedev')}
           </Button>
         </Flex>
-        {/* <IconList networkKey="global" />
-          <IconList networkKey="lundprod" />
-          <IconList networkKey="lundprodGameDev" /> */}
         <Collapse in={isLundprodVideoOpen}>
           <AspectRatio maxW="800px" mx="auto" ratio={16 / 9}>
             <iframe
