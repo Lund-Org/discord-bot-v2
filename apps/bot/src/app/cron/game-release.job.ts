@@ -7,15 +7,48 @@ import {
   translateRegion,
 } from '@discord-bot-v2/igdb';
 import { prisma } from '@discord-bot-v2/prisma';
-import { initI18n } from '@discord-bot-v2/translation';
+// import { initI18n } from '@discord-bot-v2/translation';
 import { EmbedBuilder, spoiler, userMention, WebhookClient } from 'discord.js';
-import { chain } from 'lodash';
+import { TFunction } from 'i18next';
+import { chain, get } from 'lodash';
 
 export const cronTiming = '0 0 0 * * *';
 
-const i18n = initI18n({});
+// PATCH, TO FIX
+const translations = {
+  region: {
+    asia: 'Asie',
+    australia: 'Australie',
+    brazil: 'Brésil',
+    china: 'Chine',
+    europe: 'Europe',
+    japan: 'Japon',
+    korea: 'Corée',
+    newZealand: 'Nouvelle Zelande',
+    northAmerica: 'US',
+    worldWide: 'Mondial',
+  },
+  gameType: {
+    bundle: 'Bundle',
+    dlc: 'DLC',
+    episode: 'Episode',
+    expansion: 'Extension',
+    game: 'Jeu',
+    mod: 'Mod',
+    other: 'Autre',
+    port: 'Portage',
+    remake: 'Remake',
+    remaster: 'Remaster',
+    season: 'Saison',
+    standalone: 'Standalone',
+  },
+};
+const t = ((key: string) => {
+  return get(translations, key);
+}) as TFunction;
 
 export async function cronDefinition() {
+  // const i18n = initI18n({});
   const date = new Date();
   date.setSeconds(0);
   date.setMinutes(0);
@@ -65,8 +98,9 @@ export async function cronDefinition() {
           url: expectedGames[0].url,
           userDiscordIds: expectedGames.map(({ user }) => user.discordId),
           regions: expectedGames
-            .map(({ releaseDate }) =>
-              translateRegion(i18n.t, releaseDate.region),
+            .map(
+              ({ releaseDate }) => translateRegion(t, releaseDate.region),
+              // translateRegion(i18n.t, releaseDate.region),
             )
             .join(', '),
           platforms: expectedGames
@@ -140,7 +174,8 @@ export async function cronDefinition() {
               update: {},
               create: {
                 url: expectedGame.url,
-                category: translateGameType(i18n.t, category),
+                category: translateGameType(t, category),
+                // category: translateGameType(i18n.t, category),
                 igdbGameId: expectedGame.igdbId,
                 name: expectedGame.name,
                 user: { connect: { id: expectedGame.userId } },
