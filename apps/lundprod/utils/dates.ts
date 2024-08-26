@@ -1,24 +1,26 @@
-export function formatDate(date: Date) {
+import { TFunction } from 'i18next';
+
+export function formatDate(tFn: TFunction, date: Date) {
   const months = [
-    'Janvier',
-    'Fevrier',
-    'Mars',
-    'Avril',
-    'Mai',
-    'Juin',
-    'Juillet',
-    'Aout',
-    'Septembre',
-    'Octobre',
-    'Novembre',
-    'Decembre',
+    tFn('months.january'),
+    tFn('months.february'),
+    tFn('months.march'),
+    tFn('months.april'),
+    tFn('months.may'),
+    tFn('months.june'),
+    tFn('months.july'),
+    tFn('months.august'),
+    tFn('months.september'),
+    tFn('months.october'),
+    tFn('months.november'),
+    tFn('months.december'),
   ];
 
   return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
 }
 
-export function formatDateTime(date: Date) {
-  return `${formatDate(date)} ${date
+export function formatDateTime(tFn: TFunction, date: Date) {
+  return `${formatDate(tFn, date)} ${date
     .getHours()
     .toString()
     .padStart(2, '0')}h${date.getMinutes().toString().padStart(2, '0')}`;

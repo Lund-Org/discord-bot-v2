@@ -20,8 +20,10 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import { useState } from 'react';
 
 import { getUserProfileUrl } from '~/lundprod/utils/url';
+import { useTranslation } from 'react-i18next';
 
 export const SignMenu = () => {
+  const { t } = useTranslation();
   const { data: session, status } = useSession();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -31,11 +33,16 @@ export const SignMenu = () => {
 
   const drawerItems = [
     ...(session?.isPlayer
-      ? [{ label: 'Ma page gacha', link: getUserProfileUrl(session?.userId) }]
+      ? [
+          {
+            label: t('menu.sign.myGacha'),
+            link: getUserProfileUrl(session?.userId),
+          },
+        ]
       : []),
-    { label: 'Mon backlog', link: '/my-space/backlog' },
+    { label: t('menu.sign.myBacklog'), link: '/my-space/backlog' },
     {
-      label: 'Mes jeux attendus',
+      label: t('menu.sign.myExpectedGames'),
       link: '/my-space/expected-games',
     },
   ];
@@ -62,7 +69,7 @@ export const SignMenu = () => {
                 alt={session?.user?.name}
                 fallback={
                   <Tooltip
-                    label="Impossible de charger l'avatar. Cela arrive si tu as changé d'avatar. Déco/reco pour l'actualiser"
+                    label={t('menu.sign.avatarError')}
                     placement="bottom-end"
                     border="1px solid"
                     borderColor="gray.500"
@@ -102,7 +109,7 @@ export const SignMenu = () => {
 
           <DrawerBody>
             <Heading as="h4" variant="h4" color="gray.800">
-              Mes pages
+              {t('menu.sign.myPages')}
             </Heading>
             <UnorderedList
               listStyleType="none"
@@ -140,10 +147,10 @@ export const SignMenu = () => {
               onClick={() => setIsOpen(false)}
               colorScheme="blackAlpha"
             >
-              Fermer
+              {t('menu.sign.close')}
             </Button>
             <Button colorScheme="orange" onClick={() => signOut()}>
-              Deconnexion
+              {t('menu.sign.signout')}
             </Button>
           </DrawerFooter>
         </DrawerContent>

@@ -1,6 +1,5 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["clientExtensions", "extendedWhereUnique"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -24,13 +23,43 @@ model BacklogItem {
   category   String
   url        String
   status     BacklogStatus @default(BACKLOG)
-  reason     String?       @db.VarChar(255)
   note       String?       @db.VarChar(255)
-  rating     Int           @default(0)
   order      Int           @default(0)
   user       User          @relation(fields: [userId], references: [id])
 
+  backlogItemReview BacklogItemReview?
+
   @@unique([userId, igdbGameId])
+}
+
+model BacklogItemReview {
+  id            Int     @id @default(autoincrement())
+  backlogItemId Int     @unique
+  rating        Int     @default(0)
+  review        String? @db.Text
+  duration      Int?
+  completion    Int?
+
+  pros BacklogItemReviewPros[]
+  cons BacklogItemReviewCons[]
+
+  backlogItem BacklogItem @relation(fields: [backlogItemId], references: [id], onDelete: Cascade)
+}
+
+model BacklogItemReviewPros {
+  id                  Int    @id @default(autoincrement())
+  backlogItemReviewId Int
+  value               String @db.VarChar(255)
+
+  backlogItemReview BacklogItemReview @relation(fields: [backlogItemReviewId], references: [id])
+}
+
+model BacklogItemReviewCons {
+  id                  Int    @id @default(autoincrement())
+  backlogItemReviewId Int
+  value               String @db.VarChar(255)
+
+  backlogItemReview BacklogItemReview @relation(fields: [backlogItemReviewId], references: [id])
 }
 
 model BlogPost {
@@ -185,51 +214,6 @@ model PlayerInventory {
   @@index([playerId])
 }
 
-model SportEvent {
-  id       Int                @id @default(autoincrement())
-  name     String?
-  teamAId  Int?
-  teamBId  Int?
-  startAt  DateTime
-  imageUrl String
-  category SportEventCategory
-  leagueId Int
-  teamA    SportTeam?         @relation("TeamHome", fields: [teamAId], references: [id])
-  teamB    SportTeam?         @relation("TeamAway", fields: [teamBId], references: [id])
-  league   SportLeague        @relation(fields: [leagueId], references: [id])
-
-  @@index([teamAId])
-  @@index([teamBId])
-}
-
-model SportLeague {
-  id          Int          @id @default(autoincrement())
-  name        String
-  logoUrl     String
-  countryCode String
-  sportApiId  Int?
-  year        Int
-  teams       SportTeam[]
-  events      SportEvent[]
-  users       User[]
-
-  @@index([sportApiId])
-}
-
-model SportTeam {
-  id         Int           @id @default(autoincrement())
-  name       String
-  logoUrl    String
-  sportApiId Int?
-  year       Int
-  users      User[]
-  league     SportLeague[]
-  eventsHome SportEvent[]  @relation("TeamHome")
-  eventsAway SportEvent[]  @relation("TeamAway")
-
-  @@unique([name, sportApiId, year])
-}
-
 model Tag {
   id       Int        @id @default(autoincrement())
   name     String     @unique @db.VarChar(255)
@@ -245,8 +229,6 @@ model User {
   player         Player?
   backlogItems   BacklogItem[]
   expectedGames  ExpectedGame[]
-  teamFollowed   SportTeam[]
-  leagueFollowed SportLeague[]
   aiAttempts     AiAttempt[]
 }
 
@@ -280,17 +262,8 @@ enum Category {
   OTHER
 }
 
-enum SportEventCategory {
-  FOOTBALL
-  BASKET
-  MOTORSPORT
-}
-
 enum ChannelNotification {
   BIRTHDAY
   MEME
   SHOP
-  FOOTBALL
-  NBA
-  MOTORSPORT
 }

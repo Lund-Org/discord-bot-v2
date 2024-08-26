@@ -8,7 +8,6 @@ import { pollResponse } from './poll';
 import { pongResponse } from './pong';
 import { ppResponse } from './pp';
 import { shifumiResponse } from './shifumi';
-import { sportResponse } from './sport';
 import { tellmeResponse } from './tellme';
 
 export const commandsResponses = [
@@ -22,7 +21,6 @@ export const commandsResponses = [
   pollResponse,
   ppResponse,
   shifumiResponse,
-  sportResponse,
   tellmeResponse,
 ];
 

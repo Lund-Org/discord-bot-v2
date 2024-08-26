@@ -1,5 +1,6 @@
 import { Box, BoxProps, Flex, Text } from '@chakra-ui/react';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 
 import { Rank as RankType } from '~/lundprod/utils/types';
 import { getUserProfileUrl } from '~/lundprod/utils/url';
@@ -10,6 +11,7 @@ type RankProps = {
 };
 
 export const Rank = ({ rank, level }: RankProps) => {
+  const { t } = useTranslation();
   const getRankStyle = (): BoxProps => {
     switch (level) {
       case 1:
@@ -63,8 +65,10 @@ export const Rank = ({ rank, level }: RankProps) => {
       <Text fontWeight="bold" _hover={{ color: 'blue.300' }}>
         <Link href={getUserProfileUrl(rank.discordId)}>{rank.username}</Link>
       </Text>
-      <Text>Niveau : {rank.level.currentLevel}</Text>
-      <Text>XP : {rank.currentXP}</Text>
+      <Text>
+        {t('rank.level.currentLevel', { level: rank.level.currentLevel })}
+      </Text>
+      <Text>{t('rank.level.xp', { xp: rank.currentXP })}</Text>
     </Flex>
   );
 };

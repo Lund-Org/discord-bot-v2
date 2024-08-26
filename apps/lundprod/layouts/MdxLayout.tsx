@@ -12,6 +12,7 @@ import { ReactNode } from 'react';
 import { BlogFooter } from '../components/blog/blog-footer';
 import { BlogHeader } from '../components/blog/blog-header';
 import { getTitleFromFilename } from '../utils/blog';
+import { useTranslation } from 'react-i18next';
 
 type MdxLayoutProps = {
   children: ReactNode;
@@ -19,6 +20,7 @@ type MdxLayoutProps = {
 };
 
 export const MdxLayout = ({ blogPost, children }: MdxLayoutProps) => {
+  const { t } = useTranslation();
   const currentName = getTitleFromFilename(blogPost.filename);
 
   return (
@@ -31,13 +33,13 @@ export const MdxLayout = ({ blogPost, children }: MdxLayoutProps) => {
       >
         <BreadcrumbItem>
           <BreadcrumbLink as={Link} href="/">
-            Accueil
+            {t('menu.home')}
           </BreadcrumbLink>
         </BreadcrumbItem>
 
         <BreadcrumbItem>
           <BreadcrumbLink as={Link} href="/blog">
-            Blog
+            {t('menu.blog')}
           </BreadcrumbLink>
         </BreadcrumbItem>
 

@@ -6,14 +6,27 @@ export const backlogItemFields = [
   'category',
   'url',
   'status',
-  'reason',
   'note',
-  'rating',
   'order',
 ] as const;
+export const backlogItemReviewFields = [
+  'review',
+  'duration',
+  'completion',
+  'pros',
+  'cons',
+  'rating',
+] as const;
 
+export type BacklogItemReviewFields = ArrayElement<
+  typeof backlogItemReviewFields
+>;
 export type BacklogItemFields = ArrayElement<typeof backlogItemFields>;
 
 export const backlogItemPrismaFields = Object.fromEntries(
-  backlogItemFields.map((fieldName) => [fieldName, true])
+  backlogItemFields.map((fieldName) => [fieldName, true]),
 ) as Record<BacklogItemFields, true>;
+
+export const backlogItemReviewsPrismaFields = Object.fromEntries(
+  backlogItemReviewFields.map((fieldName) => [fieldName, true]),
+) as Record<BacklogItemReviewFields, true>;

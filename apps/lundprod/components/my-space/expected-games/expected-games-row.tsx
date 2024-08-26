@@ -17,8 +17,10 @@ import {
   translateGameType,
   translateRegion,
 } from '@discord-bot-v2/igdb-front';
+import { TFunction } from 'i18next';
 import Link from 'next/link';
 import { Fragment, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useExpectedGame } from '~/lundprod/contexts/expected-games-context';
 import { ExpectedGame } from '~/lundprod/utils/api/expected-games';
@@ -29,17 +31,18 @@ type ExpectedGamesRowProps = {
 };
 
 export const ExpectedGamesRow = ({ element }: ExpectedGamesRowProps) => {
+  const { t } = useTranslation();
   const { expectedGames } = useExpectedGame();
 
   const savedExpectedGame = useMemo(() => {
     return expectedGames.find(
-      (expectedGame) => expectedGame.igdbId === element.id
+      (expectedGame) => expectedGame.igdbId === element.id,
     );
   }, [expectedGames, element]);
 
   const releaseDateBlock = useMemo(() => {
     const keepFutureFilter = (
-      releaseDate: ArrayElement<Game['release_dates']>
+      releaseDate: ArrayElement<Game['release_dates']>,
     ) => {
       return releaseDate.date * 1000 > Date.now();
     };
@@ -50,10 +53,10 @@ export const ExpectedGamesRow = ({ element }: ExpectedGamesRowProps) => {
         <Fragment key={releaseDate.id}>
           <GridItem display="flex" alignItems="center">
             <Text as="span" mr={2}>
-              {getReleaseDateWording(releaseDate)}
+              {getReleaseDateWording(t, releaseDate)}
             </Text>
             <Tag variant="outline" size="sm">
-              <TagLabel>{translateRegion(releaseDate.region)}</TagLabel>
+              <TagLabel>{translateRegion(t, releaseDate.region)}</TagLabel>
             </Tag>
           </GridItem>
           <GridItem>
@@ -77,12 +80,12 @@ export const ExpectedGamesRow = ({ element }: ExpectedGamesRowProps) => {
         </Text>
       </Td>
       <Td>
-        <Text>{translateGameType(element.category)}</Text>
+        <Text>{translateGameType(t, element.category)}</Text>
       </Td>
       <Td>
         <Link href={element.url} target="_blank" rel="noopener noreferrer">
           <Button size="sm" color="gray.700" rightIcon={<ExternalLinkIcon />}>
-            Info
+            {t('mySpace.expectedGames.list.info')}
           </Button>
         </Link>
       </Td>
@@ -96,13 +99,14 @@ export const ExpectedGamesRow = ({ element }: ExpectedGamesRowProps) => {
 };
 
 function getReleaseDateWording(
-  releaseDate?: ArrayElement<Game['release_dates']>
+  tFn: TFunction,
+  releaseDate?: ArrayElement<Game['release_dates']>,
 ) {
   return releaseDate
     ? releaseDate.date
       ? formatReleaseDate(new Date(releaseDate.date * 1000))
       : releaseDate.human
-    : 'Inconnue';
+    : tFn('mySpace.expectedGames.list.unknownDate');
 }
 
 const PlatformButton = ({
@@ -116,6 +120,7 @@ const PlatformButton = ({
   platformId: number;
   region: REGION;
 }) => {
+  const { t } = useTranslation();
   const { removeFromExpectedList, setModalData } = useExpectedGame();
 
   const platformLabel = useMemo(() => {
@@ -129,7 +134,7 @@ const PlatformButton = ({
       colorScheme="red"
       onClick={() => removeFromExpectedList(element.id)}
     >
-      {platformLabel} - Supprimer
+      {platformLabel} - {t('mySpace.expectedGames.list.delete')}
     </Button>
   ) : (
     <Button
@@ -140,7 +145,7 @@ const PlatformButton = ({
       }
       isDisabled={!!savedExpectedGame}
     >
-      {platformLabel} - Ajouter
+      {platformLabel} - {t('mySpace.expectedGames.list.add')}
     </Button>
   );
 };

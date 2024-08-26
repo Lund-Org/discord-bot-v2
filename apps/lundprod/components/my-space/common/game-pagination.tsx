@@ -5,6 +5,7 @@ import {
 } from '@chakra-ui/icons';
 import { Box, Button, Flex } from '@chakra-ui/react';
 import { GAME_PER_PAGE } from '@discord-bot-v2/igdb-front';
+import { useTranslation } from 'react-i18next';
 
 type GamePaginationProps = {
   currentGameCount: number;
@@ -17,6 +18,7 @@ export function GamePagination({
   page,
   changePage,
 }: GamePaginationProps) {
+  const { t } = useTranslation();
   const goNextPage = () => {
     changePage(page + 1);
   };
@@ -46,14 +48,14 @@ export function GamePagination({
               onClick={goPreviousPage}
             >
               <ChevronLeftIcon mr={1} />
-              Précédent
+              {t('mySpace.backlog.list.paginate.previous')}
             </Button>
           </>
         )}
       </Box>
       <Box>
         <Button variant="outline" _hover={{}} cursor="default">
-          Page {page}
+          {t('mySpace.backlog.list.paginate.page', { nb: page })}
         </Button>
       </Box>
       <Box>
@@ -63,7 +65,7 @@ export function GamePagination({
             _hover={{ bg: 'gray.300' }}
             onClick={goNextPage}
           >
-            Suivant
+            {t('mySpace.backlog.list.paginate.next')}
             <ChevronRightIcon ml={1} />
           </Button>
         )}

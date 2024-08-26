@@ -2,6 +2,7 @@ import { Box, chakra, Table, Tbody, Th, Thead, Tr } from '@chakra-ui/react';
 import { Game } from '@discord-bot-v2/igdb-front';
 
 import { ExpectedGamesRow } from './expected-games-row';
+import { useTranslation } from 'react-i18next';
 
 type ExpectedGamesResultProps = {
   games: Game[];
@@ -10,6 +11,8 @@ type ExpectedGamesResultProps = {
 export const ExpectedGamesResultView = ({
   games,
 }: ExpectedGamesResultProps) => {
+  const { t } = useTranslation();
+
   return (
     <Box overflow="auto" py={2}>
       <Table
@@ -29,11 +32,17 @@ export const ExpectedGamesResultView = ({
         <Thead>
           <Tr>
             <Th colSpan={2} color="gray.400">
-              Nom
+              {t('mySpace.expectedGames.list.table.name')}
             </Th>
-            <Th color="gray.400">Type</Th>
-            <Th color="gray.400">Informations</Th>
-            <Th color="gray.400">Date de sortie</Th>
+            <Th color="gray.400">
+              {t('mySpace.expectedGames.list.table.type')}
+            </Th>
+            <Th color="gray.400">
+              {t('mySpace.expectedGames.list.table.info')}
+            </Th>
+            <Th color="gray.400">
+              {t('mySpace.expectedGames.list.table.releaseDate')}
+            </Th>
           </Tr>
         </Thead>
         <Tbody>

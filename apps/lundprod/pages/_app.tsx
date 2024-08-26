@@ -10,11 +10,20 @@ import { components } from '../components/mdx-components';
 import { theme } from '../theme';
 import Script from 'next/script';
 import { Footer } from '../components/home/footer';
+import { useRouter } from 'next/router';
+import { useMemo } from 'react';
+import { getI18nInstance } from '../i18n';
+import { I18nextProvider } from 'react-i18next';
+import { MENU_HEIGHT } from '../utils/constants';
 
 function CustomApp({ Component, pageProps }: AppProps) {
   const globalCSS = css`
     html {
       min-width: 360px;
+    }
+
+    .filter-stars option {
+      background: var(--chakra-colors-gray-600) !important;
     }
 
     @keyframes slidein {
@@ -28,6 +37,27 @@ function CustomApp({ Component, pageProps }: AppProps) {
     }
   `;
 
+  const { query, locale } = useRouter();
+
+  const i18nInstance = useMemo(() => {
+    // TODO: handle hydration
+
+    // const propsLanguage = pageProps.language;
+    // const localStorageLanguage = (
+    //   typeof window !== 'undefined' ? window : {}
+    // )?.localStorage?.getItem('i18nextLng');
+    // const queryLanguage = query.language
+    //   ? Array.isArray(query.language)
+    //     ? query.language[0]
+    //     : query.language
+    //   : undefined;
+
+    // const languageToUse =
+    //   propsLanguage || localStorageLanguage || locale || queryLanguage;
+
+    return getI18nInstance(/*languageToUse*/);
+  }, [locale, query.language, pageProps.language]);
+
   return (
     <>
       <Head>
@@ -36,24 +66,30 @@ function CustomApp({ Component, pageProps }: AppProps) {
       <main>
         <SessionProvider session={pageProps.session}>
           <MDXProvider components={components}>
-            <ChakraProvider theme={theme}>
-              <Global styles={globalCSS} />
-              <Flex h="100vh" minH="100vh" flexDir="column">
-                <Header />
+            <I18nextProvider i18n={i18nInstance}>
+              <ChakraProvider theme={theme}>
+                <Global styles={globalCSS} />
                 <Flex
-                  flex={1}
-                  overflow="auto"
-                  bg="gray.800"
-                  color="gray.100"
+                  minH="100vh"
                   flexDir="column"
+                  position="relative"
+                  pt={MENU_HEIGHT}
                 >
-                  <Box flex={1} w="100%">
-                    <Component {...pageProps} />
-                  </Box>
-                  <Footer />
+                  <Header />
+                  <Flex
+                    flex={1}
+                    bg="gray.800"
+                    color="gray.100"
+                    flexDir="column"
+                  >
+                    <Box flex={1} w="100%">
+                      <Component {...pageProps} />
+                    </Box>
+                    <Footer />
+                  </Flex>
                 </Flex>
-              </Flex>
-            </ChakraProvider>
+              </ChakraProvider>
+            </I18nextProvider>
           </MDXProvider>
         </SessionProvider>
       </main>

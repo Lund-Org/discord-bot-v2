@@ -13,8 +13,8 @@ import {
 } from '@chakra-ui/react';
 import { platForms } from '@discord-bot-v2/igdb-front';
 import { ChangeEventHandler, Context, useContext, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-// import { useBacklog } from '~/lundprod/contexts/backlog-context';
 import { mapToCategory, mapToTypeMap, TypeMap } from '~/lundprod/utils/backlog';
 import { ContextWithGameSearch } from '~/lundprod/utils/types';
 
@@ -27,6 +27,7 @@ export function GameSearch<T extends ContextWithGameSearch>({
   context,
   onSearch,
 }: GameSearchProps<T>) {
+  const { t } = useTranslation();
   const [isSearching, setIsSearching] = useState(false);
   const { category, setCategory, searchValue, platforms, setPlatforms } =
     useContext<T>(context);
@@ -36,7 +37,7 @@ export function GameSearch<T extends ContextWithGameSearch>({
   };
   const onSelectChange: ChangeEventHandler<HTMLSelectElement> = (e) => {
     const selectedPlatform = platForms.find(
-      ({ id }) => String(id) === e.target.value
+      ({ id }) => String(id) === e.target.value,
     );
 
     if (selectedPlatform) {
@@ -64,8 +65,10 @@ export function GameSearch<T extends ContextWithGameSearch>({
           value={mapToTypeMap(category)}
         >
           <Stack direction="row">
-            <Radio value={TypeMap.GAME}>Jeu</Radio>
-            <Radio value={TypeMap.DLC}>DLC</Radio>
+            <Radio value={TypeMap.GAME}>
+              {t('mySpace.backlog.search.game')}
+            </Radio>
+            <Radio value={TypeMap.DLC}>{t('mySpace.backlog.search.dlc')}</Radio>
           </Stack>
         </RadioGroup>
       </Box>
@@ -73,13 +76,13 @@ export function GameSearch<T extends ContextWithGameSearch>({
         <Input
           name="search"
           w={{ base: '100%', md: '50%' }}
-          placeholder="Nom du jeu à chercher"
+          placeholder={t('mySpace.backlog.search.gamePlaceholder')}
           onChange={onSearchChange}
           onKeyDown={(e) => e.key === 'Enter' && !isSearching && searchGames()}
         />
         <Select
           w={{ base: '100%', md: '50%' }}
-          placeholder="Ajouter un filtre par plate-forme"
+          placeholder={t('mySpace.backlog.search.filterPlatformPlaceholder')}
           onChange={onSelectChange}
           bg="gray.100"
           color="gray.800"
@@ -104,7 +107,7 @@ export function GameSearch<T extends ContextWithGameSearch>({
         onClick={searchGames}
         isLoading={isSearching}
       >
-        Chercher
+        {t('mySpace.backlog.search.search')}
       </Button>
     </Box>
   );

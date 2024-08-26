@@ -5,7 +5,7 @@ import {
   gameTypeMapping,
   PlatFormType,
 } from '@discord-bot-v2/igdb-front';
-import { BacklogItem, BacklogStatus } from '@prisma/client';
+import { BacklogItem, BacklogItemReview, BacklogStatus } from '@prisma/client';
 import { chain, clone, curry } from 'lodash';
 import {
   createContext,
@@ -17,23 +17,35 @@ import {
 } from 'react';
 
 import { useFetcher } from '../hooks/useFetcher';
-import { BacklogItemFields } from '../utils/api/backlog';
+import {
+  BacklogItemFields,
+  BacklogItemReviewFields,
+} from '../utils/api/backlog';
 import { mapToCategory, TypeMap } from '../utils/backlog';
 import { ContextWithGameSearch } from '../utils/types';
 
 export type BacklogItemLight = Pick<
   BacklogItem,
   Exclude<BacklogItemFields, 'category'>
-> & {
-  category: GAME_TYPE | string;
-};
-type IGDBGameLight = Pick<
-  BacklogItem,
-  'id' | 'name' | /*'category' |*/ 'url'
-> & {
+> &
+  Pick<BacklogItemReview, Exclude<BacklogItemReviewFields, 'pros' | 'cons'>> & {
+    category: GAME_TYPE | string;
+    pros: string[];
+    cons: string[];
+  };
+type IGDBGameLight = Pick<BacklogItem, 'id' | 'name' | 'url'> & {
   category: GAME_TYPE | string;
 };
 type BacklogReorder = { oldOrder: number; newOrder: number; igdbId: number };
+
+type UpdateData = {
+  review: string;
+  rating: number;
+  duration?: number;
+  completion?: number;
+  pros: string[];
+  cons: string[];
+};
 
 //-- Types
 type BacklogContextProvider = ContextWithGameSearch & {
@@ -41,11 +53,7 @@ type BacklogContextProvider = ContextWithGameSearch & {
   addToBacklog: (backlogItem: IGDBGameLight) => void;
   removeFromBacklog: (id: number) => void;
   updateBacklogStatus: (id: number, status: BacklogStatus) => void;
-  updateBacklogDetails: (
-    id: number,
-    reason: string,
-    rating: number
-  ) => Promise<void>;
+  updateBacklogDetails: (id: number, data: UpdateData) => Promise<void>;
   updateBacklogNote: (id: number, note: string) => Promise<void>;
   onReorder: (orderPayload: BacklogReorder) => void;
 };
@@ -91,27 +99,38 @@ export const BacklogProvider = ({
       const newItem: BacklogItemLight = {
         igdbGameId: game.id,
         name: game.name,
-        category: gameTypeMapping[game.category],
+        category: gameTypeMapping[game.category] || '',
         url: game.url,
         status: BacklogStatus.BACKLOG,
-        note: undefined,
-        reason: '',
+        note: null,
+        review: '',
+        completion: null,
+        duration: null,
+        pros: [],
+        cons: [],
         rating: 0,
         order: backlog.length,
       };
 
       setBacklog([...backlog, newItem]);
-      return post(`/api/backlog/add`, undefined, JSON.stringify(newItem)).catch(
-        () => {
-          setBacklog((_backlog) => {
-            const backlogCopy = [..._backlog];
-            backlogCopy.length -= 1;
-            return backlogCopy;
-          });
-        }
-      );
+      return post(
+        `/api/backlog/add`,
+        undefined,
+        JSON.stringify({
+          igdbGameId: newItem.igdbGameId,
+          name: newItem.name,
+          category: newItem.category,
+          url: newItem.url,
+        }),
+      ).catch(() => {
+        setBacklog((_backlog) => {
+          const backlogCopy = [..._backlog];
+          backlogCopy.length -= 1;
+          return backlogCopy;
+        });
+      });
     },
-    [setBacklog, backlog, post]
+    [setBacklog, backlog, post],
   );
   const removeFromBacklog = useCallback(
     (id: number) => {
@@ -124,12 +143,12 @@ export const BacklogProvider = ({
       return post(
         `/api/backlog/remove`,
         undefined,
-        JSON.stringify({ id })
+        JSON.stringify({ id }),
       ).catch(() => {
         setBacklog((_backlog) => [..._backlog, backupItem]);
       });
     },
-    [setBacklog, backlog, post]
+    [setBacklog, backlog, post],
   );
   const onReorder = useCallback(
     (payload: { oldOrder: number; newOrder: number; igdbId: number }) => {
@@ -159,18 +178,18 @@ export const BacklogProvider = ({
             return backlogItem;
           })
           .sortBy(['order'])
-          .value()
+          .value(),
       );
 
       return post(
         `/api/backlog/reorder`,
         undefined,
-        JSON.stringify(payload)
+        JSON.stringify(payload),
       ).catch(() => {
         setBacklog(backupBacklog);
       });
     },
-    [setBacklog, backlog, post]
+    [setBacklog, backlog, post],
   );
 
   const providerParameters = {
@@ -218,41 +237,47 @@ type UpdateBacklogCurriedParam = {
 function updateBacklogStatus(
   curriedParam: UpdateBacklogCurriedParam,
   id: number,
-  status: BacklogStatus
+  status: BacklogStatus,
 ) {
   return findItemChangePropertyAndRequestAPI(
     curriedParam,
     id,
     status,
     'status',
-    '/api/backlog/change-status'
+    '/api/backlog/change-status',
   );
 }
 function updateBacklogDetails(
   curriedParam: UpdateBacklogCurriedParam,
   id: number,
-  reason: string,
-  rating: number
+  data: UpdateData,
 ) {
   return findItemChangePropertyAndRequestAPI(
     curriedParam,
     id,
-    [reason, rating],
-    ['reason', 'rating'],
-    '/api/backlog/update-backlog-details'
+    [
+      data.review,
+      data.rating,
+      data.duration,
+      data.completion,
+      data.pros,
+      data.cons,
+    ],
+    ['review', 'rating', 'duration', 'completion', 'pros', 'cons'],
+    '/api/backlog/update-backlog-details',
   );
 }
 function updateBacklogNote(
   curriedParam: UpdateBacklogCurriedParam,
   id: number,
-  note: string
+  note: string,
 ) {
   return findItemChangePropertyAndRequestAPI(
     curriedParam,
     id,
     [note],
     ['note'],
-    '/api/backlog/update-backlog-note'
+    '/api/backlog/update-backlog-note',
   );
 }
 
@@ -261,7 +286,7 @@ function findItemChangePropertyAndRequestAPI<T>(
   id: number,
   param: T | T[],
   name: string | string[],
-  url: string
+  url: string,
 ) {
   const newBacklog = clone(backlog);
   const itemToUpdate = newBacklog.find(({ igdbGameId }) => igdbGameId === id);
@@ -285,13 +310,13 @@ function findItemChangePropertyAndRequestAPI<T>(
             [n]: param[index],
           };
         },
-        { igdbGameId: id }
-      )
+        { igdbGameId: id },
+      ),
     );
   }
 
   setBacklog(newBacklog);
-  return post(url, undefined, payload).catch(() => {
+  return post(url, undefined, payload).catch((err) => {
     if (typeof name === 'string') {
       itemToUpdate[name] = oldValue;
     } else {
@@ -301,5 +326,6 @@ function findItemChangePropertyAndRequestAPI<T>(
     }
 
     setBacklog(newBacklog);
+    throw err;
   });
 }

@@ -17,7 +17,7 @@ const addToBacklogSchema = object({
 
 export default async function addToBacklog(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const session = await getServerSession(req, res, authOptions);
 
@@ -59,7 +59,7 @@ export default async function addToBacklog(
           id: user.id,
         },
       },
-      order: existingBiggestOrder.order + 1 || 1,
+      order: existingBiggestOrder?.order + 1 || 1,
     },
     update: {},
   });

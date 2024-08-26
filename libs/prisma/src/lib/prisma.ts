@@ -2,7 +2,6 @@ import { PrismaClient } from '@prisma/client';
 
 import { DiscordNotificationChannelExtension } from './extensions/discord-notification-channel';
 import { PlayerInventoryExtension } from './extensions/player-inventory';
-import { SportLeagueExtension } from './extensions/sport-league';
 import { UserExtension } from './extensions/user';
 
 // https://www.prisma.io/docs/orm/more/help-and-troubleshooting/help-articles/nextjs-prisma-client-dev-practices
@@ -12,14 +11,12 @@ const prismaClientSingleton = () => {
   const discordNotificationChannelExtension =
     DiscordNotificationChannelExtension(prismaClient);
   const playerInventoryExtension = PlayerInventoryExtension(prismaClient);
-  const sportLeagueExtension = SportLeagueExtension(prismaClient);
   const userExtension = UserExtension(prismaClient);
 
   return prismaClient.$extends({
     model: {
       discordNotificationChannel: discordNotificationChannelExtension,
       playerInventory: playerInventoryExtension,
-      sportLeague: sportLeagueExtension,
       user: userExtension,
     },
   });

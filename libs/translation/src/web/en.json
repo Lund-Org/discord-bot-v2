@@ -1,0 +1,467 @@
+{
+  "auth": {
+    "authError": "Auth error",
+    "error": "Error : {{error}}",
+    "errorMessage": {
+      "accessDenied": "An error occured while logging in.\nYou don't have an account or an issue occured while logging in.",
+      "back": "Back",
+      "verification": "We can't verify the login token or it expired.",
+      "sessionRequired": "There is an issue with the settings of the application to authenticate.\nContact Lund if it still occurs.",
+      "unknown": "An error occured.\nMaybe you don't have an account?"
+    },
+    "login": "Login",
+    "loginWith": "Login with {{provider}} (Video game)",
+    "signup": "To signup, join the "
+  },
+  "blog": {
+    "categories": "Categories",
+    "categoryName": {
+      "news": "News",
+      "other": "Other",
+      "tech": "Tech",
+      "videogame": "Video games"
+    },
+    "noResult": "No results, please change your filters",
+    "title": "Blog posts"
+  },
+  "contact": {
+    "gamedev": "Gamedev (LundProdGameDev)",
+    "global": "Global",
+    "networkTitle": "My networks",
+    "videogame": "Video games (LundProd)"
+  },
+  "fetcher": {
+    "unauthenticated": "You're not authenticated. Refresh your page or <signinLink>login again</signinLink>",
+    "unknown": "An unknown error occured. Retry later and contact Lund to warn about the issue"
+  },
+  "gacha": {
+    "index": {
+      "additionalInfo": {
+        "item1": "Each message on the server gives you 50 points (with a one-minute cooldown, of course)",
+        "item2": "You are capped at a maximum of 15,000 points.",
+        "item3": "There are currently 142 cards available, which gives the following chances:",
+        "item3_subitem": "<highlight>{{dropChance}}%</highlight><text> chance of getting a </text><highlight>level {{level}}</highlight> card",
+        "item4": "To create a golden fusion card, just like for the other cards, you need 5 copies of the basic version to turn it into a golden card",
+        "item5": "XP is calculated as follows:",
+        "item5a": "{{xp}} x the card's level for basic cards",
+        "item5b": "{{xp}} x the card's level for golden cards",
+        "item5c": "Cards count once per type, so if you have 14 basic no. 3 cards and 5 golden no. 3 cards, you will only get {{totalXp}}xp ({{basicXP}} + {{goldXP}})",
+        "title": "Some important information:"
+      },
+      "cardListLink": "The list of cards can be found <lightLink>here</lightLink>",
+      "commandTable": {
+        "buyDescription": "Allows you to buy cards with your points ({{points}} points per card). You can buy between 1 and 6 cards.",
+        "buyExample": "will spend {{points}} points and give you 3 random cards",
+        "cardsDescription": "Allows you to list the cards in your inventory (pagination is available via the ◀️ and ▶️ reactions)",
+        "dailyDescription": "Allows you to draw a card daily for free. The reset is every day at midnight French time",
+        "dismantleDescription": "Allows you to convert a golden card into 4 basic ones",
+        "dismantleExample": "will remove a golden card but give you in return 4 basic cards n°54",
+        "fusionDescription": "Allows you to sacrifice component cards into a fusion card. You can find them in the list available above (the indication is in the top left of the card, and if you click on it, you can see the components). The command brings up a dropdown menu of possible fusions to perform; you just need to choose the card you want to get.",
+        "giftDescription": "Allows you to receive a gift",
+        "giftExample": "will give you a gift such as points, basic or golden cards",
+        "goldDescription": "Transforms 5 basic cards into a golden card of the same type",
+        "goldExample": "transforms 5 basic cards n°20 into a golden card n°20",
+        "header": {
+          "command": "Command",
+          "description": "Description",
+          "example": "Example (if necessary)"
+        },
+        "helpDescription": "Displays the available commands",
+        "joinDescription": "This command is the first you will need to use to start playing. It creates your profile and gives you 8 cards",
+        "pointsDescription": "Allows you to check how many points you have (the in-game currency to buy cards)",
+        "profileDescription": "Allows you to know your level based on the cards you own and see how much xp you need before the next level",
+        "sellDescription": "<text>Allows you to sell cards to earn points. You earn</text><code>{{basicXP}} x the card level x the number of cards sold</code><text>for basic cards and</text><code>{{goldXP}} x the card level x the number of cards sold </code><text>for golden cards</text>",
+        "sellExample": "will sell 3 basic cards n°12 and give {{points}} points",
+        "twitchDescription": "Allows you to link your Twitch username to your gacha account for rewards purchased in Madeleine on Twitch (temporarily unavailable). Your Twitch link will appear on your profile",
+        "twitchExample": "will link your Twitch channel to the gacha",
+        "viewDescription": "Allows you to display a card to see its details",
+        "viewExample": "will display card n°9"
+      },
+      "description1": "Behind this scary word that makes you think of all those mobile games that want your wallet, hides a perfectly healthy game here. Indeed, through Discord, you can play this little card collection game without spending a single euro.",
+      "description2": "This game is based on the 'lore' of my YouTube/Twitch channel, my past experience on the internet, or simply fun ideas shared with the community. Some even have their own card! And if you ever want to understand certain cards, their story is explained to you on the 'list' page.",
+      "discordCTA": "Ready to play? <lightLink>Join the Discord (VideoGame) !</lightLink>",
+      "howItWorks": {
+        "description": "On Discord, once you retrieve the associated role in the appropriate channel, a section will appear with various new channels. The one we're interested in is the one named '#commands'. Here is the list of the different available commands:",
+        "title": "How does it work ?"
+      },
+      "rankListLink": "The ranking of the players is <lightLink>here</lightLink>",
+      "title": "Introduction - Gacha",
+      "xpTable": {
+        "level": "Level",
+        "xpNeeded": "XP required",
+        "title": "XP required per level:"
+      }
+    },
+    "list": {
+      "emptyView": {
+        "filter": "Filter",
+        "details": "The details will appear here",
+        "pickCard": "Pick a card"
+      },
+      "filters": "Filters",
+      "fusionComponents": "Components for the fusion :",
+      "fusionOnly": "Fusion cards only",
+      "seeGold": "View in gold",
+      "starCount": "Number of stars: "
+    },
+    "ranking": {
+      "level": "Level: {{level}}",
+      "listUserInfo": ", level {{level}} with {{xp}}xp",
+      "xp": "XP: {{xp}}"
+    }
+  },
+  "gameType": {
+    "bundle": "Bundle",
+    "dlc": "DLC",
+    "episode": "Episode",
+    "expansion": "Expansion",
+    "game": "Game0",
+    "mod": "Mod",
+    "other": "Other",
+    "port": "Portage",
+    "remake": "Remake",
+    "remaster": "Remaster",
+    "season": "Season",
+    "standalone": "Standalone"
+  },
+  "home": {
+    "bot": {
+      "line1": "A Discord bot that allows users to access various features, from a small Rock-Paper-Scissors game to creating polls or even querying the site <hltbLink>HowLongToBeat<externalIcon /></hltbLink>.",
+      "line2": "It also enables users to play the gacha through the commands it makes available.",
+      "line3": "You can find the code for the site and the bot on <darkLinkGithub>Github<externalIcon /></darkLinkGithub>.",
+      "title": "MauriceBot"
+    },
+    "gacha": {
+      "line1": "A card collection game on my Discord. These cards are based on the universe of my channel, related to the games I've played live.",
+      "line2": "Unlike mobile gachas that push for microtransactions, here everything is, of course, free.",
+      "line3": "You can access it <darkLinkDiscord>here<externalIcon /></darkLinkDiscord> or view the cards & rankings <darkLinkGacha>here</darkLinkGacha>.",
+      "title": "Gacha"
+    },
+    "other": {
+      "line1": "And many other projects are available or in development, including 3D creations, games, and more. They can be seen in the <projectLink>projects</projectLink> section, but you can also find announcements for new projects via <discordLink>Discord<externalIcon /></discordLink>."
+    },
+    "website": {
+      "line1": "Designed to host all my projects, this site has gone through several iterations.",
+      "line2": "Initially only presenting the gacha pages, it has evolved to be cleaner in design, but also richer in features and information.",
+      "line3": "You can find the code for the site and the bot on <darkLinkGithub>Github<externalIcon /></darkLinkGithub>.",
+      "title": "Lundprod.com"
+    },
+    "welcome": {
+      "item1": "I'm Florian, Lund on internet, I'm {{currentAge}}y.o and I'm a developer.",
+      "item2": "Here you'll find all my work and useful links to different platforms.",
+      "item3": "I have multiple projects, find what you like; Videos, game on Discord, games from gamejam..."
+    },
+    "title": "Welcome"
+  },
+  "language": {
+    "en": "English",
+    "fr": "French"
+  },
+  "menu": {
+    "blog": "Blog",
+    "contact": "My networks",
+    "gacha": {
+      "gacha": "Gacha",
+      "gachaEntry": "Gacha > {{entry}}",
+      "intro": "Introduction",
+      "list": "List",
+      "myPage": "My page",
+      "ranking": "Ranking"
+    },
+    "home": "Home",
+    "projects": "Projects",
+    "sign": {
+      "avatarError": "Cannot load avatar. It happens if you changed your avatar. Signout/Login to refresh it",
+      "close": "Close",
+      "myBacklog": "My backlog",
+      "myExpectedGames": "My expected games",
+      "myGacha": "My gacha page",
+      "myPages": "My pages",
+      "signout": "Signout"
+    },
+    "users": "Users"
+  },
+  "months": {
+    "april": "April",
+    "august": "August",
+    "february": "February",
+    "december": "December",
+    "january": "January",
+    "july": "July",
+    "june": "June",
+    "march": "March",
+    "may": "May",
+    "november": "November",
+    "october": "October",
+    "september": "September"
+  },
+  "mySpace": {
+    "backlog": {
+      "details": {
+        "add": "Add",
+        "addDetails": "Add details",
+        "addNote": "Add a note",
+        "charactersLeft": "{{count}} characters left",
+        "comment": "Comment *",
+        "completion": "Completion",
+        "completionPercentage": "%",
+        "cons": "Cons",
+        "duration": "Duration",
+        "durationHour": "h",
+        "note": "Note *",
+        "pros": "Pros",
+        "save": "Save"
+      },
+      "list": {
+        "actions": "Actions",
+        "delete": "Delete",
+        "emptyView": {
+          "edit": "<t>Nothing in your backlog ?</t><t>Find a game in the second tab to fill your list!</t><t>You can put up to 100 games in your backlog 🤩</t>",
+          "readOnly": "This backlog is empty for now"
+        },
+        "info": "Info",
+        "moreInfo": "More information",
+        "name": "Name",
+        "paginate": {
+          "next": "Next",
+          "page": "Page {{nb}}",
+          "previous": "Previous"
+        },
+        "status": "Status",
+        "type": "Type"
+      },
+      "review": {
+        "completion": "Completion: {{completion}}%",
+        "cons": "Cons",
+        "duration": "Playtime: {{duration}}h",
+        "generalInformation": "General information",
+        "open": "See review",
+        "pros": "Pros",
+        "rating": "Rating: ",
+        "review": "Review",
+        "title": "Review of {{userName}} for {{gameName}}"
+      },
+      "search": {
+        "dlc": "DLC",
+        "filterPlatformPlaceholder": "Add a filter per platform",
+        "game": "Game",
+        "gamePlaceholder": "Name of the game to search",
+        "search": "Search"
+      },
+      "searchNoResult": "No result found",
+      "status": {
+        "abandoned": "Abandoned",
+        "backlog": "Backlog",
+        "finished": "Finished",
+        "inProgress": "In Progress",
+        "noFilter": "No filter",
+        "wishlist": "Wishlist"
+      },
+      "table": {
+        "add": "Add",
+        "delete": "Delete",
+        "header": {
+          "name": "Name",
+          "platform": "Platform",
+          "releaseDate": "Release date",
+          "type": "Type"
+        }
+      },
+      "tabs": {
+        "backlog": "Backlog",
+        "findGame": "Find a game",
+        "list": "My list"
+      }
+    },
+    "expectedGames": {
+      "awaitedGames": "Awaited games",
+      "calendar": {
+        "eventError": "<t>This game has been cancelled, you can't edit it.</t><t>Delete it with the list view or the search.</t>"
+      },
+      "findGame": "Find a game",
+      "list": {
+        "add": "Add",
+        "addedToBacklog": "Added to backlog at release",
+        "calendar": "Calendar",
+        "cancelled": "Cancelled",
+        "delete": "Delete",
+        "edit": "Edit",
+        "info": "Info",
+        "list": "Liste",
+        "noExpectedGames": "No expected game for the moment",
+        "noResult": "No result found",
+        "table": {
+          "info": "Information",
+          "name": "Name",
+          "releaseDate": "Release date",
+          "type": "Type"
+        },
+        "unknownDate": "Unknown"
+      },
+      "modal": {
+        "addToBacklogOnRelease": "Add to backlog on release",
+        "cancel": "Cancel",
+        "createTitle": "Add an expected game",
+        "createType": "You're going to add {{game}} to your expected games {{platform}}",
+        "platformMessage": "for the platform: {{platform}}",
+        "save": "Save",
+        "updateTitle": "Update the expected game",
+        "updateType": "You're about to update your expectation for the game: {{game}} {{platform}}"
+      },
+      "myGames": "My games"
+    }
+  },
+  "pal": {
+    "errorBadPal": "Wrong Pal!",
+    "errorPalNotFound": "This Pal doesn't exist",
+    "nextPal": "Next Pal",
+    "pass": "Pass",
+    "placeholder": "Name of the Pal",
+    "submit": "Submit",
+    "successPal": "It was {{palName}}"
+  },
+  "profile": {
+    "gacha": {
+      "cardToGold": "Card to gold",
+      "filters": "Filters",
+      "inventory": "Inventory",
+      "noCard": "No cards"
+    },
+    "join": "Joined the {{date}}",
+    "lastDraw": "Last card draw the {{date}}",
+    "level": "Current level: {{level}}",
+    "onTwitch": "Or <twitchLink>{{username}}</twitchLink> on Twitch",
+    "points": "Current points: {{points}}",
+    "rank": "Current rank: {{rank}}",
+    "xp": "Current XP: {{xp}}",
+    "xpToNextLevel": "XP to next level: {{xp}}"
+  },
+  "projects": {
+    "3d": {
+      "description": "I started 3D in March 2023 by following courses on <lightLink>GameDev.tv</lightLink> that I got in a Humble Bundle. Here are my various creations, in chronological order.",
+      "title": "3D Projects"
+    },
+    "guessPal": {
+      "description": "You probably know the game <lightLink>\"Who's that Pokémon?\"</lightLink>? Well, it's the same concept but for the Pals of Palworld.",
+      "hint": "You will see the silhouette of a Pal, and you will have to guess which little monster is hiding behind it!",
+      "start": "Start",
+      "title": "Guess the Pal!"
+    },
+    "overview": {
+      "intro": "I have tons of passions, and just as many projects. If I want to do something, I learn what I need. For example, I learned how to do 3D modeling to handle graphic assets on my own, lacking the dexterity or knowledge for drawing.",
+      "listText": "Here, you will find a list of all my projects:",
+      "title": "Projects"
+    },
+    "projects": {
+      "3D": {
+        "date": "2023 - Present",
+        "description": "Renders made with Blender",
+        "gallery": {
+          "item1": {
+            "description": "First 3D render following a course to create a low-poly scene to learn the basics of Blender. It was really interesting to do, and I created 2 renders with different atmospheres: One during the day and another at night.",
+            "image1": "Final render with daylight",
+            "image2": "Final render with a nighttime atmosphere",
+            "image3": "Progress 1/12",
+            "image4": "Progress 2/12",
+            "image5": "Progress 3/12",
+            "image6": "Progress 4/12",
+            "image7": "Progress 5/12",
+            "image8": "Progress 6/12",
+            "image9": "Progress 7/12",
+            "image10": "Progress 8/12",
+            "image11": "Progress 9/12",
+            "image12": "Progress 10/12",
+            "image13": "Progress 11/12",
+            "image14": "Progress 12/12",
+            "title": "Cottage on an Island"
+          },
+          "item2": {
+            "description": "3D adaptation based on a drawing by Fakhear (@fakhear on Instagram)",
+            "image1": "Final render",
+            "image2": "View 1/4",
+            "image3": "View 2/4",
+            "image4": "View 3/4",
+            "image5": "View 4/4",
+            "title": "Fakhear's Book"
+          },
+          "item3": {
+            "description": "3D adaptation based on a drawing by Sconera (@sconera._ on Instagram)",
+            "image1": "Final render 1/2",
+            "image2": "Final render 2/2",
+            "image3": "Progress 1/6",
+            "image4": "Progress 2/6",
+            "image5": "Progress 3/6",
+            "image6": "Progress 4/6",
+            "image7": "Progress 5/6",
+            "image8": "Progress 6/6",
+            "title": "Sconera's Room"
+          },
+          "item4": {
+            "description": "3D render following a course on character modeling and basic animation. With the walking animation, it reminded me of the 'Wide Putin' meme.",
+            "image1": "Demo scene of the character in a pose",
+            "image2": "Wide Putin meme",
+            "title": "The Big Guy"
+          }
+        },
+        "title": "3D"
+      },
+      "gacha": {
+        "date": "2021 - 2024",
+        "description": "The card game on Discord",
+        "title": "Gacha"
+      },
+      "guessThePal": {
+        "date": "February 2024",
+        "description": "A small game for Palworld fans",
+        "title": "Guess the Pal"
+      },
+      "lundProd": {
+        "date": "2022 - Present",
+        "description": "The website you are on",
+        "title": "Lundprod.com"
+      },
+      "pizzaJam": {
+        "date": "April 2023",
+        "description": "The result of the Gamedev.js Jam 2023",
+        "title": "Pizza Jam"
+      },
+      "wherestheroad": {
+        "date": "July 2024",
+        "description": "The result of the KenneyJam 2024",
+        "title": "Where's the road??"
+      }
+    }
+  },
+  "region": {
+    "asia": "Asia",
+    "australia": "Australia",
+    "brazil": "Brazil",
+    "china": "China",
+    "europe": "Europe",
+    "japan": "Japan",
+    "korea": "Korea",
+    "newZealand": "New Zealand",
+    "northAmerica": "US",
+    "worldWide": "WorldWide"
+  },
+  "userList": {
+    "title": "Users:"
+  },
+  "userPage": {
+    "backlog": "Backlog",
+    "expectedGames": "Expected games",
+    "gacha": "Gacha"
+  },
+  "welcome": {
+    "lastVideoLundprod": "LundProd",
+    "lastVideoLundprodGamedev": "LundProdGamedev",
+    "lastVideoTitle": "Last videos",
+    "social": {
+      "gamedev": "Gamedev (LundProdGameDev)",
+      "global": "Global",
+      "networkTitle": "My social networks",
+      "videogame": "Videogame (LundProd)"
+    },
+    "title": "Welcome"
+  }
+}

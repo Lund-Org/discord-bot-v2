@@ -1,3 +1,5 @@
+import { TFunction } from 'i18next';
+
 import {
   GAME_TYPE,
   GameTypeTranslation,
@@ -36,56 +38,59 @@ export function validateFilters(filters: unknown): filters is {
   });
 }
 
-export const translateRegion = (region: REGION) => {
+export const translateRegion = (tFn: TFunction, region: REGION) => {
   switch (region) {
     case REGION.EUROPE:
-      return 'Europe';
+      return tFn('region.europe');
     case REGION.NORTH_AMERICA:
-      return 'US';
+      return tFn('region.northAmerica');
     case REGION.AUSTRALIA:
-      return 'Australie';
+      return tFn('region.australia');
     case REGION.NEW_ZEALAND:
-      return 'Nouvelle Zelande';
+      return tFn('region.newZealand');
     case REGION.JAPAN:
-      return 'Japon';
+      return tFn('region.japan');
     case REGION.CHINA:
-      return 'Chine';
+      return tFn('region.china');
     case REGION.ASIA:
-      return 'Asie';
+      return tFn('region.asia');
     case REGION.WORLDWIDE:
-      return 'Mondial';
+      return tFn('region.worldWide');
     case REGION.KOREA:
-      return 'Corée';
+      return tFn('region.korea');
     case REGION.BRAZIL:
-      return 'Brésil';
+      return tFn('region.brazil');
   }
 };
 
-export const translateGameType = (gameType: GAME_TYPE): GameTypeTranslation => {
+export const translateGameType = (
+  tFn: TFunction,
+  gameType: GAME_TYPE,
+): GameTypeTranslation => {
   switch (gameType) {
     case GAME_TYPE.MAIN_GAME:
-      return 'Jeu';
+      return tFn('gameType.game');
     case GAME_TYPE.DLC_ADDON:
-      return 'DLC';
+      return tFn('gameType.dlc');
     case GAME_TYPE.EXPANSION:
-      return 'Extension';
+      return tFn('gameType.expansion');
     case GAME_TYPE.BUNDLE:
-      return 'Bundle';
+      return tFn('gameType.bundle');
     case GAME_TYPE.STANDALONE_EXPANSION:
-      return 'Standalone';
+      return tFn('gameType.standalone');
     case GAME_TYPE.MOD:
-      return 'Mod';
+      return tFn('gameType.mod');
     case GAME_TYPE.EPISODE:
-      return 'Episode';
+      return tFn('gameType.episode');
     case GAME_TYPE.SEASON:
-      return 'Saison';
+      return tFn('gameType.season');
     case GAME_TYPE.REMAKE:
-      return 'Remake';
+      return tFn('gameType.remake');
     case GAME_TYPE.REMASTER:
-      return 'Remaster';
+      return tFn('gameType.remaster');
     case GAME_TYPE.PORT:
-      return 'Portage';
+      return tFn('gameType.port');
     default:
-      return 'Autre';
+      return tFn('gameType.other');
   }
 };

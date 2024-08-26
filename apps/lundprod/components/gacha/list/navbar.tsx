@@ -17,8 +17,10 @@ import { useGachaHome } from '~/lundprod/contexts/gacha-home-context';
 import { CardListElement } from '../card-list-element';
 import { FilterMenu } from '../filter-menu';
 import { CardPreviewContainer } from './card-preview-container';
+import { useTranslation } from 'react-i18next';
 
 export const Navbar = () => {
+  const { t } = useTranslation();
   const isMobile = useBreakpointValue({
     base: true,
     md: false,
@@ -67,7 +69,7 @@ export const Navbar = () => {
             mr="5px"
             _hover={{ bg: 'gray.700' }}
           />
-          Filtres
+          {t('gacha.list.filters')}
         </Heading>
         {filterPanelState && (
           <Box pt="20px">

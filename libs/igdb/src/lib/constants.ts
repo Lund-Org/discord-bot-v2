@@ -31,7 +31,7 @@ export const GAME_FIELDS = [
   'release_dates.platform.name',
 ];
 
-export const gameTypeMapping = {
+export const gameTypeMapping: Partial<Record<GAME_TYPE, string>> = {
   [GAME_TYPE.MAIN_GAME]: 'Jeu',
   [GAME_TYPE.DLC_ADDON]: 'DLC',
   [GAME_TYPE.EXPANSION]: 'Extension',

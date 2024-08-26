@@ -6,9 +6,10 @@ import { illustrationSketching } from '~/lundprod/assets';
 import { LightStyledLink } from '../styled-link';
 import { FullLinePresentation } from './full-line-presentation';
 import { networks } from '~/lundprod/utils/url';
+import { Trans } from 'react-i18next';
 
 export const OtherProjectsPresentation = () => {
-  const discordNetwork = networks.find(
+  const discordNetwork = networks.lundprod.find(
     (network) => network.title === 'Discord',
   );
 
@@ -20,19 +21,20 @@ export const OtherProjectsPresentation = () => {
       illustrationPosition="left"
     >
       <Text mt={5}>
-        Et bien d'autres projets sont disponibles ou en cours de réalisation
-        comme des réalisations 3D, des jeux, et plus encore. Ils sont visibles
-        dans la rubrique&nbsp;
-        <LightStyledLink href="/projects">projet</LightStyledLink> mais vous
-        pouvez aussi retrouver les annonces de nouveaux projets via&nbsp;
-        <LightStyledLink
-          href={discordNetwork.url}
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          Discord
-          <ExternalLinkIcon ml="3px" />
-        </LightStyledLink>
+        <Trans
+          i18nKey="home.other.line1"
+          components={{
+            projectLink: <LightStyledLink href="/projects" />,
+            discordLink: (
+              <LightStyledLink
+                href={discordNetwork.url}
+                target="_blank"
+                rel="noreferrer noopener"
+              />
+            ),
+            externalIcon: <ExternalLinkIcon ml="3px" />,
+          }}
+        />
       </Text>
     </FullLinePresentation>
   );

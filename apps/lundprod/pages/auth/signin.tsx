@@ -6,6 +6,8 @@ import { getProviders, signIn } from 'next-auth/react';
 
 import { LightStyledLink } from '~/lundprod/components/styled-link';
 import { networks } from '~/lundprod/utils/url';
+import { useTranslation } from 'react-i18next';
+import { getErrorMessage } from '~/lundprod/utils/auth';
 
 type Providers = Awaited<ReturnType<typeof getProviders>>;
 
@@ -35,15 +37,16 @@ const Legend = styled.legend(() => ({
 }));
 
 export default function SignIn({ providers }: SignInProps) {
+  const { t } = useTranslation();
   const { query } = useRouter();
-  const discordNetwork = networks.find(
-    (network) => network.title === 'Discord'
+  const discordNetwork = networks.lundprod.find(
+    (network) => network.title === 'Discord',
   );
 
   return (
     <Box maxW="500px" mx="auto" mt="50px">
       <Fieldset>
-        <Legend>Connexion</Legend>
+        <Legend>{t('auth.login')}</Legend>
         {Object.values(providers).map((provider) => (
           <Box key={provider.name}>
             <Button
@@ -60,13 +63,15 @@ export default function SignIn({ providers }: SignInProps) {
                 w="20px"
                 mr="10px"
               />
-              <Text as="span">Connexion avec {provider.name}</Text>
+              <Text as="span">
+                {t('auth.loginWith', { provider: provider.name })}
+              </Text>
             </Button>
           </Box>
         ))}
       </Fieldset>
       <Box mt="50px" textAlign="center">
-        <Text as="span">Pour s&apos;inscrire, il faut rejoindre le&nbsp;</Text>
+        <Text as="span">{t('auth.signup')}</Text>
         <LightStyledLink
           href={discordNetwork.url}
           target="_blank"
@@ -76,7 +81,12 @@ export default function SignIn({ providers }: SignInProps) {
         </LightStyledLink>
         {query.error && (
           <Text color="red.400" mt="20px">
-            Erreur : {query.error}
+            {t('auth.error', {
+              error: getErrorMessage(
+                t,
+                Array.isArray(query.error) ? query.error[0] : query.error,
+              ),
+            })}
           </Text>
         )}
       </Box>

@@ -16,6 +16,7 @@ import {
 } from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
 import { GetStaticProps } from 'next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { CommandTable } from '~/lundprod/components/gacha/home/command-table';
 import { DiscordCTA } from '~/lundprod/components/gacha/home/discord-CTA';
@@ -80,6 +81,8 @@ export function GachaPage({
   configCardXP,
   configLevels,
 }: GachaPageProps) {
+  const { t } = useTranslation();
+
   return (
     <Flex justifyContent="center">
       <Box maxW="1200px" p="30px" overflow="hidden">
@@ -91,30 +94,27 @@ export function GachaPage({
           borderBottom="1px solid var(--chakra-colors-orange-500)"
           maxW="400px"
         >
-          Introduction - Gacha
+          {t('gacha.index.title')}
         </Heading>
-        <Text mb="10px">
-          Derrière ce mot qui fait peur et qui fait penser à tous ces jeux
-          mobiles qui en veulent à votre porte-monnaie se cache un jeu tout à
-          fait sain ici. En effet, via Discord, vous pouvez jouer à ce petit jeu
-          de collection de carte, sans dépenser le moindre euro.
-        </Text>
-        <Text mb="30px">
-          Ce jeu est basé sur le &quot;lore&quot; de ma chaine Youtube/Twitch,
-          de mon expérience passée sur internet, ou tout simplement de petits
-          délires avec la communauté. Certains ayant même leur propre carte ! Et
-          si jamais vous voulez comprendre certaines cartes, son histoire vous
-          est expliquée dans la page &quot;liste&quot;.
-        </Text>
+        <Text mb="10px">{t('gacha.index.description1')}</Text>
+        <Text mb="30px">{t('gacha.index.description2')}</Text>
         <Text mb="10px">
           <ChevronRightIcon mr="4px" />
-          La liste des cartes est présente{' '}
-          <LightStyledLink href="/gacha/list">ici</LightStyledLink>
+          <Trans
+            i18nKey="gacha.index.cardListLink"
+            components={{
+              lightLink: <LightStyledLink href="/gacha/list" />,
+            }}
+          />
         </Text>
         <Text mb="60px">
           <ChevronRightIcon mr="4px" />
-          Le classement des joueurs est{' '}
-          <LightStyledLink href="/gacha/ranking">ici</LightStyledLink>
+          <Trans
+            i18nKey="gacha.index.rankListLink"
+            components={{
+              lightLink: <LightStyledLink href="/gacha/ranking" />,
+            }}
+          />
         </Text>
         <Heading
           variant="h6"
@@ -126,32 +126,18 @@ export function GachaPage({
           alignItems="center"
         >
           <QuestionOutlineIcon mr="12px" />
-          Comment ça marche ?
+          {t('gacha.index.howItWorks.title')}
         </Heading>
-        <Text mb="30px">
-          Sur Discord, et une fois le rôle associé récupéré dans le channel
-          adéquate, une section apparait avec différents nouveaux channels.
-          Celui qui nous intéresse, c&apos;est celui nommé
-          &quot;#commandes&quot;. Voici la liste des différentes commandes
-          disponibles :
-        </Text>
+        <Text mb="30px">{t('gacha.index.howItWorks.description')}</Text>
         <CommandTable configSell={configSell} configPrice={configPrice} />
         <Text mb="10px" fontWeight="bold">
-          Quelques informations importantes :
+          {t('gacha.index.additionalInfo.title')}
         </Text>
         <UnorderedList>
+          <ListItem>{t('gacha.index.additionalInfo.item1')}</ListItem>
+          <ListItem>{t('gacha.index.additionalInfo.item2')}</ListItem>
           <ListItem>
-            Chaque message sur le serveur vous donne 50 points (avec un cooldown
-            d&apos;une minute tout de même)
-          </ListItem>
-          <ListItem>
-            Vous êtes capés à un capital de points maximum de 15 000 points.
-          </ListItem>
-          <ListItem>
-            <Text>
-              Il y a actuellement 142 cartes disponibles, ce qui donne les
-              chances suivantes :
-            </Text>
+            <Text>{t('gacha.index.additionalInfo.item3')}</Text>
             <UnorderedList listStyleType="disclosure-closed" ml="50px">
               {Object.keys(configDropChances)
                 .sort()
@@ -160,36 +146,38 @@ export function GachaPage({
 
                   return (
                     <ListItem key={key}>
-                      <Text as="span" color="orange.300">
-                        {dropChance}%
-                      </Text>
-                      <Text as="span"> de chance de tomber sur une carte </Text>
-                      <Text as="span" color="orange.300">
-                        niveau {key}
-                      </Text>
+                      <Trans
+                        i18nKey="gacha.index.additionalInfo.item3_subitem"
+                        components={{
+                          highlight: <Text as="span" color="orange.300" />,
+                          text: <Text as="span" />,
+                        }}
+                        values={{ level: key, dropChance }}
+                      />
                     </ListItem>
                   );
                 })}
             </UnorderedList>
           </ListItem>
-          <ListItem>
-            Pour créer une carte fusion dorée, comme pour les autres cartes, il
-            faut 5 fois la version basique pour pouvoir la golder
-          </ListItem>
-          <ListItem>L&apos;XP est calculé de la manière suivante : </ListItem>
+          <ListItem>{t('gacha.index.additionalInfo.item4')}</ListItem>
+          <ListItem>{t('gacha.index.additionalInfo.item5')}</ListItem>
           <UnorderedList listStyleType="disclosure-closed" ml="50px">
             <ListItem>
-              {configCardXP.basic} x le niveau de la carte pour les cartes
-              basiques
+              {t('gacha.index.additionalInfo.item5a', {
+                xp: configCardXP.basic,
+              })}
             </ListItem>
             <ListItem>
-              {configCardXP.gold} x le niveau de la carte pour les cartes dorées
+              {t('gacha.index.additionalInfo.item5b', {
+                xp: configCardXP.gold,
+              })}
             </ListItem>
             <ListItem>
-              Les cartes comptent une fois par type, ainsi si vous avez 14
-              cartes basiques n°3 et 5 cartes dorées n°3, vous aurez uniquement{' '}
-              {configCardXP.basic + configCardXP.gold}xp ({configCardXP.basic} +
-              {configCardXP.gold})
+              {t('gacha.index.additionalInfo.item5c', {
+                totalXp: configCardXP.basic + configCardXP.gold,
+                basicXP: configCardXP.basic,
+                goldXP: configCardXP.gold,
+              })}
             </ListItem>
           </UnorderedList>
         </UnorderedList>

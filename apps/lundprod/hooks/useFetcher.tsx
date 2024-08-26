@@ -1,8 +1,10 @@
 import { Text, useToast } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useCallback, useMemo } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 export const useFetcher = () => {
+  const { t } = useTranslation();
   const toast = useToast();
 
   const fetcher = useMemo(
@@ -10,7 +12,7 @@ export const useFetcher = () => {
       (
         url: string,
         queryParams?: Record<string, unknown | unknown[]>,
-        init?: RequestInit
+        init?: RequestInit,
       ) => {
         const query = new URLSearchParams();
 
@@ -34,8 +36,12 @@ export const useFetcher = () => {
               title: 'Erreur',
               description: (
                 <Text>
-                  Vous n&apos;êtes plus authentifié. Rafraichissez votre page ou{' '}
-                  <Link href="/auth/signin">reconnectez vous</Link>
+                  <Trans
+                    i18nKey="fetcher.unauthenticated"
+                    components={{
+                      signinLink: <Link href="/auth/signin" />,
+                    }}
+                  />
                 </Text>
               ),
               status: 'error',
@@ -46,8 +52,7 @@ export const useFetcher = () => {
           } else {
             toast({
               title: 'Erreur',
-              description:
-                "Une erreur inconnue s'est produite. Réessayez ultérieurement et contactez Lund pour remonter le probleme",
+              description: t('fetcher.unknown'),
               status: 'error',
               duration: 9000,
               isClosable: true,
@@ -60,7 +65,7 @@ export const useFetcher = () => {
           });
         });
       },
-    [toast]
+    [toast],
   );
 
   const get = useCallback(
@@ -72,14 +77,14 @@ export const useFetcher = () => {
         },
       });
     },
-    [fetcher]
+    [fetcher],
   );
 
   const post = useCallback(
     (
       url: string,
       queryParams?: Record<string, unknown | unknown[]>,
-      body?: BodyInit
+      body?: BodyInit,
     ) => {
       return fetcher(url, queryParams, {
         method: 'POST',
@@ -89,7 +94,7 @@ export const useFetcher = () => {
         body,
       });
     },
-    [fetcher]
+    [fetcher],
   );
 
   return { get, post };

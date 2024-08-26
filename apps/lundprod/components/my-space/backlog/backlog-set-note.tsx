@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react';
 import { BacklogStatus } from '@prisma/client';
 import { FormEventHandler, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useBacklog } from '~/lundprod/contexts/backlog-context';
 
@@ -36,6 +37,7 @@ export const BacklogSetNote = ({
   status,
   note,
 }: BacklogSetNoteProps) => {
+  const { t } = useTranslation();
   const { updateBacklogNote } = useBacklog();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFormLoading, setIsFormLoading] = useState(false);
@@ -82,12 +84,12 @@ export const BacklogSetNote = ({
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Ajouter une note</ModalHeader>
+          <ModalHeader>{t('mySpace.backlog.details.addNote')}</ModalHeader>
           <ModalCloseButton />
           <form onSubmit={submitForm}>
             <ModalBody>
               <FormControl>
-                <FormLabel>Note</FormLabel>
+                <FormLabel>{t('mySpace.backlog.details.note')}</FormLabel>
                 <Textarea
                   value={newNote || ''}
                   onChange={(e) => setNewNote(e.target.value)}
@@ -96,7 +98,9 @@ export const BacklogSetNote = ({
                 <FormHelperText
                   color={newNote.length > 255 ? 'red.600' : 'inherit'}
                 >
-                  {255 - newNote.length} caractères restants
+                  {t('mySpace.backlog.details.charactersLeft', {
+                    count: 255 - newNote.length,
+                  })}
                 </FormHelperText>
               </FormControl>
             </ModalBody>
@@ -107,7 +111,7 @@ export const BacklogSetNote = ({
                 isLoading={isFormLoading}
                 isDisabled={!newNote.length || newNote.length > 255}
               >
-                Sauvegarder
+                {t('mySpace.backlog.details.save')}
               </Button>
             </ModalFooter>
           </form>

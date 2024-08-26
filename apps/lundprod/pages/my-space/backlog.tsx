@@ -17,9 +17,15 @@ import {
   BacklogItemLight,
   BacklogProvider,
 } from '~/lundprod/contexts/backlog-context';
-import { backlogItemPrismaFields } from '~/lundprod/utils/api/backlog';
+import {
+  backlogItemPrismaFields,
+  backlogItemReviewFields,
+  backlogItemReviewsPrismaFields,
+} from '~/lundprod/utils/api/backlog';
 
 import { authOptions } from '../api/auth/[...nextauth]';
+import { useTranslation } from 'react-i18next';
+import { convertPrismaToBacklogItem } from '~/lundprod/utils/backlog';
 
 type PropsType = {
   backlog: BacklogItemLight[];
@@ -47,7 +53,16 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
     },
     select: {
       backlogItems: {
-        select: backlogItemPrismaFields,
+        select: {
+          ...backlogItemPrismaFields,
+          backlogItemReview: {
+            select: {
+              ...backlogItemReviewsPrismaFields,
+              pros: { select: { value: true } },
+              cons: { select: { value: true } },
+            },
+          },
+        },
         orderBy: {
           order: 'asc',
         },
@@ -64,15 +79,18 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
     };
   }
 
+  const backlogItems = user.backlogItems.map(convertPrismaToBacklogItem);
+
   return {
     props: {
-      backlog: user.backlogItems,
+      backlog: backlogItems,
       session,
     },
   };
 };
 
 export function BacklogWrapper({ backlog }: PropsType) {
+  const { t } = useTranslation();
   const selected = {
     color: 'orange.400',
     borderBottomColor: 'orange.400',
@@ -82,15 +100,15 @@ export function BacklogWrapper({ backlog }: PropsType) {
     <BacklogProvider backlog={backlog}>
       <Box maxW="1200px" m="auto" py="30px" px="15px">
         <Heading as="h1" variant="h1">
-          Backlog
+          {t('mySpace.backlog.tabs.backlog')}
         </Heading>
         <Tabs>
           <TabList>
             <Tab _selected={selected} _active={{}}>
-              Ma liste
+              {t('mySpace.backlog.tabs.list')}
             </Tab>
             <Tab _selected={selected} _active={{}}>
-              Trouver un jeu
+              {t('mySpace.backlog.tabs.findGame')}
             </Tab>
           </TabList>
 

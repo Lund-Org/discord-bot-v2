@@ -3,7 +3,8 @@ import { GetStaticProps } from 'next';
 
 import { ProjectLine } from '~/lundprod/components/projects/project-line';
 
-import projects from '../../utils/data/projects.json';
+import { getProjects } from '../../utils/data/projects';
+import { useTranslation } from 'react-i18next';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -13,20 +14,19 @@ export const getStaticProps: GetStaticProps = async () => {
 };
 
 export function ProjectListPage() {
+  const { t } = useTranslation();
+  const projects = getProjects(t);
+
   return (
     <Box pt="30px">
       <Heading px="50px" variant="h3" mb="20px">
-        Projets
+        {t('projects.overview.title')}
       </Heading>
       <Text px="50px" mb="20px">
-        Des passions j&apos;en ai des tas, et des projets tout autant. Si
-        j&apos;ai envie de faire un truc, j&apos;apprends ce qu&apos;il me faut.
-        Ainsi par exemple, j&apos;ai appris à faire de la 3D pour pouvoir me
-        débrouiller seul à faire des assets graphiques, à défaut d&apos;avoir la
-        dextérité ou les connaissances pour du dessin.
+        {t('projects.overview.intro')}
       </Text>
       <Text px="50px" mb="30px">
-        Ainsi, vous trouverez ici une liste de tous mes projets :
+        {t('projects.overview.listText')}
       </Text>
       {projects.map((data, index) => (
         <ProjectLine

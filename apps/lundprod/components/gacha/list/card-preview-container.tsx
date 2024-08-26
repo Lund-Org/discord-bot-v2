@@ -12,12 +12,14 @@ import { useGachaHome } from '~/lundprod/contexts/gacha-home-context';
 import Card from './card';
 import { EmptyView } from './empty-view';
 import { FusionDetails } from './fusion-details';
+import { useTranslation } from 'react-i18next';
 
 type CardPreviewContainerProps = BoxProps;
 
 export const CardPreviewContainer = ({
   ...rest
 }: CardPreviewContainerProps) => {
+  const { t } = useTranslation();
   const { cardSelected, filters, updateFilters } = useGachaHome();
 
   if (!cardSelected) {
@@ -46,7 +48,7 @@ export const CardPreviewContainer = ({
             onChange={() => updateFilters({ ...filters, gold: !filters.gold })}
             isChecked={filters.gold}
           />
-          <FormLabel htmlFor="isChecked">Visualiser en or</FormLabel>
+          <FormLabel htmlFor="isChecked">{t('gacha.list.seeGold')}</FormLabel>
         </FormControl>
       </Box>
       <Text textAlign="center">{cardSelected.lore}</Text>

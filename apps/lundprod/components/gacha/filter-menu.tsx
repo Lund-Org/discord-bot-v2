@@ -1,4 +1,13 @@
-import { Box, Checkbox, Flex, Input, Select, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Checkbox,
+  Flex,
+  Input,
+  Select,
+  Text,
+  chakra,
+} from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { options } from '~/lundprod/utils/filters';
 import { Filters } from '~/lundprod/utils/types';
@@ -14,6 +23,7 @@ export const FilterMenu = ({
   updateFilters,
   withGoldFilter = true,
 }: FilterMenuProps) => {
+  const { t } = useTranslation();
   const update = (key: string, value: unknown) => {
     updateFilters({
       ...filters,
@@ -31,13 +41,11 @@ export const FilterMenu = ({
         />
       </Box>
       <Box>
-        <Text as="span">Nombre d&apos;étoiles : </Text>
+        <Text as="span">{t('gacha.list.starCount')}</Text>
         <Select
+          className="filter-stars"
           value={filters.filterStars}
           onChange={(event) => update('filterStars', event.target.value)}
-          sx={{
-            option: 'background: var(--chakra-colors-gray-500) !important;',
-          }}
         >
           {options.map((opt, index) => (
             <option value={opt} key={index}>
@@ -52,7 +60,7 @@ export const FilterMenu = ({
             onChange={() => update('gold', !filters.gold)}
             isChecked={filters.gold}
           >
-            Visualiser les cartes en dorée
+            {t('gacha.list.seeGold')}
           </Checkbox>
         </Box>
       )}
@@ -61,7 +69,7 @@ export const FilterMenu = ({
           onChange={() => update('fusion', !filters.fusion)}
           isChecked={filters.fusion}
         >
-          Cartes fusions uniquement
+          {t('gacha.list.fusionOnly')}
         </Checkbox>
       </Box>
     </Flex>

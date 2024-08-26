@@ -20,12 +20,14 @@ import { Filters, ProfileType } from '~/lundprod/utils/types';
 import { CardListElement } from '../../gacha/card-list-element';
 import { FilterMenu } from '../../gacha/filter-menu';
 import { ScrollContainer } from '../../scroll-container';
+import { useTranslation } from 'react-i18next';
 
 type InventoryListProps = {
   profile: ProfileType;
 } & FlexProps;
 
 export const InventoryList = ({ profile, ...rest }: InventoryListProps) => {
+  const { t } = useTranslation();
   const [inventoryFilter, setInventoryFilter] = useState<Filters>({
     gold: false,
     fusion: false,
@@ -36,22 +38,22 @@ export const InventoryList = ({ profile, ...rest }: InventoryListProps) => {
   const [basicCards, goldCards] = useMemo(() => {
     const playerInventory = profile.player.playerInventory || [];
     const filteredBasicInventories = playerInventory.filter(
-      (x) => x.type === 'basic'
+      (x) => x.type === 'basic',
     );
     const filteredGoldInventories = playerInventory.filter(
-      (x) => x.type === 'gold'
+      (x) => x.type === 'gold',
     );
 
     const filterCardsByFilter = (
       sourceCards: (PlayerInventory & {
         cardType: CardType;
-      })[]
+      })[],
     ) => {
       return filterCards(
         sourceCards.map(({ cardType, total }) => {
           return { ...cardType, total };
         }),
-        inventoryFilter
+        inventoryFilter,
       );
     };
 
@@ -64,11 +66,11 @@ export const InventoryList = ({ profile, ...rest }: InventoryListProps) => {
   return (
     <Box {...rest}>
       <Flex alignItems="center">
-        <Heading>Inventaire</Heading>
+        <Heading>{t('profile.gacha.inventory')}</Heading>
         <Popover placement="bottom-end" autoFocus={false}>
           <PopoverTrigger>
             <Button variant="solid" bg="cyan.900" ml="auto" size="sm">
-              Filtres
+              {t('profile.gacha.filters')}
             </Button>
           </PopoverTrigger>
           <PopoverContent w="auto" p="10px" bg="gray.900">
@@ -93,7 +95,7 @@ export const InventoryList = ({ profile, ...rest }: InventoryListProps) => {
         borderRadius="6px"
       >
         {basicCards.length + goldCards.length === 0 && (
-          <Text>Aucune carte</Text>
+          <Text>{t('profile.gacha.noCard')}</Text>
         )}
         {basicCards.map((basicCard) => (
           <CardListElement
