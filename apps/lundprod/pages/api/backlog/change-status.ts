@@ -16,7 +16,7 @@ const changeBacklogStatusSchema = object({
 
 export default async function changeBacklogStatus(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const session = await getServerSession(req, res, authOptions);
 
@@ -46,8 +46,6 @@ export default async function changeBacklogStatus(
     },
     data: {
       status: payload.status,
-      reason: null,
-      rating: 0,
     },
   });
 
