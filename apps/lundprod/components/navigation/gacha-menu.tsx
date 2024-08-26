@@ -25,8 +25,10 @@ import {
 } from '~/lundprod/utils/url';
 
 import { MenuLink } from './styled-components';
+import { useTranslation } from 'react-i18next';
 
 export const GachaMenu = ({ onClick }: { onClick: () => void }) => {
+  const { t } = useTranslation();
   const { pathname } = useRouter();
   const { data: session } = useSession();
   const ref = useRef(null);
@@ -34,17 +36,21 @@ export const GachaMenu = ({ onClick }: { onClick: () => void }) => {
   // Don't use useBreakpointValue to have a default value as false
   const isMobile = useMedia('(max-width: 768px)', false);
   const gachaEntries = [
-    { label: 'Introduction', href: '/gacha', isActive: isGachaPage },
-    { label: 'Liste', href: '/gacha/list', isActive: isGachaListPage },
+    { label: t('menu.gacha.intro'), href: '/gacha', isActive: isGachaPage },
     {
-      label: 'Classement',
+      label: t('menu.gacha.list'),
+      href: '/gacha/list',
+      isActive: isGachaListPage,
+    },
+    {
+      label: t('menu.gacha.ranking'),
       href: getGachaRankingPage(),
       isActive: isGachaRankingPage,
     },
     ...(session?.isPlayer
       ? [
           {
-            label: 'Ma page',
+            label: t('menu.gacha.myPage'),
             href: getUserProfileUrl(session.userId),
             isActive: curry(isUserGachaPage)(session.userId),
           },
@@ -77,7 +83,9 @@ export const GachaMenu = ({ onClick }: { onClick: () => void }) => {
             isActive={entry.isActive(pathname)}
             onClick={onClick}
           >
-            <Link href={entry.href}>Gacha &gt; {entry.label}</Link>
+            <Link href={entry.href}>
+              {t('menu.gacha.gachaEntry', { entry: entry.label })}
+            </Link>
           </MenuLink>
         ))}
       </>
@@ -95,7 +103,7 @@ export const GachaMenu = ({ onClick }: { onClick: () => void }) => {
             color="orange.300"
             cursor="pointer"
           >
-            <Text>Gacha</Text>
+            <Text>{t('menu.gacha.gacha')}</Text>
             <TriangleDownIcon w="10px" h="10px" ml="3px" />
           </Flex>
         </MenuLink>

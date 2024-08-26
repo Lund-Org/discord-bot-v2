@@ -18,6 +18,7 @@ import {
 } from 'react-big-calendar';
 
 import { useExpectedGame } from '~/lundprod/contexts/expected-games-context';
+import { Trans } from 'react-i18next';
 
 const locales = {
   fr: fr,
@@ -46,7 +47,7 @@ export const ExpectedGamesCalendarView = () => {
     return chain(expectedGames)
       .flatMap((expectedGame) => {
         const platformWording = getPlatformLabel(
-          expectedGame.releaseDate.platformId
+          expectedGame.releaseDate.platformId,
         );
         const startDate = expectedGame.releaseDate.date
           ? new Date(expectedGame.releaseDate.date)
@@ -66,7 +67,7 @@ export const ExpectedGamesCalendarView = () => {
 
   const onEventSelect = (event: Event) => {
     const expectedGame = expectedGames.find(
-      ({ igdbId }) => igdbId === event.id
+      ({ igdbId }) => igdbId === event.id,
     );
 
     if (expectedGame) {
@@ -87,10 +88,10 @@ export const ExpectedGamesCalendarView = () => {
       toast({
         title: 'Erreur',
         description: (
-          <>
-            <Text>Ce jeu a été annulé, tu ne peux pas l&apos;éditer.</Text>
-            <Text>Supprime le via la vue liste ou la recherche.</Text>
-          </>
+          <Trans
+            i18nKey="mySpace.expectedGames.calendar.eventError"
+            components={{ t: <Text /> }}
+          />
         ),
         status: 'error',
         duration: 9000,

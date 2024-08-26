@@ -6,6 +6,7 @@ import {
   translateRegion,
 } from '@discord-bot-v2/igdb-front';
 import { Fragment } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   BacklogItemLight,
@@ -18,6 +19,7 @@ type BacklogGameRowProps = {
 };
 
 export const BacklogGameRow = ({ element }: BacklogGameRowProps) => {
+  const { t } = useTranslation();
   const { backlog, addToBacklog, removeFromBacklog } = useBacklog();
 
   return (
@@ -28,7 +30,7 @@ export const BacklogGameRow = ({ element }: BacklogGameRowProps) => {
         </Text>
       </Td>
       <Td>
-        <Text>{translateGameType(element.category)}</Text>
+        <Text>{translateGameType(t, element.category)}</Text>
       </Td>
       <Td>
         <Flex gap="5px" flexDir="column">
@@ -43,7 +45,7 @@ export const BacklogGameRow = ({ element }: BacklogGameRowProps) => {
                       getReleaseFromPlatform(platform.id, element.release_dates)
                         .length - 1,
                   },
-                  (_, i) => <Text key={`placeholder${i}`}>&nbsp;</Text>
+                  (_, i) => <Text key={`placeholder${i}`}>&nbsp;</Text>,
                 )}
             </Flex>
           ))}
@@ -62,10 +64,12 @@ export const BacklogGameRow = ({ element }: BacklogGameRowProps) => {
                   >
                     <Text>{getReleaseDateWording(releaseDate)}</Text>
                     <Tag variant="outline" size="sm">
-                      <TagLabel>{translateRegion(releaseDate.region)}</TagLabel>
+                      <TagLabel>
+                        {translateRegion(t, releaseDate.region)}
+                      </TagLabel>
                     </Tag>
                   </Flex>
-                )
+                ),
               )}
             </Fragment>
           ))}
@@ -78,7 +82,7 @@ export const BacklogGameRow = ({ element }: BacklogGameRowProps) => {
             colorScheme="red"
             onClick={() => removeFromBacklog(element.id)}
           >
-            Supprimer
+            {t('mySpace.backlog.table.delete')}
           </Button>
         ) : (
           <Button
@@ -86,7 +90,7 @@ export const BacklogGameRow = ({ element }: BacklogGameRowProps) => {
             colorScheme="green"
             onClick={() => addToBacklog(element)}
           >
-            Ajouter
+            {t('mySpace.backlog.table.add')}
           </Button>
         )}
       </Td>
@@ -95,7 +99,7 @@ export const BacklogGameRow = ({ element }: BacklogGameRowProps) => {
 };
 
 function getReleaseDateWording(
-  releaseDate?: ArrayElement<Game['release_dates']>
+  releaseDate?: ArrayElement<Game['release_dates']>,
 ) {
   return releaseDate
     ? releaseDate.date
@@ -110,7 +114,7 @@ function isInBacklog(backlogList: BacklogItemLight[], game: { id: number }) {
 
 function getReleaseFromPlatform(
   platformId: number,
-  releaseDates: Game['release_dates'] = []
+  releaseDates: Game['release_dates'] = [],
 ) {
   return releaseDates.filter(({ platform }) => platform.id === platformId);
 }

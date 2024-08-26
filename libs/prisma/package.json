@@ -9,5 +9,6 @@
   "prisma": {
     "schema": "src/schema.prisma",
     "seed": "ts-node src/seed.ts"
-  }
+  },
+  "dependencies": {}
 }

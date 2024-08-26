@@ -10,10 +10,18 @@ import { ProjectMenu } from './navigation/project-menu';
 import { MenuBox } from './navigation/styled-components';
 import { UserMenu } from './navigation/user-menu';
 import { MobileBox } from './visibility';
+import { ContactMenu } from './navigation/contact-menu';
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const Menus = [HomeMenu, GachaMenu, BlogMenu, UserMenu, ProjectMenu];
+  const Menus = [
+    HomeMenu,
+    GachaMenu,
+    BlogMenu,
+    UserMenu,
+    ProjectMenu,
+    ContactMenu,
+  ];
   const ref = useRef();
 
   useClickAway(ref, () => setTimeout(() => setIsMenuOpen(false), 100));
@@ -42,6 +50,10 @@ export const Header = () => {
       h={MENU_HEIGHT}
       color="orange.300"
       px="20px"
+      position="fixed"
+      top={0}
+      left={0}
+      right={0}
     >
       <Flex ref={ref} flex={1} h="100%" alignItems="center" position="relative">
         <MobileBox>

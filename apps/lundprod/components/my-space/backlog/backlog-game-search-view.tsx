@@ -8,8 +8,10 @@ import { IGDBFilter, ListGamesSearch } from '../../../utils/types';
 import { GamePagination } from '../common/game-pagination';
 import { GameSearch } from '../common/game-search';
 import { BacklogGameResultView } from './backlog-game-result-view';
+import { useTranslation } from 'react-i18next';
 
 export const BacklogGameSearchView = () => {
+  const { t } = useTranslation();
   const [loadedGames, setLoadedGames] = useState<Game[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -80,7 +82,7 @@ export const BacklogGameSearchView = () => {
               />
             </>
           ) : (
-            <Text>Aucun résultat n&apos;a été trouvé</Text>
+            <Text>{t('mySpace.backlog.searchNoResult')}</Text>
           ))}
       </Box>
     </Box>

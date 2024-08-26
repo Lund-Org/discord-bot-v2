@@ -11,7 +11,6 @@ import { pollCmd } from './poll';
 import { pongCmd } from './pong';
 import { ppCmd } from './pp';
 import { shifumiCmd } from './shifumi';
-import { sportCmd } from './sport';
 import { tellmeCmd } from './tellme';
 
 const commands = [
@@ -25,7 +24,6 @@ const commands = [
   pongCmd,
   ppCmd,
   shifumiCmd,
-  sportCmd,
   tellmeCmd,
 ];
 
@@ -36,9 +34,9 @@ export async function initCommands() {
     .put(
       Routes.applicationGuildCommands(
         process.env.DISCORD_OAUTH_CLIENT_ID || '',
-        process.env.DISCORD_GUILD_ID || ''
+        process.env.DISCORD_GUILD_ID || '',
       ),
-      { body: commands }
+      { body: commands },
     )
     .catch((e) => {
       console.log(e);

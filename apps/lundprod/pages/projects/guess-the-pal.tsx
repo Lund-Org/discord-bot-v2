@@ -4,6 +4,7 @@ import { GetStaticProps } from 'next';
 import { LightStyledLink } from '~/lundprod/components/styled-link';
 
 import { GuessThePalForm } from '~/lundprod/components/projects/guess-the-pal-form';
+import { Trans, useTranslation } from 'react-i18next';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -14,33 +15,34 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-export function GuessThePal({ cdnUrl }) {
+export function GuessThePal({ cdnUrl }: { cdnUrl: string }) {
+  const { t } = useTranslation();
   const [hasStarted, setHasStarted] = useBoolean(false);
 
   return (
     <Box pt="40px" px="30px" textAlign="center" maxW="1024px" mx="auto">
-      <Heading>Devine le Pal !</Heading>
+      <Heading>{t('projects.guessPal.title')}</Heading>
       <Text mt="30px">
-        Tu connais surement le jeu{' '}
-        <LightStyledLink
-          href="https://www.youtube.com/watch?v=BZCftBSm8kA"
-          target="_blank"
-        >
-          "Who's that pokemon"
-        </LightStyledLink>{' '}
-        ? Et bien c'est le même principe mais pour les Pals de Palworld.
+        <Trans
+          i18nKey="projects.guessPal.description"
+          components={{
+            lightLink: (
+              <LightStyledLink
+                href="https://www.youtube.com/watch?v=BZCftBSm8kA"
+                target="_blank"
+              />
+            ),
+          }}
+        />
       </Text>
-      <Text>
-        Vous verrez la silhouette d'un Pal et il faudra deviner quel est le
-        petit monstre qui se cache derrière !
-      </Text>
+      <Text>{t('projects.guessPal.hint')}</Text>
       {!hasStarted ? (
         <Button
           colorScheme="orange"
           onClick={() => setHasStarted.on()}
           mt="40px"
         >
-          Commencer
+          {t('projects.guessPal.start')}
         </Button>
       ) : (
         <GuessThePalForm cdnUrl={cdnUrl} />

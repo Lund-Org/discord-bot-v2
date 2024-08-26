@@ -37,20 +37,6 @@ The bot provides several slash commands :
 | /shifumi       | To play rock-paper-cissors with the bot               |
 | /tellme        | To ask a question to Maurice (OpenAI integration)     |
 
-You can be warn for some sports :
-
-| Command               | Description                                         |
-| --------------------- | --------------------------------------------------- |
-| /sport help           | Display the bot features for the sport commands     |
-| /sport followleague   | Allow to follow a league to be notified             |
-| /sport followteam     | Allow to follow a team to be notified               |
-| /sport unfollowleague | Allow to unfollow a league to be notified           |
-| /sport unfollowteam   | Allow to unfollow a team to be notified             |
-| /sport viewleagues    | Display all the leagues in the database             |
-| /sport viewteams      | Display all the teams from a league in the database |
-
-To fill the database with sport event, take a look at the README in the cli folder
-
 A game is also available thanks to this slash commands :
 |Command|Description|
 |---|---|
@@ -95,9 +81,6 @@ When we notify for some feature or monitor a channel, we need their channel id. 
 - BIRTHDAY : The channel where the birthday wish will be done
 - MEME : The meme channel we are monitoring to check the messages
 - SHOP : The shop channel for the gacha where the threads are created
-- FOOTBALL : The sport channel to warn for football events
-- NBA : The sport channel to warn for NBA events
-- MOTORSPORT : The sport channel to warn for motorsport events
 
 To enable the developper mode in your settings, then right click on the channel and copy the id
 
@@ -172,10 +155,6 @@ The CDN url to redirect to when calling the proxy with the cdn subdomain
 > **NEXTAUTH_SECRET**
 
 Secret used for the JWT. Mandatory otherwise unstable_get_session doesn't work
-
-> **API_SPORT_IO_KEY**
-
-The API key from https://api-sports.io/
 
 > **EXPECTED_GAMES_WEBHOOK**
 

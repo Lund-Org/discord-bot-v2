@@ -11,12 +11,14 @@ import {
 } from '@chakra-ui/react';
 import { getRandomPal, isRightPal } from '@discord-bot-v2/common/lib/pal-guess';
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type GuessThePalFormProps = {
   cdnUrl: string;
 };
 
 export const GuessThePalForm = ({ cdnUrl }: GuessThePalFormProps) => {
+  const { t } = useTranslation();
   const [pal, setPal] = useState(() => getRandomPal());
   const [error, setError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useBoolean(false);
@@ -28,16 +30,16 @@ export const GuessThePalForm = ({ cdnUrl }: GuessThePalFormProps) => {
 
     ref.current.value = '';
     if (wrong) {
-      setError('Mauvais Pal !');
+      setError(t('pal.errorBadPal'));
     } else if (notFound) {
-      setError("Ce Pal n'existe pas");
+      setError(t('pal.errorPalNotFound'));
     } else if (valid) {
       setIsSuccess.on();
     }
   };
 
   const pass = () => {
-    setError(`C'était ${pal.name}`);
+    setError(t('pal.successPal', { palName: pal.name }));
     setIsPassed.on();
   };
 
@@ -65,17 +67,17 @@ export const GuessThePalForm = ({ cdnUrl }: GuessThePalFormProps) => {
             }
           }}
           variant="outline"
-          placeholder="Nom du Pal"
+          placeholder={t('pal.placeholder')}
           flex={1}
         />
         <IconButton
           colorScheme="orange"
           icon={<ArrowForwardIcon />}
-          aria-label="Soumettre"
+          aria-label={t('pal.submit')}
           onClick={onSubmit}
         />
-        <Button colorScheme="red" aria-label="Passer" onClick={pass}>
-          Passer
+        <Button colorScheme="red" aria-label={t('pal.pass')} onClick={pass}>
+          {t('pal.pass')}
         </Button>
       </Flex>
       {!!error && <Text color="red">{error}</Text>}
@@ -88,7 +90,7 @@ export const GuessThePalForm = ({ cdnUrl }: GuessThePalFormProps) => {
               setIsSuccess.off();
             }}
           >
-            Pal suivant
+            {t('pal.nextPal')}
           </Button>
         </Box>
       )}
@@ -102,7 +104,7 @@ export const GuessThePalForm = ({ cdnUrl }: GuessThePalFormProps) => {
               setError(null);
             }}
           >
-            Pal suivant
+            {t('pal.nextPal')}
           </Button>
         </Box>
       )}

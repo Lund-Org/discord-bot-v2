@@ -1,0 +1,467 @@
+{
+  "auth": {
+    "authError": "Erreur d'authentification",
+    "error": "Erreur : {{error}}",
+    "errorMessage": {
+      "accessDenied": "Impossible de vous connecter.\nVous n'avez pas de comptes ou un problème s'est produit à la connexion.",
+      "back": "Retour",
+      "verification": "Impossible de vérifier le token, ou il a expiré.",
+      "sessionRequired": "Il y a un problème avec le paramétrage de l'application pour l'authentification.\nContactez Lund si l'erreur continue d'apparaitre.",
+      "unknown": "Une erreur inconnue s'est produite.\nPeut-être n'avez vous pas de compte ?"
+    },
+    "login": "Connexion",
+    "loginWith": "Connexion avec {{provider}} (JV)",
+    "signup": "Pour s'inscrire, il faut rejoindre le "
+  },
+  "blog": {
+    "categories": "Catégories",
+    "categoryName": {
+      "news": "News",
+      "other": "Autre",
+      "tech": "Tech",
+      "videogame": "Jeu Vidéo"
+    },
+    "noResult": "Aucun résultat, veuillez changer vos filtres",
+    "title": "Article de blog"
+  },
+  "contact": {
+    "gamedev": "Gamedev (LundProdGameDev)",
+    "global": "Global",
+    "networkTitle": "Mes réseaux",
+    "videogame": "Jeux vidéos (LundProd)"
+  },
+  "fetcher": {
+    "unauthenticated": "Vous n'êtes plus authentifié. Rafraichissez votre page ou <signinLink>reconnectez vous</signinLink>",
+    "unknown": "Une erreur inconnue s'est produite. Réessayez ultérieurement et contactez Lund pour remonter le probleme"
+  },
+  "gacha": {
+    "index": {
+      "additionalInfo": {
+        "item1": "Chaque message sur le serveur vous donne 50 points (avec un cooldown d'une minute tout de même)",
+        "item2": "Vous êtes capés à un capital de points maximum de 15 000 points.",
+        "item3": "Il y a actuellement 142 cartes disponibles, ce qui donne les chances suivantes :",
+        "item3_subitem": "<highlight>{{dropChance}}%</highlight><text> de chance de tomber sur une carte </text><highlight>niveau {{level}}</highlight>",
+        "item4": "Pour créer une carte fusion dorée, comme pour les autres cartes, il faut 5 fois la version basique pour pouvoir la golder",
+        "item5": "L'XP est calculé de la manière suivante : ",
+        "item5a": "{{xp}} x le niveau de la carte pour les cartes basiques",
+        "item5b": "{{xp}} x le niveau de la carte pour les cartes dorées",
+        "item5c": "Les cartes comptent une fois par type, ainsi si vous avez 14 cartes basiques n°3 et 5 cartes dorées n°3, vous aurez uniquement {{totalXp}}xp ({{basicXP}} + {{goldXP}})",
+        "title": "Quelques informations importantes :"
+      },
+      "cardListLink": "La liste des cartes est présente <lightLink>ici</lightLink>",
+      "commandTable": {
+        "buyDescription": "Permet d'acheter des cartes avec vos points ({{points}} points par cartes). Possibilité d'acheter entre 1 et 6 cartes.",
+        "buyExample": "vous dépensera {{points}} points et vous donnera 3 cartes aléatoires",
+        "cardsDescription": "Permet de lister les cartes dans l'inventaire (une pagination est disponible via les réactions ◀️ et ▶️)",
+        "dailyDescription": "Permet de faire un tirage quotidiennement d'une carte gratuitement. Le reset est chaque jour à minuit heure française",
+        "dismantleDescription": "Permet de transformer une carte dorée en 4 basique",
+        "dismantleExample": "va vous retirer une carte dorée mais vous donner en échange 4 cartes basiques n°54",
+        "fusionDescription": "Permet de sacrifier les cartes composants en une carte fusion. Vous pouvez les retrouver dans la liste disponible ci-dessus (l'indication est en haut à gauche de la carte et si vous cliquez dessus, vous voyez les composants). La commande fait apparaitre un menu déroulant des fusions possibles à faire, vous n'avez qu'à choisir la carte que vous voulez récupérer.",
+        "giftDescription": "Permet de récupérer un cadeau",
+        "giftExample": "vous donnera un cadeau tel que des points, des cartes basiques ou dorées",
+        "goldDescription": "Transforme 5 cartes basiques en une carte dorée du même type",
+        "goldExample": "transforme 5 cartes n°20 basique en une carte n°20 dorée",
+        "header": {
+          "command": "Commande",
+          "description": "Description",
+          "example": "Exemple (si nécessaire)"
+        },
+        "helpDescription": "Affiche les commandes disponibles",
+        "joinDescription": "Cette commande est la première qu'il faudra faire pour pouvoir jouer. Elle crée votre profil et vous offre 8 cartes",
+        "pointsDescription": "Permet de savoir combien de points vous avez (la monnaie du jeu pour acheter des cartes)",
+        "profileDescription": "Permet de connaitre votre niveau par rapport aux cartes que vous avez et à voir combien d'xp il vous manque avant le prochain",
+        "sellDescription": "<text>Permet de vendre des cartes pour gagner des points. Vous gagnez</text><code>{{basicXP}} x le niveau de la carte x la quantité de carte vendu</code><text>pour les cartes basiques et </text><code>{{goldXP}} x le niveau de la carte x la quantité de carte vendu </code><text>pour les cartes dorées</text>",
+        "sellExample": "va vendre 3 cartes basiques n°12 et donner {{points}} points",
+        "twitchDescription": "Permet de lier son pseudo twitch à son compte de gacha pour les rewards achetées en Madeleine sur Twitch (temporairement indisponible). Votre lien twitch apparaitra sur votre profil",
+        "twitchExample": "va lier votre chaine Twitch au gacha",
+        "viewDescription": "Permet d'afficher une carte pour avoir ses détails",
+        "viewExample": "affichera la carte n°9"
+      },
+      "description1": "Derrière ce mot qui fait peur et qui fait penser à tous ces jeux mobiles qui en veulent à votre porte-monnaie se cache un jeu tout à fait sain ici. En effet, via Discord, vous pouvez jouer à ce petit jeu de collection de carte, sans dépenser le moindre euro.",
+      "description2": "Ce jeu est basé sur le \"lore\" de ma chaine Youtube/Twitch, de mon expérience passée sur internet, ou tout simplement de petits délires avec la communauté. Certains ayant même leur propre carte ! Et si jamais vous voulez comprendre certaines cartes, son histoire vous est expliquée dans la page \"liste\".",
+      "discordCTA": "Prêt à jouer ? <lightLink>Rejoignez le Discord (JV) !</lightLink>",
+      "howItWorks": {
+        "description": "Sur Discord, et une fois le rôle associé récupéré dans le channel adéquate, une section apparait avec différents nouveaux channels. Celui qui nous intéresse, c'est celui nommé \"#commandes\". Voici la liste des différentes commandes disponibles :",
+        "title": "Comment ça marche ?"
+      },
+      "rankListLink": "Le classement des joueurs est <lightLink>ici</lightLink>",
+      "title": "Introduction - Gacha",
+      "xpTable": {
+        "level": "Niveau",
+        "xpNeeded": "XP nécessaire",
+        "title": "XP nécessaire par niveau :"
+      }
+    },
+    "list": {
+      "emptyView": {
+        "filter": "Filtre",
+        "details": "Les détails apparaitront ici",
+        "pickCard": "Choisis une carte"
+      },
+      "filters": "Filtres",
+      "fusionComponents": "Composants pour la fusion :",
+      "fusionOnly": "Cartes fusions uniquement",
+      "seeGold": "Visualiser en or",
+      "starCount": "Nombre d'étoiles : "
+    },
+    "ranking": {
+      "level": "Niveau : {{level}}",
+      "listUserInfo": ", niveau {{level}} avec {{xp}}xp",
+      "xp": "XP : {{xp}}"
+    }
+  },
+  "gameType": {
+    "bundle": "Bundle",
+    "dlc": "DLC",
+    "episode": "Episode",
+    "expansion": "Extension",
+    "game": "Jeu",
+    "mod": "Mod",
+    "other": "Autre",
+    "port": "Portage",
+    "remake": "Remake",
+    "remaster": "Remaster",
+    "season": "Saison",
+    "standalone": "Standalone"
+  },
+  "home": {
+    "bot": {
+      "line1": "Bot Discord qui permet aux utilisateurs d'accéder à diverses fonctionnalités, du petit jeu de Shifumi, à la possibilité de créer des sondages ou encore de requêter le site <hltbLink>HowLongToBeat<externalIcon /></hltbLink>",
+      "line2": "C'est lui aussi qui permet aux utilisateurs de jouer au gacha via les commandes qu'il rend disponible.",
+      "line3": "Vous pouvez retrouver le code du site et le bot sur <darkLinkGithub>Github<externalIcon /></darkLinkGithub>",
+      "title": "MauriceBot"
+    },
+    "gacha": {
+      "line1": "Jeu sur mon discord de collection de cartes. Ces cartes sont basées sur l'univers de ma chaine, par rapport aux jeux auxquels j'ai pu jouer en live.",
+      "line2": "Contrairement aux gachas mobiles qui incitent aux microtransactions, ici tout est évidemment gratuit.",
+      "line3": "Vous pouvez y accéder <darkLinkDiscord>ici<externalIcon /></darkLinkDiscord> ou consulter les cartes & le classement <darkLinkGacha>ici</darkLinkGacha>.",
+      "title": "Gacha"
+    },
+    "other": {
+      "line1": "Et bien d'autres projets sont disponibles ou en cours de réalisation comme des réalisations 3D, des jeux, et plus encore. Ils sont visibles dans la rubrique <projectLink>projets</projectLink> mais vous pouvez aussi retrouver les annonces de nouveaux projets via <discordLink>Discord<externalIcon /></discordLink>"
+    },
+    "website": {
+      "line1": "Prévu pour accueillir tous mes projets, ce site a reçu plusieurs itérations.",
+      "line2": "Présentant de base uniquement les pages du gacha, il a évolué pour être plus propre en terme de design, mais aussi plus riche en fonctionnalité et informations.",
+      "line3": "Vous pouvez retrouver le code du site et le bot sur <darkLinkGithub>Github<externalIcon /></darkLinkGithub>",
+      "title": "Lundprod.com"
+    },
+    "welcome": {
+      "item1": "Je suis Florian, Lund sur internet, j'ai {{currentAge}} ans et je suis développeur.",
+      "item2": "Ici, vous trouverez tous mes travaux et liens utiles vers les différentes plate-formes.",
+      "item3": "Mes projets sont très variés, cherchez votre bonheur; Vidéos, jeux sur discord, jeux de Gamejam...."
+    },
+    "title": "Bienvenue"
+  },
+  "language": {
+    "en": "Anglais",
+    "fr": "Français"
+  },
+  "menu": {
+    "blog": "Blog",
+    "contact": "Mes réseaux",
+    "gacha": {
+      "gacha": "Gacha",
+      "gachaEntry": "Gacha > {{entry}}",
+      "intro": "Introduction",
+      "list": "Liste",
+      "myPage": "Ma page",
+      "ranking": "Classement"
+    },
+    "home": "Accueil",
+    "projects": "Projets",
+    "sign": {
+      "avatarError": "Impossible de charger l'avatar. Cela arrive si tu as changé d'avatar. Déco/reco pour l'actualiser",
+      "close": "Fermer",
+      "myBacklog": "Mon backlog",
+      "myExpectedGames": "Mes jeux attendus",
+      "myGacha": "Ma page gacha",
+      "myPages": "Mes pages",
+      "signout": "Deconnexion"
+    },
+    "users": "Utilisateurs"
+  },
+  "months": {
+    "april": "Avril",
+    "august": "Aout",
+    "february": "Fevrier",
+    "december": "Decembre",
+    "january": "Janvier",
+    "july": "Juillet",
+    "june": "Juin",
+    "march": "Mars",
+    "may": "Mai",
+    "november": "Novembre",
+    "october": "Octobre",
+    "september": "Septembre"
+  },
+  "mySpace": {
+    "backlog": {
+      "details": {
+        "add": "Ajouter",
+        "addDetails": "Ajouter des détails",
+        "addNote": "Ajouter une note",
+        "charactersLeft": "{{count}} caractères restants",
+        "comment": "Commentaire *",
+        "completion": "Complétion",
+        "completionPercentage": "%",
+        "cons": "Points négatifs",
+        "duration": "Durée",
+        "durationHour": "h",
+        "note": "Note *",
+        "pros": "Points positifs",
+        "save": "Sauvegarder"
+      },
+      "list": {
+        "actions": "Actions",
+        "delete": "Supprimer",
+        "emptyView": {
+          "edit": "<t>Rien dans ton backlog ?</t><t>Trouve un jeu dans le deuxième onglet pour enrichir ta liste !</t><t>Tu peux mettre jusqu'à 100 jeux dans ton backlog 🤩</t>",
+          "readOnly": "Ce backlog ne contient aucun jeu pour l'instant"
+        },
+        "info": "Info",
+        "moreInfo": "Plus d'information",
+        "name": "Nom",
+        "paginate": {
+          "next": "Suivant",
+          "page": "Page {{nb}}",
+          "previous": "Précédent"
+        },
+        "status": "Statut",
+        "type": "Type"
+      },
+      "review": {
+        "completion": "Complétion : {{completion}}%",
+        "cons": "Points négatifs",
+        "duration": "Durée de jeu : {{duration}}h",
+        "generalInformation": "Information générale",
+        "open": "Voir l'avis",
+        "pros": "Points positifs",
+        "rating": "Note : ",
+        "review": "Avis",
+        "title": "Avis de {{userName}} pour {{gameName}}"
+      },
+      "search": {
+        "dlc": "DLC",
+        "filterPlatformPlaceholder": "Ajouter un filtre par plate-forme",
+        "game": "Jeu",
+        "gamePlaceholder": "Nom du jeu à chercher",
+        "search": "Chercher"
+      },
+      "searchNoResult": "Aucun résultat n'a été trouvé",
+      "status": {
+        "abandoned": "Abandonné",
+        "backlog": "Backlog",
+        "finished": "Fini",
+        "inProgress": "En cours",
+        "noFilter": "Sans filtre",
+        "wishlist": "Wishlist"
+      },
+      "table": {
+        "add": "Ajouter",
+        "delete": "Supprimer",
+        "header": {
+          "name": "Nom",
+          "platform": "Plate-forme",
+          "releaseDate": "Date de sortie",
+          "type": "Type"
+        }
+      },
+      "tabs": {
+        "backlog": "Backlog",
+        "findGame": "Trouver un jeu",
+        "list": "Ma liste"
+      }
+    },
+    "expectedGames": {
+      "awaitedGames": "Jeux attendus",
+      "calendar": {
+        "eventError": "<t>Ce jeu a été annulé, tu ne peux pas l'éditer.</t><t>Supprime le via la vue liste ou la recherche.</t>"
+      },
+      "findGame": "Trouver un jeu",
+      "list": {
+        "add": "Ajouter",
+        "addedToBacklog": "Ajouté au backlog à la sortie",
+        "calendar": "Calendrier",
+        "cancelled": "Annulé",
+        "delete": "Supprimer",
+        "edit": "Editer",
+        "info": "Info",
+        "list": "Liste",
+        "noExpectedGames": "Aucun jeu attendu pour le moment",
+        "noResult": "Aucun résultat n'a été trouvé",
+        "table": {
+          "info": "Informations",
+          "name": "Nom",
+          "releaseDate": "Date de sortie",
+          "type": "Type"
+        },
+        "unknownDate": "Inconnue"
+      },
+      "modal": {
+        "addToBacklogOnRelease": "Ajouter au backlog à la sortie",
+        "cancel": "Annuler",
+        "createTitle": "Ajouter un jeu attendu",
+        "createType": "Tu es sur le point d'ajouter {{game}} à tes jeux attendus {{platform}}",
+        "platformMessage": "pour la plate-forme : {{platform}}",
+        "save": "Enregistrer",
+        "updateTitle": "Mettre à jour le jeu attendu",
+        "updateType": "Tu es sur le point de mettre à jour ta mise en attente pour le jeu : {{game}} {{platform}}"
+      },
+      "myGames": "Mes jeux"
+    }
+  },
+  "pal": {
+    "errorBadPal": "Mauvais Pal !",
+    "errorPalNotFound": "Ce Pal n'existe pas",
+    "nextPal": "Pal suivant",
+    "pass": "Passer",
+    "placeholder": "Nom du Pal",
+    "submit": "Soumettre",
+    "successPal": "C'était {{palName}}"
+  },
+  "profile": {
+    "gacha": {
+      "cardToGold": "Carte à golder",
+      "filters": "Filtres",
+      "inventory": "Inventaire",
+      "noCard": "Aucune carte"
+    },
+    "join": "A rejoint le Discord le {{date}}",
+    "lastDraw": "Dernier tirage de carte le {{date}}",
+    "level": "Niveau actuel : {{level}}",
+    "onTwitch": "Ou <twitchLink>{{username}}</twitchLink> sur Twitch",
+    "points": "Points actuels : {{points}}",
+    "rank": "Rang actuel : {{rank}}",
+    "xp": "XP actuelle : {{xp}}",
+    "xpToNextLevel": "XP du prochain niveau : {{xp}}"
+  },
+  "projects": {
+    "3d": {
+      "description": "Je me suis mis à la 3D en Mars 2023 en suivant les cours sur <lightLink>GameDev.tv</lightLink> que j'ai eu dans un Humble Bundle. Voici mes différentes créations, dans l'ordre chronologique.",
+      "title": "Projets 3D"
+    },
+    "guessPal": {
+      "description": "Tu connais surement le jeu <lightLink>\"Who's that pokemon?\"</lightLink> ? Et bien c'est le même principe mais pour les Pals de Palworld.",
+      "hint": "Vous verrez la silhouette d'un Pal et il faudra deviner quel est le petit monstre qui se cache derrière !",
+      "start": "Commencer",
+      "title": "Devine le Pal !"
+    },
+    "overview": {
+      "intro": "Des passions j'en ai des tas, et des projets tout autant. Si j'ai envie de faire un truc, j'apprends ce qu'il me faut. Ainsi par exemple, j'ai appris à faire de la 3D pour pouvoir me débrouiller seul à faire des assets graphiques, à défaut d'avoir la dextérité ou les connaissances pour du dessin.",
+      "listText": "Ainsi, vous trouverez ici une liste de tous mes projets :",
+      "title": "Projets"
+    },
+    "projects": {
+      "3D": {
+        "date": "2023 - Maintenant",
+        "description": "Les rendus faits avec Blender",
+        "gallery": {
+          "item1": {
+            "description": "Premier rendu 3D en suivant un cours pour créer une scène en low poly, pour connaître les bases de Blender. C'était vraiment très intéressant à faire et j'ai créé 2 rendus avec des atmosphères différentes : Une première de jour, une seconde de nuit.",
+            "image1": "Rendu final avec une lumière de jour",
+            "image2": "Rendu final avec une atmosphère de nuit",
+            "image3": "Avancement 1/12",
+            "image4": "Avancement 2/12",
+            "image5": "Avancement 3/12",
+            "image6": "Avancement 4/12",
+            "image7": "Avancement 5/12",
+            "image8": "Avancement 6/12",
+            "image9": "Avancement 7/12",
+            "image10": "Avancement 8/12",
+            "image11": "Avancement 9/12",
+            "image12": "Avancement 10/12",
+            "image13": "Avancement 11/12",
+            "image14": "Avancement 12/12",
+            "title": "Cottage sur une île"
+          },
+          "item2": {
+            "description": "Adaptation 3D basée sur un dessin de Fakhear (@fakhear sur Instagram)",
+            "image1": "Rendu final",
+            "image2": "Vue 1/4",
+            "image3": "Vue 2/4",
+            "image4": "Vue 3/4",
+            "image5": "Vue 4/4",
+            "title": "Le livre de Fakhear"
+          },
+          "item3": {
+            "description": "Adaptation 3D basée sur un dessin de Sconera (@sconera._ sur Instagram)",
+            "image1": "Rendu final 1/2",
+            "image2": "Rendu final 2/2",
+            "image3": "Avancement 1/6",
+            "image4": "Avancement 2/6",
+            "image5": "Avancement 3/6",
+            "image6": "Avancement 4/6",
+            "image7": "Avancement 5/6",
+            "image8": "Avancement 6/6",
+            "title": "La chambre de Sconera"
+          },
+          "item4": {
+            "description": "Rendu 3D en suivant un cours sur la modélisation de personnage et une base d'animation. Avec l'animation de marche, il m'a fait penser au meme \"Wide Putin\"",
+            "image1": "Scene de démo du personnage avec une pose",
+            "image2": "Wide putin meme",
+            "title": "Le gros bonhomme"
+          }
+        },
+        "title": "3D"
+      },
+      "gacha": {
+        "date": "2021 - 2024",
+        "description": "Le jeu de carte sur Discord",
+        "title": "Gacha"
+      },
+      "guessThePal": {
+        "date": "Février 2024",
+        "description": "Petit jeu pour les fans de Palworld",
+        "title": "Devine le Pal"
+      },
+      "lundprod": {
+        "date": "2022 - Maintenant",
+        "description": "Le site sur lequel vous êtes",
+        "title": "Lundprod.com"
+      },
+      "pizzaJam": {
+        "date": "Avril 2023",
+        "description": "Le résultat de la Gamedev.js Jam 2023",
+        "title": "Pizza Jam"
+      },
+      "wherestheroad": {
+        "date": "Juillet 2024",
+        "description": "Le résultat de la KenneyJam 2024",
+        "title": "Where's the road??"
+      }
+    }
+  },
+  "region": {
+    "asia": "Asie",
+    "australia": "Australie",
+    "brazil": "Brésil",
+    "china": "Chine",
+    "europe": "Europe",
+    "japan": "Japon",
+    "korea": "Corée",
+    "newZealand": "Nouvelle Zelande",
+    "northAmerica": "US",
+    "worldWide": "Mondial"
+  },
+  "userList": {
+    "title": "Utilisateurs :"
+  },
+  "userPage": {
+    "backlog": "Backlog",
+    "expectedGames": "Jeux attendus",
+    "gacha": "Gacha"
+  },
+  "welcome": {
+    "lastVideoLundprod": "LundProd",
+    "lastVideoLundprodGamedev": "LundProdGamedev",
+    "lastVideoTitle": "Les dernières vidéos",
+    "social": {
+      "gamedev": "Gamedev (LundProdGameDev)",
+      "global": "Global",
+      "networkTitle": "Mes réseaux",
+      "videogame": "Jeux vidéos (LundProd)"
+    },
+    "title": "Bienvenue"
+  }
+}

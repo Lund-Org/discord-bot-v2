@@ -4,6 +4,7 @@ import { prisma } from '@discord-bot-v2/prisma';
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { GamepadIcon } from '~/lundprod/components/icons/gamepad';
 import { ListIcon } from '~/lundprod/components/icons/list';
@@ -56,7 +57,7 @@ export const getStaticProps: GetStaticProps<UsersPageProps> = async () => {
     };
   }).filter(
     ({ isPlayer, backlogItemsCount, expectedGamesCount }) =>
-      isPlayer || backlogItemsCount || expectedGamesCount
+      isPlayer || backlogItemsCount || expectedGamesCount,
   );
 
   return {
@@ -68,6 +69,7 @@ export const getStaticProps: GetStaticProps<UsersPageProps> = async () => {
 };
 
 export function UserProfilePage({ users }: UsersPageProps) {
+  const { t } = useTranslation();
   const [userOverId, setUserOverId] = useState<number | null>(null);
 
   const iconColorFn = (condition: boolean, index: number) => ({
@@ -75,16 +77,16 @@ export function UserProfilePage({ users }: UsersPageProps) {
   });
 
   return (
-    <Box p="20px 50px">
-      <Heading variant="h3">Utilisateurs :</Heading>
+    <Box p={{ base: '10px 20px', md: '20px 50px' }}>
+      <Heading variant="h3">{t('userList.title')}</Heading>
       <Flex flexDir="column" gap="16px" mt="30px" maxW="800px">
         {users.map((user, index) => (
           <Link key={user.discordId} href={`/u/${user.discordId}`}>
             <Box
-              display={['block', 'flex']}
+              display="flex"
               borderRadius="4px"
               p={['4px', '4px 20px']}
-              w={['fit-content', 'auto']}
+              w={{ base: 'fit-content', md: 'auto' }}
               border="1px solid"
               borderColor="gray.700"
               alignItems="center"

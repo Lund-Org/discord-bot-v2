@@ -2,6 +2,7 @@ import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { Box, Button, Flex, Tag, TagLabel, Text } from '@chakra-ui/react';
 import { getPlatformLabel } from '@discord-bot-v2/igdb-front';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 
 import { useExpectedGame } from '~/lundprod/contexts/expected-games-context';
 import { formatReleaseDate } from '~/lundprod/utils/dates';
@@ -13,18 +14,19 @@ type ExpectedGamesListViewProps = {
 export const ExpectedGamesListView = ({
   readOnly = true,
 }: ExpectedGamesListViewProps) => {
+  const { t } = useTranslation();
   const { expectedGames, removeFromExpectedList, setModalData } =
     useExpectedGame();
 
   if (!expectedGames.length) {
-    return <Text>Aucun jeu attendu pour le moment</Text>;
+    return <Text>{t('mySpace.expectedGames.list.noExpectedGames')}</Text>;
   }
 
   return (
     <Box maxW="800px">
       {expectedGames.map((expectedGame) => {
         const platformWording = getPlatformLabel(
-          expectedGame.releaseDate.platformId
+          expectedGame.releaseDate.platformId,
         );
 
         return (
@@ -55,12 +57,12 @@ export const ExpectedGamesListView = ({
               </Flex>
               {expectedGame.addToBacklog && (
                 <Text fontStyle="italic" fontSize="0.8em">
-                  Ajouté au backlog à la sortie
+                  {t('mySpace.expectedGames.list.addedToBacklog')}
                 </Text>
               )}
               {expectedGame.cancelled && (
                 <Text color="red.400" fontSize="0.8em">
-                  Annulé
+                  {t('mySpace.expectedGames.list.cancelled')}
                 </Text>
               )}
             </Flex>
@@ -75,7 +77,7 @@ export const ExpectedGamesListView = ({
                   color="gray.700"
                   rightIcon={<ExternalLinkIcon />}
                 >
-                  Info
+                  {t('mySpace.expectedGames.list.info')}
                 </Button>
               </Link>
             </Box>
@@ -97,14 +99,14 @@ export const ExpectedGamesListView = ({
                     })
                   }
                 >
-                  Editer
+                  {t('mySpace.expectedGames.list.edit')}
                 </Button>
                 <Button
                   size="sm"
                   colorScheme="red"
                   onClick={() => removeFromExpectedList(expectedGame.igdbId)}
                 >
-                  Supprimer
+                  {t('mySpace.expectedGames.list.delete')}
                 </Button>
               </Flex>
             )}

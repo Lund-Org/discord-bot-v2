@@ -7,10 +7,13 @@ import {
   translateRegion,
 } from '@discord-bot-v2/igdb';
 import { prisma } from '@discord-bot-v2/prisma';
+import { initI18n } from '@discord-bot-v2/translation';
 import { EmbedBuilder, spoiler, userMention, WebhookClient } from 'discord.js';
 import { chain } from 'lodash';
 
 export const cronTiming = '0 0 0 * * *';
+
+const i18n = initI18n({});
 
 export async function cronDefinition() {
   const date = new Date();
@@ -62,7 +65,9 @@ export async function cronDefinition() {
           url: expectedGames[0].url,
           userDiscordIds: expectedGames.map(({ user }) => user.discordId),
           regions: expectedGames
-            .map(({ releaseDate }) => translateRegion(releaseDate.region))
+            .map(({ releaseDate }) =>
+              translateRegion(i18n.t, releaseDate.region),
+            )
             .join(', '),
           platforms: expectedGames
             .map(({ releaseDate }) => getPlatformLabel(releaseDate.platformId))
@@ -74,7 +79,7 @@ export async function cronDefinition() {
     // send all the notifications
     notifData.forEach((data) => {
       const userNotifs = spoiler(
-        data.userDiscordIds.map(userMention).join(' ')
+        data.userDiscordIds.map(userMention).join(' '),
       );
 
       const embed = new EmbedBuilder()
@@ -135,7 +140,7 @@ export async function cronDefinition() {
               update: {},
               create: {
                 url: expectedGame.url,
-                category: translateGameType(category),
+                category: translateGameType(i18n.t, category),
                 igdbGameId: expectedGame.igdbId,
                 name: expectedGame.name,
                 user: { connect: { id: expectedGame.userId } },

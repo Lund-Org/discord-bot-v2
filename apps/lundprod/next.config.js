@@ -23,6 +23,13 @@ const nextConfig = {
   experimental: {
     esmExternals: false,
   },
+  compiler: {
+    // Enables the styled-components SWC transform
+    styledComponents: {
+      displayName: false,
+    },
+  },
+  reactStrictMode: true,
 };
 
 const mdxConfig = withMdx({

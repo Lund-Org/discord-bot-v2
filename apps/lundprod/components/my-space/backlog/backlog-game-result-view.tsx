@@ -2,12 +2,15 @@ import { Box, chakra, Table, Tbody, Th, Thead, Tr } from '@chakra-ui/react';
 import { Game } from '@discord-bot-v2/igdb-front';
 
 import { BacklogGameRow } from './backlog-game-row';
+import { useTranslation } from 'react-i18next';
 
 type BacklogGameResultProps = {
   games: Game[];
 };
 
 export const BacklogGameResultView = ({ games }: BacklogGameResultProps) => {
+  const { t } = useTranslation();
+
   return (
     <Box overflow="auto" py={2}>
       <Table
@@ -28,11 +31,15 @@ export const BacklogGameResultView = ({ games }: BacklogGameResultProps) => {
         <Thead>
           <Tr>
             <Th colSpan={2} color="gray.400">
-              Nom
+              {t('mySpace.backlog.table.header.name')}
             </Th>
-            <Th color="gray.400">Type</Th>
-            <Th color="gray.400">Plate-forme</Th>
-            <Th color="gray.400">Date de sortie</Th>
+            <Th color="gray.400">{t('mySpace.backlog.table.header.type')}</Th>
+            <Th color="gray.400">
+              {t('mySpace.backlog.table.header.platform')}
+            </Th>
+            <Th color="gray.400">
+              {t('mySpace.backlog.table.header.releaseDate')}
+            </Th>
             <Th w="100px" />
           </Tr>
         </Thead>

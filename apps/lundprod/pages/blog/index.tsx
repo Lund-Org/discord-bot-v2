@@ -10,11 +10,12 @@ import {
 import { BlogPost, Category, Tag } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { BlogArticle } from '~/lundprod/components/blog/blog-article';
 import { useFetcher } from '~/lundprod/hooks/useFetcher';
 import { getManyBlogPosts } from '~/lundprod/utils/api/blog';
-import { CategoryWordingMapping } from '~/lundprod/utils/blog';
+import { CategoryKeys, getCategoryName } from '~/lundprod/utils/blog';
 import { getNumberParam } from '~/lundprod/utils/next';
 
 type PropsType = {
@@ -44,6 +45,7 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
 };
 
 export function BlogPage({ blogPosts }: PropsType) {
+  const { t } = useTranslation();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadedBlogPosts, setLoadedBlogPosts] = useState(blogPosts);
   const { get } = useFetcher();
@@ -63,7 +65,7 @@ export function BlogPage({ blogPosts }: PropsType) {
     setCategories(
       categories.includes(value)
         ? categories.filter((category) => category !== value)
-        : [...categories, value]
+        : [...categories, value],
     );
   };
 
@@ -88,15 +90,13 @@ export function BlogPage({ blogPosts }: PropsType) {
           borderBottom="1px solid var(--chakra-colors-orange-500)"
           w="250px"
         >
-          Blog Posts
+          {t('blog.title')}
         </Heading>
         {loadedBlogPosts.map((blogPost, index) => (
           <BlogArticle key={index} blogPost={blogPost} />
         ))}
         {!loadedBlogPosts.length && (
-          <Text fontStyle="italic">
-            Aucun résultat, veuillez changer vos filtres
-          </Text>
+          <Text fontStyle="italic">{t('blog.noResult')}</Text>
         )}
       </Box>
       <Box w="250px">
@@ -107,21 +107,19 @@ export function BlogPage({ blogPosts }: PropsType) {
           mb="30px"
           borderBottom="1px solid var(--chakra-colors-orange-500)"
         >
-          Catégories
+          {t('blog.categories')}
         </Heading>
         <UnorderedList listStyleType="none" ml={0}>
-          {Object.keys(CategoryWordingMapping).map(
-            (blogCategoryEnum: Category, index) => (
-              <ListItem key={index} my={2}>
-                <Checkbox
-                  colorScheme="orange"
-                  onChange={() => onToggle(blogCategoryEnum)}
-                >
-                  {CategoryWordingMapping[blogCategoryEnum]}
-                </Checkbox>
-              </ListItem>
-            )
-          )}
+          {CategoryKeys.map((blogCategoryEnum: Category, index) => (
+            <ListItem key={index} my={2}>
+              <Checkbox
+                colorScheme="orange"
+                onChange={() => onToggle(blogCategoryEnum)}
+              >
+                {getCategoryName(t, blogCategoryEnum)}
+              </Checkbox>
+            </ListItem>
+          ))}
         </UnorderedList>
       </Box>
     </Flex>

@@ -1,6 +1,7 @@
 import { Flex, Select } from '@chakra-ui/react';
 import { BacklogStatus } from '@prisma/client';
 import { ChangeEventHandler } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useBacklog } from '~/lundprod/contexts/backlog-context';
 import {
@@ -17,6 +18,7 @@ export const BacklogChangeStatus = ({
   igdbId,
   status,
 }: BacklogChangeStatusProps) => {
+  const { t } = useTranslation();
   const { updateBacklogStatus } = useBacklog();
 
   const updateStatus: ChangeEventHandler<HTMLSelectElement> = (e) => {
@@ -40,7 +42,7 @@ export const BacklogChangeStatus = ({
       >
         {Object.values(BacklogStatus).map((backlogStatus) => (
           <option key={backlogStatus} value={backlogStatus}>
-            {getBacklogStatusTranslation(backlogStatus)}
+            {getBacklogStatusTranslation(t, backlogStatus)}
           </option>
         ))}
       </Select>

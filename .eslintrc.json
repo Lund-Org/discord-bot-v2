@@ -10,7 +10,7 @@
           "error",
           {
             "enforceBuildableLibDependency": true,
-            "allow": ["~/bot", "~/cli", "~/lundprod"],
+            "allow": ["~/bot", "~/lundprod"],
             "depConstraints": [
               {
                 "sourceTag": "scope:app",

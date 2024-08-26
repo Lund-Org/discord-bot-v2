@@ -20,6 +20,7 @@ import {
 } from '~/lundprod/utils/api/expected-games';
 
 import { authOptions } from '../api/auth/[...nextauth]';
+import { useTranslation } from 'react-i18next';
 
 type PropsType = {
   expectedGames: ExpectedGame[];
@@ -70,6 +71,7 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
 };
 
 export function ExpectedGamesWrapper({ expectedGames }: PropsType) {
+  const { t } = useTranslation();
   const selected = {
     color: 'orange.400',
     borderBottomColor: 'orange.400',
@@ -79,15 +81,15 @@ export function ExpectedGamesWrapper({ expectedGames }: PropsType) {
     <ExpectedGameProvider expectedGames={expectedGames}>
       <Box maxW="1200px" m="auto" py="30px" px="15px">
         <Heading as="h1" variant="h1">
-          Jeux attendus
+          {t('mySpace.expectedGames.awaitedGames')}
         </Heading>
         <Tabs>
           <TabList>
             <Tab _selected={selected} _active={{}}>
-              Mes jeux
+              {t('mySpace.expectedGames.myGames')}
             </Tab>
             <Tab _selected={selected} _active={{}}>
-              Trouver un jeu
+              {t('mySpace.expectedGames.findGame')}
             </Tab>
           </TabList>
 

@@ -8,21 +8,24 @@ import {
   // Thead,
   Tr,
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 type LevelsTableProps = {
   configLevels: Record<string, number>;
 };
 
 export const LevelsTable = ({ configLevels }: LevelsTableProps) => {
+  const { t } = useTranslation();
+
   return (
     <Box mt="30px">
-      <Text fontWeight="bold">XP nécessaire par niveau :</Text>
+      <Text fontWeight="bold">{t('gacha.index.xpTable.title')}</Text>
       <Box pt={2} w="100%" maxW="100%" overflowX="auto">
         <Table>
           <Tbody>
             <Tr>
               <Td bg="blackAlpha.300" fontWeight="bold">
-                Niveau
+                {t('gacha.index.xpTable.level')}
               </Td>
               {Object.keys(configLevels)
                 .map((x) => parseInt(x, 10))
@@ -39,7 +42,7 @@ export const LevelsTable = ({ configLevels }: LevelsTableProps) => {
             </Tr>
             <Tr>
               <Td whiteSpace="nowrap" bg="blackAlpha.300" fontWeight="bold">
-                XP nécessaire
+                {t('gacha.index.xpTable.xpNeeded')}
               </Td>
               {Object.keys(configLevels)
                 .map((x) => parseInt(x, 10))

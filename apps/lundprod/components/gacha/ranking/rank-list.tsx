@@ -1,5 +1,6 @@
 import { ListItem, OrderedList, Text } from '@chakra-ui/react';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 
 import { Rank } from '~/lundprod/utils/types';
 import { getUserProfileUrl } from '~/lundprod/utils/url';
@@ -9,6 +10,8 @@ type RankListProps = {
 };
 
 export const RankList = ({ ranks }: RankListProps) => {
+  const { t } = useTranslation();
+
   return (
     <OrderedList start={4} pt="35px" pl={{ base: '35px', md: '0' }}>
       {ranks.map((rank) => (
@@ -19,7 +22,10 @@ export const RankList = ({ ranks }: RankListProps) => {
             </Text>
           </Link>
           <Text as="span">
-            , niveau {rank.level.currentLevel} avec {rank.currentXP}xp
+            {t('gacha.ranking.listUserInfo', {
+              level: rank.level.currentLevel,
+              xp: rank.currentXP,
+            })}
           </Text>
         </ListItem>
       ))}

@@ -1,24 +1,27 @@
 import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import { GetServerSideProps } from 'next';
 import { signIn } from 'next-auth/react';
+import { useTranslation } from 'react-i18next';
 
 import { getErrorMessage } from '~/lundprod/utils/auth';
 import { getParam } from '~/lundprod/utils/next';
 
-type ErrorMessage = {
-  errorMessage: string;
+type ErrorProps = {
+  error: string;
 };
 
-export const getServerSideProps: GetServerSideProps<ErrorMessage> = async ({
+export const getServerSideProps: GetServerSideProps<ErrorProps> = async ({
   query,
 }) => {
-  const errorMessage = getErrorMessage(getParam(query.error));
   return {
-    props: { errorMessage },
+    props: { error: getParam(query.error) },
   };
 };
 
-export default function Error({ errorMessage }: ErrorMessage) {
+export default function Error({ error }: ErrorProps) {
+  const { t } = useTranslation();
+  const errorMessage = getErrorMessage(t, error);
+
   return (
     <Flex
       flexDirection="column"
@@ -34,7 +37,7 @@ export default function Error({ errorMessage }: ErrorMessage) {
         border: '1px solid var(--chakra-colors-gray-500)',
       }}
     >
-      <Heading variant="h2">Erreur d&apos;authentification</Heading>
+      <Heading variant="h2">{t('auth.authError')}</Heading>
       <Box>
         {errorMessage.split('\n').map((errorMsg, index) => (
           <Text color="red.400" key={index}>
@@ -47,7 +50,7 @@ export default function Error({ errorMessage }: ErrorMessage) {
         variant="outline"
         onClick={() => signIn('credentials', { callbackUrl: '/' })}
       >
-        Retour
+        {t('auth.errorMessage.back')}
       </Button>
     </Flex>
   );

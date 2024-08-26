@@ -2,8 +2,9 @@ import { Box, Divider, Heading, Text } from '@chakra-ui/react';
 import { RankByUser } from '@discord-bot-v2/common';
 import styled from '@emotion/styled';
 import Link from 'next/link';
+import { Trans, useTranslation } from 'react-i18next';
 
-import { formatDate, formatDateTime } from '~/lundprod/utils/dates';
+import { formatDate } from '~/lundprod/utils/dates';
 import { ProfileType } from '~/lundprod/utils/types';
 
 type GeneralInformationProps = {
@@ -21,26 +22,38 @@ export const GeneralInformation = ({
   profile,
   rank,
 }: GeneralInformationProps) => {
+  const { t } = useTranslation();
   const playerInformations = profile.player ? (
     <>
-      <CustomText>Points actuels : {profile.player.points}</CustomText>
-      {rank && (
-        <CustomText>Niveau actuel : {rank.level.currentLevel}</CustomText>
-      )}
-      {rank && <CustomText>Rang actuel : {rank.position}</CustomText>}
-      {rank && <CustomText>XP actuelle : {rank.currentXP}</CustomText>}
+      <CustomText>
+        {t('profile.points', { points: profile.player.points })}
+      </CustomText>
       {rank && (
         <CustomText>
-          XP du prochain niveau : {rank.level.xpNextLevel}
+          {t('profile.level', { level: rank.level.currentLevel })}
+        </CustomText>
+      )}
+      {rank && (
+        <CustomText>{t('profile.rank', { rank: rank.position })}</CustomText>
+      )}
+      {rank && (
+        <CustomText>{t('profile.xp', { xp: rank.currentXP })}</CustomText>
+      )}
+      {rank && (
+        <CustomText>
+          {t('profile.xpToNextLevel', { xp: rank.level.xpNextLevel })}
         </CustomText>
       )}
       <CustomText>
-        A rejoint le Discord le {formatDate(new Date(profile.player.joinDate))}
+        {t('profile.join', {
+          date: formatDate(t, new Date(profile.player.joinDate)),
+        })}
       </CustomText>
       {profile.player.lastDailyDraw ? (
         <CustomText>
-          Dernier tirage de carte le&nbsp;
-          {formatDateTime(new Date(profile.player.lastDailyDraw))}
+          {t('profile.lastDraw', {
+            date: formatDate(t, new Date(profile.player.lastDailyDraw)),
+          })}
         </CustomText>
       ) : null}
     </>
@@ -51,15 +64,19 @@ export const GeneralInformation = ({
       <Heading>{profile.username}</Heading>
       {profile.twitchUsername && (
         <Text as="span" fontSize="13px">
-          Ou&nbsp;
-          <Link
-            href={`https://twitch.tv/${profile.twitchUsername}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {profile.twitchUsername}
-          </Link>
-          &nbsp;sur Twitch
+          <Trans
+            i18nKey="profile.onTwitch"
+            values={{ username: profile.twitchUsername }}
+            components={{
+              twitchLink: (
+                <Link
+                  href={`https://twitch.tv/${profile.twitchUsername}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                />
+              ),
+            }}
+          />
         </Text>
       )}
       <Divider my={2} borderBottomWidth="2px" />

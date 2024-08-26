@@ -5,34 +5,34 @@ import { illustrationCodeThinking } from '~/lundprod/assets';
 
 import { DarkStyledLink } from '../styled-link';
 import { FullLinePresentation } from './full-line-presentation';
+import { Trans, useTranslation } from 'react-i18next';
 
 export const WebsitePresentation = () => {
+  const { t } = useTranslation();
+
   return (
     <FullLinePresentation
       theme="light"
-      title="Lundprod.com"
+      title={t('home.website.title')}
       illustration={illustrationCodeThinking}
       illustrationPosition="right"
     >
+      <Text mt={5}>{t('home.website.line1')}</Text>
+      <Text mt={5}>{t('home.website.line2')}</Text>
       <Text mt={5}>
-        Prévu pour accueillir tous mes projets, ce site a reçu plusieurs
-        itérations.
-      </Text>
-      <Text mt={5}>
-        Présentant de base uniquement les pages du gacha, il a évolué pour être
-        plus propre en terme de design, mais aussi plus riche en fonctionnalité
-        et informations.
-      </Text>
-      <Text mt={5}>
-        Vous pouvez retrouver le code du site et le bot sur&nbsp;
-        <DarkStyledLink
-          href="https://github.com/Lund-Org/discord-bot-v2"
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          Github
-          <ExternalLinkIcon ml="3px" />
-        </DarkStyledLink>
+        <Trans
+          i18nKey="home.website.line3"
+          components={{
+            darkLinkGithub: (
+              <DarkStyledLink
+                href="https://github.com/Lund-Org/discord-bot-v2"
+                target="_blank"
+                rel="noreferrer noopener"
+              />
+            ),
+            externalIcon: <ExternalLinkIcon ml="3px" />,
+          }}
+        />
       </Text>
     </FullLinePresentation>
   );

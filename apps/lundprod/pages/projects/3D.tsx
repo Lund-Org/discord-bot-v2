@@ -5,7 +5,8 @@ import { Fragment } from 'react';
 import { Gallery } from '~/lundprod/components/blog/blog-helpers';
 import { LightStyledLink } from '~/lundprod/components/styled-link';
 
-import gallery from '../../utils/data/3D-gallery.json';
+import { getGallery } from '../../utils/data/3D-gallery';
+import { Trans, useTranslation } from 'react-i18next';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -16,20 +17,28 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-export function Project3D({ cdnUrl }) {
+export function Project3D({ cdnUrl }: { cdnUrl: string }) {
+  const { t } = useTranslation();
+  const gallery = getGallery(t);
+
   return (
     <>
       <Box pt="30px" px="50px">
         <Heading variant="h3" mb="20px">
-          Projets 3D
+          {t('projects.3d.title')}
         </Heading>
         <Text>
-          Je me suis mis à la 3D en Mars 2023 en suivant les cours sur{' '}
-          <LightStyledLink href="https://www.gamedev.tv/" target="_blank">
-            GameDev.tv
-          </LightStyledLink>{' '}
-          que j&apos;ai eu dans un Humble Bundle. Voici mes différentes
-          créations, dans l&apos;ordre chronologique.
+          <Trans
+            i18nKey="projects.3d.description"
+            components={{
+              lightLink: (
+                <LightStyledLink
+                  href="https://www.gamedev.tv/"
+                  target="_blank"
+                />
+              ),
+            }}
+          />
         </Text>
       </Box>
       <Box maxW="1200px" mx="auto" textAlign="center">

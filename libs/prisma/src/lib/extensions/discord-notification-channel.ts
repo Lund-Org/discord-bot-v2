@@ -28,31 +28,4 @@ export const DiscordNotificationChannelExtension = (prisma: PrismaClient) => ({
 
     return channel?.discordChannelId || '';
   },
-  getFootballChannelId: async (): Promise<string> => {
-    const channel = await prisma.discordNotificationChannel.findUnique({
-      where: {
-        notificationType: ChannelNotification.FOOTBALL,
-      },
-    });
-
-    return channel?.discordChannelId || '';
-  },
-  getNBAChannelId: async (): Promise<string> => {
-    const channel = await prisma.discordNotificationChannel.findUnique({
-      where: {
-        notificationType: ChannelNotification.NBA,
-      },
-    });
-
-    return channel?.discordChannelId || '';
-  },
-  getMotorsportChannelId: async (): Promise<string> => {
-    const channel = await prisma.discordNotificationChannel.findUnique({
-      where: {
-        notificationType: ChannelNotification.MOTORSPORT,
-      },
-    });
-
-    return channel?.discordChannelId || '';
-  },
 });

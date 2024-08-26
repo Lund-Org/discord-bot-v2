@@ -1,10 +1,11 @@
-import { AddIcon, StarIcon } from '@chakra-ui/icons';
+import { AddIcon, DeleteIcon, StarIcon } from '@chakra-ui/icons';
 import {
   Button,
   Flex,
   FormControl,
   FormHelperText,
   FormLabel,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -13,17 +14,25 @@ import {
   ModalHeader,
   ModalOverlay,
   Textarea,
+  InputGroup,
+  InputRightAddon,
+  IconButton,
+  Box,
 } from '@chakra-ui/react';
 import { BacklogStatus } from '@prisma/client';
-import { FormEventHandler, useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { FieldArrayPath, useFieldArray, useForm } from 'react-hook-form';
 
-import { useBacklog } from '~/lundprod/contexts/backlog-context';
+import {
+  BacklogItemLight,
+  useBacklog,
+} from '~/lundprod/contexts/backlog-context';
 
 type BacklogSetDetailsProps = {
   igdbId: number;
   status: BacklogStatus;
-  reason: string;
-  rating: number;
+  item: BacklogItemLight;
 };
 
 const STATUS_WITH_DETAILS: BacklogStatus[] = [
@@ -31,33 +40,78 @@ const STATUS_WITH_DETAILS: BacklogStatus[] = [
   BacklogStatus.FINISHED,
 ];
 
+type FormData = {
+  review: string;
+  rating: number;
+  duration?: number;
+  completion?: number;
+  pros: { value: string }[];
+  cons: { value: string }[];
+  ratingValidation: string;
+};
+
 export const BacklogSetDetails = ({
   igdbId,
   status,
-  reason,
-  rating,
+  item,
 }: BacklogSetDetailsProps) => {
+  const { t } = useTranslation();
   const { updateBacklogDetails } = useBacklog();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isFormLoading, setIsFormLoading] = useState(false);
-  const [newReason, setNewReason] = useState(reason || '');
-  const [newRating, setNewRating] = useState(rating);
 
-  useEffect(() => {
-    setNewReason(reason || '');
-  }, [reason]);
+  const {
+    control,
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { isSubmitting, errors },
+  } = useForm<FormData>({
+    defaultValues: {
+      review: item.review || '',
+      rating: item.rating || 0,
+      completion: item.completion,
+      duration: item.duration,
+      pros: item.pros?.length
+        ? item.pros.map((value) => ({ value }))
+        : [{ value: '' }],
+      cons: item.cons?.length
+        ? item.cons.map((value) => ({ value }))
+        : [{ value: '' }],
+      ratingValidation: '',
+    },
+  });
 
-  useEffect(() => {
-    setNewRating(rating);
-  }, [rating]);
+  const newRating = watch('rating');
+  const _proFields = watch('pros');
+  const _conFields = watch('cons');
 
-  const submitForm: FormEventHandler<HTMLFormElement> = (e) => {
-    e.preventDefault();
-    setIsFormLoading(true);
-    updateBacklogDetails(igdbId, newReason, newRating).then(() => {
+  const {
+    fields: proFields,
+    remove: removePro,
+    append: appendPro,
+  } = useFieldArray({
+    control,
+    name: 'pros',
+  });
+  const {
+    fields: conFields,
+    remove: removeCon,
+    append: appendCon,
+  } = useFieldArray({
+    control,
+    name: 'cons',
+  });
+
+  const onSubmit = async (data: FormData) => {
+    try {
+      await updateBacklogDetails(igdbId, {
+        ...data,
+        pros: data.pros.map(({ value }) => value),
+        cons: data.cons.map(({ value }) => value),
+      });
       setIsModalOpen(false);
-      setIsFormLoading(false);
-    });
+    } catch (e) {}
   };
 
   if (!STATUS_WITH_DETAILS.includes(status)) {
@@ -74,53 +128,205 @@ export const BacklogSetDetails = ({
       >
         <AddIcon />
       </Button>
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      <Modal
+        isOpen={isModalOpen}
+        size="2xl"
+        onClose={() => setIsModalOpen(false)}
+      >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Ajouter des détails</ModalHeader>
+          <ModalHeader>{t('mySpace.backlog.details.addDetails')}</ModalHeader>
           <ModalCloseButton />
-          <form onSubmit={submitForm}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <ModalBody>
-              <FormControl>
-                <FormLabel>Note</FormLabel>
-                <Flex gap={1}>
-                  {Array.from({ length: 5 }, (_, index) => (
-                    <StarIcon
-                      key={index}
-                      color={index + 1 <= newRating ? 'gold' : 'gray.300'}
-                      onClick={() => setNewRating(index + 1)}
-                      cursor="pointer"
-                    />
-                  ))}
+              <Flex flexDir="column" gap={3}>
+                <Flex gap={4}>
+                  <FormControl>
+                    <FormLabel>{t('mySpace.backlog.details.note')}</FormLabel>
+                    <Flex gap={1}>
+                      {Array.from({ length: 5 }, (_, index) => (
+                        <StarIcon
+                          key={index}
+                          color={index + 1 <= newRating ? 'gold' : 'gray.300'}
+                          onClick={() => setValue('rating', index + 1)}
+                          cursor="pointer"
+                          boxSize="20px"
+                        />
+                      ))}
+                      <input
+                        type="hidden"
+                        {...register('ratingValidation', {
+                          validate: () =>
+                            newRating === 0 ? 'invalid' : undefined,
+                        })}
+                      />
+                    </Flex>
+                  </FormControl>
+                  <FormControl maxW="200px">
+                    <FormLabel>
+                      {t('mySpace.backlog.details.duration')}
+                    </FormLabel>
+                    <InputGroup flex={1}>
+                      <Input
+                        type="number"
+                        {...register('duration', { min: 0 })}
+                        isInvalid={!!errors.duration}
+                      />
+                      <InputRightAddon>
+                        {t('mySpace.backlog.details.durationHour')}
+                      </InputRightAddon>
+                    </InputGroup>
+                  </FormControl>
+                  <FormControl maxW="200px">
+                    <FormLabel>
+                      {t('mySpace.backlog.details.completion')}
+                    </FormLabel>
+                    <InputGroup flex={1}>
+                      <Input
+                        type="number"
+                        {...register('completion', { min: 0, max: 100 })}
+                        isInvalid={!!errors.completion}
+                      />
+                      <InputRightAddon>
+                        {t('mySpace.backlog.details.completionPercentage')}
+                      </InputRightAddon>
+                    </InputGroup>
+                  </FormControl>
                 </Flex>
-              </FormControl>
-              <FormControl mt={3}>
-                <FormLabel>Commentaire</FormLabel>
-                <Textarea
-                  value={newReason || ''}
-                  onChange={(e) => setNewReason(e.target.value)}
-                  isRequired
-                />
-                <FormHelperText
-                  color={newReason.length > 255 ? 'red.600' : 'inherit'}
-                >
-                  {255 - newReason.length} caractères restants
-                </FormHelperText>
-              </FormControl>
+                <FormControl>
+                  <FormLabel>{t('mySpace.backlog.details.comment')}</FormLabel>
+                  <Textarea
+                    {...register('review', { required: true })}
+                    isInvalid={!!errors.review}
+                  />
+                </FormControl>
+                <Flex gap={4} flexDir={{ base: 'column', sm: 'row' }}>
+                  <FormControl>
+                    <Flex>
+                      <FormLabel>{t('mySpace.backlog.details.pros')}</FormLabel>
+                      <Button
+                        leftIcon={<AddIcon />}
+                        aria-label={''}
+                        onClick={() => appendPro({ value: '' })}
+                        size="xs"
+                        colorScheme="green"
+                      >
+                        {t('mySpace.backlog.details.add')}
+                      </Button>
+                    </Flex>
+                    {proFields.map((field, index) => (
+                      <Box key={field.id} mb={2}>
+                        <Flex
+                          gap={2}
+                          mb={2}
+                          justifyContent="space-between"
+                          alignItems="center"
+                        >
+                          <Input
+                            {...register(`pros.${index}.value`, {
+                              min: 0,
+                              max: 100,
+                              validate: (value) =>
+                                value.length > 255 || value.length === 0
+                                  ? 'invalid'
+                                  : undefined,
+                            })}
+                            isInvalid={!!errors.pros?.[index]?.value}
+                          />
+                          {proFields.length > 1 && (
+                            <IconButton
+                              icon={<DeleteIcon />}
+                              aria-label={''}
+                              onClick={() => removePro(index)}
+                            />
+                          )}
+                        </Flex>
+                        <CharactersLeft
+                          lengthMax={255}
+                          str={_proFields[index].value}
+                        />
+                      </Box>
+                    ))}
+                  </FormControl>
+                  <FormControl>
+                    <Flex>
+                      <FormLabel>{t('mySpace.backlog.details.cons')}</FormLabel>
+                      <Button
+                        leftIcon={<AddIcon />}
+                        aria-label={''}
+                        onClick={() => appendCon({ value: '' })}
+                        size="xs"
+                        colorScheme="red"
+                      >
+                        {t('mySpace.backlog.details.add')}
+                      </Button>
+                    </Flex>
+                    {conFields.map((field, index) => (
+                      <Box key={field.id} mb={2}>
+                        <Flex
+                          gap={2}
+                          mb={2}
+                          justifyContent="space-between"
+                          alignItems="center"
+                        >
+                          <Input
+                            {...register(`cons.${index}.value`, {
+                              min: 0,
+                              max: 100,
+                              validate: (value) =>
+                                value.length > 255 || value.length === 0
+                                  ? 'invalid'
+                                  : undefined,
+                            })}
+                            isInvalid={!!errors.cons?.[index]?.value}
+                          />
+                          {conFields.length > 1 && (
+                            <IconButton
+                              icon={<DeleteIcon />}
+                              aria-label={''}
+                              onClick={() => removeCon(index)}
+                            />
+                          )}
+                        </Flex>
+                        <CharactersLeft
+                          lengthMax={255}
+                          str={_conFields[index].value}
+                        />
+                      </Box>
+                    ))}
+                  </FormControl>
+                </Flex>
+              </Flex>
             </ModalBody>
             <ModalFooter>
               <Button
                 colorScheme="green"
                 type="submit"
-                isLoading={isFormLoading}
-                isDisabled={!newReason.length || newReason.length > 255}
+                isLoading={isSubmitting}
               >
-                Sauvegarder
+                {t('mySpace.backlog.details.save')}
               </Button>
             </ModalFooter>
           </form>
         </ModalContent>
       </Modal>
     </>
+  );
+};
+
+const CharactersLeft = ({
+  str,
+  lengthMax,
+}: {
+  str: string;
+  lengthMax: number;
+}) => {
+  const { t } = useTranslation();
+  return (
+    <FormHelperText color={str.length > lengthMax ? 'red.600' : 'inherit'}>
+      {t('mySpace.backlog.details.charactersLeft', {
+        count: lengthMax - str.length,
+      })}
+    </FormHelperText>
   );
 };

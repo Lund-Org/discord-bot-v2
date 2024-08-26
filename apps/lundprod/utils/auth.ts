@@ -1,9 +1,11 @@
-export const getErrorMessage = (error: string) => {
+import { TFunction } from 'i18next';
+
+export const getErrorMessage = (tFn: TFunction, error: string) => {
   switch (error) {
     case 'AccessDenied':
-      return "Impossible de vous connecter.\nVous n'avez pas de comptes ou un problème s'est produit à la connexion.";
+      return tFn('auth.errorMessage.accessDenied');
     case 'Verification':
-      return 'Impossible de vérifier le token, ou il a expiré.';
+      return tFn('auth.errorMessage.verification');
     case 'Configuration':
     case 'OAuthSignin':
     case 'OAuthCallback':
@@ -14,8 +16,8 @@ export const getErrorMessage = (error: string) => {
     case 'EmailSignin':
     case 'CredentialsSignin':
     case 'SessionRequired':
-      return "Il y a un problème avec le paramétrage de l'application pour l'authentification.\nContactez le responsable.";
+      return tFn('auth.errorMessage.sessionRequired');
     default: // = case 'Default':
-      return "Une erreur inconnue s'est produite.\nPeut-être n'avez vous pas de compte ?";
+      return tFn('auth.errorMessage.unknown');
   }
 };

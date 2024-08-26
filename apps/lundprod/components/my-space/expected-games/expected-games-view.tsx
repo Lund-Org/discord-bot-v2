@@ -2,14 +2,16 @@ import { Box, Flex, Switch, Text, useBoolean } from '@chakra-ui/react';
 
 import { ExpectedGamesCalendarView } from './expected-games-calendar-view';
 import { ExpectedGamesListView } from './expected-games-list-view';
+import { useTranslation } from 'react-i18next';
 
 export const ExpectedGamesView = () => {
+  const { t } = useTranslation();
   const [isCalendar, setIsCalendar] = useBoolean();
 
   return (
     <Box>
       <Flex justifyContent="flex-end" alignItems="center" gap={2}>
-        <Text>Liste</Text>
+        <Text>{t('mySpace.expectedGames.list.list')}</Text>
         <Switch
           sx={{
             '.chakra-switch__track': {
@@ -22,7 +24,7 @@ export const ExpectedGamesView = () => {
           size="lg"
           onChange={setIsCalendar.toggle}
         />
-        <Text>Calendrier</Text>
+        <Text>{t('mySpace.expectedGames.list.calendar')}</Text>
       </Flex>
       <Box mt="20px">
         {isCalendar ? (

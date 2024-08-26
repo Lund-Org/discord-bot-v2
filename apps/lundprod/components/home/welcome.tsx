@@ -1,8 +1,15 @@
 import { Box, Divider, Flex, Heading, Image, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { illustrationBookReading } from '~/lundprod/assets';
 
 export const Welcome = () => {
+  const { t } = useTranslation();
+  const currentAge =
+    new Date(
+      Date.now() - new Date('1993-11-20T00:00:00Z').getTime(),
+    ).getFullYear() - 1970;
+
   return (
     <Flex
       flexDirection={{ base: 'column-reverse', md: 'row' }}
@@ -27,19 +34,11 @@ export const Welcome = () => {
         w={{ base: '100%', md: '50%' }}
         mb={{ base: '40px', md: '0px' }}
       >
-        <Heading color="orange.300">Bienvenue</Heading>
+        <Heading color="orange.300">{t('home.title')}</Heading>
         <Divider mb={10} />
-        <Text mt={5}>
-          Je suis Florian, Lund sur internet, j&apos;ai 30 ans et je suis
-          développeur.
-        </Text>
-        <Text mt={5}>
-          Ici, vous trouverez tous mes travaux et liens utiles vers les
-          différentes plate-formes.
-        </Text>
-        <Text mt={5}>
-          Les projets sont très variés, cherchez votre bonheur.
-        </Text>
+        <Text mt={5}>{t('home.welcome.item1', { currentAge })}</Text>
+        <Text mt={5}>{t('home.welcome.item2')}</Text>
+        <Text mt={5}>{t('home.welcome.item3')}</Text>
       </Box>
     </Flex>
   );

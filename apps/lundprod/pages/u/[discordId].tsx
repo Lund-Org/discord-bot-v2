@@ -15,6 +15,7 @@ import {
 import { prisma } from '@discord-bot-v2/prisma';
 import { GetStaticProps } from 'next';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { BacklogList } from '~/lundprod/components/my-space/backlog/backlog-list';
 import { ExpectedGamesListView } from '~/lundprod/components/my-space/expected-games/expected-games-list-view';
@@ -59,7 +60,7 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps: GetStaticProps<UserProfilePageProps> = async (
-  context
+  context,
 ) => {
   const { params = {} } = context;
   const discordId = getParam(params.discordId, '');
@@ -101,6 +102,7 @@ export function UserProfilePage({
   cardsToGold,
   fusions,
 }: UserProfilePageProps) {
+  const { t } = useTranslation();
   const [isLoadingBacklog, setIsLoadingBacklog] = useState(true);
   const [isLoadingExpectedGames, setIsLoadingExpectedGames] = useState(true);
   const [initialBacklog, setInitialBacklog] = useState<BacklogItemLight[]>([]);
@@ -148,13 +150,13 @@ export function UserProfilePage({
       <Tabs mt={6} defaultIndex={profile.player ? 0 : 1}>
         <TabList>
           <Tab _selected={selected} _active={{}} isDisabled={!profile.player}>
-            Gacha
+            {t('userPage.gacha')}
           </Tab>
           <Tab _selected={selected} _active={{}}>
-            Backlog
+            {t('userPage.backlog')}
           </Tab>
           <Tab _selected={selected} _active={{}}>
-            Jeux attendus
+            {t('userPage.expectedGames')}
           </Tab>
         </TabList>
 
@@ -171,7 +173,7 @@ export function UserProfilePage({
               loader
             ) : (
               <BacklogProvider backlog={initialBacklog}>
-                <BacklogList />
+                <BacklogList userName={profile.username} isReadOnly />
               </BacklogProvider>
             )}
           </TabPanel>

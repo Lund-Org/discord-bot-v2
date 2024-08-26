@@ -1,8 +1,11 @@
 import { QuestionIcon, StarIcon } from '@chakra-ui/icons';
-import { Badge, Box, Flex, Tooltip } from '@chakra-ui/react';
+import { Badge, Box, Button, Flex, Tooltip } from '@chakra-ui/react';
 import { BacklogStatus } from '@prisma/client';
+import { useRouter } from 'next/router';
 import { useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useClickAway } from 'react-use';
+import { BacklogItemLight } from '~/lundprod/contexts/backlog-context';
 
 import {
   getBacklogStatusColor,
@@ -10,10 +13,8 @@ import {
 } from '~/lundprod/utils/backlog';
 
 type BacklogItemDetailsProps = {
-  status: BacklogStatus;
-  reason: string;
-  note?: string;
-  rating: number;
+  item: BacklogItemLight;
+  selectReview: (igdbGameId: number | null) => void;
 };
 
 const STATUS_WITH_DETAILS: BacklogStatus[] = [
@@ -27,79 +28,63 @@ const STATUS_WITH_NOTE: BacklogStatus[] = [
 ];
 
 export const BacklogItemDetails = ({
-  status,
-  reason,
-  rating,
-  note,
+  item: { igdbGameId, status, note },
+  selectReview,
 }: BacklogItemDetailsProps) => {
-  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+  const { t } = useTranslation();
   const [isNoteTooltipOpen, setIsNoteTooltipOpen] = useState(false);
+  const { push, query } = useRouter();
   const ref = useRef<HTMLSpanElement>(null);
-  const refNote = useRef<HTMLSpanElement>(null);
 
-  useClickAway(ref, () => {
-    setIsTooltipOpen(false);
-  });
-
-  useClickAway(refNote, () => {
-    setIsNoteTooltipOpen(false);
-  });
+  const onReviewSelect = (igdbGameId: number) => {
+    push({ query: { ...query, igdbGameId } }, undefined, {
+      shallow: true,
+    });
+    selectReview(igdbGameId);
+  };
 
   const statusBadge = useMemo(() => {
-    const component = (
+    return (
       <Badge
         ref={ref}
         variant="solid"
         colorScheme={getBacklogStatusColor(status)}
         px={3}
         py={1}
-        cursor={STATUS_WITH_DETAILS.includes(status) ? 'pointer' : 'cursor'}
-        onMouseEnter={() => setIsTooltipOpen(true)}
-        onClick={() => setIsTooltipOpen(!isTooltipOpen)}
-        onMouseLeave={() => setIsTooltipOpen(false)}
       >
-        {getBacklogStatusTranslation(status)}
+        {getBacklogStatusTranslation(t, status)}
       </Badge>
     );
-    return STATUS_WITH_DETAILS.includes(status) ? (
-      <Tooltip hasArrow label={reason} p={3} isOpen={isTooltipOpen}>
-        {component}
-      </Tooltip>
-    ) : (
-      component
-    );
-  }, [isTooltipOpen, reason, status]);
+  }, [status]);
 
   return (
-    <Flex gap={2}>
+    <Flex gap={3} alignItems="center" justifyContent="space-between">
       <Box>{statusBadge}</Box>
       {STATUS_WITH_DETAILS.includes(status) && (
-        <Box whiteSpace="nowrap" mr={0} ml="auto">
-          {Array.from({ length: rating }, (_, index) => (
-            <StarIcon key={index} color="gold" />
-          ))}
-          {Array.from({ length: 5 - rating }, (_, index) => (
-            <StarIcon key={index} color="gray.300" />
-          ))}
-        </Box>
+        <Button
+          onClick={() => onReviewSelect(igdbGameId)}
+          size="sm"
+          colorScheme="yellow"
+        >
+          {t('mySpace.backlog.review.open')}
+        </Button>
       )}
       {STATUS_WITH_NOTE.includes(status) && note && (
-        <Box ml="25%">
+        <Box>
           <Tooltip
             hasArrow
             label={note}
             p={3}
             isOpen={isNoteTooltipOpen}
             placement="left"
+            shouldWrapChildren
           >
-            <span ref={refNote}>
-              <QuestionIcon
-                boxSize="20px"
-                onMouseEnter={() => setIsNoteTooltipOpen(true)}
-                onClick={() => setIsNoteTooltipOpen(!isNoteTooltipOpen)}
-                onMouseLeave={() => setIsNoteTooltipOpen(false)}
-              />
-            </span>
+            <QuestionIcon
+              boxSize="20px"
+              onMouseEnter={() => setIsNoteTooltipOpen(true)}
+              onClick={() => setIsNoteTooltipOpen(!isNoteTooltipOpen)}
+              onMouseLeave={() => setIsNoteTooltipOpen(false)}
+            />
           </Tooltip>
         </Box>
       )}

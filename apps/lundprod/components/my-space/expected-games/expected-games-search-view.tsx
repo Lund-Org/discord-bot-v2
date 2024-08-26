@@ -12,9 +12,10 @@ import { IGDBFilter, ListGamesSearch } from '../../../utils/types';
 import { GamePagination } from '../common/game-pagination';
 import { GameSearch } from '../common/game-search';
 import { ExpectedGamesResultView } from './expected-games-result-view';
-// import { BacklogGameListView } from './backlog-game-list-view';
+import { useTranslation } from 'react-i18next';
 
 export const ExpectedGamesSearchView = () => {
+  const { t } = useTranslation();
   const [loadedGames, setLoadedGames] = useState<Game[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -79,7 +80,7 @@ export const ExpectedGamesSearchView = () => {
               />
             </>
           ) : (
-            <Text>Aucun résultat n&apos;a été trouvé</Text>
+            <Text>{t('mySpace.expectedGames.list.noResult')}</Text>
           ))}
       </Box>
     </Box>
