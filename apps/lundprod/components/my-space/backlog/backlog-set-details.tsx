@@ -45,6 +45,7 @@ type FormData = {
   rating: number;
   duration?: number;
   completion?: number;
+  completionComment?: string;
   pros: { value: string }[];
   cons: { value: string }[];
   ratingValidation: string;
@@ -71,6 +72,7 @@ export const BacklogSetDetails = ({
       review: item.review || '',
       rating: item.rating || 0,
       completion: item.completion,
+      completionComment: item.completionComment || '',
       duration: item.duration,
       pros: item.pros?.length
         ? item.pros.map((value) => ({ value }))
@@ -85,6 +87,7 @@ export const BacklogSetDetails = ({
   const newRating = watch('rating');
   const _proFields = watch('pros');
   const _conFields = watch('cons');
+  const completionComment = watch('completionComment');
 
   const {
     fields: proFields,
@@ -194,6 +197,22 @@ export const BacklogSetDetails = ({
                   </FormControl>
                 </Flex>
                 <FormControl>
+                  <FormLabel>
+                    {t('mySpace.backlog.details.completionComment')}
+                  </FormLabel>
+                  <InputGroup flex={1}>
+                    <Input
+                      type="text"
+                      {...register('completionComment', {
+                        validate: (value) =>
+                          value && value.length > 255 ? 'invalid' : undefined,
+                      })}
+                      isInvalid={!!errors.completionComment}
+                    />
+                  </InputGroup>
+                  <CharactersLeft lengthMax={255} str={completionComment} />
+                </FormControl>
+                <FormControl>
                   <FormLabel>{t('mySpace.backlog.details.comment')}</FormLabel>
                   <Textarea
                     {...register('review', { required: true })}
@@ -224,8 +243,6 @@ export const BacklogSetDetails = ({
                         >
                           <Input
                             {...register(`pros.${index}.value`, {
-                              min: 0,
-                              max: 100,
                               validate: (value) =>
                                 value.length > 255 || value.length === 0
                                   ? 'invalid'
@@ -271,8 +288,6 @@ export const BacklogSetDetails = ({
                         >
                           <Input
                             {...register(`cons.${index}.value`, {
-                              min: 0,
-                              max: 100,
                               validate: (value) =>
                                 value.length > 255 || value.length === 0
                                   ? 'invalid'

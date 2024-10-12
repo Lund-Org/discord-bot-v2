@@ -13,6 +13,7 @@ export const backlogItemReviewFields = [
   'review',
   'duration',
   'completion',
+  'completionComment',
   'pros',
   'cons',
   'rating',

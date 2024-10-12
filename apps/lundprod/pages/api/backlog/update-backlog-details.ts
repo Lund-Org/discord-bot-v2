@@ -8,7 +8,7 @@ import { array, number, object, string } from 'yup';
 import { getUserProfileUrl } from '~/lundprod/utils/url';
 
 import { authOptions } from '../auth/[...nextauth]';
-import { last, omit } from 'lodash';
+import { omit } from 'lodash';
 
 const updateBacklogDetailsSchema = object({
   igdbGameId: number().required().positive().integer(),
@@ -16,6 +16,7 @@ const updateBacklogDetailsSchema = object({
   rating: number().min(1).max(5).required().integer(),
   duration: number().integer(),
   completion: number().min(0).max(100).integer(),
+  completionComment: string().max(255),
   pros: array().of(string().max(255)),
   cons: array().of(string().max(255)),
 });
@@ -66,6 +67,7 @@ export default async function updateBacklogDetails(
   const data = {
     review: payload.review,
     completion: payload.completion,
+    completionComment: payload.completionComment,
     rating: payload.rating,
     duration: payload.duration,
     backlogItemId: id,
@@ -128,31 +130,41 @@ function webhookNotification(user: User, backlogItem: BacklogItemType) {
   const webhookClient = new WebhookClient({
     url: process.env.BACKLOG_WEBHOOK,
   });
-
+  const url = `${process.env.WEBSITE_URL}${getUserProfileUrl(
+    user.discordId,
+  )}?igdbGameId=${backlogItem.igdbGameId}`;
   const embed = new EmbedBuilder()
     .setTitle('Mise à jour du backlog')
     .setColor(colorMapping[backlogItem.status]);
 
-  embed.setURL(
-    `${process.env.WEBSITE_URL}${getUserProfileUrl(
-      user.discordId,
-    )}?igdbGameId=${backlogItem.igdbGameId}`,
-  );
+  embed.setURL(url);
 
-  embed.addFields({ name: 'Utilisateur', value: user.username });
-  embed.addFields({ name: 'Titre', value: backlogItem.name });
+  embed.addFields({ name: 'Utilisateur', value: user.username, inline: true });
+  embed.addFields({ name: 'Titre', value: backlogItem.name, inline: true });
+  embed.addFields({ name: ' ', value: ' ' });
   embed.addFields({
     name: 'Note',
     value: `${backlogItem.backlogItemReview.rating}/5`,
+    inline: true,
   });
   embed.addFields({
     name: 'Durée',
     value: `${backlogItem.backlogItemReview.duration}h`,
+    inline: true,
   });
+  embed.addFields({ name: ' ', value: ' ' });
   embed.addFields({
     name: 'Complétion',
     value: `${backlogItem.backlogItemReview.completion}%`,
+    inline: !!backlogItem.backlogItemReview.completionComment,
   });
+  if (backlogItem.backlogItemReview.completionComment) {
+    embed.addFields({
+      name: 'Remarque sur la complétion',
+      value: backlogItem.backlogItemReview.completionComment,
+      inline: true,
+    });
+  }
   embed.addFields({
     name: 'Commentaire',
     value:
@@ -177,8 +189,8 @@ function webhookNotification(user: User, backlogItem: BacklogItemType) {
     inline: true,
   });
   embed.addFields({
-    name: 'URL du profil',
-    value: `${process.env.WEBSITE_URL}${getUserProfileUrl(user.discordId)}`,
+    name: 'Lien vers la review',
+    value: url,
   });
 
   webhookClient.send({
