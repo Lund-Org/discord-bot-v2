@@ -33,12 +33,13 @@ model BacklogItem {
 }
 
 model BacklogItemReview {
-  id            Int     @id @default(autoincrement())
-  backlogItemId Int     @unique
-  rating        Int     @default(0)
-  review        String? @db.Text
-  duration      Int?
-  completion    Int?
+  id                Int     @id @default(autoincrement())
+  backlogItemId     Int     @unique
+  rating            Int     @default(0)
+  review            String? @db.Text
+  duration          Int?
+  completion        Int?
+  completionComment String? @db.VarChar(255)
 
   pros BacklogItemReviewPros[]
   cons BacklogItemReviewCons[]

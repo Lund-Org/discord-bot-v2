@@ -204,6 +204,7 @@
         "charactersLeft": "{{count}} characters left",
         "comment": "Comment *",
         "completion": "Completion",
+        "completionComment": "Completion comment",
         "completionPercentage": "%",
         "cons": "Cons",
         "duration": "Duration",

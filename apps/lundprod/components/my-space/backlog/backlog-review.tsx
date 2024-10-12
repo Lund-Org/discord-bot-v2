@@ -120,11 +120,18 @@ export const BacklogReview = ({
                   </Box>
                 </Flex>
                 {item.completion && (
-                  <Text>
-                    {t('mySpace.backlog.review.completion', {
-                      completion: item.completion,
-                    })}
-                  </Text>
+                  <Box>
+                    <Text>
+                      {t('mySpace.backlog.review.completion', {
+                        completion: item.completion,
+                      })}
+                    </Text>
+                    {item.completionComment && (
+                      <Text fontStyle="italic" fontSize="14px">
+                        {item.completionComment}
+                      </Text>
+                    )}
+                  </Box>
                 )}
                 {item.duration && (
                   <Text>

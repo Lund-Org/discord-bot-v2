@@ -14,6 +14,7 @@ import {
 } from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
 import { GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -103,6 +104,7 @@ export function UserProfilePage({
   fusions,
 }: UserProfilePageProps) {
   const { t } = useTranslation();
+  const { query } = useRouter();
   const [isLoadingBacklog, setIsLoadingBacklog] = useState(true);
   const [isLoadingExpectedGames, setIsLoadingExpectedGames] = useState(true);
   const [initialBacklog, setInitialBacklog] = useState<BacklogItemLight[]>([]);
@@ -112,6 +114,14 @@ export function UserProfilePage({
     borderBottomColor: 'orange.400',
   };
   const { get } = useFetcher();
+
+  const [tabIndex, setTabIndex] = useState(profile.player ? 0 : 1);
+
+  useEffect(() => {
+    if (query.igdbGameId) {
+      setTabIndex(1);
+    }
+  }, [query.igdbGameId]);
 
   useEffect(() => {
     get(`/api/backlog/list/${profile.discordId}`)
@@ -147,7 +157,7 @@ export function UserProfilePage({
   return (
     <Box px="20px" pb="50px" pt="20px" color="gray.300">
       <GeneralInformation profile={profile} rank={rank} />
-      <Tabs mt={6} defaultIndex={profile.player ? 0 : 1}>
+      <Tabs mt={6} index={tabIndex} onChange={(index) => setTabIndex(index)}>
         <TabList>
           <Tab _selected={selected} _active={{}} isDisabled={!profile.player}>
             {t('userPage.gacha')}

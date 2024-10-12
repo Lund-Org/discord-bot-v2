@@ -43,6 +43,7 @@ type UpdateData = {
   rating: number;
   duration?: number;
   completion?: number;
+  completionComment?: string;
   pros: string[];
   cons: string[];
 };
@@ -105,6 +106,7 @@ export const BacklogProvider = ({
         note: null,
         review: '',
         completion: null,
+        completionComment: '',
         duration: null,
         pros: [],
         cons: [],
@@ -260,10 +262,19 @@ function updateBacklogDetails(
       data.rating,
       data.duration,
       data.completion,
+      data.completionComment,
       data.pros,
       data.cons,
     ],
-    ['review', 'rating', 'duration', 'completion', 'pros', 'cons'],
+    [
+      'review',
+      'rating',
+      'duration',
+      'completion',
+      'completionComment',
+      'pros',
+      'cons',
+    ],
     '/api/backlog/update-backlog-details',
   );
 }
