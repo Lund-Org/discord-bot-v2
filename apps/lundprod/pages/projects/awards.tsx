@@ -20,7 +20,7 @@ export function AwardsPage() {
   const [isDisclaimerDisplayed, setIsDisclaimerDisplayed] = useBoolean(true);
 
   return (
-    <Box py="30px" px="50px">
+    <Box py={{ base: '15px', md: '30px' }} px={{ base: '15px', md: '50px' }}>
       <Heading as="h1" variant="h1" mb="20px">
         {t('awards.title')}
       </Heading>

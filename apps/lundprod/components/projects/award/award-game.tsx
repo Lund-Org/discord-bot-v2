@@ -7,7 +7,7 @@ type AwardGameProps = {
   game: FieldArrayWithId<AwardForm, 'awards.0.games', 'id'>;
   onDelete: VoidFunction;
   isBest: boolean;
-  onClick: VoidFunction;
+  onClick: (value: boolean) => void;
 };
 
 export const AwardGame = ({
@@ -39,7 +39,7 @@ export const AwardGame = ({
         minW="fit-content"
       />
       <Flex
-        onClick={onClick}
+        onClick={() => onClick(!isBest)}
         flexDir="column"
         justifyContent="center"
         p="8px"

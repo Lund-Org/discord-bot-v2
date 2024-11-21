@@ -41,30 +41,23 @@ import { useFetcher } from '~/lundprod/hooks/useFetcher';
 import { Game } from '~/lundprod/types/awards';
 
 type AwardGameModalProps = {
-  defaultValue?: Game;
   onSave: (game: Game) => void;
   onClose: VoidFunction;
 };
 
-export const AwardGameModal = ({
-  defaultValue,
-  onSave,
-  onClose,
-}: AwardGameModalProps) => {
+export const AwardGameModal = ({ onSave, onClose }: AwardGameModalProps) => {
   const { t } = useTranslation();
   const { post } = useFetcher();
 
   const {
     handleSubmit,
     getValues,
-    setValue,
     register,
-    formState: { errors, isValid },
+    formState: { errors },
     trigger,
     watch,
   } = useForm<{ game: Game; search: string }>({
     defaultValues: {
-      game: defaultValue || { label: '' },
       search: '',
     },
   });
@@ -91,11 +84,6 @@ export const AwardGameModal = ({
               field: 'category',
               operator: QUERY_OPERATOR.EQ,
               value: GAME_TYPE.MAIN_GAME,
-            },
-            {
-              field: 'release_dates.date',
-              operator: QUERY_OPERATOR.LT,
-              value: Math.round(Date.now() / 1000),
             },
           ],
         }),
@@ -129,9 +117,7 @@ export const AwardGameModal = ({
     cover: string | undefined,
     name: string,
   ) => {
-    setValue('game.igdb', id);
-    setValue('game.image', cover);
-    setValue('game.label', name);
+    submit({ game: { igdb: id, image: cover, label: name, isBest: false } });
   };
 
   const submit = ({ game }: { game: Game }) => {
@@ -144,11 +130,7 @@ export const AwardGameModal = ({
       <ModalOverlay />
       <form onSubmit={handleSubmit(submit)}>
         <ModalContent>
-          <ModalHeader>
-            {defaultValue
-              ? t('awards.gameAward.headerEditGame')
-              : t('awards.gameAward.headerNewGame')}
-          </ModalHeader>
+          <ModalHeader>{t('awards.gameAward.headerNewGame')}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <FormControl isInvalid={!!errors.search}>
@@ -265,13 +247,6 @@ export const AwardGameModal = ({
           <ModalFooter>
             <Button colorScheme="red" mr={3} onClick={onClose}>
               {t('awards.gameAward.close')}
-            </Button>
-            <Button
-              type="submit"
-              colorScheme="green"
-              isDisabled={!selectedGameId}
-            >
-              {t('awards.gameAward.save')}
             </Button>
           </ModalFooter>
         </ModalContent>

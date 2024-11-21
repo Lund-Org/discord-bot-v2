@@ -47,12 +47,12 @@ export const AwardRow = ({
     append({ ...game, isBest: false });
   };
 
-  const setAward = (index) => {
+  const setAward = (index: number, value: boolean) => {
     games.forEach((game, gameIndex) => {
       update(
         gameIndex,
         index === gameIndex
-          ? { ...game, isBest: true }
+          ? { ...game, isBest: value }
           : { ...game, isBest: false },
       );
     });
@@ -130,7 +130,7 @@ export const AwardRow = ({
                 game={game}
                 onDelete={() => remove(index)}
                 isBest={game.isBest}
-                onClick={() => setAward(index)}
+                onClick={(value) => setAward(index, value)}
               />
             );
           })}
