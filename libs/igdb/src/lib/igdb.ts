@@ -5,6 +5,7 @@ import { addGameToCache } from './cache';
 import {
   BASE_URL,
   GAME_FIELDS,
+  GAME_FIELDS_WITH_IMAGES,
   GAME_PER_PAGE,
   QUERY_OPERATOR,
 } from './constants';
@@ -101,6 +102,7 @@ export async function getGames(
     value: IGDBConditionValue;
   }[],
   page = 1,
+  withImage = false,
 ): Promise<Game[]> {
   if (page < 1) {
     page = 1;
@@ -108,7 +110,7 @@ export async function getGames(
 
   const queryBuilder = new IGDBQueryBuilder();
   queryBuilder
-    .setFields(GAME_FIELDS)
+    .setFields(withImage ? GAME_FIELDS_WITH_IMAGES : GAME_FIELDS)
     .setSearch(name)
     .setLimit(GAME_PER_PAGE)
     .setOffset((page - 1) * GAME_PER_PAGE);
@@ -122,6 +124,14 @@ export async function getGames(
   });
 
   const result = await IGDBRequest<Game[]>('/games', queryBuilder.toString());
+
+  if (withImage) {
+    for (const game of result) {
+      if (game.cover) {
+        game.cover.url = `https:${game.cover.url}`;
+      }
+    }
+  }
 
   await addGameToCache(result);
 

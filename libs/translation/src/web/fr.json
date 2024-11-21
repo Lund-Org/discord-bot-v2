@@ -13,6 +13,66 @@
     "loginWith": "Connexion avec {{provider}} (JV)",
     "signup": "Pour s'inscrire, il faut rejoindre le "
   },
+  "awards": {
+    "addAward": "Ajouter un award",
+    "addGame": "Ajouter un jeu",
+    "canvas": "Image exportée !",
+    "canvasHint": "(Pour partager l'image : Clic droit > Enregistrer l'image)",
+    "copyright": "Awards générée sur Lundprod.com",
+    "defaultCategories": {
+      "accessibility": "Innovation en accessibility",
+      "bestAction": "Meilleur jeu d'action",
+      "bestAdventure": "Meilleur jeu d'action / aventure",
+      "bestAudio": "Meilleur design audio",
+      "bestArtDirection": "Meilleure direction artistique",
+      "bestCommunitySupport": "Meilleur soutien de la communauté",
+      "bestDebutIndie": "Meilleur premier jeu indépendant",
+      "bestEsportGame": "Meilleur jeu esport",
+      "bestFamily": "Meilleur jeu en famille",
+      "bestFighting": "Meilleur jeu de combat",
+      "bestGameDirection": "Meilleure direction de jeu",
+      "bestIndie": "Meilleur jeu indépendant",
+      "bestMobile": "Meilleur jeu mobile",
+      "bestMultiplayer": "Meilleur jeu multijoueur",
+      "bestMusic": "Meilleure bande-son",
+      "bestNarrative": "Meilleure narration",
+      "bestOngoing": "Meilleur jeu actif",
+      "bestRPG": "Meilleur RPG",
+      "bestSports": "Meilleur jeu de sport / course",
+      "bestStrategy": "Meilleur jeu de simulation / stratégie",
+      "bestVR": "Meilleur jeu VR / AR",
+      "goty": "GOTY",
+      "impact": "Jeu avec un fort impact",
+      "mostAnticipated": "Jeu le plus attendu"
+    },
+    "disclaimer": "Beaucoup de gens critiquent les game awards, à juste titre, donc j'ai voulu proposer cet outil pour que chacun puisse faire sa propre liste.\nParce que le GOTY le plus important, c'est le votre.\nModifie les catégories, ajoute des jeux, tu peux cliquer sur un jeu pour le marquer comme gagnant de la catégorie et tu peux cliquer sur le bouton exporter en bas de la page pour avoir une image de tes awards !",
+    "editAward": {
+      "close": "Fermer",
+      "edit": "Editer",
+      "header": "Editer l'award",
+      "label": "Label :"
+    },
+    "gameAward": {
+      "close": "Fermer",
+      "headerNewGame": "Nouveau jeu",
+      "headerEditGame": "Editer jeu",
+      "next": "Suivant",
+      "previous": "Précédent",
+      "required": "Le champ est vide",
+      "save": "Sauvegarder",
+      "search": "Recherche d'un jeu",
+      "searchButton": "Rechercher",
+      "table": {
+        "action": "Action",
+        "name": "Nom",
+        "select": "Selectionner"
+      }
+    },
+    "passDisclaimer": "Accéder au configurateur d'awards",
+    "screenshot": "Exporter",
+    "subtitle": "Crée tes propres awards et partage les avec tes amis ou sur les réseaux.",
+    "title": "Mes awards"
+  },
   "blog": {
     "categories": "Catégories",
     "categoryName": {
