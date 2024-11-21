@@ -31,6 +31,12 @@ export const GAME_FIELDS = [
   'release_dates.platform.name',
 ];
 
+export const GAME_FIELDS_WITH_IMAGES = [
+  ...GAME_FIELDS,
+  'cover.url',
+  'game_localizations',
+];
+
 export const gameTypeMapping: Partial<Record<GAME_TYPE, string>> = {
   [GAME_TYPE.MAIN_GAME]: 'Jeu',
   [GAME_TYPE.DLC_ADDON]: 'DLC',

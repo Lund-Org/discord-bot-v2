@@ -8,7 +8,7 @@ import { authOptions } from '../auth/[...nextauth]';
 
 export default async function listGames(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const session = await getServerSession(req, res, authOptions);
 
@@ -17,6 +17,7 @@ export default async function listGames(
   }
 
   const search = getParam(req.body.search, '');
+  const withImage = getParam(req.body.withImage, 'false') === 'true';
   const page = getNumberParam(req.query.page, 1);
   const filters = req.body.filters || [];
 
@@ -28,7 +29,7 @@ export default async function listGames(
     return res.json({ games: [] });
   }
 
-  const games = await getGames(search, filters, page < 1 ? 1 : page);
+  const games = await getGames(search, filters, page < 1 ? 1 : page, withImage);
 
   res.json({ games });
 }

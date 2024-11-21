@@ -45,6 +45,10 @@ export enum REGION {
 export type Game = {
   id: number;
   name: string;
+  cover?: {
+    id: string;
+    url: string;
+  };
   status?: GAME_STATUS;
   storyline?: string;
   summary?: string;

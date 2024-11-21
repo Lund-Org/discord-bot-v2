@@ -13,6 +13,66 @@
     "loginWith": "Login with {{provider}} (Video game)",
     "signup": "To signup, join the "
   },
+  "awards": {
+    "addAward": "Add an award",
+    "addGame": "Add game",
+    "canvas": "Awards export!",
+    "canvasHint": "(To share the image: Right click > Save image)",
+    "copyright": "Awards generated on Lundprod.com",
+    "defaultCategories": {
+      "accessibility": "Innovation in Accessibility",
+      "bestAction": "Best Action Game",
+      "bestAdventure": "Best Action / Adventure",
+      "bestAudio": "Best Audio Design",
+      "bestArtDirection": "Best Art Direction",
+      "bestCommunitySupport": "Best Community Support",
+      "bestDebutIndie": "Best Debut Indie Game",
+      "bestEsportGame": "Best Esports Game",
+      "bestFamily": "Best Family",
+      "bestFighting": "Best Fighting",
+      "bestGameDirection": "Best Game Direction",
+      "bestIndie": "Best Independent Game",
+      "bestMobile": "Best Mobile Game",
+      "bestMultiplayer": "Best Multiplayer",
+      "bestMusic": "Best Score and Music",
+      "bestNarrative": "Best Narrative",
+      "bestOngoing": "Best Ongoing",
+      "bestRPG": "Best RPG",
+      "bestSports": "Best Sports / Racing",
+      "bestStrategy": "Best Sim / Strategy",
+      "bestVR": "Best VR / AR",
+      "goty": "GOTY",
+      "impact": "Games for Impact",
+      "mostAnticipated": "Most Anticipated Game"
+    },
+    "disclaimer": "A lot of people criticize the game awards, and to be fair they deserve it, so I wanted to offer this tool so that everyone can make their own list.\nBecause the real GOTY is the one you choose.\nJust customize the categories, add games, you can click to select your winner for each categories.\nYou can click on export at the bottom to get an image of your awards!",
+    "editAward": {
+      "close": "Close",
+      "edit": "Edit",
+      "header": "Edit the award",
+      "label": "Label :"
+    },
+    "gameAward": {
+      "close": "Close",
+      "headerNewGame": "New game",
+      "headerEditGame": "Edit game",
+      "next": "Next",
+      "previous": "Previous",
+      "required": "The field is empty",
+      "save": "Save",
+      "search": "Search a game",
+      "searchButton": "Search",
+      "table": {
+        "action": "Action",
+        "name": "Name",
+        "select": "Select"
+      }
+    },
+    "passDisclaimer": "Go to the awards configurator",
+    "screenshot": "Export",
+    "subtitle": "Create your own awards and share them with your friends or on your social networks.",
+    "title": "My awards"
+  },
   "blog": {
     "categories": "Categories",
     "categoryName": {

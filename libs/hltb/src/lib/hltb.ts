@@ -138,11 +138,21 @@ export class HowLongToBeatService {
         ...hltbHeaders,
       },
     });
-    const tokenMatch = (scriptResult.data as string).match(
-      new RegExp(`"/api/search/".concat\\("([a-zA-Z0-9]+)"\\)`),
-    );
 
-    return tokenMatch[1];
+    const searchLine = (scriptResult.data as string).match(
+      new RegExp(`fetch\\("/api/search/"(.*),`),
+    );
+    if (!searchLine) {
+      return '';
+    }
+
+    const tokenMatch = Array.from(
+      searchLine[1].matchAll(new RegExp(`.concat\\("([a-zA-Z0-9]+)"\\)`, 'g')),
+    )
+      .map((match) => match[1])
+      .join('');
+
+    return tokenMatch;
   }
 
   private getFormattedData(data: HLTBObj) {
