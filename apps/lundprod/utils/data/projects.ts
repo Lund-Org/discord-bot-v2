@@ -2,6 +2,13 @@ import { TFunction } from 'i18next';
 
 export const getProjects = (tFn: TFunction) => [
   {
+    title: tFn('projects.projects.awards.title'),
+    description: tFn('projects.projects.awards.description'),
+    to: '/projects/awards',
+    bgImg: 'https://d18wazra96xhgb.cloudfront.net/projects/project-awards.png',
+    date: tFn('projects.projects.awards.date'),
+  },
+  {
     title: tFn('projects.projects.wherestheroad.title'),
     description: tFn('projects.projects.wherestheroad.description'),
     to: 'https://www.youtube.com/watch?v=AFRkQTwi-FI',

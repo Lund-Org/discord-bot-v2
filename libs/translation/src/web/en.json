@@ -466,6 +466,11 @@
         },
         "title": "3D"
       },
+      "awards": {
+        "date": "November 2024",
+        "description": "Create your own Game Awards",
+        "title": "Awards generator"
+      },
       "gacha": {
         "date": "2021 - 2024",
         "description": "The card game on Discord",
