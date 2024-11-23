@@ -25,7 +25,7 @@ export const GachaPresentation = () => {
           components={{
             darkLinkDiscord: (
               <DarkStyledLink
-                href="https://discord.gg/gJyu9p2"
+                href="https://discord.gg/tCYmDm2"
                 target="_blank"
                 rel="noreferrer noopener"
               />

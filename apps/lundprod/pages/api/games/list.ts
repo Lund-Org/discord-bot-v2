@@ -12,9 +12,9 @@ export default async function listGames(
 ) {
   const session = await getServerSession(req, res, authOptions);
 
-  if (!session) {
-    return res.status(401).json({ games: [] });
-  }
+  // if (!session) {
+  //   return res.status(401).json({ games: [] });
+  // }
 
   const search = getParam(req.body.search, '');
   const withImage = getParam(req.body.withImage, 'false') === 'true';

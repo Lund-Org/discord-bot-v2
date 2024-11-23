@@ -79,7 +79,7 @@ export const networks = {
     {
       imgSrc: socialDiscord.src,
       title: 'Discord',
-      url: 'https://discord.gg/gJyu9p2',
+      url: 'https://discord.gg/tCYmDm2',
     },
     {
       imgSrc: socialTwitter.src,
