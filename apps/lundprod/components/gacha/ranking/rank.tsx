@@ -66,9 +66,9 @@ export const Rank = ({ rank, level }: RankProps) => {
         <Link href={getUserProfileUrl(rank.discordId)}>{rank.username}</Link>
       </Text>
       <Text>
-        {t('rank.level.currentLevel', { level: rank.level.currentLevel })}
+        {t('gacha.ranking.level', { level: rank.level.currentLevel })}
       </Text>
-      <Text>{t('rank.level.xp', { xp: rank.currentXP })}</Text>
+      <Text>{t('gacha.ranking.xp', { xp: rank.currentXP })}</Text>
     </Flex>
   );
 };
