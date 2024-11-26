@@ -1,3 +1,4 @@
+import { chunk } from 'lodash';
 import { useMemo, useRef, useState } from 'react';
 import {
   FieldArrayWithId,
@@ -15,17 +16,14 @@ import {
   Button,
   Flex,
   Grid,
-  GridItem,
   Heading,
-  Icon,
   Text,
+  Tooltip,
   useBoolean,
 } from '@chakra-ui/react';
 import { AddIcon, StarIcon } from '@chakra-ui/icons';
 import { useGetDefaultAwards } from '~/lundprod/hooks/use-get-default-awards';
 import { useScreenshot } from '~/lundprod/hooks/use-screenshot';
-
-const SCREENSHOT_SELECTOR = 'award-configurator';
 
 export const AwardConfigurator = () => {
   const { t } = useTranslation();
@@ -33,7 +31,7 @@ export const AwardConfigurator = () => {
   const canvasRef = useRef<HTMLDivElement>(null);
 
   const [hasCanvas, setHasCanvas] = useBoolean(false);
-  const screenshot = useScreenshot(`#${SCREENSHOT_SELECTOR}`);
+  const screenshot = useScreenshot();
   const [editedAward, setEditedAward] = useState<{
     field: FieldArrayWithId<AwardForm, 'awards', 'id'>;
     index: number;
@@ -58,46 +56,65 @@ export const AwardConfigurator = () => {
   });
 
   const screenshotAwards = async () => {
-    if (canvasRef.current) {
-      const canvas = await screenshot();
+    for (const child of Array.from(canvasRef.current.children)) {
+      canvasRef.current.removeChild(child);
+    }
+
+    for (var i = 0; i < 4; ++i) {
+      const block = document.querySelector(`#award-block-${i}`);
+
+      if (!block) {
+        return;
+      }
+
+      const canvas = await screenshot(block as HTMLElement | null);
 
       if (canvas) {
-        for (const child of Array.from(canvasRef.current.children)) {
-          canvasRef.current.removeChild(child);
-        }
-
         canvasRef.current.appendChild(canvas);
         setHasCanvas.on();
       }
     }
   };
 
+  const fieldBlocks = chunk(fields, 5);
+
   return (
     <FormProvider {...form}>
       <Form>
-        <Box id={SCREENSHOT_SELECTOR} bg="gray.800">
-          {fields.map((field, index) => (
-            <AwardRow
-              key={field.id}
-              field={field}
-              index={index}
-              onEditAward={() => setEditedAward({ field, index })}
-              onDelete={remove}
-            />
+        <Box>
+          {fieldBlocks.map((fieldBlock, blockIndex) => (
+            <Box id={`award-block-${blockIndex}`} bg="gray.800">
+              {fieldBlock.map((field, index) => (
+                <AwardRow
+                  key={field.id}
+                  field={field}
+                  index={blockIndex * 5 + index}
+                  onEditAward={() =>
+                    setEditedAward({ field, index: blockIndex * 5 + index })
+                  }
+                  onDelete={remove}
+                />
+              ))}
+              {blockIndex + 1 === fieldBlocks.length && (
+                <Text transform="translateY(-25px)" textAlign="right" mr="10px">
+                  {t('awards.copyright')}
+                </Text>
+              )}
+            </Box>
           ))}
-          <Text transform="translateY(-25px)" textAlign="right" mr="10px">
-            {t('awards.copyright')}
-          </Text>
         </Box>
 
         <Flex alignItems="center" gap={4}>
-          <Button
-            colorScheme="orange"
-            leftIcon={<AddIcon color="white" />}
-            onClick={() => append({ label: 'Award', games: [] })}
-          >
-            {t('awards.addAward')}
-          </Button>
+          <Tooltip isDisabled={fields.length < 20} label={t('awards.maxAward')}>
+            <Button
+              colorScheme="orange"
+              leftIcon={<AddIcon color="white" />}
+              onClick={() => append({ label: 'Award', games: [] })}
+              isDisabled={fields.length === 20}
+            >
+              {t('awards.addAward')}
+            </Button>
+          </Tooltip>
           <Button
             colorScheme="teal"
             leftIcon={<StarIcon color="white" />}
@@ -114,14 +131,16 @@ export const AwardConfigurator = () => {
               <Text mb="10px">{t('awards.canvasHint')}</Text>
             </>
           )}
-          <Box
+          <Flex
+            flexWrap="wrap"
+            gap={5}
             ref={canvasRef}
-            border={hasCanvas && '2px solid white'}
-            maxW="500px"
+            p="8px"
+            maxW="1000px"
             sx={{
-              '& > canvas': {
-                width: '100% !important',
-                height: '100% !important',
+              '& > img': {
+                w: '200px',
+                border: '1px solid white',
               },
             }}
           />

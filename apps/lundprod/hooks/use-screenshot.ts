@@ -1,13 +1,9 @@
 import html2canvas from 'html2canvas';
-import { useCallback } from 'react';
 
-type Result = Promise<HTMLCanvasElement | null>;
+type Result = Promise<HTMLImageElement | null>;
 
-export const useScreenshot = (selector: string): (() => Result) => {
-  return useCallback(async (): Result => {
-    console.log(selector);
-    const element = document.querySelector(selector);
-
+export function useScreenshot() {
+  return async (element: HTMLElement | null): Result => {
     if (!element) {
       return null;
     }
@@ -18,6 +14,9 @@ export const useScreenshot = (selector: string): (() => Result) => {
       useCORS: true,
     });
 
-    return canvas;
-  }, [selector]);
-};
+    var img = new Image();
+    img.src = canvas.toDataURL();
+
+    return img;
+  };
+}

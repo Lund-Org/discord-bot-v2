@@ -25,14 +25,11 @@
       "bestAdventure": "Best Action / Adventure",
       "bestAudio": "Best Audio Design",
       "bestArtDirection": "Best Art Direction",
-      "bestCommunitySupport": "Best Community Support",
       "bestDebutIndie": "Best Debut Indie Game",
-      "bestEsportGame": "Best Esports Game",
       "bestFamily": "Best Family",
       "bestFighting": "Best Fighting",
       "bestGameDirection": "Best Game Direction",
       "bestIndie": "Best Independent Game",
-      "bestMobile": "Best Mobile Game",
       "bestMultiplayer": "Best Multiplayer",
       "bestMusic": "Best Score and Music",
       "bestNarrative": "Best Narrative",
@@ -40,7 +37,6 @@
       "bestRPG": "Best RPG",
       "bestSports": "Best Sports / Racing",
       "bestStrategy": "Best Sim / Strategy",
-      "bestVR": "Best VR / AR",
       "goty": "GOTY",
       "impact": "Games for Impact",
       "mostAnticipated": "Most Anticipated Game"
@@ -68,6 +64,7 @@
         "select": "Select"
       }
     },
+    "maxAward": "Max 20 awards",
     "passDisclaimer": "Go to the awards configurator",
     "screenshot": "Export",
     "subtitle": "Create your own awards and share them with your friends or on your social networks.",
