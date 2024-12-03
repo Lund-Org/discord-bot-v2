@@ -1,5 +1,6 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import { readFileSync } from 'fs';
+import axios from 'axios';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { MDXRemote } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import { join, resolve } from 'path';
@@ -15,7 +16,7 @@ export async function getStaticPaths() {
 
   return {
     paths: mdxList.map(({ filename }) => ({ params: { filename } })),
-    fallback: false, // can also be true or 'blocking'
+    fallback: 'blocking', // can also be true or 'blocking'
   };
 }
 
@@ -25,7 +26,24 @@ export async function getStaticProps({ params }) {
     include: { tags: true },
   });
   const dir = resolve('./public', 'mdx');
-  const mdxContent = readFileSync(join(dir, `${params.filename}.mdx`));
+
+  let mdxContent;
+
+  if (existsSync(join(dir, `${params.filename}.mdx`))) {
+    mdxContent = readFileSync(join(dir, `${params.filename}.mdx`));
+  } else {
+    const remoteFile = await axios.get(
+      `${process.env.NEXT_PUBLIC_CDN_URL}/blog-articles/${
+        params.filename
+      }.mdx?t=${Date.now()}`,
+    );
+
+    mdxContent = remoteFile.data;
+
+    writeFileSync(join(dir, `${params.filename}.mdx`), mdxContent, {
+      flag: 'w+',
+    });
+  }
 
   return {
     props: {

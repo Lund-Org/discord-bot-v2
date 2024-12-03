@@ -150,6 +150,8 @@ The webhook to post the updates on the backlog
 
 > **CDN_URL**
 
+> **NEXT_PUBLIC_CDN_URL**
+
 The CDN url to redirect to when calling the proxy with the cdn subdomain
 
 > **NEXTAUTH_SECRET**

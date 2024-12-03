@@ -12,7 +12,7 @@ export const getStaticProps: GetStaticProps = async () => {
   return {
     revalidate: 3600,
     props: {
-      cdnUrl: process.env.CDN_URL,
+      cdnUrl: process.env.NEXT_PUBLIC_CDN_URL,
     },
   };
 };
@@ -50,7 +50,7 @@ export function Project3D({ cdnUrl }: { cdnUrl: string }) {
                 <Gallery
                   images={images.map((img) => ({
                     ...img,
-                    src: `${cdnUrl}${img.src}`,
+                    src: img.src,
                   }))}
                   aspectRatio={null}
                 />

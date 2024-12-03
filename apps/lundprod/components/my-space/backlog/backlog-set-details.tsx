@@ -71,7 +71,7 @@ export const BacklogSetDetails = ({
     defaultValues: {
       review: item.review || '',
       rating: item.rating || 0,
-      completion: item.completion,
+      completion: item.completion || undefined,
       completionComment: item.completionComment || '',
       duration: item.duration,
       pros: item.pros?.length

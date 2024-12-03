@@ -28,7 +28,7 @@ const STATUS_WITH_NOTE: BacklogStatus[] = [
 ];
 
 export const BacklogItemDetails = ({
-  item: { igdbGameId, status, note },
+  item: { igdbGameId, status, note, review },
   selectReview,
 }: BacklogItemDetailsProps) => {
   const { t } = useTranslation();
@@ -60,7 +60,7 @@ export const BacklogItemDetails = ({
   return (
     <Flex gap={3} alignItems="center" justifyContent="space-between">
       <Box>{statusBadge}</Box>
-      {STATUS_WITH_DETAILS.includes(status) && (
+      {STATUS_WITH_DETAILS.includes(status) && !!review && (
         <Button
           onClick={() => onReviewSelect(igdbGameId)}
           size="sm"

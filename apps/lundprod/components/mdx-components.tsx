@@ -6,6 +6,7 @@ import {
   Heading,
   HeadingProps,
   Image,
+  ImageProps,
   Link,
   ListItem,
   OrderedList,
@@ -32,7 +33,7 @@ export const StyledLink = styled(Link)`
 
 const titleCommonProps: (
   children: ReactNode,
-  push: NextRouter['push']
+  push: NextRouter['push'],
 ) => HeadingProps = (children, push) => {
   if (typeof children !== 'string') {
     console.log('children is not a string :(');
@@ -83,6 +84,16 @@ const BlockQuote = ({ children }: { children: ReactNode }) => (
   >
     {children}
   </Box>
+);
+const CdnImage = ({
+  src,
+  external = false,
+  ...rest
+}: ImageProps & { external?: boolean }) => (
+  <Image
+    src={external ? src : `${process.env.NEXT_PUBLIC_CDN_URL}${src}`}
+    {...rest}
+  />
 );
 const Code = ({ children }: { children: ReactNode }) => (
   <ChakraCode px={2} py={0} textIndent={0}>
@@ -220,5 +231,6 @@ export const components = {
   th: MdxTh,
   tr: MdxTr,
   td: MdxTd,
+  CdnImage,
   ...helpers,
 };

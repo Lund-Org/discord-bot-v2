@@ -7,6 +7,7 @@ type ParagraphWithImgProps = BoxProps & {
   alt: string;
   direction?: 'left' | 'right';
   imgProps?: ImageProps;
+  external?: boolean;
 };
 
 export const ParagraphWithImg = ({
@@ -15,11 +16,12 @@ export const ParagraphWithImg = ({
   alt,
   direction = 'right',
   imgProps,
+  external = false,
   ...rest
 }: ParagraphWithImgProps) => (
   <Box alignItems="center" justifyContent="center" {...rest}>
     <Image
-      src={src}
+      src={external ? src : `${process.env.NEXT_PUBLIC_CDN_URL}${src}`}
       alt={alt}
       float={direction}
       m={direction === 'right' ? '0 0 10px 10px' : '0 10px 10px 0'}

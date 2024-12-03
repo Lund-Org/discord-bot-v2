@@ -12,11 +12,13 @@ type HLTBObj = {
 };
 
 const hltbHeaders = {
+  accept: '*/*',
+  'accept-language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
   origin: 'https://howlongtobeat.com',
   referer: 'https://howlongtobeat.com',
   host: 'howlongtobeat.com',
   'user-agent':
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
 };
 
 const payload = {
@@ -37,6 +39,7 @@ const payload = {
         perspective: '',
         flow: '',
         genre: '',
+        subGenre: ' ',
       },
       rangeYear: {
         min: '',
@@ -75,6 +78,7 @@ export class HowLongToBeatService {
       search.searchTerms = searchQuery.split(' ');
 
       const searchData = JSON.stringify(search);
+
       const result = await this.axios.post(
         `${SEARCH_URL}/${token}`,
         searchData,

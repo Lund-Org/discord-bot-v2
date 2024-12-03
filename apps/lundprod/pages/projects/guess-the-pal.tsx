@@ -10,7 +10,7 @@ export const getStaticProps: GetStaticProps = async () => {
   return {
     revalidate: 3600,
     props: {
-      cdnUrl: process.env.CDN_URL,
+      cdnUrl: process.env.NEXT_PUBLIC_CDN_URL,
     },
   };
 };
