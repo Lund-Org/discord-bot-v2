@@ -46,6 +46,7 @@ export async function getStaticProps({ params }) {
   }
 
   return {
+    revalidate: 3600, // In seconds
     props: {
       blogPost: JSON.parse(JSON.stringify(blogPost)),
       mdxSource: await serialize(mdxContent, {
