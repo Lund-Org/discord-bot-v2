@@ -6,7 +6,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getTitleFromFilename } from '~/lundprod/utils/blog';
 import { getParam } from '~/lundprod/utils/next';
 
-export default async function listBlogPosts(
+export default async function publishBlogPosts(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {

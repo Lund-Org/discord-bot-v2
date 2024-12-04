@@ -32,6 +32,7 @@ const GalleryButtonStyle: FlexProps = {
 type ImageItem = {
   src: string;
   description: string;
+  external?: boolean;
 };
 
 type GalleryProps = {
@@ -76,6 +77,11 @@ export const Gallery = ({ images, aspectRatio = 16 / 9 }: GalleryProps) => {
     if (index === step) {
       setFullscreenImg(images[step]);
     }
+  };
+  const getImageSrc = (image: ImageItem) => {
+    return image.external
+      ? image.src
+      : `${process.env.NEXT_PUBLIC_CDN_URL}${image.src}`;
   };
 
   return (
@@ -139,10 +145,10 @@ export const Gallery = ({ images, aspectRatio = 16 / 9 }: GalleryProps) => {
               >
                 {image.src.endsWith('mp4') ? (
                   <video controls width="100%">
-                    <source src={image.src} type="video/mp4" />
+                    <source src={getImageSrc(image)} type="video/mp4" />
                   </video>
                 ) : (
-                  <Image src={image.src} alt={image.description} />
+                  <Image src={getImageSrc(image)} alt={image.description} />
                 )}
               </Box>
             ))}
@@ -163,7 +169,7 @@ export const Gallery = ({ images, aspectRatio = 16 / 9 }: GalleryProps) => {
               <Box textAlign="center">
                 <Image
                   display="inline-block"
-                  src={fullscreenImg.src}
+                  src={getImageSrc(fullscreenImg)}
                   alt={fullscreenImg.description}
                 />
               </Box>

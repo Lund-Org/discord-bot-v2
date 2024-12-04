@@ -80,7 +80,7 @@ export const initServer = () => {
       console.log(
         'Server is running at http://localhost:%d in %s mode',
         80,
-        process.env.ENV
+        process.env.ENV,
       );
     });
     if (process.env.ENV !== 'dev') {
@@ -93,7 +93,7 @@ export const initServer = () => {
         console.log(
           'Server is running at https://localhost:%d in %s mode',
           443,
-          process.env.ENV
+          process.env.ENV,
         );
       });
     }
