@@ -34,7 +34,7 @@ export const BacklogGameSearchView = () => {
       {
         field: 'first_release_date',
         operator: QUERY_OPERATOR.LTE,
-        value: new Date().getTime(),
+        value: Math.floor(Date.now() / 1000),
       },
     ];
 

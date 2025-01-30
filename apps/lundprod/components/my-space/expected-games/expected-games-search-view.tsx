@@ -32,7 +32,7 @@ export const ExpectedGamesSearchView = () => {
       {
         field: 'release_dates.date',
         operator: QUERY_OPERATOR.GT,
-        value: Math.round(Date.now() / 1000),
+        value: Math.floor(Date.now() / 1000),
       },
     ];
 
