@@ -5,7 +5,6 @@ import {
   socialItchIo,
   socialLinktree,
   socialTwitch,
-  socialTwitter,
   socialYoutube,
 } from '../assets';
 
@@ -69,6 +68,11 @@ export const networks = {
       title: 'Twitch',
       url: 'https://www.twitch.tv/lundprod',
     },
+    {
+      imgSrc: socialBluesky.src,
+      title: 'Bluesky',
+      url: 'https://bsky.app/profile/lund.bsky.social',
+    },
   ],
   lundprod: [
     {
@@ -81,16 +85,6 @@ export const networks = {
       title: 'Discord',
       url: 'https://discord.gg/tCYmDm2',
     },
-    {
-      imgSrc: socialTwitter.src,
-      title: 'Twitter',
-      url: 'https://twitter.com/LundProd',
-    },
-    {
-      imgSrc: socialBluesky.src,
-      title: 'Bluesky',
-      url: 'https://bsky.app/profile/lund.bsky.social',
-    },
   ],
   lundprodGameDev: [
     {
@@ -102,11 +96,6 @@ export const networks = {
       imgSrc: socialDiscord.src,
       title: 'Discord',
       url: 'https://discord.gg/6RTVVrNVxz',
-    },
-    {
-      imgSrc: socialTwitter.src,
-      title: 'Twitter',
-      url: 'https://x.com/LundProdGameDev',
     },
     {
       imgSrc: socialInstagram.src,

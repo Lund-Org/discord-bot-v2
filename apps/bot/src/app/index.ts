@@ -46,7 +46,7 @@ export const startBot = (): Promise<Client> => {
     client.on(Events.ClientReady, () => {
       console.log(`Logged in as ${client.user?.tag} !`);
       initializers.forEach((initializer: (client: Client) => void) =>
-        initializer(client)
+        initializer(client),
       );
     });
 
@@ -136,7 +136,7 @@ export const startBot = (): Promise<Client> => {
         await manageGachaPagination(
           matchingPagination,
           fullReaction,
-          user as User
+          user as User,
         );
       }
     });

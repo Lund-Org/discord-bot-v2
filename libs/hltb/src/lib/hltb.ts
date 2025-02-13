@@ -14,6 +14,7 @@ type HLTBObj = {
 const hltbHeaders = {
   accept: '*/*',
   'accept-language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
+  priority: 'u=1, i',
   origin: 'https://howlongtobeat.com',
   referer: 'https://howlongtobeat.com',
   host: 'howlongtobeat.com',
@@ -39,7 +40,7 @@ const payload = {
         perspective: '',
         flow: '',
         genre: '',
-        subGenre: ' ',
+        difficulty: '',
       },
       rangeYear: {
         min: '',
@@ -144,7 +145,7 @@ export class HowLongToBeatService {
     });
 
     const searchLine = (scriptResult.data as string).match(
-      new RegExp(`fetch\\("/api/search/"(.*),`),
+      new RegExp(`fetch\\("/api/ouch/"(.*),`),
     );
     if (!searchLine) {
       return '';

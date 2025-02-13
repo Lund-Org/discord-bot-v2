@@ -13,12 +13,14 @@ class MemeCheckerHandler extends Handler {
       'imgur.com',
       'giphy.com',
       'x.com',
+      'xcancel.com',
       'twitter.com',
       'instagram.com',
       'tiktok.com',
       'bsky.app',
       'youtube.com',
       'youtu.be',
+      'twitch.tv',
     ];
   }
 
