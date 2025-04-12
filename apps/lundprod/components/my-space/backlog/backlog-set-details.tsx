@@ -18,9 +18,11 @@ import {
   InputRightAddon,
   IconButton,
   Box,
+  Checkbox,
+  Divider,
 } from '@chakra-ui/react';
 import { BacklogStatus } from '@prisma/client';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FieldArrayPath, useFieldArray, useForm } from 'react-hook-form';
 
@@ -49,6 +51,7 @@ type FormData = {
   pros: { value: string }[];
   cons: { value: string }[];
   ratingValidation: string;
+  shouldNotify: boolean;
 };
 
 export const BacklogSetDetails = ({
@@ -60,15 +63,8 @@ export const BacklogSetDetails = ({
   const { updateBacklogDetails } = useBacklog();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const {
-    control,
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { isSubmitting, errors },
-  } = useForm<FormData>({
-    defaultValues: {
+  const defaultValues = useMemo(() => {
+    return {
       review: item.review || '',
       rating: item.rating || 0,
       completion: item.completion || undefined,
@@ -81,8 +77,27 @@ export const BacklogSetDetails = ({
         ? item.cons.map((value) => ({ value }))
         : [{ value: '' }],
       ratingValidation: '',
-    },
+      shouldNotify: true,
+    };
+  }, [item]);
+
+  const {
+    control,
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    watch,
+    formState: { isSubmitting, errors },
+  } = useForm<FormData>({
+    defaultValues,
   });
+
+  useEffect(() => {
+    if (isModalOpen) {
+      reset(defaultValues);
+    }
+  }, [isModalOpen]);
 
   const newRating = watch('rating');
   const _proFields = watch('pros');
@@ -217,6 +232,7 @@ export const BacklogSetDetails = ({
                   <Textarea
                     {...register('review', { required: true })}
                     isInvalid={!!errors.review}
+                    minH="250px"
                   />
                 </FormControl>
                 <Flex gap={4} flexDir={{ base: 'column', sm: 'row' }}>
@@ -311,6 +327,12 @@ export const BacklogSetDetails = ({
                     ))}
                   </FormControl>
                 </Flex>
+                <FormControl>
+                  <Divider w="100%" h="1px" my="15px" />
+                  <Checkbox {...register(`shouldNotify`)}>
+                    {t('mySpace.backlog.details.shouldNotify')}
+                  </Checkbox>
+                </FormControl>
               </Flex>
             </ModalBody>
             <ModalFooter>

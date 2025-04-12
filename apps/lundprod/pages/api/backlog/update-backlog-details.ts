@@ -3,7 +3,7 @@ import { BacklogItem, BacklogStatus, Prisma, User } from '@prisma/client';
 import { EmbedBuilder, WebhookClient } from 'discord.js';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
-import { array, number, object, string } from 'yup';
+import { array, boolean, number, object, string } from 'yup';
 
 import { getUserProfileUrl } from '~/lundprod/utils/url';
 
@@ -19,6 +19,7 @@ const updateBacklogDetailsSchema = object({
   completionComment: string().max(255),
   pros: array().of(string().max(255)),
   cons: array().of(string().max(255)),
+  shouldNotify: boolean(),
 });
 
 const backlogItemValidator = Prisma.validator<Prisma.BacklogItemDefaultArgs>()({
@@ -117,7 +118,10 @@ export default async function updateBacklogDetails(
   });
 
   res.revalidate(getUserProfileUrl(session.userId));
-  webhookNotification(user, backlogItem as BacklogItemType);
+
+  if (payload.shouldNotify) {
+    webhookNotification(user, backlogItem as BacklogItemType);
+  }
 
   res.json({ success: true });
 }

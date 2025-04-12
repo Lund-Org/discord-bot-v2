@@ -268,7 +268,8 @@
         "durationHour": "h",
         "note": "Note *",
         "pros": "Pros",
-        "save": "Save"
+        "save": "Save",
+        "shouldNotify": "Send a discord notification"
       },
       "list": {
         "actions": "Actions",

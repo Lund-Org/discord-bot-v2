@@ -46,6 +46,7 @@ type UpdateData = {
   completionComment?: string;
   pros: string[];
   cons: string[];
+  shouldNotify: boolean;
 };
 
 //-- Types
@@ -265,6 +266,7 @@ function updateBacklogDetails(
       data.completionComment,
       data.pros,
       data.cons,
+      data.shouldNotify,
     ],
     [
       'review',
@@ -274,6 +276,7 @@ function updateBacklogDetails(
       'completionComment',
       'pros',
       'cons',
+      'shouldNotify',
     ],
     '/api/backlog/update-backlog-details',
   );
