@@ -20,7 +20,7 @@ model BacklogItem {
   userId     Int
   igdbGameId Int
   name       String
-  category   String
+  game_type  String
   url        String
   status     BacklogStatus @default(BACKLOG)
   note       String?       @db.VarChar(255)

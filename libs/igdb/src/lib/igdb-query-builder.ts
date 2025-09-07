@@ -14,6 +14,7 @@ export class IGDBQueryBuilder {
   }
 
   reset() {
+    this.search = '';
     this.query = '';
     this.sort = '';
     this.fields = [];
@@ -114,7 +115,7 @@ export class IGDBQueryBuilder {
 
   andWhere(field: string, operator: QUERY_OPERATOR, value: IGDBConditionValue) {
     this.and((subQueryBuilder) =>
-      subQueryBuilder.where(field, operator, value)
+      subQueryBuilder.where(field, operator, value),
     );
     return this;
   }

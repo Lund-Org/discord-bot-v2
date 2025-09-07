@@ -20,7 +20,7 @@ export const GAME_FIELDS = [
   'storyline',
   'summary',
   'version_title',
-  'category',
+  'game_type',
   'url',
   'platforms.id',
   'platforms.name',

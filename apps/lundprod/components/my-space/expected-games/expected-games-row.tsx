@@ -80,7 +80,7 @@ export const ExpectedGamesRow = ({ element }: ExpectedGamesRowProps) => {
         </Text>
       </Td>
       <Td>
-        <Text>{translateGameType(t, element.category)}</Text>
+        <Text>{translateGameType(t, element.game_type)}</Text>
       </Td>
       <Td>
         <Link href={element.url} target="_blank" rel="noopener noreferrer">

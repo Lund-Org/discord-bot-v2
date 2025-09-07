@@ -30,7 +30,7 @@ export const BacklogGameRow = ({ element }: BacklogGameRowProps) => {
         </Text>
       </Td>
       <Td>
-        <Text>{translateGameType(t, element.category)}</Text>
+        <Text>{translateGameType(t, element.game_type)}</Text>
       </Td>
       <Td>
         <Flex gap="5px" flexDir="column">

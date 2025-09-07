@@ -26,15 +26,15 @@ import { ContextWithGameSearch } from '../utils/types';
 
 export type BacklogItemLight = Pick<
   BacklogItem,
-  Exclude<BacklogItemFields, 'category'>
+  Exclude<BacklogItemFields, 'game_type'>
 > &
   Pick<BacklogItemReview, Exclude<BacklogItemReviewFields, 'pros' | 'cons'>> & {
-    category: GAME_TYPE | string;
+    game_type: GAME_TYPE | string;
     pros: string[];
     cons: string[];
   };
 type IGDBGameLight = Pick<BacklogItem, 'id' | 'name' | 'url'> & {
-  category: GAME_TYPE | string;
+  game_type: GAME_TYPE | string;
 };
 type BacklogReorder = { oldOrder: number; newOrder: number; igdbId: number };
 
@@ -101,7 +101,7 @@ export const BacklogProvider = ({
       const newItem: BacklogItemLight = {
         igdbGameId: game.id,
         name: game.name,
-        category: gameTypeMapping[game.category] || '',
+        game_type: gameTypeMapping[game.game_type] || '',
         url: game.url,
         status: BacklogStatus.BACKLOG,
         note: null,
@@ -122,7 +122,7 @@ export const BacklogProvider = ({
         JSON.stringify({
           igdbGameId: newItem.igdbGameId,
           name: newItem.name,
-          category: newItem.category,
+          game_type: newItem.game_type,
           url: newItem.url,
         }),
       ).catch(() => {

@@ -81,7 +81,7 @@ export const AwardGameModal = ({ onSave, onClose }: AwardGameModalProps) => {
           withImage: 'true',
           filters: [
             {
-              field: 'category',
+              field: 'game_type',
               operator: QUERY_OPERATOR.EQ,
               value: GAME_TYPE.MAIN_GAME,
             },

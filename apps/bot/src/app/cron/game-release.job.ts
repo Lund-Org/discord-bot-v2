@@ -148,11 +148,12 @@ export async function cronDefinition() {
           igdbId: expectedGame.igdbId,
         },
       });
-      let category = (gameCache.content as { category?: GAME_TYPE }).category;
+      let game_type = (gameCache.content as { game_type?: GAME_TYPE })
+        .game_type;
 
-      if (!category) {
+      if (!game_type) {
         const game = await getGame(expectedGame.igdbId);
-        category = game?.category;
+        game_type = game?.game_type;
       }
 
       await prisma
@@ -174,8 +175,8 @@ export async function cronDefinition() {
               update: {},
               create: {
                 url: expectedGame.url,
-                category: translateGameType(t, category),
-                // category: translateGameType(i18n.t, category),
+                game_type: translateGameType(t, game_type),
+                // game_type: translateGameType(i18n.t, game_type),
                 igdbGameId: expectedGame.igdbId,
                 name: expectedGame.name,
                 user: { connect: { id: expectedGame.userId } },

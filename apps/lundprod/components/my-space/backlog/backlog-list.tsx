@@ -147,7 +147,7 @@ export const BacklogList = ({
                   <Text title={item.name}>{item.name}</Text>
                 </Td>
                 <Td>
-                  <Text>{item.category}</Text>
+                  <Text>{item.game_type}</Text>
                 </Td>
                 <Td>
                   <Link

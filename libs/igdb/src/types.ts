@@ -53,7 +53,7 @@ export type Game = {
   storyline?: string;
   summary?: string;
   version_title?: string;
-  category: GAME_TYPE;
+  game_type: GAME_TYPE;
   url: string;
   platforms?: Array<{
     id: number;

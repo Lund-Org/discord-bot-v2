@@ -52,7 +52,7 @@ export default async function addToBacklog(
     create: {
       igdbGameId: payload.igdbGameId,
       name: payload.name,
-      category: payload.category,
+      game_type: payload.game_type,
       url: payload.url,
       user: {
         connect: {

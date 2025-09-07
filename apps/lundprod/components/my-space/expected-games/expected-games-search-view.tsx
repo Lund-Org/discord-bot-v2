@@ -25,7 +25,7 @@ export const ExpectedGamesSearchView = () => {
   const onGameSearch = async (_page = 1) => {
     const filters: IGDBFilter[] = [
       {
-        field: 'category',
+        field: 'game_type',
         operator: QUERY_OPERATOR.EQ,
         value: category,
       },
