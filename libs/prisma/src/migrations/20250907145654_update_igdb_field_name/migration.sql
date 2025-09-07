@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE `backlogitem` RENAME COLUMN `category` TO `game_type`;
+ALTER TABLE `BacklogItem` RENAME COLUMN `category` TO `game_type`;
