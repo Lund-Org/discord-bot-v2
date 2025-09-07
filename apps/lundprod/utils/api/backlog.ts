@@ -3,7 +3,7 @@ import { ArrayElement } from '@discord-bot-v2/common';
 export const backlogItemFields = [
   'igdbGameId',
   'name',
-  'category',
+  'game_type',
   'url',
   'status',
   'note',

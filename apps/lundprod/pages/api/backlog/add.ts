@@ -11,7 +11,7 @@ import { authOptions } from '../auth/[...nextauth]';
 const addToBacklogSchema = object({
   igdbGameId: number().required().positive().integer(),
   name: string().required(),
-  category: string().oneOf(Object.values(gameTypeMapping)).required(),
+  game_type: string().oneOf(Object.values(gameTypeMapping)).required(),
   url: string().required(),
 });
 
