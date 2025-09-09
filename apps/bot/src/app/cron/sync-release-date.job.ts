@@ -21,9 +21,9 @@ export async function cronDefinition() {
       cache[expectedGame.igdbId] = game;
 
       const relatedReleaseDate = game.release_dates.find(
-        ({ platform, region }) =>
+        ({ platform, release_region }) =>
           expectedGame.releaseDate.platformId === platform.id &&
-          expectedGame.releaseDate.region === region
+          expectedGame.releaseDate.region === release_region,
       );
 
       if (!relatedReleaseDate) {
@@ -33,6 +33,11 @@ export async function cronDefinition() {
         });
 
         continue;
+      } else if (expectedGame.cancelled) {
+        await prisma.expectedGame.update({
+          where: { id: expectedGame.id },
+          data: { cancelled: false },
+        });
       }
 
       if (!relatedReleaseDate.date) {
@@ -45,17 +50,25 @@ export async function cronDefinition() {
       }
 
       if (
+        (!expectedGame.releaseDate.date && relatedReleaseDate.date) ||
         relatedReleaseDate.date * 1000 !==
-        expectedGame.releaseDate.date.getTime()
+          expectedGame.releaseDate.date.getTime()
       ) {
-        await prisma.expectedGameReleaseDate.update({
-          where: { id: expectedGame.releaseDate.id },
-          data: { date: new Date(relatedReleaseDate.date * 1000) },
-        });
+        if (relatedReleaseDate.date * 1000 < new Date().getTime()) {
+          await prisma.expectedGame.delete({
+            where: { id: expectedGame.id },
+          });
+        } else {
+          await prisma.expectedGameReleaseDate.update({
+            where: { id: expectedGame.releaseDate.id },
+            data: { date: new Date(relatedReleaseDate.date * 1000) },
+          });
+        }
       }
     } catch (e) {
+      console.error(e);
       console.error(
-        `Error while synchronizing - id:${expectedGame.id} | igdbId:${expectedGame.igdbId}`
+        `Error while synchronizing - id:${expectedGame.id} | igdbId:${expectedGame.igdbId}`,
       );
     }
   }

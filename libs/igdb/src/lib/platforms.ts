@@ -19,6 +19,12 @@ export const platForms = [
     name: 'Xbox Series X|S',
   },
   {
+    id: 508,
+    abbreviation: 'Switch 2',
+    generation: 9,
+    name: 'Switch 2',
+  },
+  {
     id: 48,
     abbreviation: 'PS4',
     generation: 8,

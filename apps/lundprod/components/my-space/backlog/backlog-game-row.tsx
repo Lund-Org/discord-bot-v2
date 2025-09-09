@@ -25,7 +25,7 @@ export const BacklogGameRow = ({ element }: BacklogGameRowProps) => {
   return (
     <Tr key={element.id} _hover={{ bg: 'gray.900' }}>
       <Td colSpan={2}>
-        <Text noOfLines={1} textOverflow="ellipsis">
+        <Text noOfLines={1} textOverflow="ellipsis" title={element.name}>
           {element.name}
         </Text>
       </Td>
@@ -65,7 +65,7 @@ export const BacklogGameRow = ({ element }: BacklogGameRowProps) => {
                     <Text>{getReleaseDateWording(releaseDate)}</Text>
                     <Tag variant="outline" size="sm">
                       <TagLabel>
-                        {translateRegion(t, releaseDate.region)}
+                        {translateRegion(t, releaseDate.release_region)}
                       </TagLabel>
                     </Tag>
                   </Flex>

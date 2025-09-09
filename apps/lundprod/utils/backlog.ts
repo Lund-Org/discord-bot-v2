@@ -43,6 +43,7 @@ export function mapToCategory(value: TypeMap): GAME_TYPE[] {
         GAME_TYPE.REMAKE,
         GAME_TYPE.REMASTER,
         GAME_TYPE.PORT,
+        GAME_TYPE.EXPANDED_GAME,
       ];
     case TypeMap.DLC:
       return [GAME_TYPE.DLC_ADDON, GAME_TYPE.EXPANSION];
@@ -54,6 +55,7 @@ export function mapToCategory(value: TypeMap): GAME_TYPE[] {
 export function mapToTypeMap(categories: GAME_TYPE[]): TypeMap {
   if (
     categories.includes(GAME_TYPE.MAIN_GAME) ||
+    categories.includes(GAME_TYPE.EXPANDED_GAME) ||
     categories.includes(GAME_TYPE.REMAKE) ||
     categories.includes(GAME_TYPE.REMASTER) ||
     categories.includes(GAME_TYPE.PORT)

@@ -56,7 +56,9 @@ export const ExpectedGamesRow = ({ element }: ExpectedGamesRowProps) => {
               {getReleaseDateWording(t, releaseDate)}
             </Text>
             <Tag variant="outline" size="sm">
-              <TagLabel>{translateRegion(t, releaseDate.region)}</TagLabel>
+              <TagLabel>
+                {translateRegion(t, releaseDate.release_region)}
+              </TagLabel>
             </Tag>
           </GridItem>
           <GridItem>
@@ -64,7 +66,7 @@ export const ExpectedGamesRow = ({ element }: ExpectedGamesRowProps) => {
               savedExpectedGame={savedExpectedGame}
               element={element}
               platformId={releaseDate.platform.id}
-              region={releaseDate.region}
+              region={releaseDate.release_region}
             />
           </GridItem>
         </Fragment>

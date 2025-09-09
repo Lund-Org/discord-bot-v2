@@ -38,7 +38,7 @@ export function validateFilters(filters: unknown): filters is {
   });
 }
 
-export const translateRegion = (tFn: TFunction, region: REGION) => {
+export const translateRegion = (tFn: TFunction, region: REGION | undefined) => {
   switch (region) {
     case REGION.EUROPE:
       return tFn('region.europe');
@@ -54,12 +54,13 @@ export const translateRegion = (tFn: TFunction, region: REGION) => {
       return tFn('region.china');
     case REGION.ASIA:
       return tFn('region.asia');
-    case REGION.WORLDWIDE:
-      return tFn('region.worldWide');
     case REGION.KOREA:
       return tFn('region.korea');
     case REGION.BRAZIL:
       return tFn('region.brazil');
+    case REGION.WORLDWIDE:
+    default:
+      return tFn('region.worldWide');
   }
 };
 
@@ -69,6 +70,7 @@ export const translateGameType = (
 ): GameTypeTranslation => {
   switch (gameType) {
     case GAME_TYPE.MAIN_GAME:
+    case GAME_TYPE.EXPANDED_GAME:
       return tFn('gameType.game');
     case GAME_TYPE.DLC_ADDON:
       return tFn('gameType.dlc');

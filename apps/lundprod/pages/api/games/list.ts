@@ -25,7 +25,7 @@ export default async function listGames(
     return res.status(400).json({ games: [] });
   }
 
-  if (typeof search === 'string' && search.length <= 3) {
+  if (typeof search === 'string' && search.length <= 2) {
     return res.json({ games: [] });
   }
 

@@ -62,7 +62,7 @@ export type Game = {
   release_dates?: Array<{
     id: number;
     date: number;
-    region: REGION;
+    release_region?: REGION;
     human: string;
     platform: {
       id: number;

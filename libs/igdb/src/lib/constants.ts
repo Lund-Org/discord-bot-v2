@@ -24,6 +24,7 @@ export const GAME_FIELDS = [
   'url',
   'platforms.id',
   'platforms.name',
+  'release_dates.release_region',
   'release_dates.date',
   'release_dates.platform',
   'release_dates.region',
@@ -49,4 +50,5 @@ export const gameTypeMapping: Partial<Record<GAME_TYPE, string>> = {
   [GAME_TYPE.REMAKE]: 'Remake',
   [GAME_TYPE.REMASTER]: 'Remaster',
   [GAME_TYPE.PORT]: 'Portage',
+  [GAME_TYPE.EXPANDED_GAME]: 'Jeu',
 } as const;

@@ -18,7 +18,7 @@ const addExpectedGameSchema = object({
 
 export default async function addExpectedGame(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const session = await getServerSession(req, res, authOptions);
 
@@ -101,7 +101,7 @@ export default async function addExpectedGame(
           create: {
             date: new Date(releaseDate.date * 1000),
             platformId: releaseDate.platform.id,
-            region: releaseDate.region,
+            region: releaseDate.release_region,
           },
         },
       },
