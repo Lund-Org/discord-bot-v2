@@ -115,7 +115,7 @@ export function UserProfilePage({
   };
   const { get } = useFetcher();
 
-  const [tabIndex, setTabIndex] = useState(profile.player ? 0 : 1);
+  const [tabIndex, setTabIndex] = useState(0);
 
   useEffect(() => {
     if (query.igdbGameId) {
@@ -159,25 +159,18 @@ export function UserProfilePage({
       <GeneralInformation profile={profile} rank={rank} />
       <Tabs mt={6} index={tabIndex} onChange={(index) => setTabIndex(index)}>
         <TabList>
-          <Tab _selected={selected} _active={{}} isDisabled={!profile.player}>
-            {t('userPage.gacha')}
-          </Tab>
           <Tab _selected={selected} _active={{}}>
             {t('userPage.backlog')}
           </Tab>
           <Tab _selected={selected} _active={{}}>
             {t('userPage.expectedGames')}
           </Tab>
+          <Tab _selected={selected} _active={{}} isDisabled={!profile.player}>
+            {t('userPage.gacha')}
+          </Tab>
         </TabList>
 
         <TabPanels>
-          <TabPanel>
-            <GachaTab
-              profile={profile}
-              cardsToGold={cardsToGold}
-              fusions={fusions}
-            />
-          </TabPanel>
           <TabPanel>
             {isLoadingBacklog ? (
               loader
@@ -195,6 +188,13 @@ export function UserProfilePage({
                 <ExpectedGamesListView readOnly />
               </ExpectedGameProvider>
             )}
+          </TabPanel>
+          <TabPanel>
+            <GachaTab
+              profile={profile}
+              cardsToGold={cardsToGold}
+              fusions={fusions}
+            />
           </TabPanel>
         </TabPanels>
       </Tabs>

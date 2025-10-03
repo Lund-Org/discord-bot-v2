@@ -78,7 +78,7 @@ export const SignMenu = () => {
                       maxW="35px"
                       mr={4}
                       src={`https://via.placeholder.com/100x100/ffae00/333333?text=${
-                        session?.user?.name.at(0) || 'Ø'
+                        session?.user?.name[0] || 'Ø'
                       }`}
                       alt={session?.user?.name}
                     />

@@ -13,6 +13,11 @@ model Birthday {
   birthdayDay   Int
   birthdayMonth Int
   birthdayYear  Int
+
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+
+  @@map("Birthday")
 }
 
 model BacklogItem {
@@ -25,11 +30,21 @@ model BacklogItem {
   status     BacklogStatus @default(BACKLOG)
   note       String?       @db.VarChar(255)
   order      Int           @default(0)
-  user       User          @relation(fields: [userId], references: [id])
 
+  startedAt    DateTime? @db.Timestamp(3)
+  finishedAt   DateTime? @db.Timestamp(3)
+  abandonnedAt DateTime? @db.Timestamp(3)
+  wishlistAt   DateTime? @db.Timestamp(3)
+
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+
+  user              User               @relation(fields: [userId], references: [id])
   backlogItemReview BacklogItemReview?
 
   @@unique([userId, igdbGameId])
+  @@unique([userId, order, status])
+  @@map("BacklogItem")
 }
 
 model BacklogItemReview {
@@ -41,10 +56,15 @@ model BacklogItemReview {
   completion        Int?
   completionComment String? @db.VarChar(255)
 
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+
   pros BacklogItemReviewPros[]
   cons BacklogItemReviewCons[]
 
   backlogItem BacklogItem @relation(fields: [backlogItemId], references: [id], onDelete: Cascade)
+
+  @@map("BacklogItemReview")
 }
 
 model BacklogItemReviewPros {
@@ -52,7 +72,12 @@ model BacklogItemReviewPros {
   backlogItemReviewId Int
   value               String @db.VarChar(255)
 
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+
   backlogItemReview BacklogItemReview @relation(fields: [backlogItemReviewId], references: [id])
+
+  @@map("BacklogItemReviewPros")
 }
 
 model BacklogItemReviewCons {
@@ -60,7 +85,12 @@ model BacklogItemReviewCons {
   backlogItemReviewId Int
   value               String @db.VarChar(255)
 
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+
   backlogItemReview BacklogItemReview @relation(fields: [backlogItemReviewId], references: [id])
+
+  @@map("BacklogItemReviewCons")
 }
 
 model BlogPost {
@@ -73,57 +103,84 @@ model BlogPost {
   postAt       DateTime
   description  String     @db.Text()
   tags         Tag[]
+
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+
+  @@map("BlogPost")
 }
 
 model CardType {
-  id                 Int               @id @default(autoincrement())
-  name               String            @unique @db.VarChar(255)
-  description        String            @db.VarChar(255)
-  level              Int
-  imageName          String            @unique @db.VarChar(255)
-  isFusion           Int               @default(0) @db.TinyInt
-  lore               String            @db.Text
+  id          Int    @id @default(autoincrement())
+  name        String @unique @db.VarChar(255)
+  description String @db.VarChar(255)
+  level       Int
+  imageName   String @unique @db.VarChar(255)
+  isFusion    Int    @default(0) @db.TinyInt
+  lore        String @db.Text
+
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+
   possibleFusions    CardType[]        @relation("CardFusions")
   fusionDependencies CardType[]        @relation("CardFusions")
   playerInventory    PlayerInventory[]
   dailyShopItems     DailyShopItem[]
+
+  @@map("CardType")
 }
 
 model Config {
   id    Int    @id @default(autoincrement())
   name  String @unique @db.VarChar(255)
   value Json
+
+  @@map("Config")
 }
 
 model DailyPurchase {
-  id              Int           @id @default(autoincrement())
+  id              Int @id @default(autoincrement())
   playerId        Int
   dailyShopItemId Int
-  dailyShopItem   DailyShopItem @relation(fields: [dailyShopItemId], references: [id])
-  player          Player        @relation(fields: [playerId], references: [id])
+
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+
+  dailyShopItem DailyShopItem @relation(fields: [dailyShopItemId], references: [id])
+  player        Player        @relation(fields: [playerId], references: [id])
 
   @@unique([playerId, dailyShopItemId])
   @@index([dailyShopItemId])
   @@index([playerId])
+  @@map("DailyPurchase")
 }
 
 model DailyShop {
-  id             Int             @id @default(autoincrement())
-  shopDay        Int
-  shopMonth      Int
-  shopYear       Int
-  threadId       String
+  id        Int    @id @default(autoincrement())
+  shopDay   Int
+  shopMonth Int
+  shopYear  Int
+  threadId  String
+
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+
   dailyShopItems DailyShopItem[]
 
   @@unique([shopDay, shopMonth, shopYear])
+  @@map("DailyShop")
 }
 
 model DailyShopItem {
-  id            Int             @id @default(autoincrement())
-  cardTypeId    Int
-  dailyShopId   Int
-  type          String          @db.VarChar(255)
-  price         Int
+  id          Int    @id @default(autoincrement())
+  cardTypeId  Int
+  dailyShopId Int
+  type        String @db.VarChar(255)
+  price       Int
+
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+
   cardType      CardType        @relation(fields: [cardTypeId], references: [id])
   dailyShop     DailyShop       @relation(fields: [dailyShopId], references: [id])
   dailyPurchase DailyPurchase[]
@@ -131,41 +188,60 @@ model DailyShopItem {
   @@unique([cardTypeId, dailyShopId])
   @@index([dailyShopId])
   @@index([cardTypeId])
+  @@map("DailyShopItem")
 }
 
 model DiscordNotificationChannel {
   id               Int                 @id @default(autoincrement())
   discordChannelId String
   notificationType ChannelNotification @unique
+
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+
+  @@map("DiscordNotificationChannel")
 }
 
 model ExpectedGame {
-  id           Int                      @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   igdbId       Int
-  name         String                   @db.VarChar(255)
-  url          String                   @db.VarChar(255)
+  name         String   @db.VarChar(255)
+  url          String   @db.VarChar(255)
   addToBacklog Boolean
   cancelled    Boolean?
   userId       Int
-  releaseDate  ExpectedGameReleaseDate?
-  user         User                     @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+
+  releaseDate ExpectedGameReleaseDate?
+  user        User                     @relation(fields: [userId], references: [id])
 
   @@unique([igdbId, userId])
+  @@map("ExpectedGame")
 }
 
 model ExpectedGameReleaseDate {
-  id             Int          @id @default(autoincrement())
+  id             Int       @id @default(autoincrement())
   date           DateTime?
   platformId     Int
   region         Int
-  expectedGameId Int          @unique
-  expectedGame   ExpectedGame @relation(fields: [expectedGameId], references: [id], onDelete: Cascade)
+  expectedGameId Int       @unique
+
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+
+  expectedGame ExpectedGame @relation(fields: [expectedGameId], references: [id], onDelete: Cascade)
+
+  @@map("ExpectedGameReleaseDate")
 }
 
 model GameCache {
   id      Int  @id @default(autoincrement())
   igdbId  Int  @unique
   content Json
+
+  @@map("GameCache")
 }
 
 model Gift {
@@ -174,7 +250,13 @@ model Gift {
   endDatetime       DateTime @db.DateTime(0)
   code              String   @unique @db.VarChar(255)
   bonus             Json
-  players           Player[]
+
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+
+  players Player[]
+
+  @@map("Gift")
 }
 
 model Pagination {
@@ -182,6 +264,8 @@ model Pagination {
   page             Int
   discordMessageId String @unique @db.VarChar(255)
   discordUserId    String @db.VarChar(255)
+
+  @@map("Pagination")
 }
 
 model Player {
@@ -195,50 +279,72 @@ model Player {
   userId             Int       @unique
   finishRank         Int?      @unique
 
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+
   gifts           Gift[]
   playerInventory PlayerInventory[]
   dailyPurchase   DailyPurchase[]
   user            User              @relation(fields: [userId], references: [id])
+
+  @@map("Player")
 }
 
 model PlayerInventory {
-  id         Int      @id @default(autoincrement())
+  id         Int    @id @default(autoincrement())
   total      Int
   playerId   Int
   cardTypeId Int
-  type       String   @db.VarChar(255)
-  cardType   CardType @relation(fields: [cardTypeId], references: [id])
-  player     Player   @relation(fields: [playerId], references: [id])
+  type       String @db.VarChar(255)
+
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+
+  cardType CardType @relation(fields: [cardTypeId], references: [id])
+  player   Player   @relation(fields: [playerId], references: [id])
 
   @@unique([playerId, cardTypeId, type])
   @@index([cardTypeId])
   @@index([playerId])
+  @@map("PlayerInventory")
 }
 
 model Tag {
   id       Int        @id @default(autoincrement())
   name     String     @unique @db.VarChar(255)
   blogPost BlogPost[]
+
+  @@map("Tag")
 }
 
 model User {
-  id             Int            @id @default(autoincrement())
-  discordId      String         @unique @db.VarChar(255)
-  twitchUsername String?        @unique @db.VarChar(255)
-  username       String         @db.VarChar(255)
-  isActive       Boolean        @default(true)
-  player         Player?
-  backlogItems   BacklogItem[]
-  expectedGames  ExpectedGame[]
-  aiAttempts     AiAttempt[]
+  id             Int     @id @default(autoincrement())
+  discordId      String  @unique @db.VarChar(255)
+  twitchUsername String? @unique @db.VarChar(255)
+  username       String  @db.VarChar(255)
+  isActive       Boolean @default(true)
+
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+
+  player        Player?
+  backlogItems  BacklogItem[]
+  expectedGames ExpectedGame[]
+  aiAttempts    AiAttempt[]
+
+  @@map("User")
 }
 
 model AiAttempt {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  createdAt DateTime
+  id     Int @id @default(autoincrement())
+  userId Int
+
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
 
   user User @relation(fields: [userId], references: [id])
+
+  @@map("AiAttempt")
 }
 
 //-- Enums
