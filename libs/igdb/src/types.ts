@@ -46,7 +46,7 @@ export type Game = {
   id: number;
   name: string;
   cover?: {
-    id: string;
+    id: number;
     url: string;
   };
   status?: GAME_STATUS;
@@ -61,7 +61,7 @@ export type Game = {
   }>;
   release_dates?: Array<{
     id: number;
-    date: number;
+    date?: number;
     release_region?: REGION;
     human: string;
     platform: {

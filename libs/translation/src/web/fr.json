@@ -167,6 +167,29 @@
       "xp": "XP : {{xp}}"
     }
   },
+  "gameModal": {
+    "details": "Détails",
+    "dlc": "DLC",
+    "filterPlatformPlaceholder": "Ajouter un filtre par plate-forme",
+    "game": "Jeu",
+    "gamePlaceholder": "Nom du jeu à chercher",
+    "minLength": "2 caractères minimum",
+    "nextPage": "Suivant",
+    "noMoreResults": {
+      "text": "Tu as atteint la fin de la liste, repars en arrière ou essaye une nouvelle recherche.",
+      "title": "Oups, il n'y a plus de résultats !"
+    },
+    "noResults": {
+      "text": "Essaye une nouvelle recherche.",
+      "title": "Aucun jeu trouvé !"
+    },
+    "previousPage": "Précédent",
+    "search": "Chercher",
+    "select": "Selectionner",
+    "selectByPlatform": "Tu dois selectionner un jeu avec sa plate-forme. Clique sur le bouton détails pour voir les choix",
+    "title": "Selectionner un jeu",
+    "unknown": "Inconnue"
+  },
   "gameType": {
     "bundle": "Bundle",
     "dlc": "DLC",

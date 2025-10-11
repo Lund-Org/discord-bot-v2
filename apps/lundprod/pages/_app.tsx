@@ -1,7 +1,8 @@
 import { Box, ChakraProvider, Flex } from '@chakra-ui/react';
 import { css, Global } from '@emotion/react';
 import { MDXProvider } from '@mdx-js/react';
-import { AppProps } from 'next/app';
+import { withTRPC } from '@trpc/next';
+import { AppProps, AppType } from 'next/app';
 import Head from 'next/head';
 import { SessionProvider } from 'next-auth/react';
 
@@ -15,8 +16,9 @@ import { useMemo } from 'react';
 import { getI18nInstance } from '../i18n';
 import { I18nextProvider } from 'react-i18next';
 import { MENU_HEIGHT } from '../utils/constants';
+import { trpc } from '../utils/trpc';
 
-function CustomApp({ Component, pageProps }: AppProps) {
+const CustomApp: AppType = ({ Component, pageProps }: AppProps) => {
   const globalCSS = css`
     html {
       min-width: 360px;
@@ -113,6 +115,6 @@ function CustomApp({ Component, pageProps }: AppProps) {
       )}
     </>
   );
-}
+};
 
-export default CustomApp;
+export default trpc.withTRPC(CustomApp);
