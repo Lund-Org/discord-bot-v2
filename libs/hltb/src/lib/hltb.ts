@@ -20,7 +20,7 @@ const hltbHeaders = {
   referer: 'https://howlongtobeat.com',
   host: 'howlongtobeat.com',
   'user-agent':
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:143.0) Gecko/20100101 Firefox/143.0',
   'Sec-Fetch-Dest': 'empty',
   'Sec-Fetch-Mode': 'cors',
   'Sec-Fetch-Site': 'same-origin',
@@ -28,43 +28,43 @@ const hltbHeaders = {
 };
 
 const payload = {
-  searchType: 'games',
-  searchPage: 1,
-  size: 20,
   searchOptions: {
+    filter: '',
     games: {
-      userId: 0,
-      platform: '',
-      sortCategory: 'popular',
-      rangeCategory: 'main',
-      rangeTime: {
-        min: null,
-        max: null,
-      },
       gameplay: {
-        perspective: '',
+        difficulty: '',
         flow: '',
         genre: '',
-        difficulty: '',
-      },
-      rangeYear: {
-        min: '',
-        max: '',
+        perspective: '',
       },
       modifier: '',
-    },
-    users: {
-      sortCategory: 'postcount',
+      platform: '',
+      rangeCategory: 'main',
+      rangeTime: {
+        max: null,
+        min: null,
+      },
+      rangeYear: {
+        max: '',
+        min: '',
+      },
+      sortCategory: 'popular',
+      userId: 0,
     },
     lists: {
       sortCategory: 'follows',
     },
-    filter: '',
-    sort: 0,
     randomizer: 0,
+    sort: 0,
+    users: {
+      sortCategory: 'postcount',
+    },
   },
-  useCache: true,
+  searchPage: 1,
   searchTerms: [],
+  searchType: 'games',
+  size: 20,
+  useCache: true,
 };
 
 export class HowLongToBeatService {
@@ -97,6 +97,7 @@ export class HowLongToBeatService {
         },
       );
 
+      console.log(result.data);
       const { data } = JSON.parse(result.data);
 
       if (data.length) {
@@ -133,6 +134,9 @@ export class HowLongToBeatService {
     const result = await this.axios.get(BASE_URL, {
       headers: {
         ...hltbHeaders,
+        'Sec-Fetch-Dest': 'script',
+        'Sec-Fetch-Mode': 'no-cors',
+        'Sec-Fetch-Site': 'same-origin',
       },
     });
     const startIndex = result.data.indexOf(
@@ -150,7 +154,7 @@ export class HowLongToBeatService {
     });
 
     const searchLine = (scriptResult.data as string).match(
-      new RegExp(`fetch\\("/api/seek/"(.*),`),
+      new RegExp(`fetch\\("/api/locate/"(.*),`),
     );
     if (!searchLine) {
       return '';
