@@ -16,14 +16,13 @@ import {
   ModalProps,
 } from '@chakra-ui/react';
 import { Game, GAME_PER_PAGE } from '@discord-bot-v2/igdb-front';
-import { keepPreviousData } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { trpc } from '~/lundprod/utils/trpc';
 import { TypeMap } from '~/lundprod/utils/backlog';
 
 import { SearchGameForm } from './search-game-form';
-import { useEffect, useState } from 'react';
 import { SearchFormValues } from './type';
 import { SearchGameLine } from './search-game-line';
 
@@ -34,6 +33,7 @@ type SearchGameModalProps = {
   futureGame: boolean;
   size?: ModalProps['size'];
   selectByPlatform?: boolean;
+  isGameSelected: (game: Game, platformId?: number) => boolean;
 };
 
 export const SearchGameModal = ({
@@ -43,6 +43,7 @@ export const SearchGameModal = ({
   futureGame,
   size = '3xl',
   selectByPlatform = false,
+  isGameSelected,
 }: SearchGameModalProps) => {
   const { t } = useTranslation();
   const [page, setPage] = useState(1);
@@ -89,7 +90,9 @@ export const SearchGameModal = ({
     <Modal isOpen={isOpen} onClose={onClose} size={size}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{t('gameModal.title')}</ModalHeader>
+        <ModalHeader borderBottom="1px solid" borderColor="gray.200">
+          {t('gameModal.title')}
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <SearchGameForm submitSearch={setFormData} isFetching={isFetching} />
@@ -102,6 +105,7 @@ export const SearchGameModal = ({
                     game={game}
                     onGameSelect={onGameSelected}
                     selectByPlatform={selectByPlatform}
+                    isGameSelected={isGameSelected}
                   />
                 ))}
             </Flex>

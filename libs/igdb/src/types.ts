@@ -1,6 +1,16 @@
 import { ValueOf } from '@discord-bot-v2/common';
 
-import { gameTypeMapping } from './lib/constants';
+import { gameTypeMapping, QUERY_OPERATOR } from './lib/constants';
+
+export type Filter = {
+  field: string;
+  operator: QUERY_OPERATOR;
+  value: IGDBConditionValue;
+};
+
+export type OrFilter = {
+  or: Filter[];
+};
 
 export enum GAME_TYPE {
   MAIN_GAME = 0,
@@ -75,7 +85,7 @@ export type LightGame = Pick<Game, 'id' | 'name'>;
 
 export type GameTypeTranslation = ValueOf<typeof gameTypeMapping> | 'Autre';
 
-export type IGDBConditionValue = string[] | number[] | string | number;
+export type IGDBConditionValue = string[] | number[] | string | number | null;
 
 export type Webhook = {
   id: number;

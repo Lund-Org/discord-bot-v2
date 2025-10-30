@@ -1,7 +1,7 @@
 import { ChevronRightIcon, TimeIcon } from '@chakra-ui/icons';
 import { Box, Button, Flex, Heading, Text, Tooltip } from '@chakra-ui/react';
 import { prisma } from '@discord-bot-v2/prisma';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,7 +20,9 @@ type UsersPageProps = {
   }>;
 };
 
-export const getStaticProps: GetStaticProps<UsersPageProps> = async () => {
+export const getServerSideProps: GetServerSideProps<
+  UsersPageProps
+> = async () => {
   const DBUsers = await prisma.user.findMany({
     select: {
       discordId: true,
@@ -61,7 +63,6 @@ export const getStaticProps: GetStaticProps<UsersPageProps> = async () => {
   );
 
   return {
-    revalidate: 3600,
     props: {
       users,
     },

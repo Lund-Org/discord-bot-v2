@@ -80,6 +80,28 @@ export const backlogItemSchema = z.object({
   status: backlogStatusSchema,
   note: z.string().nullable(),
   order: z.number(),
+  startedAt: z.string().nullable(),
+  finishedAt: z.string().nullable(),
+  abandonedAt: z.string().nullable(),
+  wishlistAt: z.string().nullable(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+});
+
+export const expectedGameSchema = z.object({
+  releaseDate: z
+    .object({
+      date: z.string().nullable(),
+      platformId: z.number(),
+      region: z.number(),
+    })
+    .nullable(),
+  id: z.number(),
+  igdbId: z.number(),
+  name: z.string(),
+  url: z.string(),
+  addToBacklog: z.boolean(),
+  cancelled: z.boolean().nullable(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });

@@ -2,7 +2,7 @@
   "name": "discord-bot-v2",
   "version": "1.0.0",
   "license": "MIT",
-  "packageManager": "pnpm@8.11.0",
+  "packageManager": "pnpm@10.18.3",
   "scripts": {
     "start-bot": "node dist/bot/main.js",
     "start-lundprod": "npx nx run lundprod:serve",

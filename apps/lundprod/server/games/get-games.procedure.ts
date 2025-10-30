@@ -1,9 +1,11 @@
 import z from 'zod';
 import { TServer } from '../types';
 import {
+  Filter,
   GAME_TYPE,
   getGames,
   IGDBConditionValue,
+  OrFilter,
   platForms,
   QUERY_OPERATOR,
 } from '@discord-bot-v2/igdb';
@@ -50,11 +52,7 @@ export const getGamesProcedure = (t: TServer) => {
       const { query, dlc, futureGame, filters, page, platformId, withImage } =
         input;
 
-      const queryFilters: {
-        field: string;
-        operator: QUERY_OPERATOR;
-        value: IGDBConditionValue;
-      }[] = filters || [];
+      const queryFilters: Array<Filter | OrFilter> = filters || [];
 
       if (dlc) {
         queryFilters.push({
@@ -81,9 +79,18 @@ export const getGamesProcedure = (t: TServer) => {
 
       if (futureGame) {
         queryFilters.push({
-          field: 'first_release_date',
-          operator: QUERY_OPERATOR.GT,
-          value: Math.floor(Date.now() / 1000),
+          or: [
+            {
+              field: 'release_dates.date',
+              operator: QUERY_OPERATOR.GT,
+              value: Math.floor(Date.now() / 1000),
+            },
+            {
+              field: 'release_dates.date',
+              operator: QUERY_OPERATOR.EQ,
+              value: null,
+            },
+          ],
         });
       } else {
         queryFilters.push({
@@ -105,6 +112,8 @@ export const getGamesProcedure = (t: TServer) => {
           value: platformId,
         });
       }
+
+      console.log(JSON.stringify({ query, queryFilters, page, withImage }));
 
       const games = await getGames(query, queryFilters, page, withImage);
 

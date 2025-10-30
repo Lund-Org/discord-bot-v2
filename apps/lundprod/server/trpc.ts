@@ -5,8 +5,17 @@ import { getGamesRouter } from './games';
 import { authOptions } from '../pages/api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth/next';
 import { getProfilesRouter } from './profile';
+import { Session } from 'next-auth';
+import { getMySpaceRouter } from './my-space';
 
-export const createContext = async (opts: CreateNextContextOptions) => {
+export const createContext = async (
+  opts: CreateNextContextOptions | { session: Session | null },
+) => {
+  // for SSR
+  if ('session' in opts) {
+    return opts;
+  }
+
   const session = await getServerSession(opts.req, opts.res, authOptions);
 
   return {
@@ -25,5 +34,6 @@ export const appRouter = t.router({
     }),
   ...getProfilesRouter(t),
   ...getGamesRouter(t),
+  ...getMySpaceRouter(t),
 });
 export type AppRouter = typeof appRouter;

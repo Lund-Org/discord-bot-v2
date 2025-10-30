@@ -332,7 +332,7 @@ async function applyDBOperations(
           data: {
             startedAt: null,
             finishedAt: null,
-            abandonnedAt: null,
+            abandonedAt: null,
             wishlistAt: null,
             createdAt: new Date(operation.ts),
           },
@@ -344,7 +344,7 @@ async function applyDBOperations(
           where: { id: operation.backlogItem.id },
           data: {
             finishedAt: null,
-            abandonnedAt: new Date(operation.ts),
+            abandonedAt: new Date(operation.ts),
           },
         });
         break;
@@ -354,7 +354,7 @@ async function applyDBOperations(
           where: { id: operation.backlogItem.id },
           data: {
             finishedAt: null,
-            abandonnedAt: null,
+            abandonedAt: null,
             startedAt: new Date(operation.ts),
           },
         });
@@ -365,7 +365,7 @@ async function applyDBOperations(
           where: { id: operation.backlogItem.id },
           data: {
             finishedAt: new Date(operation.ts),
-            abandonnedAt: null,
+            abandonedAt: null,
           },
         });
         break;

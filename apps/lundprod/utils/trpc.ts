@@ -1,4 +1,3 @@
-import { createTRPCReact } from '@trpc/react-query';
 import { httpBatchLink } from '@trpc/client';
 import type { AppRouter } from '../server/trpc';
 import { createTRPCNext } from '@trpc/next';

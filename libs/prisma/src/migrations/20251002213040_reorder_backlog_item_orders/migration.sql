@@ -37,16 +37,16 @@ JOIN finished bi ON b.id = bi.id
 SET b.`order` = bi.new_order;
 
 
-WITH abandonned AS (
+WITH abandoned AS (
   SELECT 
     id,
     userId,
     ROW_NUMBER() OVER (PARTITION BY userId ORDER BY `order`, id) AS new_order
   FROM BacklogItem
-  WHERE status = 'ABANDONNED'
+  WHERE status = 'Abandoned'
 )
 UPDATE BacklogItem b
-JOIN abandonned bi ON b.id = bi.id
+JOIN abandoned bi ON b.id = bi.id
 SET b.`order` = bi.new_order;
 
 

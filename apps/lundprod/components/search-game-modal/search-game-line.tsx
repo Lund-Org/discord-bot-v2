@@ -24,27 +24,24 @@ import { useTranslation } from 'react-i18next';
 import { formatReleaseDate } from '~/lundprod/utils/dates';
 import { Tooltip } from '../tooltip';
 import { TFunction } from 'i18next';
-import { useMe } from '~/lundprod/contexts/me.context';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 type SearchGameLineProps = {
   game: Game;
   onGameSelect: (game: Game, platformId?: number) => void;
   selectByPlatform: boolean;
+  isGameSelected: (game: Game, platformId?: number) => boolean;
 };
 
 export const SearchGameLine = ({
   game,
   onGameSelect,
   selectByPlatform,
+  isGameSelected,
 }: SearchGameLineProps) => {
   const { t } = useTranslation();
-  const { backlog } = useMe();
 
   const [areDetailsDisplayed, setAreDetailsDisplayed] = useState(false);
-  const isGameInBacklog = backlog.find(
-    ({ igdbGameId }) => igdbGameId === game.id,
-  );
 
   return (
     <Box
@@ -101,13 +98,19 @@ export const SearchGameLine = ({
             >
               <Button
                 colorScheme={
-                  selectByPlatform ? 'gray' : isGameInBacklog ? 'red' : 'teal'
+                  selectByPlatform
+                    ? 'gray'
+                    : isGameSelected(game)
+                      ? 'red'
+                      : 'teal'
                 }
                 size="sm"
                 onClick={() => onGameSelect(game)}
                 isDisabled={selectByPlatform}
               >
-                {t('gameModal.select')}
+                {!selectByPlatform && isGameSelected(game)
+                  ? t('gameModal.remove')
+                  : t('gameModal.select')}
               </Button>
             </Tooltip>
           </Flex>
@@ -126,6 +129,9 @@ export const SearchGameLine = ({
                 ({ platform: { id: platformId } }) =>
                   platformId === platform.id,
               );
+
+              const selected =
+                selectByPlatform && isGameSelected(game, platform.id);
 
               return (
                 <Tr
@@ -153,11 +159,13 @@ export const SearchGameLine = ({
                   {selectByPlatform && (
                     <Td>
                       <Button
-                        colorScheme="teal"
+                        colorScheme={selected ? 'red' : 'teal'}
                         size="sm"
                         onClick={() => onGameSelect(game, platform.id)}
                       >
-                        {t('gameModal.select')}
+                        {selected
+                          ? t('gameModal.remove')
+                          : t('gameModal.select')}
                       </Button>
                     </Td>
                   )}

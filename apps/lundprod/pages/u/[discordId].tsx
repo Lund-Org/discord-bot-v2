@@ -13,12 +13,12 @@ import {
   RankByUser,
 } from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { BacklogList } from '~/lundprod/components/my-space/backlog/backlog-list';
+import { BacklogList } from '~/lundprod/components/my-space/backlog-deprecated/backlog-list';
 import { ExpectedGamesListView } from '~/lundprod/components/my-space/expected-games/expected-games-list-view';
 import { GachaTab } from '~/lundprod/components/profile/gacha-tab';
 import { GeneralInformation } from '~/lundprod/components/profile/general-informations';
@@ -43,26 +43,9 @@ type UserProfilePageProps = {
   fusions: CardWithFusionDependencies[];
 };
 
-export async function getStaticPaths() {
-  const users = await prisma.user.findMany({
-    include: {
-      player: true,
-    },
-    where: { isActive: true },
-  });
-
-  const paths = users
-    .filter(({ player }) => player)
-    .map((user) => ({
-      params: { discordId: user.discordId },
-    }));
-
-  return { paths, fallback: 'blocking' };
-}
-
-export const getStaticProps: GetStaticProps<UserProfilePageProps> = async (
-  context,
-) => {
+export const getServerSideProps: GetServerSideProps<
+  UserProfilePageProps
+> = async (context) => {
   const { params = {} } = context;
   const discordId = getParam(params.discordId, '');
   const profile = await prisma.user.getProfile(discordId);
@@ -83,16 +66,12 @@ export const getStaticProps: GetStaticProps<UserProfilePageProps> = async (
   const fusions = await getCardsToFusion(discordId);
 
   return {
-    // Next.js will attempt to re-generate the page:
-    // - When a request comes in
-    // - At most once every hour
-    revalidate: 3600, // In seconds
     // Passed to the page component as props
     props: {
       profile: JSON.parse(JSON.stringify(profile)),
-      cardsToGold,
+      cardsToGold: JSON.parse(JSON.stringify(cardsToGold)),
       rank: rank ? JSON.parse(JSON.stringify(rank)) : null,
-      fusions,
+      fusions: JSON.parse(JSON.stringify(fusions)),
     },
   };
 };

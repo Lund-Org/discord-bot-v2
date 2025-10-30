@@ -1,7 +1,11 @@
 import { Box, ChakraProvider, Flex } from '@chakra-ui/react';
 import { css, Global } from '@emotion/react';
 import { MDXProvider } from '@mdx-js/react';
-import { withTRPC } from '@trpc/next';
+import {
+  HydrationBoundary,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 import { AppProps, AppType } from 'next/app';
 import Head from 'next/head';
 import { SessionProvider } from 'next-auth/react';
@@ -12,13 +16,19 @@ import { theme } from '../theme';
 import Script from 'next/script';
 import { Footer } from '../components/home/footer';
 import { useRouter } from 'next/router';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { getI18nInstance } from '../i18n';
 import { I18nextProvider } from 'react-i18next';
 import { MENU_HEIGHT } from '../utils/constants';
 import { trpc } from '../utils/trpc';
+import { MeProvider } from '../contexts/me.context';
 
-const CustomApp: AppType = ({ Component, pageProps }: AppProps) => {
+const CustomApp: AppType = ({
+  Component,
+  pageProps,
+}: AppProps & {
+  dehydratedState?: unknown;
+}) => {
   const globalCSS = css`
     html {
       min-width: 360px;
@@ -40,6 +50,19 @@ const CustomApp: AppType = ({ Component, pageProps }: AppProps) => {
   `;
 
   const { query, locale } = useRouter();
+
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            // With SSR, we usually want to set some default staleTime
+            // above 0 to avoid refetching immediately on the client
+            staleTime: 60 * 1000,
+          },
+        },
+      }),
+  );
 
   const i18nInstance = useMemo(() => {
     // TODO: handle hydration
@@ -66,34 +89,40 @@ const CustomApp: AppType = ({ Component, pageProps }: AppProps) => {
         <title>LundProd</title>
       </Head>
       <main>
-        <SessionProvider session={pageProps.session}>
-          <MDXProvider components={components}>
-            <I18nextProvider i18n={i18nInstance}>
-              <ChakraProvider theme={theme}>
-                <Global styles={globalCSS} />
-                <Flex
-                  minH="100vh"
-                  flexDir="column"
-                  position="relative"
-                  pt={MENU_HEIGHT}
-                >
-                  <Header />
-                  <Flex
-                    flex={1}
-                    bg="gray.800"
-                    color="gray.100"
-                    flexDir="column"
-                  >
-                    <Box flex={1} w="100%">
-                      <Component {...pageProps} />
-                    </Box>
-                    <Footer />
-                  </Flex>
-                </Flex>
-              </ChakraProvider>
-            </I18nextProvider>
-          </MDXProvider>
-        </SessionProvider>
+        <QueryClientProvider client={queryClient}>
+          <SessionProvider session={pageProps.session}>
+            <MDXProvider components={components}>
+              <I18nextProvider i18n={i18nInstance}>
+                <ChakraProvider theme={theme}>
+                  <MeProvider>
+                    <Global styles={globalCSS} />
+                    <Flex
+                      minH="100vh"
+                      flexDir="column"
+                      position="relative"
+                      pt={MENU_HEIGHT}
+                    >
+                      <Header />
+                      <Flex
+                        flex={1}
+                        bg="gray.800"
+                        color="gray.100"
+                        flexDir="column"
+                      >
+                        <Box flex={1} w="100%">
+                          <HydrationBoundary state={pageProps.dehydratedState}>
+                            <Component {...pageProps} />
+                          </HydrationBoundary>
+                        </Box>
+                        <Footer />
+                      </Flex>
+                    </Flex>
+                  </MeProvider>
+                </ChakraProvider>
+              </I18nextProvider>
+            </MDXProvider>
+          </SessionProvider>
+        </QueryClientProvider>
       </main>
       {!!process.env.NX_GOOGLE_ANALYTICS_ID && (
         <>

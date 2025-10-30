@@ -2,8 +2,10 @@ import z from 'zod';
 import { TServer } from '../types';
 import { BacklogStatus, Prisma } from '@prisma/client';
 import { prisma } from '@discord-bot-v2/prisma';
+
 import { backlogItemSchema } from '../common-schema';
 import { getAuthedProcedure } from '../middleware';
+import { convertTs } from '../../utils/trpc/date-to-string';
 
 const ITEMS_PER_PAGE = 30;
 
@@ -74,9 +76,20 @@ export const getMyBacklogProcedure = (t: TServer) => {
         },
         include: backlogItemData.include,
         omit: backlogItemData.omit,
+        orderBy: {
+          order: 'asc',
+        },
       });
 
-      return backlogItems.map(convert);
+      return backlogItems.map((item) =>
+        convertTs(item, [
+          'abandonedAt',
+          'createdAt',
+          'finishedAt',
+          'startedAt',
+          'updatedAt',
+        ]),
+      );
     });
 };
 
@@ -97,15 +110,18 @@ const getBacklogByDiscordId = async ({
     omit: backlogItemData.omit,
     take: ITEMS_PER_PAGE,
     skip: ITEMS_PER_PAGE * (page - 1),
+    orderBy: {
+      order: 'asc',
+    },
   });
 
-  return backlogItems.map(convert);
+  return backlogItems.map((item) =>
+    convertTs(item, [
+      'abandonedAt',
+      'createdAt',
+      'finishedAt',
+      'startedAt',
+      'updatedAt',
+    ]),
+  );
 };
-
-function convert(backlogItem: BacklogItemType) {
-  return {
-    ...backlogItem,
-    createdAt: backlogItem.createdAt.toISOString(),
-    updatedAt: backlogItem.updatedAt.toISOString(),
-  };
-}

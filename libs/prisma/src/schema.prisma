@@ -31,10 +31,10 @@ model BacklogItem {
   note       String?       @db.VarChar(255)
   order      Int           @default(0)
 
-  startedAt    DateTime? @db.Timestamp(3)
-  finishedAt   DateTime? @db.Timestamp(3)
-  abandonnedAt DateTime? @db.Timestamp(3)
-  wishlistAt   DateTime? @db.Timestamp(3)
+  startedAt   DateTime? @db.Timestamp(3)
+  finishedAt  DateTime? @db.Timestamp(3)
+  abandonedAt DateTime? @db.Timestamp(3)
+  wishlistAt  DateTime? @db.Timestamp(3)
 
   createdAt DateTime @default(now()) @db.Timestamp(3)
   updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
@@ -43,7 +43,7 @@ model BacklogItem {
   backlogItemReview BacklogItemReview?
 
   @@unique([userId, igdbGameId])
-  @@unique([userId, order, status])
+  @@index(userId)
   @@map("BacklogItem")
 }
 

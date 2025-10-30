@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { Game, IGDBConditionValue } from '../types';
+import { Filter, Game, OrFilter } from '../types';
 import { addGameToCache } from './cache';
 import {
   BASE_URL,
@@ -96,11 +96,7 @@ export async function getPlatforms() {
 
 export async function getGames(
   name: string,
-  filters: {
-    field: string;
-    operator: QUERY_OPERATOR;
-    value: IGDBConditionValue;
-  }[],
+  filters: Array<Filter | OrFilter>,
   page = 1,
   withImage = false,
 ): Promise<Game[]> {
@@ -115,14 +111,21 @@ export async function getGames(
     .setLimit(GAME_PER_PAGE)
     .setOffset((page - 1) * GAME_PER_PAGE);
 
-  filters.forEach(({ field, operator, value }, index) => {
-    if (index === 0) {
-      queryBuilder.where(field, operator, value);
+  filters.forEach((filter, index) => {
+    if ('or' in filter) {
+      queryBuilder.orWhere(filter.or);
     } else {
-      queryBuilder.andWhere(field, operator, value);
+      const { field, operator, value } = filter;
+
+      if (index === 0) {
+        queryBuilder.where(field, operator, value);
+      } else {
+        queryBuilder.andWhere(field, operator, value);
+      }
     }
   });
 
+  console.log(queryBuilder.toString());
   const result = await IGDBRequest<Game[]>('/games', queryBuilder.toString());
 
   if (withImage) {

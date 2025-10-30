@@ -81,6 +81,26 @@
     "noResult": "Aucun résultat, veuillez changer vos filtres",
     "title": "Article de blog"
   },
+  "changeStateModal": {
+    "cancel": "Annuler",
+    "errorDescription": "Une erreur est apparue en changeant le statut de cet élément de backlog",
+    "errorTitle": "Impossible de changer le statut",
+    "notifyOnDiscordLabel": "Notifier sur Discord",
+    "successDescription": "Le statut a été changé avec succès",
+    "successTitle": "Statut changé",
+    "text": "Choisissez le nouveau statut de l'élément de votre backlog",
+    "title": "Changement de statut",
+    "validate": "Valider"
+  },
+  "charactersLeft_zero": "{{count}} caractère restant",
+  "charactersLeft_one": "{{count}} caractère restant",
+  "charactersLeft_other": "{{count}} caractères restants",
+  "confirmModal": {
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "text": "Confirmez vous cette action ?",
+    "title": "Êtes vous sûr ?"
+  },
   "contact": {
     "gamedev": "Gamedev (LundProdGameDev)",
     "global": "Global",
@@ -184,6 +204,7 @@
       "title": "Aucun jeu trouvé !"
     },
     "previousPage": "Précédent",
+    "remove": "Retirer",
     "search": "Chercher",
     "select": "Selectionner",
     "selectByPlatform": "Tu dois selectionner un jeu avec sa plate-forme. Clique sur le bouton détails pour voir les choix",
@@ -274,6 +295,70 @@
     "november": "Novembre",
     "october": "Octobre",
     "september": "Septembre"
+  },
+  "myBacklog": {
+    "abandonedAt": "Abandonné le",
+    "actions": "Actions",
+    "addedThe": "Date d'ajout",
+    "addGame": "Ajouter un jeu",
+    "addGameErrorDescription": "Une erreur s'est produite lors de l'ajout du jeu",
+    "addGameErrorTitle": "Impossible d'ajouter le jeu au backlog",
+    "addGameSuccessTitle": "Jeu ajouté au backlog avec succès",
+    "autosort": {
+      "alphabeticalOrder": "Par nom",
+      "byDateOrder": "Par date",
+      "text": "Tri automatique :"
+    },
+    "changeStatus": "Statut",
+    "delete": "Supprimer",
+    "error": {
+      "deleteDescription": "Une erreur est arrivée en supprimant le jeu",
+      "deleteTitle": "Echec de suppression",
+      "reorderDescription": "Une erreur est arrivée en rangeant la liste",
+      "reorderTitle": "Echec de réarrangement"
+    },
+    "finishedAt": "Fini le",
+    "info": "Informations",
+    "note": "Note",
+    "placeholder": {
+      "abandoned": {
+        "description": "C'est bon signe, ça veut dire que tu finis tes jeux !",
+        "title": "Aucun jeu abandonné"
+      },
+      "backlog": {
+        "button": "Ajoute un nouveau jeu",
+        "description": "Tu peux remplir cette liste avec les jeux que tu dois faire !",
+        "title": "Aucun jeu dans ton backlog"
+      },
+      "currently": {
+        "description": "Tu peux sélectionner un jeu de ton backlog et le déplacer ici en changeant son statut",
+        "title": "Aucun jeu en cours"
+      },
+      "finished": {
+        "description": "Tu n'as marqué aucun jeu comme fini. Tu peux le faire en changeant le statut d'un jeu de ton backlog ou en cours, et tu pourras écrire ton avis une fois qu'il est ici !",
+        "title": "Aucun jeu fini"
+      },
+      "wishlist": {
+        "title": "Aucun jeu dans la liste de souhait"
+      }
+    },
+    "review": "Avis",
+    "startedAt": "Date de démarrage",
+    "success": {
+      "deleteTitle": "Element de backlog supprimé",
+      "reorderDescription": "La liste a été réarrangée avec succès",
+      "reorderTitle": "Réarrangement réussi"
+    },
+    "tabs": {
+      "abandoned": "Abandonné",
+      "backlog": "Backlog",
+      "currently": "En cours",
+      "finished": "Fini",
+      "wishlist": "Liste de souhait"
+    },
+    "todoSection": {},
+    "title": "Gestion de mon backlog",
+    "wishlistedAt": "Mis en liste de souhait le"
   },
   "mySpace": {
     "backlog": {
@@ -392,6 +477,21 @@
       },
       "myGames": "Mes jeux"
     }
+  },
+  "noteModal": {
+    "cancel": "Annuler",
+    "charactersLeft_zero": "{{count}} caractère restant",
+    "charactersLeft_one": "{{count}} caractère restant",
+    "charactersLeft_other": "{{count}} caractères restants",
+    "description": "Prends des notes pour ce jeu pour donner des informations au futur toi quand tu parcourras ton backlog",
+    "errorDescription": "Une erreur est apparue en changeant la note de cet élément de backlog",
+    "errorTitle": "Erreur",
+    "maxLength": "Taille maximum de 255 caractères",
+    "placeholder": "Prends des note pour ce jeu comme combien de temps cela prend pour le finir",
+    "submit": "Sauvegarder",
+    "successDescription": "La note a été changé avec succès",
+    "successTitle": "Note changée",
+    "title": "Mise à jour de la note"
   },
   "pal": {
     "errorBadPal": "Mauvais Pal !",
@@ -531,6 +631,27 @@
     "northAmerica": "US",
     "worldWide": "Mondial"
   },
+  "reviewModal": {
+    "add": "Ajouter",
+    "cancel": "Annuler",
+    "completion": "Complétion *",
+    "completionPercentage": "%",
+    "completionComment": "Commentaire sur la completion",
+    "cons": "Points négatifs",
+    "duration": "Durée *",
+    "durationHour": "h",
+    "errorDescription": "Une erreur est apparue en postant ton avis sur cet élément de backlog",
+    "errorTitle": "Erreur sur la review",
+    "note": "Note *",
+    "progressTitle": "Progression",
+    "pros": "Points positifs",
+    "reviewTitle": "Avis",
+    "review": "Review *",
+    "shouldNotify": "Notifier sur Discord",
+    "submit": "Envoyer",
+    "successTitle": "Review postée avec succès",
+    "title": "Avis sur le jeu"
+  },
   "userList": {
     "title": "Utilisateurs :"
   },
@@ -538,6 +659,11 @@
     "backlog": "Backlog",
     "expectedGames": "Jeux attendus",
     "gacha": "Gacha"
+  },
+  "validation": {
+    "length": "La taille doit être entre {{min}} et {{max}} caractères",
+    "max": "La valeur max est {{max}}",
+    "min": "La valeur minimale est {{min}}"
   },
   "welcome": {
     "lastVideoLundprod": "LundProd",
