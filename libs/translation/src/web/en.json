@@ -341,6 +341,9 @@
         "title": "No game wishlisted"
       }
     },
+    "removeGameErrorDescription": "An error occured while removing the game to your backlog",
+    "removeGameErrorTitle": "Not able to remove the game to the backlog",
+    "removeGameSuccessTitle": "Game removed to the backlog successfully",
     "review": "Review",
     "startedAt": "Started date",
     "success": {
@@ -358,6 +361,30 @@
     "todoSection": {},
     "title": "My backlog management",
     "wishlistedAt": "Wishlist date"
+  },
+  "myExpectedGame": {
+    "actions": "Actions",
+    "addGame": "Add game",
+    "addExpectedGameErrorDescription": "An error occured while adding a game",
+    "addExpectedGameErrorTitle": "Can't add the game",
+    "addExpectedGameSuccessTitle": "Game added successfully",
+    "addToBacklog": "Add to backlog on release",
+    "cancelled": "Cancelled",
+    "delete": "Delete",
+    "expectedDate": "Expected release date",
+    "info": "Info",
+    "placeholder": {
+      "button": "Find a game",
+      "description": "You don't have any games here. Add one to be notified on Discord when a game you're waiting for is released",
+      "title": "No expected games"
+    },
+    "removeExpectedGameSuccessTitle": "The game has been deleted successfully",
+    "removeExpectedGameErrorDescription": "An error occured while deleting the game",
+    "removeExpectedGameErrorTitle": "Deletion of the game failed",
+    "title": "Expected games",
+    "toggleAddBacklogErrorDescription": "An error occured while updating the game",
+    "toggleAddBacklogErrorTitle": "Update of the game failed",
+    "unknown": "Unknown"
   },
   "mySpace": {
     "backlog": {
@@ -501,6 +528,17 @@
     "successPal": "It was {{palName}}"
   },
   "profile": {
+    "backlog": {
+      "abandonedAt": "Abandoned date",
+      "actions": "Actions",
+      "createdAt": "Date added",
+      "finishedAt": "Finished date",
+      "info": "Info",
+      "note": "Note",
+      "review": "Review",
+      "startedAt": "Started date",
+      "wishlistedAt": "Wishlist date"
+    },
     "gacha": {
       "cardToGold": "Card to gold",
       "filters": "Filters",
@@ -511,8 +549,19 @@
     "lastDraw": "Last card draw the {{date}}",
     "level": "Current level: {{level}}",
     "onTwitch": "Or <twitchLink>{{username}}</twitchLink> on Twitch",
+    "placeholder": {
+      "description": "The user has nothing in this section",
+      "title": "Nothing here!"
+    },
     "points": "Current points: {{points}}",
     "rank": "Current rank: {{rank}}",
+    "tabs": {
+      "abandoned": "Abandoned",
+      "backlog": "Backlog",
+      "finished": "Finished",
+      "inProgress": "In Progress",
+      "wishlist": "Wishlist"
+    },
     "xp": "Current XP: {{xp}}",
     "xpToNextLevel": "XP to next level: {{xp}}"
   },
@@ -656,7 +705,18 @@
   "userPage": {
     "backlog": "Backlog",
     "expectedGames": "Expected games",
-    "gacha": "Gacha"
+    "gacha": "Gacha",
+    "review": {
+      "completion": "Completion: {{completion}}%",
+      "cons": "Cons",
+      "duration": "Playtime: {{duration}}h",
+      "generalInformation": "General information",
+      "open": "See review",
+      "pros": "Pros",
+      "rating": "Rating: ",
+      "review": "Review",
+      "title": "Review of {{userName}} for {{gameName}}"
+    }
   },
   "validation": {
     "length": "The length should be between {{min}} and {{max}} characters",

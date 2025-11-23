@@ -1,8 +1,8 @@
-import { set } from 'lodash';
+import { get, set } from 'lodash';
 
 export function convertTs<T extends { createdAt: Date; updatedAt: Date }>(
   item: T,
-  fields: Array<keyof T> = ['createdAt', 'updatedAt'] as const,
+  fields: Array<keyof T | string> = ['createdAt', 'updatedAt'] as const,
 ) {
   const newItem = { ...item };
 
@@ -10,7 +10,9 @@ export function convertTs<T extends { createdAt: Date; updatedAt: Date }>(
     set(
       newItem,
       key,
-      newItem[key] ? (newItem[key] as unknown as Date).toISOString() : null,
+      get(newItem, key)
+        ? (get(newItem, key) as unknown as Date).toISOString()
+        : null,
     );
   }
 

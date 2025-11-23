@@ -1,9 +1,6 @@
 import {
   Box,
   Button,
-  Flex,
-  Heading,
-  Hide,
   Show,
   Tab,
   TabIndicator,
@@ -18,13 +15,9 @@ import { getServerSession } from 'next-auth/next';
 
 import { authOptions } from '../api/auth/[...nextauth]';
 import { useTranslation } from 'react-i18next';
-import { convertPrismaToBacklogItem } from '~/lundprod/utils/backlog';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { trpc } from '~/lundprod/utils/trpc';
 import { BacklogGame, useMe } from '~/lundprod/contexts/me.context';
 
-import { createServerSideHelpers } from '@trpc/react-query/server';
-import { AppRouter, appRouter, createContext } from '../../server/trpc';
 import { MyPagesLayout } from '~/lundprod/layouts/MyPagesLayout';
 import { AddIcon } from '@chakra-ui/icons';
 import { TodoSection } from '~/lundprod/components/my-space/backlog/todo-section';
@@ -100,12 +93,16 @@ export function BacklogWrapper({}: PropsType) {
 
   const [isSearchingGame, setIsSearchingGame] = useState(false);
 
-  const { mutateAsync: addBacklogItem, isPending } =
+  const { mutateAsync: addBacklogItem, isPending: isAddBacklogItemPending } =
     trpc.addBacklogItem.useMutation();
+  const {
+    mutateAsync: removeBacklogItem,
+    isPending: isRemoveBacklogItemPending,
+  } = trpc.removeBacklogItem.useMutation();
+
+  const isPending = isAddBacklogItemPending || isRemoveBacklogItemPending;
 
   const onAddGame = async (game: Game) => {
-    setIsSearchingGame(false);
-
     try {
       const { backlogItem } = await addBacklogItem({
         gameId: game.id,
@@ -128,6 +125,35 @@ export function BacklogWrapper({}: PropsType) {
       errorToast({
         title: t('myBacklog.addGameErrorTitle'),
         description: t('myBacklog.addGameErrorDescription'),
+      });
+    }
+  };
+  const onRemoveGame = async (game: Game) => {
+    const item = backlog.find(({ igdbGameId }) => game.id === igdbGameId);
+
+    if (!item) {
+      return;
+    }
+
+    try {
+      await removeBacklogItem({
+        itemId: item.id,
+      });
+
+      queryClient.getMyBacklog.setData(
+        {},
+        (data: BacklogGame[] | undefined) => {
+          return (data || []).filter(({ id }) => item.id !== id);
+        },
+      );
+
+      successToast({
+        title: t('myBacklog.removeGameSuccessTitle'),
+      });
+    } catch (err) {
+      errorToast({
+        title: t('myBacklog.removeGameErrorTitle'),
+        description: t('myBacklog.removeGameErrorDescription'),
       });
     }
   };
@@ -180,10 +206,12 @@ export function BacklogWrapper({}: PropsType) {
         isOpen={isSearchingGame}
         onClose={() => setIsSearchingGame(false)}
         onGameSelected={onAddGame}
+        onGameUnselected={onRemoveGame}
         futureGame={false}
         isGameSelected={(game: Game) =>
           !!backlog.find(({ igdbGameId }) => game.id === igdbGameId)
         }
+        isLoading={isPending}
       />
     </MyPagesLayout>
   );

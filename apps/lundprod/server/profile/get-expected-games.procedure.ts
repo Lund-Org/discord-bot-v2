@@ -1,9 +1,10 @@
 import z from 'zod';
 import { TServer } from '../types';
-import { BacklogStatus, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { prisma } from '@discord-bot-v2/prisma';
-import { backlogItemSchema, expectedGameSchema } from '../common-schema';
+import { expectedGameSchema } from '../common-schema';
 import { getAuthedProcedure } from '../middleware';
+import { convertTs } from '~/lundprod/utils/trpc/date-to-string';
 
 const ITEMS_PER_PAGE = 30;
 
@@ -83,17 +84,9 @@ const getExpectedGamesByDiscordId = async ({
 function convert(
   expectedGame: ExpectedGameType,
 ): z.infer<typeof expectedGameSchema> {
-  return {
-    ...expectedGame,
-    releaseDate: expectedGame.releaseDate
-      ? {
-          ...expectedGame.releaseDate,
-          date: expectedGame.releaseDate.date
-            ? expectedGame.releaseDate.date.toISOString()
-            : null,
-        }
-      : null,
-    createdAt: expectedGame.createdAt.toISOString(),
-    updatedAt: expectedGame.updatedAt.toISOString(),
-  };
+  return convertTs(expectedGame, [
+    'createdAt',
+    'updatedAt',
+    'releaseDate.date',
+  ]);
 }

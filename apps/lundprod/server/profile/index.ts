@@ -1,4 +1,5 @@
 import { TServer } from '../types';
+import { getBacklogItemByGameIdProcedure } from './get-backlog-item-by-game-id.procedure';
 import {
   getBacklogProcedure,
   getMyBacklogProcedure,
@@ -14,5 +15,6 @@ export function getProfilesRouter(t: TServer) {
     getMyBacklog: getMyBacklogProcedure(t),
     getExpectedGames: getExpectedGamesProcedure(t),
     getMyExpectedGames: getMyExpectedGamesProcedure(t),
+    getBacklogItemByGameId: getBacklogItemByGameIdProcedure(t),
   };
 }

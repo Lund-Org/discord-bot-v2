@@ -27,7 +27,7 @@ import {
 import { capitalize } from 'lodash';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
-import { BacklogItemLight } from '~/lundprod/contexts/backlog-context';
+import { BacklogItemLight } from '~/lundprod/contexts/backlog-context-deprecated';
 import {
   getBacklogStatusColor,
   getBacklogStatusTranslation,

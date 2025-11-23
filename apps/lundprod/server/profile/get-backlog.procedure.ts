@@ -6,8 +6,7 @@ import { prisma } from '@discord-bot-v2/prisma';
 import { backlogItemSchema } from '../common-schema';
 import { getAuthedProcedure } from '../middleware';
 import { convertTs } from '../../utils/trpc/date-to-string';
-
-const ITEMS_PER_PAGE = 30;
+import { BACKLOG_ITEMS_PER_PAGE } from '../../utils/trpc/constants';
 
 const backlogItemData = Prisma.validator<Prisma.BacklogItemDefaultArgs>()({
   omit: {
@@ -50,7 +49,12 @@ const getBacklogInput = z.object({
   discordId: z.string(),
 });
 const getMyBacklogInput = z.object({});
-const getBacklogOutput = z.array(backlogItemSchema);
+
+const getBacklogOutput = z.object({
+  list: z.array(backlogItemSchema),
+  total: z.number().int(),
+});
+const getMyBacklogOutput = z.array(backlogItemSchema);
 
 export type GetBacklogInputType = z.infer<typeof getBacklogInput>;
 export type GetBacklogOutputType = z.infer<typeof getBacklogOutput>;
@@ -59,12 +63,27 @@ export const getBacklogProcedure = (t: TServer) => {
   return t.procedure
     .input(getBacklogInput)
     .output(getBacklogOutput)
-    .query(getBacklogByDiscordId);
+    .query(async ({ input, ctx }) => {
+      const list = await getBacklogByDiscordId({ input });
+      const total = await prisma.backlogItem.count({
+        where: {
+          user: {
+            discordId: input.discordId,
+          },
+          status: input.category,
+        },
+      });
+
+      return {
+        list,
+        total,
+      };
+    });
 };
 export const getMyBacklogProcedure = (t: TServer) => {
   return getAuthedProcedure(t)
     .input(getMyBacklogInput)
-    .output(getBacklogOutput)
+    .output(getMyBacklogOutput)
     .query(async ({ input, ctx }) => {
       const { session } = ctx;
 
@@ -108,8 +127,8 @@ const getBacklogByDiscordId = async ({
     },
     include: backlogItemData.include,
     omit: backlogItemData.omit,
-    take: ITEMS_PER_PAGE,
-    skip: ITEMS_PER_PAGE * (page - 1),
+    take: BACKLOG_ITEMS_PER_PAGE,
+    skip: BACKLOG_ITEMS_PER_PAGE * (page - 1),
     orderBy: {
       order: 'asc',
     },

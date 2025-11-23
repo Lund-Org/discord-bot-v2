@@ -30,20 +30,24 @@ type SearchGameModalProps = {
   isOpen: boolean;
   onClose: VoidFunction;
   onGameSelected: (game: Game, platformId?: number) => void;
+  onGameUnselected: (game: Game, platformId?: number) => void;
   futureGame: boolean;
   size?: ModalProps['size'];
   selectByPlatform?: boolean;
   isGameSelected: (game: Game, platformId?: number) => boolean;
+  isLoading: boolean;
 };
 
 export const SearchGameModal = ({
   isOpen,
   onClose,
   onGameSelected,
+  onGameUnselected,
   futureGame,
   size = '3xl',
   selectByPlatform = false,
   isGameSelected,
+  isLoading,
 }: SearchGameModalProps) => {
   const { t } = useTranslation();
   const [page, setPage] = useState(1);
@@ -104,8 +108,10 @@ export const SearchGameModal = ({
                     key={game.id}
                     game={game}
                     onGameSelect={onGameSelected}
+                    onGameUnselect={onGameUnselected}
                     selectByPlatform={selectByPlatform}
                     isGameSelected={isGameSelected}
+                    isDisabled={isLoading}
                   />
                 ))}
             </Flex>

@@ -29,19 +29,27 @@ import { ExternalLinkIcon } from '@chakra-ui/icons';
 type SearchGameLineProps = {
   game: Game;
   onGameSelect: (game: Game, platformId?: number) => void;
+  onGameUnselect: (game: Game, platformId?: number) => void;
   selectByPlatform: boolean;
   isGameSelected: (game: Game, platformId?: number) => boolean;
+  isDisabled: boolean;
 };
 
 export const SearchGameLine = ({
   game,
   onGameSelect,
+  onGameUnselect,
   selectByPlatform,
   isGameSelected,
+  isDisabled,
 }: SearchGameLineProps) => {
   const { t } = useTranslation();
 
   const [areDetailsDisplayed, setAreDetailsDisplayed] = useState(false);
+
+  const oneOfThePlatformSelected = game.platforms?.some(({ id }) =>
+    isGameSelected(game, id),
+  );
 
   return (
     <Box
@@ -105,8 +113,12 @@ export const SearchGameLine = ({
                       : 'teal'
                 }
                 size="sm"
-                onClick={() => onGameSelect(game)}
-                isDisabled={selectByPlatform}
+                onClick={() =>
+                  isGameSelected(game)
+                    ? onGameUnselect(game)
+                    : onGameSelect(game)
+                }
+                isDisabled={selectByPlatform || isDisabled}
               >
                 {!selectByPlatform && isGameSelected(game)
                   ? t('gameModal.remove')
@@ -161,7 +173,14 @@ export const SearchGameLine = ({
                       <Button
                         colorScheme={selected ? 'red' : 'teal'}
                         size="sm"
-                        onClick={() => onGameSelect(game, platform.id)}
+                        onClick={() =>
+                          selected
+                            ? onGameUnselect(game, platform.id)
+                            : onGameSelect(game, platform.id)
+                        }
+                        isDisabled={
+                          isDisabled || (!selected && oneOfThePlatformSelected)
+                        }
                       >
                         {selected
                           ? t('gameModal.remove')

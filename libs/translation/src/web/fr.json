@@ -297,7 +297,7 @@
     "september": "Septembre"
   },
   "myBacklog": {
-    "abandonedAt": "Abandonné le",
+    "abandonedAt": "Date d'abandon",
     "actions": "Actions",
     "addedThe": "Date d'ajout",
     "addGame": "Ajouter un jeu",
@@ -342,6 +342,9 @@
         "title": "Aucun jeu dans la liste de souhait"
       }
     },
+    "removeGameErrorDescription": "Une erreur s'est produite lors de la suppression du jeu",
+    "removeGameErrorTitle": "Impossible de supprimer le jeu au backlog",
+    "removeGameSuccessTitle": "Jeu supprimé du backlog avec succès",
     "review": "Avis",
     "startedAt": "Date de démarrage",
     "success": {
@@ -359,6 +362,30 @@
     "todoSection": {},
     "title": "Gestion de mon backlog",
     "wishlistedAt": "Mis en liste de souhait le"
+  },
+  "myExpectedGame": {
+    "actions": "Actions",
+    "addGame": "Ajouter un jeu",
+    "addExpectedGameErrorDescription": "Une erreur s'est produite lors de l'ajout du jeu",
+    "addExpectedGameErrorTitle": "L'ajout du jeu a échoué",
+    "addExpectedGameSuccessTitle": "Jeu ajouté avec succès",
+    "addToBacklog": "Ajouter au backlog à la sortie",
+    "cancelled": "Annulé",
+    "delete": "Supprimer",
+    "expectedDate": "Date de sortie attendue",
+    "info": "Info",
+    "placeholder": {
+      "button": "Trouver un jeu",
+      "description": "Tu n'as aucun jeu ici. Ajoute en un pour être notifié sur Discord quand un jeu que tu attends sort",
+      "title": "Aucun jeu attendu"
+    },
+    "removeExpectedGameSuccessTitle": "Le jeu a été supprimé avec succès",
+    "removeExpectedGameErrorDescription": "Une erreur s'est produite en supprimant le jeu",
+    "removeExpectedGameErrorTitle": "La suppression du jeu a échoué",
+    "title": "Jeux attendus",
+    "toggleAddBacklogErrorDescription": "Une erreur s'est produite en mettant le jeu à jour",
+    "toggleAddBacklogErrorTitle": "La mise à jour du jeu a échoué",
+    "unknown": "Inconnue"
   },
   "mySpace": {
     "backlog": {
@@ -398,10 +425,10 @@
         "type": "Type"
       },
       "review": {
-        "completion": "Complétion : {{completion}}%",
+        "completion": "Complétion: {{completion}}%",
         "cons": "Points négatifs",
-        "duration": "Durée de jeu : {{duration}}h",
-        "generalInformation": "Information générale",
+        "duration": "Temps de jeu : {{duration}}h",
+        "generalInformation": "Informations générales",
         "open": "Voir l'avis",
         "pros": "Points positifs",
         "rating": "Note : ",
@@ -503,6 +530,17 @@
     "successPal": "C'était {{palName}}"
   },
   "profile": {
+    "backlog": {
+      "abandonedAt": "Date d'abandon",
+      "actions": "Actions",
+      "createdAt": "Date d'ajout",
+      "finishedAt": "Fini le",
+      "info": "Info",
+      "note": "Note",
+      "review": "Avis",
+      "startedAt": "Date de démarrage",
+      "wishlistedAt": "Mis en liste de souhait le"
+    },
     "gacha": {
       "cardToGold": "Carte à golder",
       "filters": "Filtres",
@@ -512,8 +550,19 @@
     "join": "A rejoint le Discord le {{date}}",
     "lastDraw": "Dernier tirage de carte le {{date}}",
     "level": "Niveau actuel : {{level}}",
+    "placeholder": {
+      "description": "L'utilisateur n'a rien dans cette section",
+      "title": "Rien ici !"
+    },
     "onTwitch": "Ou <twitchLink>{{username}}</twitchLink> sur Twitch",
     "points": "Points actuels : {{points}}",
+    "tabs": {
+      "abandoned": "Abandonné",
+      "backlog": "Backlog",
+      "finished": "Fini",
+      "inProgress": "En cours",
+      "wishlist": "Liste de souhait"
+    },
     "rank": "Rang actuel : {{rank}}",
     "xp": "XP actuelle : {{xp}}",
     "xpToNextLevel": "XP du prochain niveau : {{xp}}"
@@ -658,7 +707,18 @@
   "userPage": {
     "backlog": "Backlog",
     "expectedGames": "Jeux attendus",
-    "gacha": "Gacha"
+    "gacha": "Gacha",
+    "review": {
+      "completion": "Complétion : {{completion}}%",
+      "cons": "Points négatifs",
+      "duration": "Durée de jeu : {{duration}}h",
+      "generalInformation": "Information générale",
+      "open": "Voir l'avis",
+      "pros": "Points positifs",
+      "rating": "Note : ",
+      "review": "Avis",
+      "title": "Avis de {{userName}} pour {{gameName}}"
+    }
   },
   "validation": {
     "length": "La taille doit être entre {{min}} et {{max}} caractères",

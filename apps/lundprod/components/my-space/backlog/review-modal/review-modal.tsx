@@ -68,7 +68,6 @@ export const ReviewModal = ({ backlogItemId, onClose }: ReviewModalProps) => {
     trpc.upsertReview.useMutation();
 
   const onSubmit = async (data: ReviewModalForm) => {
-    console.log(data);
     try {
       const { newBacklogItem } = await upsertReview({
         ...omit(data, ['pros', 'cons', 'duration', 'completion']),
