@@ -41,13 +41,13 @@ export default function SignIn({ providers }: SignInProps) {
   const { query } = useRouter();
   const discordNetwork = networks.lundprod.find(
     (network) => network.title === 'Discord',
-  );
+  )!;
 
   return (
     <Box maxW="500px" mx="auto" mt="50px">
       <Fieldset>
         <Legend>{t('auth.login')}</Legend>
-        {Object.values(providers).map((provider) => (
+        {Object.values(providers || {}).map((provider) => (
           <Box key={provider.name}>
             <Button
               variant="outline"

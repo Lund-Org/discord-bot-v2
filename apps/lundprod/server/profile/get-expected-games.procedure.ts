@@ -28,7 +28,11 @@ const getExpectedGamesInput = z.object({
   discordId: z.string(),
 });
 const getMyExpectedGamesInput = z.object({});
-const getExpectedGamesOutput = z.array(expectedGameSchema);
+const getExpectedGamesOutput = z.object({
+  list: z.array(expectedGameSchema),
+  total: z.number().int(),
+});
+const getMyExpectedGamesOutput = z.array(expectedGameSchema);
 
 export type GetExpectedGamesInputType = z.infer<typeof getExpectedGamesInput>;
 export type GetExpectedGamesOutputType = z.infer<typeof getExpectedGamesOutput>;
@@ -37,12 +41,26 @@ export const getExpectedGamesProcedure = (t: TServer) => {
   return t.procedure
     .input(getExpectedGamesInput)
     .output(getExpectedGamesOutput)
-    .query(getExpectedGamesByDiscordId);
+    .query(async ({ input, ctx }) => {
+      const list = await getExpectedGamesByDiscordId({ input });
+      const total = await prisma.expectedGame.count({
+        where: {
+          user: {
+            discordId: input.discordId,
+          },
+        },
+      });
+
+      return {
+        list,
+        total,
+      };
+    });
 };
 export const getMyExpectedGamesProcedure = (t: TServer) => {
   return getAuthedProcedure(t)
     .input(getMyExpectedGamesInput)
-    .output(getExpectedGamesOutput)
+    .output(getMyExpectedGamesOutput)
     .query(async ({ input, ctx }) => {
       const { session } = ctx;
 

@@ -44,7 +44,7 @@ export const daily = async (interaction: ChatInputCommandInteraction) => {
 
   if (drawPossible) {
     const cards = await drawCards(1);
-    const canvas = await generateDrawImage(interaction.user.username, cards);
+    const canvas = await generateDrawImage(interaction.user.globalName, cards);
     const attachment = new AttachmentBuilder(canvas.toBuffer(), {
       name: 'cards.png',
     });

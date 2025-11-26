@@ -541,31 +541,37 @@
       "startedAt": "Date de démarrage",
       "wishlistedAt": "Mis en liste de souhait le"
     },
+    "expectedGames": {
+      "info": "Informations",
+      "releaseDate": "Date de sortie",
+      "unknown": "Inconnue"
+    },
     "gacha": {
       "cardToGold": "Carte à golder",
       "filters": "Filtres",
+      "fusions": "Fusions disponibles",
       "inventory": "Inventaire",
-      "noCard": "Aucune carte"
+      "join": "A rejoint le gacha le {{date}}",
+      "lastDraw": "Dernier tirage de carte le {{date}}",
+      "level": "Niveau actuel : {{level}}",
+      "noCard": "Aucune carte",
+      "points": "Points actuels : {{points}}",
+      "rank": "Rang actuel : {{rank}}",
+      "xp": "XP actuelle : {{xp}}",
+      "xpToNextLevel": "XP du prochain niveau : {{xp}}"
     },
-    "join": "A rejoint le Discord le {{date}}",
-    "lastDraw": "Dernier tirage de carte le {{date}}",
-    "level": "Niveau actuel : {{level}}",
     "placeholder": {
       "description": "L'utilisateur n'a rien dans cette section",
       "title": "Rien ici !"
     },
     "onTwitch": "Ou <twitchLink>{{username}}</twitchLink> sur Twitch",
-    "points": "Points actuels : {{points}}",
     "tabs": {
       "abandoned": "Abandonné",
       "backlog": "Backlog",
       "finished": "Fini",
       "inProgress": "En cours",
       "wishlist": "Liste de souhait"
-    },
-    "rank": "Rang actuel : {{rank}}",
-    "xp": "XP actuelle : {{xp}}",
-    "xpToNextLevel": "XP du prochain niveau : {{xp}}"
+    }
   },
   "projects": {
     "3d": {

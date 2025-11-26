@@ -17,16 +17,19 @@ import { useMemo, useState } from 'react';
 import { AllCards, filterCards } from '~/lundprod/utils/filters';
 import { Filters, ProfileType } from '~/lundprod/utils/types';
 
-import { CardListElement } from '../../gacha/card-list-element';
-import { FilterMenu } from '../../gacha/filter-menu';
-import { ScrollContainer } from '../../scroll-container';
+import { CardListElement } from '../gacha/card-list-element';
+import { FilterMenu } from '../gacha/filter-menu';
+import { ScrollContainer } from '../scroll-container';
 import { useTranslation } from 'react-i18next';
 
-type InventoryListProps = {
+type GachaInventoryListProps = {
   profile: ProfileType;
 } & FlexProps;
 
-export const InventoryList = ({ profile, ...rest }: InventoryListProps) => {
+export const GachaInventoryList = ({
+  profile,
+  ...rest
+}: GachaInventoryListProps) => {
   const { t } = useTranslation();
   const [inventoryFilter, setInventoryFilter] = useState<Filters>({
     gold: false,
@@ -36,7 +39,7 @@ export const InventoryList = ({ profile, ...rest }: InventoryListProps) => {
   });
 
   const [basicCards, goldCards] = useMemo(() => {
-    const playerInventory = profile.player.playerInventory || [];
+    const playerInventory = profile.player?.playerInventory || [];
     const filteredBasicInventories = playerInventory.filter(
       (x) => x.type === 'basic',
     );

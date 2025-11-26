@@ -16,19 +16,19 @@ import { useMemo, useState } from 'react';
 import { AllCards, filterCards } from '~/lundprod/utils/filters';
 import { CardsToGoldType, Filters } from '~/lundprod/utils/types';
 
-import { CardListElement } from '../../gacha/card-list-element';
-import { FilterMenu } from '../../gacha/filter-menu';
-import { ScrollContainer } from '../../scroll-container';
+import { CardListElement } from '../gacha/card-list-element';
+import { FilterMenu } from '../gacha/filter-menu';
+import { ScrollContainer } from '../scroll-container';
 import { useTranslation } from 'react-i18next';
 
-type CardToGoldListProps = {
+type GachaCardToGoldListProps = {
   cardsToGold: CardsToGoldType;
 } & FlexProps;
 
-export const CardToGoldList = ({
+export const GachaCardToGoldList = ({
   cardsToGold,
   ...rest
-}: CardToGoldListProps) => {
+}: GachaCardToGoldListProps) => {
   const { t } = useTranslation();
   const [cardToGoldFilter, setCardToGoldFilter] = useState<Filters>({
     gold: false,

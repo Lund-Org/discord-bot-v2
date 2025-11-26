@@ -36,12 +36,13 @@ import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { BacklogView } from '~/lundprod/components/profile/backlog-view';
 import { ExpectedGamesView } from '~/lundprod/components/profile/expected-games-view';
 import { QueryTabs } from '~/lundprod/components/tabs';
+import { GachaView } from '~/lundprod/components/profile/gacha-view';
 
 type UserProfilePageProps = {
-  // cardsToGold: CardsToGoldType;
+  cardsToGold: CardsToGoldType;
   profile: ProfileType;
-  // rank: RankByUser | null;
-  // fusions: CardWithFusionDependencies[];
+  rank: RankByUser | null;
+  fusions: CardWithFusionDependencies[];
 };
 
 enum TABS {
@@ -66,11 +67,11 @@ export const getServerSideProps: GetServerSideProps<
     };
   }
 
-  // const cardsToGold = await prisma.playerInventory.getCardsToGold(discordId);
-  // const [rank] = profile.player
-  //   ? await getGlobalRanking([profile.player.id])
-  //   : [null];
-  // const fusions = await getCardsToFusion(discordId);
+  const cardsToGold = await prisma.playerInventory.getCardsToGold(discordId);
+  const [rank] = profile.player
+    ? await getGlobalRanking([profile.player.id])
+    : [null];
+  const fusions = await getCardsToFusion(discordId);
 
   const helpers = createServerSideHelpers<AppRouter>({
     router: appRouter,
@@ -119,9 +120,9 @@ export const getServerSideProps: GetServerSideProps<
     // Passed to the page component as props
     props: {
       profile: JSON.parse(JSON.stringify(profile)),
-      // cardsToGold: JSON.parse(JSON.stringify(cardsToGold)),
-      // rank: rank ? JSON.parse(JSON.stringify(rank)) : null,
-      // fusions: JSON.parse(JSON.stringify(fusions)),
+      cardsToGold: JSON.parse(JSON.stringify(cardsToGold)),
+      rank: rank ? JSON.parse(JSON.stringify(rank)) : null,
+      fusions: JSON.parse(JSON.stringify(fusions)),
       trpcState: helpers.dehydrate(),
       dehydratedState: dehydrate(queryClient),
     },
@@ -130,9 +131,9 @@ export const getServerSideProps: GetServerSideProps<
 
 export function UserProfilePage({
   profile,
-  // rank,
-  // cardsToGold,
-  // fusions,
+  rank,
+  cardsToGold,
+  fusions,
 }: UserProfilePageProps) {
   const { t } = useTranslation();
   const { query, replace } = useRouter();
@@ -148,8 +149,8 @@ export function UserProfilePage({
   }, [query.igdbGameId]);
 
   return (
-    <Box px="20px" pb="50px" pt="20px" color="gray.300">
-      <GeneralInformation profile={profile} rank={null /*rank*/} />
+    <Box px="20px" pb="50px" pt="20px" maxW="1600px" mx="auto" color="gray.300">
+      <GeneralInformation profile={profile} />
       <QueryTabs
         queryName={'tab'}
         values={Object.values(TABS)}
@@ -184,20 +185,12 @@ export function UserProfilePage({
             <ExpectedGamesView />
           </TabPanel>
           <TabPanel>
-            <Flex
-              alignItems="center"
-              justifyContent="center"
-              minW="500px"
-              minH="500px"
-              mx="auto"
-            >
-              <Heading variant="h3">{t('userPage.underRework')}</Heading>
-            </Flex>
-            {/* <GachaTab
+            <GachaView
               profile={profile}
               cardsToGold={cardsToGold}
               fusions={fusions}
-            /> */}
+              rank={rank}
+            />
           </TabPanel>
         </TabPanels>
       </QueryTabs>

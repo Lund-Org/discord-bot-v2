@@ -60,11 +60,11 @@ export const startBot = (): Promise<Client> => {
     client.on(Events.GuildMemberAdd, async (discordMember) => {
       await prisma.user.upsert({
         create: {
-          username: discordMember.user.username,
+          username: discordMember.user.globalName,
           discordId: discordMember.user.id,
         },
         update: {
-          username: discordMember.user.username,
+          username: discordMember.user.globalName,
           isActive: true,
         },
         where: { discordId: discordMember.user.id },
@@ -77,6 +77,15 @@ export const startBot = (): Promise<Client> => {
           isActive: false,
         },
         where: { discordId: discordMember.user.id },
+      });
+    });
+
+    client.on(Events.UserUpdate, async (user) => {
+      await prisma.user.update({
+        data: {
+          username: user.globalName,
+        },
+        where: { discordId: user.id },
       });
     });
 

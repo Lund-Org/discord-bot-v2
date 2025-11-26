@@ -1,13 +1,5 @@
 import { keepPreviousData } from '@tanstack/react-query';
-import {
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  ChatIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ExternalLinkIcon,
-  StarIcon,
-} from '@chakra-ui/icons';
+import { ChatIcon, ExternalLinkIcon, StarIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
@@ -16,7 +8,6 @@ import {
   Flex,
   Grid,
   GridItem,
-  IconButton,
   Show,
   Spinner,
   TabPanel,
@@ -25,6 +16,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
+import { omit } from 'lodash';
 import { useRouter } from 'next/router';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -33,11 +25,10 @@ import z from 'zod';
 import { getNumberParam, getParam } from '~/lundprod/utils/next';
 import { trpc } from '~/lundprod/utils/trpc';
 import { backlogItemSchema } from '~/lundprod/server/common-schema';
+import { BACKLOG_ITEMS_PER_PAGE } from '~/lundprod/utils/trpc/constants';
 
 import { QueryTabs } from '../tabs';
 import { BacklogReviewDrawer } from './backlog-review-drawer';
-import { BACKLOG_ITEMS_PER_PAGE } from '~/lundprod/utils/trpc/constants';
-import { omit } from 'lodash';
 import { PlaceholderEmpty } from './placeholder-empty';
 import { Pagination } from './pagination';
 

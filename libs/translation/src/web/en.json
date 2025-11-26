@@ -539,31 +539,37 @@
       "startedAt": "Started date",
       "wishlistedAt": "Wishlist date"
     },
+    "expectedGames": {
+      "info": "Information",
+      "releaseDate": "Release date",
+      "unknown": "Unknown"
+    },
     "gacha": {
       "cardToGold": "Card to gold",
       "filters": "Filters",
+      "fusions": "Available fusions",
       "inventory": "Inventory",
-      "noCard": "No cards"
+      "join": "Joined the gacha the {{date}}",
+      "lastDraw": "Last card draw the {{date}}",
+      "level": "Current level: {{level}}",
+      "noCard": "No cards",
+      "points": "Current points: {{points}}",
+      "rank": "Current rank: {{rank}}",
+      "xp": "Current XP: {{xp}}",
+      "xpToNextLevel": "XP to next level: {{xp}}"
     },
-    "join": "Joined the {{date}}",
-    "lastDraw": "Last card draw the {{date}}",
-    "level": "Current level: {{level}}",
     "onTwitch": "Or <twitchLink>{{username}}</twitchLink> on Twitch",
     "placeholder": {
       "description": "The user has nothing in this section",
       "title": "Nothing here!"
     },
-    "points": "Current points: {{points}}",
-    "rank": "Current rank: {{rank}}",
     "tabs": {
       "abandoned": "Abandoned",
       "backlog": "Backlog",
       "finished": "Finished",
       "inProgress": "In Progress",
       "wishlist": "Wishlist"
-    },
-    "xp": "Current XP: {{xp}}",
-    "xpToNextLevel": "XP to next level: {{xp}}"
+    }
   },
   "projects": {
     "3d": {

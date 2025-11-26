@@ -1,21 +1,28 @@
-import { Box, BoxProps } from '@chakra-ui/react';
+import { Box, BoxProps, Heading } from '@chakra-ui/react';
 
 import { CardWithFusionDependencies } from '~/lundprod/utils/types';
 
-import { CardListElement } from '../../gacha/card-list-element';
-import { ScrollContainer } from '../../scroll-container';
+import { CardListElement } from '../gacha/card-list-element';
+import { ScrollContainer } from '../scroll-container';
+import { useTranslation } from 'react-i18next';
 
-type FusionListProps = {
+type GachaFusionListProps = {
   fusionCards: CardWithFusionDependencies[];
 } & BoxProps;
 
-export const FusionList = ({ fusionCards, ...rest }: FusionListProps) => {
+export const GachaFusionList = ({
+  fusionCards,
+  ...rest
+}: GachaFusionListProps) => {
+  const { t } = useTranslation();
+
   if (fusionCards.length === 0) {
     return null;
   }
 
   return (
     <Box {...rest}>
+      <Heading>{t('profile.gacha.fusions')}</Heading>
       <ScrollContainer
         mt="10px"
         maxH="500px"

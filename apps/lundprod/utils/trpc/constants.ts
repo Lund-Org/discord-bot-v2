@@ -1,1 +1,2 @@
 export const BACKLOG_ITEMS_PER_PAGE = 30;
+export const EXPECTED_ITEMS_PER_PAGE = 30;
