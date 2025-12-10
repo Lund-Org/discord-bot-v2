@@ -1,6 +1,7 @@
 import { SmallCloseIcon, StarIcon } from '@chakra-ui/icons';
 import { Box, Flex, IconButton, Image, Text } from '@chakra-ui/react';
 import { FieldArrayWithId } from 'react-hook-form';
+
 import { AwardForm } from '~/lundprod/types/awards';
 
 type AwardGameProps = {

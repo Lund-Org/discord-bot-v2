@@ -26,13 +26,13 @@ import { Fragment, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { BacklogGame, useMe } from '~/lundprod/contexts/me.context';
+import { useBacklogHooks } from '~/lundprod/hooks/my-space/use-backlog-hooks';
 import { BacklogItemMoveType } from '~/lundprod/server/types';
 
-import { ChangeStateModal } from './change-state-modal';
-import { NoteModal } from './note-modal';
 import { ConfirmationModal } from '../../confirmation-modal';
-import { useBacklogHooks } from '~/lundprod/hooks/my-space/use-backlog-hooks';
+import { ChangeStateModal } from './change-state-modal';
 import { EmptyPlaceholder } from './empty-placeholder';
+import { NoteModal } from './note-modal';
 
 const STATUS: BacklogGame['status'] = 'BACKLOG';
 

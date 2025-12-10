@@ -1,3 +1,4 @@
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
@@ -19,12 +20,13 @@ import {
   translateGameType,
   translateRegion,
 } from '@discord-bot-v2/igdb-front';
+import { TFunction } from 'i18next';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { formatReleaseDate } from '~/lundprod/utils/dates';
+
 import { Tooltip } from '../tooltip';
-import { TFunction } from 'i18next';
-import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 type SearchGameLineProps = {
   game: Game;

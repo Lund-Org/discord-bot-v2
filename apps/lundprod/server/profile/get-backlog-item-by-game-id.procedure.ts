@@ -1,11 +1,11 @@
-import z from 'zod';
-import { TServer } from '../types';
-import { Prisma } from '@prisma/client';
 import { prisma } from '@discord-bot-v2/prisma';
-
-import { backlogItemSchema } from '../common-schema';
-import { convertTs } from '../../utils/trpc/date-to-string';
+import { Prisma } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
+import z from 'zod';
+
+import { convertTs } from '../../utils/trpc/date-to-string';
+import { backlogItemSchema } from '../common-schema';
+import { TServer } from '../types';
 
 const backlogItemData = Prisma.validator<Prisma.BacklogItemDefaultArgs>()({
   omit: {
@@ -40,8 +40,6 @@ const backlogItemData = Prisma.validator<Prisma.BacklogItemDefaultArgs>()({
   },
 });
 
-type BacklogItemType = Prisma.BacklogItemGetPayload<typeof backlogItemData>;
-
 const getBacklogItemByGameIdInput = z.object({
   gameId: z.number(),
   discordId: z.string(),
@@ -62,7 +60,7 @@ export const getBacklogItemByGameIdProcedure = (t: TServer) => {
   return t.procedure
     .input(getBacklogItemByGameIdInput)
     .output(getBacklogItemByGameIdOutput)
-    .query(async ({ input, ctx }) => {
+    .query(async ({ input }) => {
       const user = await prisma.user.findUniqueOrThrow({
         where: { discordId: input.discordId },
       });

@@ -1,7 +1,8 @@
-import { SearchGameModal } from '../components/search-game-modal/search-game-modal';
 import { Button } from '@chakra-ui/react';
 import { useState } from 'react';
-import { MeProvider, MeContext } from '../contexts/me.context';
+
+import { SearchGameModal } from '../components/search-game-modal/search-game-modal';
+import { MeContext,MeProvider } from '../contexts/me.context';
 
 export default function Test() {
   const [isModalBacklogOpen, setIsModalBacklogOpen] = useState(false);

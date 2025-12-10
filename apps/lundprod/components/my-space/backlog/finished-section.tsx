@@ -24,12 +24,12 @@ import { Fragment, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { BacklogGame, useMe } from '~/lundprod/contexts/me.context';
+import { useBacklogHooks } from '~/lundprod/hooks/my-space/use-backlog-hooks';
 import { BacklogItemMoveType } from '~/lundprod/server/types';
 
 import { ChangeStateModal } from './change-state-modal';
-import { useBacklogHooks } from '~/lundprod/hooks/my-space/use-backlog-hooks';
-import { ReviewModal } from './review-modal/review-modal';
 import { EmptyPlaceholder } from './empty-placeholder';
+import { ReviewModal } from './review-modal/review-modal';
 
 const STATUS: BacklogGame['status'] = 'FINISHED';
 

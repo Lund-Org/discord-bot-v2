@@ -5,8 +5,6 @@ import {
   Center,
   Flex,
   Heading,
-  Spinner,
-  Text,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -14,17 +12,19 @@ import {
   ModalHeader,
   ModalOverlay,
   ModalProps,
+  Spinner,
+  Text,
 } from '@chakra-ui/react';
 import { Game, GAME_PER_PAGE } from '@discord-bot-v2/igdb-front';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { trpc } from '~/lundprod/utils/trpc';
 import { TypeMap } from '~/lundprod/utils/backlog';
+import { trpc } from '~/lundprod/utils/trpc';
 
 import { SearchGameForm } from './search-game-form';
-import { SearchFormValues } from './type';
 import { SearchGameLine } from './search-game-line';
+import { SearchFormValues } from './type';
 
 type SearchGameModalProps = {
   isOpen: boolean;
@@ -80,7 +80,7 @@ export const SearchGameModal = ({
     if (!isOpen && !formData) {
       utils.getGames.reset();
     }
-  }, [isOpen, formData]);
+  }, [isOpen, formData, utils.getGames]);
 
   const onNextPage = () => {
     setPage((p) => p + 1);

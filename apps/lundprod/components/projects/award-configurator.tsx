@@ -1,3 +1,13 @@
+import { AddIcon, StarIcon } from '@chakra-ui/icons';
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Text,
+  Tooltip,
+  useBoolean,
+} from '@chakra-ui/react';
 import { chunk } from 'lodash';
 import { useMemo, useRef, useState } from 'react';
 import {
@@ -8,22 +18,13 @@ import {
   useForm,
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { AwardRow } from './award/award-row';
-import { AwardForm } from '~/lundprod/types/awards';
-import { EditAwardModal } from './award/edit-award-modal';
-import {
-  Box,
-  Button,
-  Flex,
-  Grid,
-  Heading,
-  Text,
-  Tooltip,
-  useBoolean,
-} from '@chakra-ui/react';
-import { AddIcon, StarIcon } from '@chakra-ui/icons';
+
 import { useGetDefaultAwards } from '~/lundprod/hooks/use-get-default-awards';
 import { useScreenshot } from '~/lundprod/hooks/use-screenshot';
+import { AwardForm } from '~/lundprod/types/awards';
+
+import { AwardRow } from './award/award-row';
+import { EditAwardModal } from './award/edit-award-modal';
 
 export const AwardConfigurator = () => {
   const { t } = useTranslation();
@@ -56,11 +57,11 @@ export const AwardConfigurator = () => {
   });
 
   const screenshotAwards = async () => {
-    for (const child of Array.from(canvasRef.current.children)) {
-      canvasRef.current.removeChild(child);
+    for (const child of Array.from(canvasRef.current?.children || [])) {
+      canvasRef.current?.removeChild(child);
     }
 
-    for (var i = 0; i < 4; ++i) {
+    for (let i = 0; i < 4; ++i) {
       const block = document.querySelector(`#award-block-${i}`);
 
       if (!block) {
@@ -70,7 +71,7 @@ export const AwardConfigurator = () => {
       const canvas = await screenshot(block as HTMLElement | null);
 
       if (canvas) {
-        canvasRef.current.appendChild(canvas);
+        canvasRef.current?.appendChild(canvas);
         setHasCanvas.on();
       }
     }
@@ -83,7 +84,11 @@ export const AwardConfigurator = () => {
       <Form>
         <Box>
           {fieldBlocks.map((fieldBlock, blockIndex) => (
-            <Box id={`award-block-${blockIndex}`} bg="gray.800">
+            <Box
+              id={`award-block-${blockIndex}`}
+              bg="gray.800"
+              key={blockIndex}
+            >
               {fieldBlock.map((field, index) => (
                 <AwardRow
                   key={field.id}

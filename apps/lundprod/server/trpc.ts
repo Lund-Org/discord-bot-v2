@@ -1,12 +1,13 @@
 import { initTRPC } from '@trpc/server';
 import type { CreateNextContextOptions } from '@trpc/server/adapters/next';
-import { z } from 'zod';
-import { getGamesRouter } from './games';
-import { authOptions } from '../pages/api/auth/[...nextauth]';
-import { getServerSession } from 'next-auth/next';
-import { getProfilesRouter } from './profile';
 import { Session } from 'next-auth';
+import { getServerSession } from 'next-auth/next';
+import { z } from 'zod';
+
+import { authOptions } from '../pages/api/auth/[...nextauth]';
+import { getGamesRouter } from './games';
 import { getMySpaceRouter } from './my-space';
+import { getProfilesRouter } from './profile';
 
 export const createContext = async (
   opts: CreateNextContextOptions | { session: Session | null },

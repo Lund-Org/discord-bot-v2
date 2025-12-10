@@ -14,7 +14,7 @@ export function useScreenshot() {
       useCORS: true,
     });
 
-    var img = new Image();
+    const img = new Image();
     img.src = canvas.toDataURL();
 
     return img;

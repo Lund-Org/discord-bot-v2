@@ -13,6 +13,7 @@ import {
 import { platForms } from '@discord-bot-v2/igdb-front';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+
 import { TypeMap } from '../../utils/backlog';
 import { SearchFormValues } from './type';
 

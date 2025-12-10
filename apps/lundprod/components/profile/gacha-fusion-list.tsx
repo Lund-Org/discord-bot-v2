@@ -1,10 +1,10 @@
 import { Box, BoxProps, Heading } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { CardWithFusionDependencies } from '~/lundprod/utils/types';
 
 import { CardListElement } from '../gacha/card-list-element';
 import { ScrollContainer } from '../scroll-container';
-import { useTranslation } from 'react-i18next';
 
 type GachaFusionListProps = {
   fusionCards: CardWithFusionDependencies[];

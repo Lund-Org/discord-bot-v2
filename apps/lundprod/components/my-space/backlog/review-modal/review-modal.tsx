@@ -20,8 +20,8 @@ import { useErrorToast, useSuccessToast } from '~/lundprod/hooks/use-toast';
 import { updateBacklogItemCache } from '~/lundprod/utils/cache-management/my-backlog';
 import { trpc } from '~/lundprod/utils/trpc';
 
-import { ProsConsSection } from './pros-cons-section';
 import { ProgressSection } from './progress-section';
+import { ProsConsSection } from './pros-cons-section';
 import { ReviewSection } from './review-section';
 import { ReviewModalForm } from './types';
 
@@ -62,7 +62,7 @@ export const ReviewModal = ({ backlogItemId, onClose }: ReviewModalProps) => {
 
   useEffect(() => {
     form.reset(defaultValues);
-  }, [defaultValues]);
+  }, [defaultValues, form]);
 
   const { mutateAsync: upsertReview, isPending } =
     trpc.upsertReview.useMutation();

@@ -1,9 +1,7 @@
 import {
-  Box,
   Button,
   Checkbox,
   Flex,
-  FormLabel,
   Modal,
   ModalBody,
   ModalContent,
@@ -14,11 +12,12 @@ import {
 } from '@chakra-ui/react';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
-import { useErrorToast, useSuccessToast } from '~/lundprod/hooks/use-toast';
-import { trpc } from '~/lundprod/utils/trpc';
-import { updateStatusBacklogItemCache } from '~/lundprod/utils/cache-management/my-backlog';
+
 import { BacklogGame } from '~/lundprod/contexts/me.context';
+import { useErrorToast, useSuccessToast } from '~/lundprod/hooks/use-toast';
 import { getBacklogStatusTranslation } from '~/lundprod/utils/backlog';
+import { updateStatusBacklogItemCache } from '~/lundprod/utils/cache-management/my-backlog';
+import { trpc } from '~/lundprod/utils/trpc';
 
 type ChangeStateModalProps<T> = {
   backlogItemId: number | null;

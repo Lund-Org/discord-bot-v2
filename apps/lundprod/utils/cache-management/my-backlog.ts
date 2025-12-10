@@ -1,5 +1,5 @@
-import { BacklogItemMoveType } from '~/lundprod/server/types';
 import { BacklogGame } from '~/lundprod/contexts/me.context';
+import { BacklogItemMoveType } from '~/lundprod/server/types';
 
 export const reorderMyBacklog =
   (itemId: number, direction: BacklogItemMoveType) =>
@@ -55,8 +55,9 @@ export const updateStatusBacklogItemCache =
     newList[itemIndex] = newItemValue;
 
     newList.forEach((item) => {
-      if (item.status === currentStatus && item.order >= currentOrder)
-        [--item.order];
+      if (item.status === currentStatus && item.order >= currentOrder) {
+        --item.order;
+      }
     });
 
     return newList;

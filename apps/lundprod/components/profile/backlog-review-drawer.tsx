@@ -5,6 +5,7 @@ import {
   StarIcon,
 } from '@chakra-ui/icons';
 import {
+  Badge,
   Box,
   Divider,
   Drawer,
@@ -16,18 +17,18 @@ import {
   DrawerOverlay,
   Flex,
   Heading,
+  Link,
+  List,
   ListIcon,
   ListItem,
-  Text,
-  List,
   Show,
-  Link,
-  Badge,
+  Text,
 } from '@chakra-ui/react';
 import { capitalize } from 'lodash';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 import z from 'zod';
+
 import { backlogItemSchema } from '~/lundprod/server/common-schema';
 import {
   getBacklogStatusColor,
@@ -52,6 +53,7 @@ export const BacklogReviewDrawer = ({
 
   const onReviewClose = () => {
     const { igdbGameId, ...params } = query;
+
     push({ query: params }, undefined, {
       shallow: true,
     });

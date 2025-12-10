@@ -1,16 +1,13 @@
 import { getGames, validateFilters } from '@discord-bot-v2/igdb';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getServerSession } from 'next-auth/next';
 
 import { getNumberParam, getParam } from '~/lundprod/utils/next';
-
-import { authOptions } from '../auth/[...nextauth]';
 
 export default async function listGames(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const session = await getServerSession(req, res, authOptions);
+  // const session = await getServerSession(req, res, authOptions);
 
   // if (!session) {
   //   return res.status(401).json({ games: [] });

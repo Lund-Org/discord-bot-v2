@@ -1,9 +1,9 @@
 import { Heading } from '@chakra-ui/react';
+import { Trans } from 'react-i18next';
 
 import { networks } from '~/lundprod/utils/url';
 
 import { LightStyledLink } from '../../styled-link';
-import { Trans } from 'react-i18next';
 
 export const DiscordCTA = () => {
   const discordNetwork = networks.lundprod.find(

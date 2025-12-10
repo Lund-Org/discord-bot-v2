@@ -7,7 +7,7 @@ import { join, resolve } from 'path';
 import remarkGfm from 'remark-gfm';
 
 import { components } from '~/lundprod/components/mdx-components';
-import { MdxLayout } from '~/lundprod/layouts/MdxLayout';
+import { MdxLayout, MdxLayoutProps } from '~/lundprod/layouts/MdxLayout';
 
 export async function getStaticPaths() {
   const mdxList = await prisma.blogPost.findMany({
@@ -20,7 +20,11 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps({
+  params,
+}: {
+  params: { filename: string };
+}) {
   const blogPost = await prisma.blogPost.findUnique({
     where: { filename: params.filename },
     include: { tags: true },
@@ -59,7 +63,13 @@ export async function getStaticProps({ params }) {
   };
 }
 
-export default function BlogPostPage({ blogPost, mdxSource }) {
+export default function BlogPostPage({
+  blogPost,
+  mdxSource,
+}: {
+  blogPost: MdxLayoutProps['blogPost'];
+  mdxSource: any;
+}) {
   return (
     <MdxLayout blogPost={blogPost}>
       <MDXRemote {...mdxSource} components={components} />

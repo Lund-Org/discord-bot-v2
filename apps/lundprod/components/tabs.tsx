@@ -1,6 +1,7 @@
 import { Tab, TabList, TabProps, Tabs, TabsProps } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect, useState } from 'react';
+
 import { getParam } from '../utils/next';
 
 type QueryTabsProps<T extends string> = {

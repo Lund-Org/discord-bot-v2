@@ -1,5 +1,8 @@
 import { Box, Divider, Flex, Text } from '@chakra-ui/react';
+import { RankByUser } from '@discord-bot-v2/common';
+import { useTranslation } from 'react-i18next';
 
+import { formatDate } from '~/lundprod/utils/dates';
 import {
   CardsToGoldType,
   CardWithFusionDependencies,
@@ -9,9 +12,6 @@ import {
 import { GachaCardToGoldList } from './gacha-card-to-gold-list';
 import { GachaFusionList } from './gacha-fusion-list';
 import { GachaInventoryList } from './gacha-inventory-list';
-import { useTranslation } from 'react-i18next';
-import { formatDate } from '~/lundprod/utils/dates';
-import { RankByUser } from '@discord-bot-v2/common';
 
 type GachaTabProps = {
   profile: ProfileType;

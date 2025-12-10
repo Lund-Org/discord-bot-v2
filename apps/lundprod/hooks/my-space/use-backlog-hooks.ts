@@ -1,11 +1,12 @@
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { trpc } from '~/lundprod/utils/trpc';
-import { useErrorToast, useSuccessToast } from '../use-toast';
-import { useCallback, useMemo, useState } from 'react';
 
 import { BacklogGame } from '~/lundprod/contexts/me.context';
 import { BacklogItemMoveType, SortType } from '~/lundprod/server/types';
 import { reorderMyBacklog } from '~/lundprod/utils/cache-management/my-backlog';
+import { trpc } from '~/lundprod/utils/trpc';
+
+import { useErrorToast, useSuccessToast } from '../use-toast';
 
 export const useBacklogHooks = () => {
   const { t } = useTranslation();
@@ -55,7 +56,14 @@ export const useBacklogHooks = () => {
         description: t('myBacklog.error.deleteDescription'),
       });
     }
-  }, [removeBacklogItem, setRemoveBacklogItemId, successToast, errorToast]);
+  }, [
+    removeBacklogItemId,
+    removeBacklogItem,
+    queryClient.getMyBacklog,
+    successToast,
+    t,
+    errorToast,
+  ]);
 
   const sortByName = useCallback(
     async (status: BacklogGame['status']) => {
@@ -77,7 +85,7 @@ export const useBacklogHooks = () => {
         });
       }
     },
-    [sortMyBacklog, queryClient, successToast, errorToast],
+    [sortMyBacklog, queryClient.getMyBacklog, successToast, t, errorToast],
   );
 
   const sortByDate = useCallback(
@@ -100,7 +108,7 @@ export const useBacklogHooks = () => {
         });
       }
     },
-    [sortMyBacklog, queryClient, successToast, errorToast],
+    [sortMyBacklog, queryClient.getMyBacklog, successToast, t, errorToast],
   );
 
   const onArrowClick = useCallback(
@@ -127,7 +135,7 @@ export const useBacklogHooks = () => {
         },
       );
     },
-    [moveBacklogItem, queryClient, errorToast],
+    [moveBacklogItem, queryClient.getMyBacklog, errorToast, t],
   );
 
   return {

@@ -8,7 +8,7 @@ export const useValidateMin = (min: number) => {
     (value: number) => {
       return value < min ? t('validation.min', { min }) : undefined;
     },
-    [t],
+    [min, t],
   );
 };
 
@@ -19,7 +19,7 @@ export const useValidateMax = (max: number) => {
     (value: number) => {
       return value > max ? t('validation.max', { max }) : undefined;
     },
-    [t],
+    [max, t],
   );
 };
 
@@ -32,7 +32,7 @@ export const useLength = (min: number, max: number) => {
         ? t('validation.length', { min, max })
         : undefined;
     },
-    [t],
+    [max, min, t],
   );
 };
 

@@ -108,6 +108,6 @@ export const networks = {
       url: 'https://mystilund.itch.io/',
     },
   ],
-} as const;
+};
 
 export type NetworkKey = keyof typeof networks;

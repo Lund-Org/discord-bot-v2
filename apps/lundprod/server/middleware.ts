@@ -1,5 +1,6 @@
 import { TRPCError } from '@trpc/server';
-import { Context, t } from './trpc';
+
+import { Context } from './trpc';
 import { TServer } from './types';
 
 export const getAuthedProcedure = (t: TServer) =>

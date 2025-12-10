@@ -1,10 +1,10 @@
 import { Box, Heading, Text } from '@chakra-ui/react';
 import { GetStaticProps } from 'next';
+import { useTranslation } from 'react-i18next';
 
 import { ProjectLine } from '~/lundprod/components/projects/project-line';
 
 import { getProjects } from '../../utils/data/projects';
-import { useTranslation } from 'react-i18next';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {

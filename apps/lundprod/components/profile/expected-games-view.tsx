@@ -1,3 +1,4 @@
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Box,
   chakra,
@@ -9,7 +10,9 @@ import {
   Tag,
   Text,
 } from '@chakra-ui/react';
+import { getPlatformLabel } from '@discord-bot-v2/igdb-front';
 import { keepPreviousData } from '@tanstack/react-query';
+import { format } from 'date-fns';
 import { useRouter } from 'next/router';
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -18,11 +21,8 @@ import { getNumberParam, getParam } from '~/lundprod/utils/next';
 import { trpc } from '~/lundprod/utils/trpc';
 import { EXPECTED_ITEMS_PER_PAGE } from '~/lundprod/utils/trpc/constants';
 
-import { PlaceholderEmpty } from './placeholder-empty';
 import { Pagination } from './pagination';
-import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { format } from 'date-fns';
-import { getPlatformLabel } from '@discord-bot-v2/igdb-front';
+import { PlaceholderEmpty } from './placeholder-empty';
 
 export const ExpectedGamesView = () => {
   const { t } = useTranslation();

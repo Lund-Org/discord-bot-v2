@@ -10,7 +10,9 @@ import {
 } from '@chakra-ui/react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+
 import { CharactersLeft } from '~/lundprod/components/characters-left';
+
 import { ReviewModalForm } from './types';
 import { useLength } from './validations';
 

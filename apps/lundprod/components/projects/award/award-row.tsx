@@ -1,21 +1,19 @@
+import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
   Flex,
   Heading,
-  Icon,
   IconButton,
   Spacer,
-  Text,
   useBoolean,
 } from '@chakra-ui/react';
 import { FieldArrayWithId, useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+
 import { AwardForm, Game } from '~/lundprod/types/awards';
 
 import { AwardGame } from './award-game';
-import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
-import { useState } from 'react';
 import { AwardGameModal } from './award-game-modal';
 
 type AwardRowProps = {

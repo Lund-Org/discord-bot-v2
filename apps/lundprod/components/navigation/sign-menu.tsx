@@ -18,9 +18,9 @@ import {
 import Link from 'next/link';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { getUserProfileUrl } from '~/lundprod/utils/url';
-import { useTranslation } from 'react-i18next';
 
 export const SignMenu = () => {
   const { t } = useTranslation();

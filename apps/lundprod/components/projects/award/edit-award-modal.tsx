@@ -10,9 +10,9 @@ import {
   ModalOverlay,
   Text,
 } from '@chakra-ui/react';
-import { useState } from 'react';
-import { FieldArrayWithId, Form, useForm } from 'react-hook-form';
+import { FieldArrayWithId, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+
 import { AwardForm } from '~/lundprod/types/awards';
 
 type EditAwardModalProps = {

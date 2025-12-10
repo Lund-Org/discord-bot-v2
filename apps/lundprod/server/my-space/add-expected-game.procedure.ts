@@ -1,11 +1,12 @@
+import { gameTypeMapping, REGION } from '@discord-bot-v2/igdb';
 import { prisma } from '@discord-bot-v2/prisma';
 import z from 'zod';
 
-import { TServer } from '../types';
-import { getAuthedProcedure } from '../middleware';
-import { gameTypeMapping, REGION } from '@discord-bot-v2/igdb';
 import { convertTs } from '~/lundprod/utils/trpc/date-to-string';
+
 import { expectedGameSchema } from '../common-schema';
+import { getAuthedProcedure } from '../middleware';
+import { TServer } from '../types';
 
 const addExpectedGameInput = z.object({
   gameId: z.number(),

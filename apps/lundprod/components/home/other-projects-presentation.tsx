@@ -1,12 +1,12 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { Text } from '@chakra-ui/react';
+import { Trans } from 'react-i18next';
 
 import { illustrationSketching } from '~/lundprod/assets';
+import { networks } from '~/lundprod/utils/url';
 
 import { LightStyledLink } from '../styled-link';
 import { FullLinePresentation } from './full-line-presentation';
-import { networks } from '~/lundprod/utils/url';
-import { Trans } from 'react-i18next';
 
 export const OtherProjectsPresentation = () => {
   const discordNetwork = networks.lundprod.find(

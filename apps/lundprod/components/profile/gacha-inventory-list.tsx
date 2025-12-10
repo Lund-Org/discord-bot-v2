@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { CardType, PlayerInventory } from '@prisma/client';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { AllCards, filterCards } from '~/lundprod/utils/filters';
 import { Filters, ProfileType } from '~/lundprod/utils/types';
@@ -20,7 +21,6 @@ import { Filters, ProfileType } from '~/lundprod/utils/types';
 import { CardListElement } from '../gacha/card-list-element';
 import { FilterMenu } from '../gacha/filter-menu';
 import { ScrollContainer } from '../scroll-container';
-import { useTranslation } from 'react-i18next';
 
 type GachaInventoryListProps = {
   profile: ProfileType;

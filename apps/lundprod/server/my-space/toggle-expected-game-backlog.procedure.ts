@@ -1,9 +1,9 @@
 import { prisma } from '@discord-bot-v2/prisma';
+import { TRPCError } from '@trpc/server';
 import z from 'zod';
 
-import { TServer } from '../types';
 import { getAuthedProcedure } from '../middleware';
-import { TRPCError } from '@trpc/server';
+import { TServer } from '../types';
 
 const toggleExpectedGameBacklogInput = z.object({
   id: z.number(),

@@ -2,8 +2,8 @@ import { prisma } from '@discord-bot-v2/prisma';
 import { TRPCError } from '@trpc/server';
 import z from 'zod';
 
-import { TServer } from '../types';
 import { getAuthedProcedure } from '../middleware';
+import { TServer } from '../types';
 
 const removeExpectedGameInput = z.object({
   id: z.number(),

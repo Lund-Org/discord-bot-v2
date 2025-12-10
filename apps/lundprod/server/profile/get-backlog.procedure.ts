@@ -1,12 +1,12 @@
-import z from 'zod';
-import { TServer } from '../types';
-import { BacklogStatus, Prisma } from '@prisma/client';
 import { prisma } from '@discord-bot-v2/prisma';
+import { BacklogStatus, Prisma } from '@prisma/client';
+import z from 'zod';
 
+import { BACKLOG_ITEMS_PER_PAGE } from '../../utils/trpc/constants';
+import { convertTs } from '../../utils/trpc/date-to-string';
 import { backlogItemSchema } from '../common-schema';
 import { getAuthedProcedure } from '../middleware';
-import { convertTs } from '../../utils/trpc/date-to-string';
-import { BACKLOG_ITEMS_PER_PAGE } from '../../utils/trpc/constants';
+import { TServer } from '../types';
 
 const backlogItemData = Prisma.validator<Prisma.BacklogItemDefaultArgs>()({
   omit: {
@@ -41,8 +41,6 @@ const backlogItemData = Prisma.validator<Prisma.BacklogItemDefaultArgs>()({
   },
 });
 
-type BacklogItemType = Prisma.BacklogItemGetPayload<typeof backlogItemData>;
-
 const getBacklogInput = z.object({
   page: z.number().gte(1).optional(),
   category: z.nativeEnum(BacklogStatus),
@@ -63,7 +61,7 @@ export const getBacklogProcedure = (t: TServer) => {
   return t.procedure
     .input(getBacklogInput)
     .output(getBacklogOutput)
-    .query(async ({ input, ctx }) => {
+    .query(async ({ input }) => {
       const list = await getBacklogByDiscordId({ input });
       const total = await prisma.backlogItem.count({
         where: {
@@ -84,7 +82,7 @@ export const getMyBacklogProcedure = (t: TServer) => {
   return getAuthedProcedure(t)
     .input(getMyBacklogInput)
     .output(getMyBacklogOutput)
-    .query(async ({ input, ctx }) => {
+    .query(async ({ ctx }) => {
       const { session } = ctx;
 
       const backlogItems = await prisma.backlogItem.findMany({

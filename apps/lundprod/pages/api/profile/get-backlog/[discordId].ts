@@ -5,7 +5,6 @@ import {
   backlogItemPrismaFields,
   backlogItemReviewsPrismaFields,
 } from '~/lundprod/utils/api/backlog';
-import { convertPrismaToBacklogItem } from '~/lundprod/utils/backlog';
 import { getParam } from '~/lundprod/utils/next';
 
 export default async function getBacklogItemsForUser(

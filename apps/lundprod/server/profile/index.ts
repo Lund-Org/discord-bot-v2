@@ -1,9 +1,9 @@
 import { TServer } from '../types';
-import { getBacklogItemByGameIdProcedure } from './get-backlog-item-by-game-id.procedure';
 import {
   getBacklogProcedure,
   getMyBacklogProcedure,
 } from './get-backlog.procedure';
+import { getBacklogItemByGameIdProcedure } from './get-backlog-item-by-game-id.procedure';
 import {
   getExpectedGamesProcedure,
   getMyExpectedGamesProcedure,

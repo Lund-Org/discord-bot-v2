@@ -5,10 +5,12 @@ export const getParam = (
   return Array.isArray(param) ? param[0] : param || defaultValue || '';
 };
 export const getNumberParam = (
-  param: string | string[],
+  param: string | string[] | undefined,
   defaultValue?: number,
 ) => {
-  return (
-    parseInt(Array.isArray(param) ? param[0] : param, 10) || defaultValue || 0
-  );
+  return !param
+    ? defaultValue || 0
+    : parseInt(Array.isArray(param) ? param[0] : param, 10) ||
+        defaultValue ||
+        0;
 };

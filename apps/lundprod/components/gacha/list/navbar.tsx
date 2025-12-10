@@ -11,13 +11,13 @@ import {
   ModalOverlay,
   useBreakpointValue,
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { useGachaHome } from '~/lundprod/contexts/gacha-home-context';
 
 import { CardListElement } from '../card-list-element';
 import { FilterMenu } from '../filter-menu';
 import { CardPreviewContainer } from './card-preview-container';
-import { useTranslation } from 'react-i18next';
 
 export const Navbar = () => {
   const { t } = useTranslation();

@@ -1,10 +1,12 @@
-import z from 'zod';
-import { TServer } from '../types';
-import { Prisma } from '@prisma/client';
 import { prisma } from '@discord-bot-v2/prisma';
+import { Prisma } from '@prisma/client';
+import z from 'zod';
+
+import { convertTs } from '~/lundprod/utils/trpc/date-to-string';
+
 import { expectedGameSchema } from '../common-schema';
 import { getAuthedProcedure } from '../middleware';
-import { convertTs } from '~/lundprod/utils/trpc/date-to-string';
+import { TServer } from '../types';
 
 const ITEMS_PER_PAGE = 30;
 
@@ -41,7 +43,7 @@ export const getExpectedGamesProcedure = (t: TServer) => {
   return t.procedure
     .input(getExpectedGamesInput)
     .output(getExpectedGamesOutput)
-    .query(async ({ input, ctx }) => {
+    .query(async ({ input }) => {
       const list = await getExpectedGamesByDiscordId({ input });
       const total = await prisma.expectedGame.count({
         where: {
@@ -61,7 +63,7 @@ export const getMyExpectedGamesProcedure = (t: TServer) => {
   return getAuthedProcedure(t)
     .input(getMyExpectedGamesInput)
     .output(getMyExpectedGamesOutput)
-    .query(async ({ input, ctx }) => {
+    .query(async ({ ctx }) => {
       const { session } = ctx;
 
       const expectedGames = await prisma.expectedGame.findMany({

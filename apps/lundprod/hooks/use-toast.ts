@@ -9,26 +9,32 @@ type Toast = {
 export const useErrorToast = () => {
   const toast = useToast();
 
-  return useCallback(({ title, description }: Toast) => {
-    toast({
-      title,
-      description,
-      status: 'error',
-      duration: 5000,
-      isClosable: true,
-    });
-  }, []);
+  return useCallback(
+    ({ title, description }: Toast) => {
+      toast({
+        title,
+        description,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    },
+    [toast],
+  );
 };
 export const useSuccessToast = () => {
   const toast = useToast();
 
-  return useCallback(({ title, description }: Toast) => {
-    toast({
-      title,
-      description,
-      status: 'success',
-      duration: 5000,
-      isClosable: true,
-    });
-  }, []);
+  return useCallback(
+    ({ title, description }: Toast) => {
+      toast({
+        title,
+        description,
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+    },
+    [toast],
+  );
 };

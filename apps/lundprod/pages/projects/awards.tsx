@@ -1,7 +1,7 @@
 import { Box, Button, Heading, Text, useBoolean } from '@chakra-ui/react';
 import { GetStaticProps } from 'next';
-
 import { useTranslation } from 'react-i18next';
+
 import { AwardConfigurator } from '~/lundprod/components/projects/award-configurator';
 
 export const getStaticProps: GetStaticProps = async () => {

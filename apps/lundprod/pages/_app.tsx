@@ -8,20 +8,20 @@ import {
 } from '@tanstack/react-query';
 import { AppProps, AppType } from 'next/app';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import Script from 'next/script';
 import { SessionProvider } from 'next-auth/react';
+import { useMemo, useState } from 'react';
+import { I18nextProvider } from 'react-i18next';
 
 import { Header } from '../components/header';
-import { components } from '../components/mdx-components';
-import { theme } from '../theme';
-import Script from 'next/script';
 import { Footer } from '../components/home/footer';
-import { useRouter } from 'next/router';
-import { useMemo, useState } from 'react';
+import { components } from '../components/mdx-components';
+import { MeProvider } from '../contexts/me.context';
 import { getI18nInstance } from '../i18n';
-import { I18nextProvider } from 'react-i18next';
+import { theme } from '../theme';
 import { MENU_HEIGHT } from '../utils/constants';
 import { trpc } from '../utils/trpc';
-import { MeProvider } from '../contexts/me.context';
 
 const CustomApp: AppType = ({
   Component,
@@ -132,6 +132,7 @@ const CustomApp: AppType = ({
             src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NX_GOOGLE_ANALYTICS_ID}`}
           />
           <Script
+            id="analytics"
             dangerouslySetInnerHTML={{
               __html: `window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}

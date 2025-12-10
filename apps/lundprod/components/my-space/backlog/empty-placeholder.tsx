@@ -1,5 +1,6 @@
-import { Box, Center, Flex, Heading, Image, Text } from '@chakra-ui/react';
+import { Center, Flex, Heading, Image, Text } from '@chakra-ui/react';
 import { ReactNode } from 'react';
+
 import { illustrationNotFound } from '~/lundprod/assets';
 
 export const EmptyPlaceholder = ({

@@ -1,5 +1,6 @@
-import { Flex, Image, Heading, Text, Box } from '@chakra-ui/react';
+import { Box,Flex, Heading, Image, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+
 import { illustrationNotFound } from '~/lundprod/assets';
 
 export const PlaceholderEmpty = () => {

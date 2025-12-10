@@ -1,3 +1,4 @@
+import { AddIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
@@ -9,28 +10,27 @@ import {
   TabPanels,
   Tabs,
 } from '@chakra-ui/react';
+import { Game, gameTypeMapping } from '@discord-bot-v2/igdb-front';
 import { prisma } from '@discord-bot-v2/prisma';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth/next';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { AbandonedSection } from '~/lundprod/components/my-space/backlog/abandoned-section';
+import { CurrentlySection } from '~/lundprod/components/my-space/backlog/currently-section';
+import { FinishedSection } from '~/lundprod/components/my-space/backlog/finished-section';
+import { TodoSection } from '~/lundprod/components/my-space/backlog/todo-section';
+import { WishlistSection } from '~/lundprod/components/my-space/backlog/wishlist-section';
+import { SearchGameModal } from '~/lundprod/components/search-game-modal/search-game-modal';
+import { BacklogGame, useMe } from '~/lundprod/contexts/me.context';
+import { useErrorToast, useSuccessToast } from '~/lundprod/hooks/use-toast';
+import { MyPagesLayout } from '~/lundprod/layouts/MyPagesLayout';
+import { trpc } from '~/lundprod/utils/trpc';
 
 import { authOptions } from '../api/auth/[...nextauth]';
-import { useTranslation } from 'react-i18next';
-import { trpc } from '~/lundprod/utils/trpc';
-import { BacklogGame, useMe } from '~/lundprod/contexts/me.context';
 
-import { MyPagesLayout } from '~/lundprod/layouts/MyPagesLayout';
-import { AddIcon } from '@chakra-ui/icons';
-import { TodoSection } from '~/lundprod/components/my-space/backlog/todo-section';
-import { SearchGameModal } from '~/lundprod/components/search-game-modal/search-game-modal';
-import { Game, gameTypeMapping } from '@discord-bot-v2/igdb-front';
-import { useState } from 'react';
-import { CurrentlySection } from '~/lundprod/components/my-space/backlog/currently-section';
-import { WishlistSection } from '~/lundprod/components/my-space/backlog/wishlist-section';
-import { FinishedSection } from '~/lundprod/components/my-space/backlog/finished-section';
-import { AbandonedSection } from '~/lundprod/components/my-space/backlog/abandoned-section';
-import { useErrorToast, useSuccessToast } from '~/lundprod/hooks/use-toast';
-
-type PropsType = {};
+type PropsType = object;
 
 export const getServerSideProps: GetServerSideProps<PropsType> = async ({
   req,
@@ -63,28 +63,14 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
     };
   }
 
-  // FOR SSR - not needed here but kept for later
-
-  // const helpers = createServerSideHelpers<AppRouter>({
-  //   router: appRouter,
-  //   ctx: await createContext({ session }),
-  // });
-
-  // const queryClient = new QueryClient();
-
-  // await helpers.getMyBacklog.prefetch({});
-  // await helpers.getMyExpectedGames.prefetch({});
-
   return {
     props: {
-      // trpcState: helpers.dehydrate(),
-      // dehydratedState: dehydrate(queryClient),
       session,
     },
   };
 };
 
-export function BacklogWrapper({}: PropsType) {
+export function BacklogWrapper() {
   const { t } = useTranslation();
   const { backlog } = useMe();
   const queryClient = trpc.useUtils();

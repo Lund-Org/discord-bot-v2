@@ -4,24 +4,25 @@ import {
   Flex,
   FormControl,
   FormErrorMessage,
-  Text,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Text,
   Textarea,
 } from '@chakra-ui/react';
-import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
-
-import { trpc } from '~/lundprod/utils/trpc';
-import { MAX_NOTE_SIZE } from '~/lundprod/server/types';
-import { useErrorToast, useSuccessToast } from '~/lundprod/hooks/use-toast';
-import { updateBacklogItemCache } from '~/lundprod/utils/cache-management/my-backlog';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+
 import { useMe } from '~/lundprod/contexts/me.context';
+import { useErrorToast, useSuccessToast } from '~/lundprod/hooks/use-toast';
+import { MAX_NOTE_SIZE } from '~/lundprod/server/types';
+import { updateBacklogItemCache } from '~/lundprod/utils/cache-management/my-backlog';
+import { trpc } from '~/lundprod/utils/trpc';
+
 import { CharactersLeft } from '../../characters-left';
 
 type NoteFormValues = {
@@ -59,10 +60,10 @@ export const NoteModal = ({ onClose, backlogItemId }: NoteModalProps) => {
     trpc.updateBacklogItemNote.useMutation();
 
   useEffect(() => {
-    if (!!backlogItemId) {
+    if (backlogItemId) {
       setValue('note', note || '');
     }
-  }, [backlogItemId, note]);
+  }, [backlogItemId, note, setValue]);
 
   const onSubmit = async (data: NoteFormValues) => {
     if (!backlogItemId) {

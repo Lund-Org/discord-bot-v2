@@ -1,16 +1,12 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import { BacklogItem, BacklogStatus, User } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
-import { EmbedBuilder, WebhookClient } from 'discord.js';
 import z from 'zod';
 
-import { getUserProfileUrl } from '~/lundprod/utils/url';
-
-import { TServer } from '../types';
-import { getAuthedProcedure } from '../middleware';
-import { backlogItemSchema } from '../common-schema';
-import { MAX_NOTE_SIZE } from '../types';
 import { convertTs } from '../../utils/trpc/date-to-string';
+import { backlogItemSchema } from '../common-schema';
+import { getAuthedProcedure } from '../middleware';
+import { MAX_NOTE_SIZE,TServer  } from '../types';
+
 
 const updateBacklogItemNoteInput = z.object({
   itemId: z.number(),

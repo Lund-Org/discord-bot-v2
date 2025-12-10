@@ -1,3 +1,4 @@
+import { AddIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
@@ -13,12 +14,10 @@ import {
   Tag,
   Text,
 } from '@chakra-ui/react';
-import { AddIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Game,
   gameTypeMapping,
   getPlatformLabel,
-  platForms,
   translateRegion,
 } from '@discord-bot-v2/igdb-front';
 import { prisma } from '@discord-bot-v2/prisma';
@@ -28,16 +27,16 @@ import { getServerSession } from 'next-auth/next';
 import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { trpc } from '~/lundprod/utils/trpc';
-import { useMe } from '~/lundprod/contexts/me.context';
-import { MyPagesLayout } from '~/lundprod/layouts/MyPagesLayout';
-import { SearchGameModal } from '~/lundprod/components/search-game-modal/search-game-modal';
-import { useErrorToast, useSuccessToast } from '~/lundprod/hooks/use-toast';
 import { EmptyPlaceholder } from '~/lundprod/components/my-space/backlog/empty-placeholder';
+import { SearchGameModal } from '~/lundprod/components/search-game-modal/search-game-modal';
+import { useMe } from '~/lundprod/contexts/me.context';
+import { useErrorToast, useSuccessToast } from '~/lundprod/hooks/use-toast';
+import { MyPagesLayout } from '~/lundprod/layouts/MyPagesLayout';
+import { trpc } from '~/lundprod/utils/trpc';
 
 import { authOptions } from '../api/auth/[...nextauth]';
 
-type PropsType = {};
+type PropsType = object;
 
 export const getServerSideProps: GetServerSideProps<PropsType> = async ({
   req,
@@ -77,7 +76,7 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
   };
 };
 
-export function ExpectedGameWrapper({}: PropsType) {
+export function ExpectedGameWrapper() {
   const { t } = useTranslation();
   const { expectedGames, isLoading } = useMe();
   const queryClient = trpc.useUtils();

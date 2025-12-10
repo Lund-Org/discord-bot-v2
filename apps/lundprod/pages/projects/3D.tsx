@@ -1,12 +1,12 @@
 import { Box, Divider, Heading, Text } from '@chakra-ui/react';
 import { GetStaticProps } from 'next';
 import { Fragment } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { Gallery } from '~/lundprod/components/blog/blog-helpers';
 import { LightStyledLink } from '~/lundprod/components/styled-link';
 
 import { getGallery } from '../../utils/data/3D-gallery';
-import { Trans, useTranslation } from 'react-i18next';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {

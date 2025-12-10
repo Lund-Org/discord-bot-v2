@@ -37,7 +37,10 @@
     {
       "files": ["*.ts", "*.tsx"],
       "extends": ["plugin:@nx/typescript"],
-      "rules": {}
+      "rules": {
+        "no-unused-vars": "off",
+        "quotes": "off"
+      }
     },
     {
       "files": ["*.js", "*.jsx"],

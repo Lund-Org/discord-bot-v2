@@ -12,8 +12,10 @@ import {
 } from '@chakra-ui/react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { ReviewModalForm } from './types';
+
 import { CharactersLeft } from '~/lundprod/components/characters-left';
+
+import { ReviewModalForm } from './types';
 import { pipeValidators, useValidateMax, useValidateMin } from './validations';
 
 export const ProgressSection = () => {

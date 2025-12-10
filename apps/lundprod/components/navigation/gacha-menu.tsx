@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useClickAway, useMedia } from 'react-use';
 
 import {
@@ -25,7 +26,6 @@ import {
 } from '~/lundprod/utils/url';
 
 import { MenuLink } from './styled-components';
-import { useTranslation } from 'react-i18next';
 
 export const GachaMenu = ({ onClick }: { onClick: () => void }) => {
   const { t } = useTranslation();

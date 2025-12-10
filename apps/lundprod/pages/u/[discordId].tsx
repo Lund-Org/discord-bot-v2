@@ -1,42 +1,32 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  Spinner,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-} from '@chakra-ui/react';
-import { createServerSideHelpers } from '@trpc/react-query/server';
+import { Box, TabPanel, TabPanels } from '@chakra-ui/react';
 import {
   getCardsToFusion,
   getGlobalRanking,
   RankByUser,
 } from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { createServerSideHelpers } from '@trpc/react-query/server';
 import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth/next';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { getServerSession } from 'next-auth/next';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { BacklogView } from '~/lundprod/components/profile/backlog-view';
+import { ExpectedGamesView } from '~/lundprod/components/profile/expected-games-view';
+import { GachaView } from '~/lundprod/components/profile/gacha-view';
 import { GeneralInformation } from '~/lundprod/components/profile/general-informations';
-import { useFetcher } from '~/lundprod/hooks/useFetcher';
-import { appRouter, AppRouter, createContext } from '~/lundprod/server/trpc';
+import { QueryTabs } from '~/lundprod/components/tabs';
+import { AppRouter, appRouter, createContext } from '~/lundprod/server/trpc';
 import { getParam } from '~/lundprod/utils/next';
 import {
   CardsToGoldType,
   CardWithFusionDependencies,
   ProfileType,
 } from '~/lundprod/utils/types';
+
 import { authOptions } from '../api/auth/[...nextauth]';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { BacklogView } from '~/lundprod/components/profile/backlog-view';
-import { ExpectedGamesView } from '~/lundprod/components/profile/expected-games-view';
-import { QueryTabs } from '~/lundprod/components/tabs';
-import { GachaView } from '~/lundprod/components/profile/gacha-view';
 
 type UserProfilePageProps = {
   cardsToGold: CardsToGoldType;
@@ -146,7 +136,7 @@ export function UserProfilePage({
 
       replace(url);
     }
-  }, [query.igdbGameId]);
+  }, [query.igdbGameId, replace]);
 
   return (
     <Box px="20px" pb="50px" pt="20px" maxW="1600px" mx="auto" color="gray.300">
@@ -161,7 +151,7 @@ export function UserProfilePage({
         }}
         defaultValue={TABS.BACKLOG}
         tabsProps={{ mt: 6 }}
-        tabProps={(value, isSelected) => ({
+        tabProps={(value) => ({
           ...(value === TABS.GACHA
             ? {
                 isDisabled: !profile.player,

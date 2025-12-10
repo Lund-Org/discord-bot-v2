@@ -1,15 +1,15 @@
-import z from 'zod';
-import { TServer } from '../types';
 import {
   Filter,
   GAME_TYPE,
   getGames,
-  IGDBConditionValue,
   OrFilter,
   platForms,
   QUERY_OPERATOR,
 } from '@discord-bot-v2/igdb';
+import z from 'zod';
+
 import { gameSchema } from '../common-schema';
+import { TServer } from '../types';
 
 const getGamesInput = z.object({
   futureGame: z.boolean().optional(),

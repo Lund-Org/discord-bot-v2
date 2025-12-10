@@ -1,10 +1,10 @@
 import { Box, Heading, ListItem, UnorderedList } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { useGachaHome } from '~/lundprod/contexts/gacha-home-context';
 import { CardWithFusionDependencies } from '~/lundprod/utils/types';
 
 import { CardListElement } from '../card-list-element';
-import { useTranslation } from 'react-i18next';
 
 export const FusionDetails = ({
   card,

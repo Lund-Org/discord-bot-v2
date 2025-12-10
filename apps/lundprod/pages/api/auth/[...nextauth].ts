@@ -8,8 +8,8 @@ export const authOptions: AuthOptions = {
   },
   providers: [
     DiscordProvider({
-      clientId: process.env.DISCORD_OAUTH_CLIENT_ID,
-      clientSecret: process.env.DISCORD_OAUTH_SECRET_ID,
+      clientId: process.env.DISCORD_OAUTH_CLIENT_ID || '',
+      clientSecret: process.env.DISCORD_OAUTH_SECRET_ID || '',
     }),
   ],
   pages: {
@@ -23,16 +23,6 @@ export const authOptions: AuthOptions = {
           discordId: user.id,
         },
       });
-      if (dbUser) {
-        await prisma.user.update({
-          where: {
-            discordId: user.id,
-          },
-          data: {
-            username: user.name,
-          },
-        });
-      }
 
       return !!dbUser;
     },
@@ -44,7 +34,7 @@ export const authOptions: AuthOptions = {
     },
     async session({ session, token, user }) {
       // To not display the email in the network, since it's not used
-      delete session.user.email;
+      delete session.user?.email;
 
       const dbUser = await prisma.user.getPlayer(token.userId);
 
