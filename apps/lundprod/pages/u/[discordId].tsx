@@ -18,6 +18,7 @@ import { ExpectedGamesView } from '~/lundprod/components/profile/expected-games-
 import { GachaView } from '~/lundprod/components/profile/gacha-view';
 import { GeneralInformation } from '~/lundprod/components/profile/general-informations';
 import { QueryTabs } from '~/lundprod/components/tabs';
+import { PROFILE_TABS } from '~/lundprod/constants/profile';
 import { AppRouter, appRouter, createContext } from '~/lundprod/server/trpc';
 import { getParam } from '~/lundprod/utils/next';
 import {
@@ -34,12 +35,6 @@ type UserProfilePageProps = {
   rank: RankByUser | null;
   fusions: CardWithFusionDependencies[];
 };
-
-enum TABS {
-  BACKLOG = 'backlog',
-  EXPECTED_GAMES = 'expected-games',
-  GACHA = 'gacha',
-}
 
 export const getServerSideProps: GetServerSideProps<
   UserProfilePageProps
@@ -102,7 +97,7 @@ export const getServerSideProps: GetServerSideProps<
     }),
     helpers.getExpectedGames.prefetch({
       discordId,
-      page: tab === TABS.EXPECTED_GAMES ? page : 1,
+      page: tab === PROFILE_TABS.EXPECTED_GAMES ? page : 1,
     }),
   ]);
 
@@ -132,7 +127,7 @@ export function UserProfilePage({
     if (query.igdbGameId) {
       const url = new URL(document.location.href);
 
-      url.searchParams.set('tab', TABS.BACKLOG);
+      url.searchParams.set('tab', PROFILE_TABS.BACKLOG);
 
       replace(url);
     }
@@ -143,16 +138,16 @@ export function UserProfilePage({
       <GeneralInformation profile={profile} />
       <QueryTabs
         queryName={'tab'}
-        values={Object.values(TABS)}
+        values={Object.values(PROFILE_TABS)}
         tabs={{
-          [TABS.BACKLOG]: t('userPage.backlog'),
-          [TABS.EXPECTED_GAMES]: t('userPage.expectedGames'),
-          [TABS.GACHA]: t('userPage.gacha'),
+          [PROFILE_TABS.BACKLOG]: t('userPage.backlog'),
+          [PROFILE_TABS.EXPECTED_GAMES]: t('userPage.expectedGames'),
+          [PROFILE_TABS.GACHA]: t('userPage.gacha'),
         }}
-        defaultValue={TABS.BACKLOG}
+        defaultValue={PROFILE_TABS.BACKLOG}
         tabsProps={{ mt: 6 }}
         tabProps={(value) => ({
-          ...(value === TABS.GACHA
+          ...(value === PROFILE_TABS.GACHA
             ? {
                 isDisabled: !profile.player,
               }

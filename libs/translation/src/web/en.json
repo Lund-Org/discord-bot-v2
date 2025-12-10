@@ -716,6 +716,7 @@
       "completion": "Completion: {{completion}}%",
       "cons": "Cons",
       "duration": "Playtime: {{duration}}h",
+      "empty": "Empty",
       "generalInformation": "General information",
       "open": "See review",
       "pros": "Pros",

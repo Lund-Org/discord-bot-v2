@@ -184,6 +184,11 @@ export const BacklogReviewDrawer = ({
                         </ListItem>
                       ),
                     )}
+                    {item.backlogItemReview?.pros.length === 0 ? (
+                      <Text fontStyle="italic">
+                        {t('userPage.review.empty')}
+                      </Text>
+                    ) : null}
                   </List>
                 </Box>
                 <Show above="md">
@@ -213,6 +218,11 @@ export const BacklogReviewDrawer = ({
                         </ListItem>
                       ),
                     )}
+                    {item.backlogItemReview?.cons.length === 0 ? (
+                      <Text fontStyle="italic">
+                        {t('userPage.review.empty')}
+                      </Text>
+                    ) : null}
                   </List>
                 </Box>
               </Flex>

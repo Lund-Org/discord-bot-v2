@@ -718,6 +718,7 @@
       "completion": "Complétion : {{completion}}%",
       "cons": "Points négatifs",
       "duration": "Durée de jeu : {{duration}}h",
+      "empty": "Vide",
       "generalInformation": "Information générale",
       "open": "Voir l'avis",
       "pros": "Points positifs",

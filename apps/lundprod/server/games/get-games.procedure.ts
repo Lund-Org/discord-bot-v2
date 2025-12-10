@@ -19,7 +19,7 @@ const getGamesInput = z.object({
     .custom<number>((data) => {
       const platformIds = platForms.map(({ id }) => id);
 
-      return platformIds.includes(data);
+      return platformIds.includes(data as number);
     })
     .optional(),
   page: z.number().gte(1).default(1).optional(),
@@ -112,8 +112,6 @@ export const getGamesProcedure = (t: TServer) => {
           value: platformId,
         });
       }
-
-      console.log(JSON.stringify({ query, queryFilters, page, withImage }));
 
       const games = await getGames(query, queryFilters, page, withImage);
 

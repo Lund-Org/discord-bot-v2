@@ -2,8 +2,11 @@ import { CardType, Player, PlayerInventory, User } from '@prisma/client';
 
 //-- Gacha types
 
-export type CardWithFusionDependencies = CardType & {
-  fusionDependencies: CardType[];
+export type CardWithFusionDependencies = Omit<
+  CardType,
+  'createdAt' | 'updatedAt'
+> & {
+  fusionDependencies: Omit<CardType, 'createdAt' | 'updatedAt'>[];
 };
 
 export type Filters = {

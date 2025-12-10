@@ -14,6 +14,7 @@ import {
   Partials,
   User,
 } from 'discord.js';
+import { createWriteStream } from 'fs';
 
 import { buttonsCallback, commandsResponses, menusCallback } from './commands';
 import { initCommands } from './commands/initializer';
@@ -188,7 +189,12 @@ export const startBot = (): Promise<Client> => {
     client.on(Events.ClientReady, async () => {
       const servers: Collection<string, Guild> = client.guilds.cache;
 
-      await processServer(servers.at(0));
+      if (
+        process.env.IMPORT_BACKLOG_CHANNEL_ID &&
+        process.env.IMPORT_BACKLOG_BOT_ID
+      ) {
+        await processServer(servers.at(0));
+      }
     });
 
     return client.login(process.env.BOT_TOKEN).then(() => client);
@@ -196,7 +202,10 @@ export const startBot = (): Promise<Client> => {
 };
 
 async function processServer(server: Guild) {
-  const backlogChannelId = '312267835151876096';
+  const importFile = createWriteStream('/tmp/discord-import.log', {
+    encoding: 'utf8',
+  });
+  const backlogChannelId = process.env.IMPORT_BACKLOG_CHANNEL_ID;
   const batchSize = 100;
   const operations: Array<{
     game: Game;
@@ -212,7 +221,7 @@ async function processServer(server: Guild) {
   );
 
   if (!webhookChannel || !webhookChannel.isTextBased()) {
-    console.warn('Channel not found');
+    importFile.write('Channel not found\n');
     return;
   }
 
@@ -220,7 +229,7 @@ async function processServer(server: Guild) {
   let list: Collection<string, Message<true>> | null = null;
 
   do {
-    console.log('Start fetching !');
+    importFile.write('Start fetching !\n');
     list = await webhookChannel.messages.fetch({
       before: lastId || undefined,
       limit: batchSize,
@@ -240,6 +249,15 @@ async function processServer(server: Guild) {
           const { backlogItem, game } = getMatchingGame(user, games);
 
           if (backlogItem && game) {
+            importFile.write(
+              `${JSON.stringify({
+                backlogItemId: backlogItem.id,
+                gameId: game.id,
+                status,
+                ts: message.createdTimestamp,
+                userId: user.id,
+              })}\n`,
+            );
             operations.push({
               backlogItem,
               game,
@@ -247,12 +265,14 @@ async function processServer(server: Guild) {
               ts: message.createdTimestamp,
             });
           } else {
-            console.warn(
-              `Game not found - ${title.value} for user ${discordId}`,
+            importFile.write(
+              `Game not found - ${title.value} for user ${discordId}\n`,
             );
           }
         } else {
-          console.warn('Not a backlog status change or not matching anything');
+          importFile.write(
+            'Not a backlog status change or not matching anything\n',
+          );
         }
       }
     }
@@ -262,14 +282,14 @@ async function processServer(server: Guild) {
 
   await applyDBOperations(operations.reverse());
 
-  console.log('FINISHED !');
+  importFile.write('FINISHED !\n');
 }
 
 function isBacklogMsg(message: Message) {
-  const backlogBot = '1067149641839300659';
+  const backlogBotId = process.env.IMPORT_BACKLOG_BOT_ID;
 
   return (
-    message.author.id === backlogBot &&
+    message.author.id === backlogBotId &&
     message.embeds[0]?.title === 'Mise à jour du backlog'
   );
 }

@@ -8,16 +8,17 @@ import {
   Spacer,
   useBoolean,
 } from '@chakra-ui/react';
-import { FieldArrayWithId, useFieldArray } from 'react-hook-form';
+import { Game } from '@discord-bot-v2/igdb-front';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { AwardForm, Game } from '~/lundprod/types/awards';
+import { AwardForm, AwardGameType } from '~/lundprod/types/awards';
 
+import { SearchGameModal } from '../../search-game-modal/search-game-modal';
 import { AwardGame } from './award-game';
-import { AwardGameModal } from './award-game-modal';
 
 type AwardRowProps = {
-  field: FieldArrayWithId<AwardForm, 'awards', 'id'>;
+  field: AwardForm['awards'][number];
   index: number;
   onDelete: (index: number) => void;
   onEditAward: VoidFunction;
@@ -30,6 +31,7 @@ export const AwardRow = ({
   onEditAward,
 }: AwardRowProps) => {
   const { t } = useTranslation();
+  const { control } = useFormContext<AwardForm>();
   const {
     fields: games,
     append,
@@ -37,12 +39,21 @@ export const AwardRow = ({
     update,
   } = useFieldArray({
     name: `awards.${index}.games`,
+    control,
+    keyName: '_id',
   });
   const [isNewGameModalDisplayed, setIsNewGameModalDisplayed] =
     useBoolean(false);
 
   const onAddGame = (game: Game) => {
     append({ ...game, isBest: false });
+  };
+  const onRemoveGame = (game: Game) => {
+    const index = games.findIndex(({ id }) => game.id == id);
+
+    if (index !== -1) {
+      remove(index);
+    }
   };
 
   const setAward = (index: number, value: boolean) => {
@@ -116,18 +127,13 @@ export const AwardRow = ({
           />
         </Flex>
         <Flex py="20px" gap="10px" flexWrap="wrap">
-          {games.map((_game, index) => {
-            const game = _game as FieldArrayWithId<
-              AwardForm,
-              'awards.0.games',
-              'id'
-            >;
+          {games.map((game, index) => {
             return (
               <AwardGame
-                key={game.id}
+                key={game._id}
                 game={game}
                 onDelete={() => remove(index)}
-                isBest={game.isBest}
+                isBest={(game as AwardGameType).isBest}
                 onClick={(value) => setAward(index, value)}
               />
             );
@@ -141,12 +147,15 @@ export const AwardRow = ({
         >
           {t('awards.addGame')}
         </Button>
-        {isNewGameModalDisplayed && (
-          <AwardGameModal
-            onSave={onAddGame}
-            onClose={setIsNewGameModalDisplayed.off}
-          />
-        )}
+        <SearchGameModal
+          isOpen={isNewGameModalDisplayed}
+          onClose={setIsNewGameModalDisplayed.off}
+          onGameSelected={onAddGame}
+          onGameUnselected={onRemoveGame}
+          futureGame={false}
+          isGameSelected={(game) => !!games.find(({ id }) => game.id === id)}
+          isLoading={false}
+        />
       </Box>
     </Box>
   );

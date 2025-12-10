@@ -125,7 +125,6 @@ export async function getGames(
     }
   });
 
-  console.log(queryBuilder.toString());
   const result = await IGDBRequest<Game[]>('/games', queryBuilder.toString());
 
   if (withImage) {
