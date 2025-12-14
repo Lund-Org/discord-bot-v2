@@ -65,7 +65,7 @@ export const useFetcher = () => {
           });
         });
       },
-    [toast],
+    [t, toast],
   );
 
   const get = useCallback(

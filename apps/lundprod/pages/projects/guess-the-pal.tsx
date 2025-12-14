@@ -1,10 +1,9 @@
 import { Box, Button, Heading, Text, useBoolean } from '@chakra-ui/react';
 import { GetStaticProps } from 'next';
-
-import { LightStyledLink } from '~/lundprod/components/styled-link';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { GuessThePalForm } from '~/lundprod/components/projects/guess-the-pal-form';
-import { Trans, useTranslation } from 'react-i18next';
+import { LightStyledLink } from '~/lundprod/components/styled-link';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {

@@ -1,6 +1,6 @@
 import { givenPointsForBirthday } from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
-import { AttachmentBuilder,ChatInputCommandInteraction } from 'discord.js';
+import { AttachmentBuilder, ChatInputCommandInteraction } from 'discord.js';
 
 import { generateDrawImage } from '../../helpers/canvas';
 import { invalidateWebsitePages } from '../../helpers/discordEvent';
@@ -18,7 +18,7 @@ async function hasBirthdayAndBeforeDate(discordId: string) {
   const birthdayThisYear = new Date(
     new Date().getFullYear(),
     birthday.birthdayMonth - 1,
-    birthday.birthdayDay
+    birthday.birthdayDay,
   );
 
   return birthdayThisYear.getTime() < Date.now();
@@ -51,7 +51,7 @@ export const join = async (interaction: ChatInputCommandInteraction) => {
     const user = await prisma.user.getPlayerWithInventory(userId);
 
     const cards = await drawCards(8);
-    const canvas = await generateDrawImage(interaction.user.username, cards);
+    const canvas = await generateDrawImage(interaction.user.globalName, cards);
     const attachment = new AttachmentBuilder(canvas.toBuffer(), {
       name: 'cards.png',
     });
@@ -69,7 +69,7 @@ export const join = async (interaction: ChatInputCommandInteraction) => {
   } catch (e) {
     console.log(e);
     return interaction.editReply(
-      'Une erreur est survenue lors de la création du compte'
+      'Une erreur est survenue lors de la création du compte',
     );
   }
 };

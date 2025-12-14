@@ -1,5 +1,4 @@
-import { Box, Card, CardBody, Heading, Image } from '@chakra-ui/react';
-import styled from '@emotion/styled';
+import { Card, CardBody, Heading, Image } from '@chakra-ui/react';
 import Link from 'next/link';
 
 type SocialNetworkCardProps = {

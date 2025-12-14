@@ -9,14 +9,14 @@ import {
   useBoolean,
 } from '@chakra-ui/react';
 import { prisma } from '@discord-bot-v2/prisma';
-import { useTranslation } from 'react-i18next';
 import { GetStaticProps } from 'next';
+import { useTranslation } from 'react-i18next';
 
 import { BotPresentation } from '../components/home/bot-presentation';
 import { GachaPresentation } from '../components/home/gacha-presentation';
+import { OtherProjectsPresentation } from '../components/home/other-projects-presentation';
 import { WebsitePresentation } from '../components/home/website-presentation';
 import { Welcome } from '../components/home/welcome';
-import { OtherProjectsPresentation } from '../components/home/other-projects-presentation';
 
 type IndexProps = {
   lundprodEmbedUrl: string;

@@ -10,6 +10,7 @@ import { pingCmd } from './ping';
 import { pollCmd } from './poll';
 import { pongCmd } from './pong';
 import { ppCmd } from './pp';
+import { roll6Cmd, roll20Cmd, roll100Cmd } from './roll';
 import { shifumiCmd } from './shifumi';
 import { tellmeCmd } from './tellme';
 
@@ -23,6 +24,9 @@ const commands = [
   pollCmd,
   pongCmd,
   ppCmd,
+  roll6Cmd,
+  roll20Cmd,
+  roll100Cmd,
   shifumiCmd,
   tellmeCmd,
 ];

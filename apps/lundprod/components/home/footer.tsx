@@ -4,30 +4,24 @@ import {
   Divider,
   Flex,
   Image,
-  Select,
   Text,
   useBreakpointValue,
 } from '@chakra-ui/react';
+import { ArrayElement } from '@discord-bot-v2/common';
 import styled from '@emotion/styled';
 
+import { useGetSocialNetworkCategoryName } from '~/lundprod/hooks/use-get-social-network-category-name';
 import { NetworkKey, networks } from '~/lundprod/utils/url';
 
 import { LightStyledLink } from '../styled-link';
-import { useGetSocialNetworkCategoryName } from '~/lundprod/hooks/use-get-social-network-category-name';
-import { supportedLanguages } from '@discord-bot-v2/translation';
-import { useTranslation } from 'react-i18next';
 
-type NetworkElement = (typeof networks)[NetworkKey][number];
+type NetworkElement = ArrayElement<(typeof networks)[NetworkKey]>;
 
 const InlineStyledLink = styled(LightStyledLink)`
   display: inline-block;
 `;
 
 export const Footer = () => {
-  const {
-    t,
-    i18n: { language, changeLanguage },
-  } = useTranslation();
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   return (
@@ -47,36 +41,31 @@ export const Footer = () => {
           display={{ base: 'block', md: 'flex' }}
         >
           {[
-            { category: 'global', networks: networks.global },
-            { category: 'divider', networks: [] },
-            { category: 'lundprod', networks: networks.lundprod },
-            { category: 'divider', networks: [] },
-            { category: 'lundprodGameDev', networks: networks.lundprodGameDev },
-          ].map(
-            (
-              networkBlock: {
-                category: NetworkKey | 'divider';
-                networks: NetworkElement[];
-              },
-              index,
-            ) => (
-              <Box key={index}>
-                {networkBlock.category === 'divider' ? (
-                  <Divider
-                    orientation="vertical"
-                    h="100%"
-                    w="1px"
-                    display={isMobile ? 'none' : 'block'}
-                  />
-                ) : (
-                  <FooterSocial
-                    category={networkBlock.category}
-                    networks={networkBlock.networks}
-                  />
-                )}
-              </Box>
-            ),
-          )}
+            { category: 'global' as const, networks: networks.global },
+            { category: 'divider' as const, networks: [] },
+            { category: 'lundprod' as const, networks: networks.lundprod },
+            { category: 'divider' as const, networks: [] },
+            {
+              category: 'lundprodGameDev' as const,
+              networks: networks.lundprodGameDev,
+            },
+          ].map((networkBlock, index) => (
+            <Box key={index}>
+              {networkBlock.category === 'divider' ? (
+                <Divider
+                  orientation="vertical"
+                  h="100%"
+                  w="1px"
+                  display={isMobile ? 'none' : 'block'}
+                />
+              ) : (
+                <FooterSocial
+                  category={networkBlock.category}
+                  networks={networkBlock.networks}
+                />
+              )}
+            </Box>
+          ))}
         </Box>
 
         <Text fontSize="10px" mt="15px">

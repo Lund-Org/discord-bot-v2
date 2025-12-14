@@ -1,35 +1,38 @@
+import { AddIcon } from '@chakra-ui/icons';
 import {
   Box,
-  Heading,
+  Button,
+  Center,
+  Show,
+  Spinner,
   Tab,
+  TabIndicator,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
 } from '@chakra-ui/react';
+import { Game, gameTypeMapping } from '@discord-bot-v2/igdb-front';
 import { prisma } from '@discord-bot-v2/prisma';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth/next';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { BacklogGameSearchView } from '~/lundprod/components/my-space/backlog/backlog-game-search-view';
-import { BacklogList } from '~/lundprod/components/my-space/backlog/backlog-list';
-import {
-  BacklogItemLight,
-  BacklogProvider,
-} from '~/lundprod/contexts/backlog-context';
-import {
-  backlogItemPrismaFields,
-  backlogItemReviewFields,
-  backlogItemReviewsPrismaFields,
-} from '~/lundprod/utils/api/backlog';
+import { AbandonedSection } from '~/lundprod/components/my-space/backlog/abandoned-section';
+import { CurrentlySection } from '~/lundprod/components/my-space/backlog/currently-section';
+import { FinishedSection } from '~/lundprod/components/my-space/backlog/finished-section';
+import { TodoSection } from '~/lundprod/components/my-space/backlog/todo-section';
+import { WishlistSection } from '~/lundprod/components/my-space/backlog/wishlist-section';
+import { SearchGameModal } from '~/lundprod/components/search-game-modal/search-game-modal';
+import { BacklogGame, useMe } from '~/lundprod/contexts/me.context';
+import { useErrorToast, useSuccessToast } from '~/lundprod/hooks/use-toast';
+import { MyPagesLayout } from '~/lundprod/layouts/MyPagesLayout';
+import { trpc } from '~/lundprod/utils/trpc';
 
 import { authOptions } from '../api/auth/[...nextauth]';
-import { useTranslation } from 'react-i18next';
-import { convertPrismaToBacklogItem } from '~/lundprod/utils/backlog';
 
-type PropsType = {
-  backlog: BacklogItemLight[];
-};
+type PropsType = object;
 
 export const getServerSideProps: GetServerSideProps<PropsType> = async ({
   req,
@@ -51,23 +54,6 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
       discordId: session.userId,
       isActive: true,
     },
-    select: {
-      backlogItems: {
-        select: {
-          ...backlogItemPrismaFields,
-          backlogItemReview: {
-            select: {
-              ...backlogItemReviewsPrismaFields,
-              pros: { select: { value: true } },
-              cons: { select: { value: true } },
-            },
-          },
-        },
-        orderBy: {
-          order: 'asc',
-        },
-      },
-    },
   });
 
   if (!user) {
@@ -79,50 +65,159 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
     };
   }
 
-  const backlogItems = user.backlogItems.map(convertPrismaToBacklogItem);
-
   return {
     props: {
-      backlog: backlogItems,
       session,
     },
   };
 };
 
-export function BacklogWrapper({ backlog }: PropsType) {
+export function BacklogWrapper() {
   const { t } = useTranslation();
-  const selected = {
-    color: 'orange.400',
-    borderBottomColor: 'orange.400',
+  const { backlog, isLoading } = useMe();
+  const queryClient = trpc.useUtils();
+  const successToast = useSuccessToast();
+  const errorToast = useErrorToast();
+
+  const [isSearchingGame, setIsSearchingGame] = useState(false);
+
+  const { mutateAsync: addBacklogItem, isPending: isAddBacklogItemPending } =
+    trpc.addBacklogItem.useMutation();
+  const {
+    mutateAsync: removeBacklogItem,
+    isPending: isRemoveBacklogItemPending,
+  } = trpc.removeBacklogItem.useMutation();
+
+  const isPending = isAddBacklogItemPending || isRemoveBacklogItemPending;
+
+  const onAddGame = async (game: Game) => {
+    try {
+      const { backlogItem } = await addBacklogItem({
+        gameId: game.id,
+        game_type: gameTypeMapping[game.game_type] || '',
+        name: game.name,
+        url: game.url,
+      });
+
+      queryClient.getMyBacklog.setData(
+        {},
+        (data: BacklogGame[] | undefined) => {
+          return data ? [...data, backlogItem] : [backlogItem];
+        },
+      );
+
+      successToast({
+        title: t('myBacklog.addGameSuccessTitle'),
+      });
+    } catch (err) {
+      errorToast({
+        title: t('myBacklog.addGameErrorTitle'),
+        description: t('myBacklog.addGameErrorDescription'),
+      });
+    }
+  };
+  const onRemoveGame = async (game: Game) => {
+    const item = backlog.find(({ igdbGameId }) => game.id === igdbGameId);
+
+    if (!item) {
+      return;
+    }
+
+    try {
+      await removeBacklogItem({
+        itemId: item.id,
+      });
+
+      queryClient.getMyBacklog.setData(
+        {},
+        (data: BacklogGame[] | undefined) => {
+          return (data || []).filter(({ id }) => item.id !== id);
+        },
+      );
+
+      successToast({
+        title: t('myBacklog.removeGameSuccessTitle'),
+      });
+    } catch (err) {
+      errorToast({
+        title: t('myBacklog.removeGameErrorTitle'),
+        description: t('myBacklog.removeGameErrorDescription'),
+      });
+    }
   };
 
   return (
-    <BacklogProvider backlog={backlog}>
-      <Box maxW="1200px" m="auto" py="30px" px="15px">
-        <Heading as="h1" variant="h1">
-          {t('mySpace.backlog.tabs.backlog')}
-        </Heading>
-        <Tabs>
+    <MyPagesLayout
+      title={t('myBacklog.title')}
+      actions={
+        <Button
+          colorScheme="orange"
+          leftIcon={<AddIcon />}
+          isLoading={isPending}
+          onClick={() => setIsSearchingGame(true)}
+        >
+          <Show above="md">{t('myBacklog.addGame')}</Show>
+        </Button>
+      }
+    >
+      {isLoading ? (
+        <Center>
+          <Spinner />
+        </Center>
+      ) : (
+        <Tabs
+          variant="unstyled"
+          isFitted
+          colorScheme="teal"
+          position="relative"
+        >
           <TabList>
-            <Tab _selected={selected} _active={{}}>
-              {t('mySpace.backlog.tabs.list')}
-            </Tab>
-            <Tab _selected={selected} _active={{}}>
-              {t('mySpace.backlog.tabs.findGame')}
-            </Tab>
+            <Tab>{t('myBacklog.tabs.backlog')}</Tab>
+            <Tab>{t('myBacklog.tabs.currently')}</Tab>
+            <Tab>{t('myBacklog.tabs.finished')}</Tab>
+            <Tab>{t('myBacklog.tabs.abandoned')}</Tab>
+            <Tab>{t('myBacklog.tabs.wishlist')}</Tab>
           </TabList>
-
-          <TabPanels>
+          <TabIndicator
+            mt="-2px"
+            height="3px"
+            bg="teal.400"
+            borderRadius="1px"
+          />
+          <Box h="1px" bg="teal.200" opacity={0.5} />
+          <TabPanels pt="20px">
             <TabPanel>
-              <BacklogList isReadOnly={false} />
+              <TodoSection openAddGameModal={() => setIsSearchingGame(true)} />
             </TabPanel>
             <TabPanel>
-              <BacklogGameSearchView />
+              <CurrentlySection />
+            </TabPanel>
+            <TabPanel>
+              <FinishedSection />
+            </TabPanel>
+            <TabPanel>
+              <AbandonedSection />
+            </TabPanel>
+            <TabPanel>
+              <WishlistSection />
             </TabPanel>
           </TabPanels>
         </Tabs>
-      </Box>
-    </BacklogProvider>
+      )}
+
+      {/*  */}
+      <SearchGameModal
+        isOpen={isSearchingGame}
+        onClose={() => setIsSearchingGame(false)}
+        onGameSelected={onAddGame}
+        onGameUnselected={onRemoveGame}
+        futureGame={false}
+        isGameSelected={(game: Game) =>
+          !!backlog.find(({ igdbGameId }) => game.id === igdbGameId)
+        }
+        isLoading={isPending}
+      />
+    </MyPagesLayout>
   );
 }
 

@@ -6,13 +6,13 @@ import {
   Switch,
   Text,
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { useGachaHome } from '~/lundprod/contexts/gacha-home-context';
 
 import Card from './card';
 import { EmptyView } from './empty-view';
 import { FusionDetails } from './fusion-details';
-import { useTranslation } from 'react-i18next';
 
 type CardPreviewContainerProps = BoxProps;
 

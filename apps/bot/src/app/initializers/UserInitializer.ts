@@ -15,11 +15,11 @@ export async function UserInitializer(client: Client) {
 
       await prisma.user.upsert({
         create: {
-          username: discordMember.user.username,
+          username: discordMember.user.globalName,
           discordId: discordMember.user.id,
         },
         update: {
-          username: discordMember.user.username,
+          username: discordMember.user.globalName,
         },
         where: { discordId: discordMember.user.id },
       });

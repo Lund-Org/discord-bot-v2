@@ -1,4 +1,4 @@
-import { IGDBConditionValue } from '../types';
+import { Filter, IGDBConditionValue } from '../types';
 import { QUERY_OPERATOR } from './constants';
 
 export class IGDBQueryBuilder {
@@ -101,6 +101,8 @@ export class IGDBQueryBuilder {
       conditionValue = `("${value.join('","')}")`;
     } else if (Array.isArray(value) && typeof value[0] === 'number') {
       conditionValue = `(${value.join(',')})`;
+    } else if (value === null) {
+      conditionValue = `null`;
     } else if (typeof value === 'string') {
       conditionValue = `"${value}"`;
     } else {
@@ -120,8 +122,27 @@ export class IGDBQueryBuilder {
     return this;
   }
 
-  orWhere(field: string, operator: QUERY_OPERATOR, value: IGDBConditionValue) {
+  orStatement(
+    field: string,
+    operator: QUERY_OPERATOR,
+    value: IGDBConditionValue,
+  ) {
     this.or((subQueryBuilder) => subQueryBuilder.where(field, operator, value));
+    return this;
+  }
+
+  orWhere(filters: Filter[]) {
+    const temporaryQueryBuilder = new IGDBQueryBuilder();
+
+    filters.forEach(({ field, operator, value }, index) => {
+      if (index === 0) {
+        temporaryQueryBuilder.where(field, operator, value);
+      } else {
+        temporaryQueryBuilder.orStatement(field, operator, value);
+      }
+    });
+
+    this.query += `& (${temporaryQueryBuilder.query})`;
     return this;
   }
 

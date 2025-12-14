@@ -1,5 +1,5 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import { AttachmentBuilder,ChatInputCommandInteraction } from 'discord.js';
+import { AttachmentBuilder, ChatInputCommandInteraction } from 'discord.js';
 
 import { generateDrawImage } from '../../helpers/canvas';
 
@@ -14,7 +14,7 @@ export const view = async (interaction: ChatInputCommandInteraction) => {
     },
   });
   if (cardToCreate) {
-    const canvas = await generateDrawImage(interaction.user.username, [
+    const canvas = await generateDrawImage(interaction.user.globalName, [
       { cardType: cardToCreate, isGold: false },
     ]);
     const attachment = new AttachmentBuilder(canvas.toBuffer(), {

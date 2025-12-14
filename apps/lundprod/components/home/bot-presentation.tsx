@@ -1,11 +1,11 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { Text } from '@chakra-ui/react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { illustrationFirmware } from '~/lundprod/assets';
 
 import { LightStyledLink } from '../styled-link';
 import { FullLinePresentation } from './full-line-presentation';
-import { Trans, useTranslation } from 'react-i18next';
 
 export const BotPresentation = () => {
   const { t } = useTranslation();

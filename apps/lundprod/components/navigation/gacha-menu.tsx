@@ -13,8 +13,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useClickAway, useMedia } from 'react-use';
 
+import { PROFILE_TABS } from '~/lundprod/constants/profile';
 import {
   getGachaRankingPage,
   getUserProfileUrl,
@@ -25,7 +27,6 @@ import {
 } from '~/lundprod/utils/url';
 
 import { MenuLink } from './styled-components';
-import { useTranslation } from 'react-i18next';
 
 export const GachaMenu = ({ onClick }: { onClick: () => void }) => {
   const { t } = useTranslation();
@@ -51,7 +52,7 @@ export const GachaMenu = ({ onClick }: { onClick: () => void }) => {
       ? [
           {
             label: t('menu.gacha.myPage'),
-            href: getUserProfileUrl(session.userId),
+            href: getUserProfileUrl(session.userId, PROFILE_TABS.GACHA),
             isActive: curry(isUserGachaPage)(session.userId),
           },
         ]

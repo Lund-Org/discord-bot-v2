@@ -13,8 +13,17 @@ type GachaPageListProps = {
 
 export const getStaticProps: GetStaticProps<GachaPageListProps> = async () => {
   const cardTypes = await prisma.cardType.findMany({
+    omit: {
+      createdAt: true,
+      updatedAt: true,
+    },
     include: {
-      fusionDependencies: true,
+      fusionDependencies: {
+        omit: {
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
     },
   });
 

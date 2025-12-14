@@ -7,6 +7,7 @@ import {
   BacklogStatus,
 } from '@prisma/client';
 import { TFunction } from 'i18next';
+
 import { BacklogItemFields, BacklogItemReviewFields } from './api/backlog';
 
 export enum TypeMap {
@@ -33,23 +34,6 @@ export function convertPrismaToBacklogItem(
     pros: item.backlogItemReview?.pros.map(({ value }) => value) || [],
     cons: item.backlogItemReview?.cons.map(({ value }) => value) || [],
   };
-}
-
-export function mapToCategory(value: TypeMap): GAME_TYPE[] {
-  switch (value) {
-    case TypeMap.GAME:
-      return [
-        GAME_TYPE.MAIN_GAME,
-        GAME_TYPE.REMAKE,
-        GAME_TYPE.REMASTER,
-        GAME_TYPE.PORT,
-        GAME_TYPE.EXPANDED_GAME,
-      ];
-    case TypeMap.DLC:
-      return [GAME_TYPE.DLC_ADDON, GAME_TYPE.EXPANSION];
-    default:
-      return [];
-  }
 }
 
 export function mapToTypeMap(categories: GAME_TYPE[]): TypeMap {

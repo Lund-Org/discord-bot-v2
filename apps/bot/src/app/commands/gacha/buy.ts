@@ -64,7 +64,7 @@ export const buy = async (interaction: ChatInputCommandInteraction) => {
   }
 
   const cards = await drawCards(cardToDraw.cardNumberToBuy);
-  const canvas = await generateDrawImage(interaction.user.username, cards);
+  const canvas = await generateDrawImage(interaction.user.globalName, cards);
   const attachment = new AttachmentBuilder(canvas.toBuffer(), {
     name: 'cards.png',
   });

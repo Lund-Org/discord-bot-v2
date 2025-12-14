@@ -4,7 +4,7 @@ import { getPlatformLabel } from '@discord-bot-v2/igdb-front';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
-import { useExpectedGame } from '~/lundprod/contexts/expected-games-context';
+import { useExpectedGame } from '~/lundprod/contexts/expected-games-context-deprecated';
 import { formatReleaseDate } from '~/lundprod/utils/dates';
 
 type ExpectedGamesListViewProps = {

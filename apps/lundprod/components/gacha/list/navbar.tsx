@@ -11,13 +11,13 @@ import {
   ModalOverlay,
   useBreakpointValue,
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { useGachaHome } from '~/lundprod/contexts/gacha-home-context';
 
 import { CardListElement } from '../card-list-element';
 import { FilterMenu } from '../filter-menu';
 import { CardPreviewContainer } from './card-preview-container';
-import { useTranslation } from 'react-i18next';
 
 export const Navbar = () => {
   const { t } = useTranslation();
@@ -47,6 +47,8 @@ export const Navbar = () => {
       flex={1}
       overflow="auto"
       maxH="calc(100vh - 70px)"
+      borderRight="1px solid"
+      borderColor="whiteAlpha.600"
     >
       <Box
         px={3}
@@ -64,7 +66,7 @@ export const Navbar = () => {
           <IconButton
             variant="outline"
             size="sm"
-            icon={<HamburgerIcon />}
+            icon={<HamburgerIcon color="whiteAlpha.900" />}
             aria-label="Filtre menu button"
             mr="5px"
             _hover={{ bg: 'gray.700' }}

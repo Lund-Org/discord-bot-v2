@@ -1,5 +1,6 @@
 import { Client } from 'discord.js';
 import { config as dotenvConfig } from 'dotenv';
+
 import { startBot } from './app';
 import { initCron } from './app/cron';
 

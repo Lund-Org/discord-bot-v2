@@ -1,40 +1,33 @@
-import {
-  Box,
-  Spinner,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-} from '@chakra-ui/react';
+import { Box, TabPanel, TabPanels } from '@chakra-ui/react';
 import {
   getCardsToFusion,
   getGlobalRanking,
   RankByUser,
 } from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
-import { GetStaticProps } from 'next';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { createServerSideHelpers } from '@trpc/react-query/server';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { getServerSession } from 'next-auth/next';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { BacklogList } from '~/lundprod/components/my-space/backlog/backlog-list';
-import { ExpectedGamesListView } from '~/lundprod/components/my-space/expected-games/expected-games-list-view';
-import { GachaTab } from '~/lundprod/components/profile/gacha-tab';
+import { BacklogView } from '~/lundprod/components/profile/backlog-view';
+import { ExpectedGamesView } from '~/lundprod/components/profile/expected-games-view';
+import { GachaView } from '~/lundprod/components/profile/gacha-view';
 import { GeneralInformation } from '~/lundprod/components/profile/general-informations';
-import {
-  BacklogItemLight,
-  BacklogProvider,
-} from '~/lundprod/contexts/backlog-context';
-import { ExpectedGameProvider } from '~/lundprod/contexts/expected-games-context';
-import { useFetcher } from '~/lundprod/hooks/useFetcher';
-import { ExpectedGame } from '~/lundprod/utils/api/expected-games';
+import { QueryTabs } from '~/lundprod/components/tabs';
+import { PROFILE_TABS } from '~/lundprod/constants/profile';
+import { AppRouter, appRouter, createContext } from '~/lundprod/server/trpc';
 import { getParam } from '~/lundprod/utils/next';
 import {
   CardsToGoldType,
   CardWithFusionDependencies,
   ProfileType,
 } from '~/lundprod/utils/types';
+
+import { authOptions } from '../api/auth/[...nextauth]';
 
 type UserProfilePageProps = {
   cardsToGold: CardsToGoldType;
@@ -43,27 +36,10 @@ type UserProfilePageProps = {
   fusions: CardWithFusionDependencies[];
 };
 
-export async function getStaticPaths() {
-  const users = await prisma.user.findMany({
-    include: {
-      player: true,
-    },
-    where: { isActive: true },
-  });
-
-  const paths = users
-    .filter(({ player }) => player)
-    .map((user) => ({
-      params: { discordId: user.discordId },
-    }));
-
-  return { paths, fallback: 'blocking' };
-}
-
-export const getStaticProps: GetStaticProps<UserProfilePageProps> = async (
-  context,
-) => {
-  const { params = {} } = context;
+export const getServerSideProps: GetServerSideProps<
+  UserProfilePageProps
+> = async ({ req, res, params = {} }) => {
+  const session = await getServerSession(req, res, authOptions);
   const discordId = getParam(params.discordId, '');
   const profile = await prisma.user.getProfile(discordId);
 
@@ -82,17 +58,58 @@ export const getStaticProps: GetStaticProps<UserProfilePageProps> = async (
     : [null];
   const fusions = await getCardsToFusion(discordId);
 
+  const helpers = createServerSideHelpers<AppRouter>({
+    router: appRouter,
+    ctx: await createContext({ session }),
+  });
+
+  const queryClient = new QueryClient();
+
+  const page = parseInt(getParam(params.page, '1'), 10);
+  const status = getParam(params.status, '');
+  const tab = getParam(params.tab, 'expected-games');
+
+  await Promise.all([
+    helpers.getBacklog.prefetch({
+      discordId,
+      category: 'ABANDONED',
+      page: status === 'ABANDONED' ? page : 1,
+    }),
+    helpers.getBacklog.prefetch({
+      discordId,
+      category: 'BACKLOG',
+      page: status === 'BACKLOG' ? page : 1,
+    }),
+    helpers.getBacklog.prefetch({
+      discordId,
+      category: 'CURRENTLY',
+      page: status === 'CURRENTLY' ? page : 1,
+    }),
+    helpers.getBacklog.prefetch({
+      discordId,
+      category: 'FINISHED',
+      page: status === 'FINISHED' ? page : 1,
+    }),
+    helpers.getBacklog.prefetch({
+      discordId,
+      category: 'WISHLIST',
+      page: status === 'WISHLIST' ? page : 1,
+    }),
+    helpers.getExpectedGames.prefetch({
+      discordId,
+      page: tab === PROFILE_TABS.EXPECTED_GAMES ? page : 1,
+    }),
+  ]);
+
   return {
-    // Next.js will attempt to re-generate the page:
-    // - When a request comes in
-    // - At most once every hour
-    revalidate: 3600, // In seconds
     // Passed to the page component as props
     props: {
       profile: JSON.parse(JSON.stringify(profile)),
-      cardsToGold,
+      cardsToGold: JSON.parse(JSON.stringify(cardsToGold)),
       rank: rank ? JSON.parse(JSON.stringify(rank)) : null,
-      fusions,
+      fusions: JSON.parse(JSON.stringify(fusions)),
+      trpcState: helpers.dehydrate(),
+      dehydratedState: dehydrate(queryClient),
     },
   };
 };
@@ -104,100 +121,64 @@ export function UserProfilePage({
   fusions,
 }: UserProfilePageProps) {
   const { t } = useTranslation();
-  const { query } = useRouter();
-  const [isLoadingBacklog, setIsLoadingBacklog] = useState(true);
-  const [isLoadingExpectedGames, setIsLoadingExpectedGames] = useState(true);
-  const [initialBacklog, setInitialBacklog] = useState<BacklogItemLight[]>([]);
-  const [expectedGames, setExpectedGames] = useState<ExpectedGame[]>([]);
-  const selected = {
-    color: 'orange.400',
-    borderBottomColor: 'orange.400',
-  };
-  const { get } = useFetcher();
-
-  const [tabIndex, setTabIndex] = useState(profile.player ? 0 : 1);
+  const { query, replace } = useRouter();
 
   useEffect(() => {
     if (query.igdbGameId) {
-      setTabIndex(1);
+      const url = new URL(document.location.href);
+
+      url.searchParams.set('tab', PROFILE_TABS.BACKLOG);
+
+      replace(url);
     }
-  }, [query.igdbGameId]);
-
-  useEffect(() => {
-    get(`/api/backlog/list/${profile.discordId}`)
-      .then((response) => {
-        setInitialBacklog(response.backlogItems);
-      })
-      .catch((err) => {
-        console.error(err);
-        setInitialBacklog([]);
-      })
-      .finally(() => setIsLoadingBacklog(false));
-    get(`/api/expected-games/list/${profile.discordId}`)
-      .then((response) => {
-        setExpectedGames(response.expectedGames);
-      })
-      .catch((err) => {
-        console.error(err);
-        setExpectedGames([]);
-      })
-      .finally(() => setIsLoadingExpectedGames(false));
-  }, [get, profile]);
-
-  const loader = (
-    <Spinner
-      thickness="4px"
-      speed="0.65s"
-      emptyColor="gray.200"
-      color="orange.400"
-      size="xl"
-    />
-  );
+  }, [query.igdbGameId, replace]);
 
   return (
-    <Box px="20px" pb="50px" pt="20px" color="gray.300">
-      <GeneralInformation profile={profile} rank={rank} />
-      <Tabs mt={6} index={tabIndex} onChange={(index) => setTabIndex(index)}>
-        <TabList>
-          <Tab _selected={selected} _active={{}} isDisabled={!profile.player}>
-            {t('userPage.gacha')}
-          </Tab>
-          <Tab _selected={selected} _active={{}}>
-            {t('userPage.backlog')}
-          </Tab>
-          <Tab _selected={selected} _active={{}}>
-            {t('userPage.expectedGames')}
-          </Tab>
-        </TabList>
-
+    <Box px="20px" pb="50px" pt="20px" maxW="1600px" mx="auto" color="gray.300">
+      <GeneralInformation profile={profile} />
+      <QueryTabs
+        queryName={'tab'}
+        values={Object.values(PROFILE_TABS)}
+        tabs={{
+          [PROFILE_TABS.BACKLOG]: t('userPage.backlog'),
+          [PROFILE_TABS.EXPECTED_GAMES]: t('userPage.expectedGames'),
+          [PROFILE_TABS.GACHA]: t('userPage.gacha'),
+        }}
+        defaultValue={PROFILE_TABS.BACKLOG}
+        tabsProps={{ mt: 6 }}
+        tabProps={(value) => ({
+          ...(value === PROFILE_TABS.GACHA
+            ? {
+                isDisabled: !profile.player,
+              }
+            : {}),
+          _selected: {
+            color: 'orange.400',
+            borderBottomColor: 'orange.400',
+          },
+          _active: {},
+        })}
+      >
         <TabPanels>
           <TabPanel>
-            <GachaTab
-              profile={profile}
-              cardsToGold={cardsToGold}
-              fusions={fusions}
+            <BacklogView
+              username={profile.username}
+              discordId={profile.discordId}
             />
           </TabPanel>
           <TabPanel>
-            {isLoadingBacklog ? (
-              loader
-            ) : (
-              <BacklogProvider backlog={initialBacklog}>
-                <BacklogList userName={profile.username} isReadOnly />
-              </BacklogProvider>
-            )}
+            <ExpectedGamesView />
           </TabPanel>
           <TabPanel>
-            {isLoadingExpectedGames ? (
-              loader
-            ) : (
-              <ExpectedGameProvider expectedGames={expectedGames}>
-                <ExpectedGamesListView readOnly />
-              </ExpectedGameProvider>
-            )}
+            <GachaView
+              profile={profile}
+              cardsToGold={cardsToGold}
+              fusions={fusions}
+              rank={rank}
+            />
           </TabPanel>
         </TabPanels>
-      </Tabs>
+      </QueryTabs>
     </Box>
   );
 }

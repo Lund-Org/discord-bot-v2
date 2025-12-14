@@ -1,12 +1,20 @@
+import { Game, getGames } from '@discord-bot-v2/igdb';
 import { prisma } from '@discord-bot-v2/prisma';
+import { BacklogItem, BacklogStatus, User as DBUser } from '@prisma/client';
 import {
   Client,
+  Collection,
   Events,
+  Guild,
+  GuildBasedChannel,
   Message,
   MessageReaction,
+  OmitPartialGroupDMChannel,
+  PartialMessage,
   Partials,
   User,
 } from 'discord.js';
+import { createWriteStream } from 'fs';
 
 import { buttonsCallback, commandsResponses, menusCallback } from './commands';
 import { initCommands } from './commands/initializer';
@@ -53,11 +61,11 @@ export const startBot = (): Promise<Client> => {
     client.on(Events.GuildMemberAdd, async (discordMember) => {
       await prisma.user.upsert({
         create: {
-          username: discordMember.user.username,
+          username: discordMember.user.globalName,
           discordId: discordMember.user.id,
         },
         update: {
-          username: discordMember.user.username,
+          username: discordMember.user.globalName,
           isActive: true,
         },
         where: { discordId: discordMember.user.id },
@@ -70,6 +78,15 @@ export const startBot = (): Promise<Client> => {
           isActive: false,
         },
         where: { discordId: discordMember.user.id },
+      });
+    });
+
+    client.on(Events.UserUpdate, async (user) => {
+      await prisma.user.update({
+        data: {
+          username: user.globalName,
+        },
+        where: { discordId: user.id },
       });
     });
 
@@ -90,22 +107,28 @@ export const startBot = (): Promise<Client> => {
       }
     });
 
-    client.on(Events.MessageUpdate, async (msg: Message) => {
-      for (const handler of updateHandlers) {
-        const validation = await handler.validate(client, msg);
+    client.on(
+      Events.MessageUpdate,
+      async (
+        oldMessage: OmitPartialGroupDMChannel<Message | PartialMessage>,
+        newMessage: OmitPartialGroupDMChannel<Message>,
+      ) => {
+        for (const handler of updateHandlers) {
+          const validation = await handler.validate(client, newMessage);
 
-        if (validation) {
-          try {
-            const result = await handler.process(client, msg);
-            if (result) {
-              break;
+          if (validation) {
+            try {
+              const result = await handler.process(client, newMessage);
+              if (result) {
+                break;
+              }
+            } catch (e) {
+              console.error(e);
             }
-          } catch (e) {
-            console.error(e);
           }
         }
-      }
-    });
+      },
+    );
 
     client.on(Events.MessageReactionAdd, async (reaction, user) => {
       let fullReaction: MessageReaction;
@@ -162,6 +185,220 @@ export const startBot = (): Promise<Client> => {
       }
     });
 
+    // To delete once import is done
+    client.on(Events.ClientReady, async () => {
+      const servers: Collection<string, Guild> = client.guilds.cache;
+
+      if (
+        process.env.IMPORT_BACKLOG_CHANNEL_ID &&
+        process.env.IMPORT_BACKLOG_BOT_ID
+      ) {
+        await processServer(servers.at(0));
+      }
+    });
+
     return client.login(process.env.BOT_TOKEN).then(() => client);
   });
 };
+
+async function processServer(server: Guild) {
+  const importFile = createWriteStream('/tmp/discord-import.log', {
+    encoding: 'utf8',
+  });
+  const backlogChannelId = process.env.IMPORT_BACKLOG_CHANNEL_ID;
+  const batchSize = 100;
+  const operations: Array<{
+    game: Game;
+    backlogItem: BacklogItem & { user: DBUser };
+    status: BacklogStatus;
+    ts: number;
+  }> = [];
+
+  const webhookChannel = server.channels.cache.find(
+    (channel: GuildBasedChannel) => {
+      return channel.id === backlogChannelId;
+    },
+  );
+
+  if (!webhookChannel || !webhookChannel.isTextBased()) {
+    importFile.write('Channel not found\n');
+    return;
+  }
+
+  let lastId: string | null = null;
+  let list: Collection<string, Message<true>> | null = null;
+
+  do {
+    importFile.write('Start fetching !\n');
+    list = await webhookChannel.messages.fetch({
+      before: lastId || undefined,
+      limit: batchSize,
+    });
+
+    for (const message of list.values()) {
+      if (isBacklogMsg(message)) {
+        const { title, status, discordId } = getBacklogFields(message);
+
+        if (title && status && discordId) {
+          const user = await prisma.user.findUnique({
+            where: { discordId },
+            include: { backlogItems: { include: { user: true } } },
+          });
+          const games = await getGames(title.value, []);
+
+          const { backlogItem, game } = getMatchingGame(user, games);
+
+          if (backlogItem && game) {
+            importFile.write(
+              `${JSON.stringify({
+                backlogItemId: backlogItem.id,
+                gameId: game.id,
+                status,
+                ts: message.createdTimestamp,
+                userId: user.id,
+              })}\n`,
+            );
+            operations.push({
+              backlogItem,
+              game,
+              status,
+              ts: message.createdTimestamp,
+            });
+          } else {
+            importFile.write(
+              `Game not found - ${title.value} for user ${discordId}\n`,
+            );
+          }
+        } else {
+          importFile.write(
+            'Not a backlog status change or not matching anything\n',
+          );
+        }
+      }
+    }
+
+    lastId = list.last().id;
+  } while (list.size === batchSize);
+
+  await applyDBOperations(operations.reverse());
+
+  importFile.write('FINISHED !\n');
+}
+
+function isBacklogMsg(message: Message) {
+  const backlogBotId = process.env.IMPORT_BACKLOG_BOT_ID;
+
+  return (
+    message.author.id === backlogBotId &&
+    message.embeds[0]?.title === 'Mise à jour du backlog'
+  );
+}
+
+function getBacklogFields(message: Message) {
+  const wordingMapping = {
+    'a abandonné le jeu': BacklogStatus.ABANDONED,
+    'a fini le jeu': BacklogStatus.FINISHED,
+    'a remis le jeu dans son backlog': BacklogStatus.BACKLOG,
+    'a commencé le jeu': BacklogStatus.CURRENTLY,
+  };
+
+  const title = message.embeds[0]?.fields.find(({ name }) => name === 'Titre');
+  const status = message.embeds[0]?.fields.find(
+    ({ name }) => name === 'Statut',
+  );
+  const url = message.embeds[0]?.fields.find(
+    ({ name }) => name === 'URL du profil',
+  );
+
+  const urlMatch = url?.value.match(/\/u\/([A-Za-z0-9]+)/);
+  const statusValue = status
+    ? wordingMapping[status.value.toLowerCase()]
+    : null;
+
+  return {
+    title,
+    status: statusValue,
+    discordId: urlMatch && urlMatch[1] ? urlMatch[1] : null,
+  };
+}
+
+function getMatchingGame(
+  user: (DBUser & { backlogItems: (BacklogItem & { user: DBUser })[] }) | null,
+  games: Game[],
+) {
+  const gameIndex = games.findIndex(({ id }) => {
+    return user?.backlogItems.find(({ igdbGameId }) => id === igdbGameId);
+  });
+  const backlogItemIndex =
+    gameIndex === -1
+      ? null
+      : user?.backlogItems.findIndex(
+          ({ igdbGameId }) => games[gameIndex].id === igdbGameId,
+        );
+
+  return {
+    game: gameIndex === -1 ? null : games[gameIndex],
+    gameIndex,
+    backlogItem:
+      backlogItemIndex === -1 ? null : user.backlogItems[backlogItemIndex],
+    backlogItemIndex,
+  };
+}
+
+async function applyDBOperations(
+  operations: Array<{
+    game: Game;
+    backlogItem: BacklogItem & { user: DBUser };
+    status: BacklogStatus;
+    ts: number;
+  }>,
+) {
+  for (const operation of operations) {
+    switch (operation.status) {
+      case BacklogStatus.BACKLOG: {
+        await prisma.backlogItem.update({
+          where: { id: operation.backlogItem.id },
+          data: {
+            startedAt: null,
+            finishedAt: null,
+            abandonedAt: null,
+            wishlistAt: null,
+            createdAt: new Date(operation.ts),
+          },
+        });
+        break;
+      }
+      case BacklogStatus.ABANDONED: {
+        await prisma.backlogItem.update({
+          where: { id: operation.backlogItem.id },
+          data: {
+            finishedAt: null,
+            abandonedAt: new Date(operation.ts),
+          },
+        });
+        break;
+      }
+      case BacklogStatus.CURRENTLY: {
+        await prisma.backlogItem.update({
+          where: { id: operation.backlogItem.id },
+          data: {
+            finishedAt: null,
+            abandonedAt: null,
+            startedAt: new Date(operation.ts),
+          },
+        });
+        break;
+      }
+      case BacklogStatus.FINISHED: {
+        await prisma.backlogItem.update({
+          where: { id: operation.backlogItem.id },
+          data: {
+            finishedAt: new Date(operation.ts),
+            abandonedAt: null,
+          },
+        });
+        break;
+      }
+    }
+  }
+}

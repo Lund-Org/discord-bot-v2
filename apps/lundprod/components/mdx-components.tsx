@@ -73,7 +73,7 @@ const titleCommonProps: (
   };
 };
 
-const BlockQuote = ({ children }: { children: ReactNode }) => (
+const BlockQuote = ({ children }: { children?: ReactNode }) => (
   <Box
     as="blockquote"
     color="gray.300"
@@ -95,17 +95,17 @@ const CdnImage = ({
     {...rest}
   />
 );
-const Code = ({ children }: { children: ReactNode }) => (
+const Code = ({ children }: { children?: ReactNode }) => (
   <ChakraCode px={2} py={0} textIndent={0}>
     {children}
   </ChakraCode>
 );
-const Em = ({ children }: { children: ReactNode }) => (
+const Em = ({ children }: { children?: ReactNode }) => (
   <Text as="em" fontStyle="italic">
     {children}
   </Text>
 );
-const H1 = ({ children }: { children: ReactNode }) => {
+const H1 = ({ children }: { children?: ReactNode }) => {
   const { push } = useRouter();
 
   return (
@@ -114,7 +114,7 @@ const H1 = ({ children }: { children: ReactNode }) => {
     </Heading>
   );
 };
-const H2 = ({ children }: { children: ReactNode }) => {
+const H2 = ({ children }: { children?: ReactNode }) => {
   const { push } = useRouter();
 
   return (
@@ -123,7 +123,7 @@ const H2 = ({ children }: { children: ReactNode }) => {
     </Heading>
   );
 };
-const H3 = ({ children }: { children: ReactNode }) => {
+const H3 = ({ children }: { children?: ReactNode }) => {
   const { push } = useRouter();
 
   return (
@@ -132,7 +132,7 @@ const H3 = ({ children }: { children: ReactNode }) => {
     </Heading>
   );
 };
-const H4 = ({ children }: { children: ReactNode }) => {
+const H4 = ({ children }: { children?: ReactNode }) => {
   const { push } = useRouter();
 
   return (
@@ -141,7 +141,7 @@ const H4 = ({ children }: { children: ReactNode }) => {
     </Heading>
   );
 };
-const H5 = ({ children }: { children: ReactNode }) => {
+const H5 = ({ children }: { children?: ReactNode }) => {
   const { push } = useRouter();
 
   return (
@@ -150,7 +150,7 @@ const H5 = ({ children }: { children: ReactNode }) => {
     </Heading>
   );
 };
-const H6 = ({ children }: { children: ReactNode }) => {
+const H6 = ({ children }: { children?: ReactNode }) => {
   const { push } = useRouter();
 
   return (
@@ -160,13 +160,19 @@ const H6 = ({ children }: { children: ReactNode }) => {
   );
 };
 const MdxHr = () => <Divider my="25px" />;
-const MdxLink = ({ href, children }: { href: string; children: ReactNode }) => (
+const MdxLink = ({
+  href,
+  children,
+}: {
+  href?: string;
+  children?: ReactNode;
+}) => (
   <StyledLink href={href} target="_blank" rel="noreferrer noopener">
     {children}
     <ExternalLinkIcon ml="3px" verticalAlign="baseline" mb="-2px" />
   </StyledLink>
 );
-const Pre = ({ children }: { children: ReactNode }) => (
+const Pre = ({ children }: { children?: ReactNode }) => (
   <Box
     as="pre"
     whiteSpace="pre"
@@ -176,32 +182,32 @@ const Pre = ({ children }: { children: ReactNode }) => (
     {children}
   </Box>
 );
-const Strong = ({ children }: { children: ReactNode }) => (
+const Strong = ({ children }: { children?: ReactNode }) => (
   <Text as="strong" fontWeight="bold">
     {children}
   </Text>
 );
-const MdxText = ({ children }: { children: ReactNode }) => (
+const MdxText = ({ children }: { children?: ReactNode }) => (
   <Text textIndent="30px" my="15px" textAlign="justify">
     {children}
   </Text>
 );
-const MdxTable = ({ children }: { children: ReactNode }) => {
+const MdxTable = ({ children }: { children?: ReactNode }) => {
   return <Table>{children}</Table>;
 };
-const MdxTbody = ({ children }: { children: ReactNode }) => {
+const MdxTbody = ({ children }: { children?: ReactNode }) => {
   return <Tbody>{children}</Tbody>;
 };
-const MdxThead = ({ children }: { children: ReactNode }) => {
+const MdxThead = ({ children }: { children?: ReactNode }) => {
   return <Thead>{children}</Thead>;
 };
-const MdxTh = ({ children }: { children: ReactNode }) => {
+const MdxTh = ({ children }: { children?: ReactNode }) => {
   return <Th color="orange.300">{children}</Th>;
 };
-const MdxTr = ({ children }: { children: ReactNode }) => {
+const MdxTr = ({ children }: { children?: ReactNode }) => {
   return <Tr>{children}</Tr>;
 };
-const MdxTd = ({ children }: { children: ReactNode }) => {
+const MdxTd = ({ children }: { children?: ReactNode }) => {
   return <Td>{children}</Td>;
 };
 

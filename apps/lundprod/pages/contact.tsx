@@ -2,8 +2,8 @@ import { Box, Flex, Heading } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
 import { SocialNetworkCard } from '../components/home/social-network-card';
-import { NetworkKey, networks } from '../utils/url';
 import { useGetSocialNetworkCategoryName } from '../hooks/use-get-social-network-category-name';
+import { NetworkKey, networks } from '../utils/url';
 
 export function Contact() {
   const { t } = useTranslation();

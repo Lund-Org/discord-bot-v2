@@ -7,13 +7,14 @@ import {
   socialTwitch,
   socialYoutube,
 } from '../assets';
+import { PROFILE_TABS } from '../constants/profile';
 
 export function getGachaRankingPage() {
   return '/gacha/ranking';
 }
 
-export function getUserProfileUrl(id: string) {
-  return `/u/${id}`;
+export function getUserProfileUrl(id: string, tab?: PROFILE_TABS) {
+  return `/u/${id}${tab ? `?tab=${tab}` : ''}`;
 }
 
 export function getUserListUrl() {
@@ -108,6 +109,6 @@ export const networks = {
       url: 'https://mystilund.itch.io/',
     },
   ],
-} as const;
+};
 
 export type NetworkKey = keyof typeof networks;

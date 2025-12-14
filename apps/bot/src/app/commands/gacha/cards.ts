@@ -30,7 +30,7 @@ async function paginateMessage({
 
 function buildSnippet(
   username: string,
-  cardInventories: (PlayerInventory & { cardType: CardType })[]
+  cardInventories: (PlayerInventory & { cardType: CardType })[],
 ) {
   const snippet = new EmbedBuilder({
     title: `Liste des cartes de ${username} :`,
@@ -76,11 +76,11 @@ export const cards = async (interaction: ChatInputCommandInteraction) => {
 
   if (!tenFirstCards.length) {
     return interaction.editReply(
-      "Aucune carte n'est présente dans l'inventaire"
+      "Aucune carte n'est présente dans l'inventaire",
     );
   }
 
-  const snippet = buildSnippet(interaction.user.username, tenFirstCards);
+  const snippet = buildSnippet(interaction.user.globalName, tenFirstCards);
   await interaction.editReply({ embeds: [snippet] });
   const inventoryMessage = (await interaction.fetchReply()) as Message;
 
@@ -95,7 +95,7 @@ export const cards = async (interaction: ChatInputCommandInteraction) => {
 export const updateMessage = async (
   pagination: Pagination,
   reaction: MessageReaction,
-  discordUser: User
+  discordUser: User,
 ) => {
   const user = await prisma.user.findFirst({
     where: { discordId: discordUser.id, isActive: true },
@@ -123,7 +123,7 @@ export const updateMessage = async (
 
   const snippet = buildSnippet(
     discordUser.username,
-    user.player.playerInventory
+    user.player.playerInventory,
   );
 
   await reaction.message.edit({ embeds: [snippet] });

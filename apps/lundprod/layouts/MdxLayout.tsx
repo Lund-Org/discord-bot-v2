@@ -8,13 +8,13 @@ import {
 import type { BlogPost, Tag } from '@prisma/client';
 import Link from 'next/link';
 import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { BlogFooter } from '../components/blog/blog-footer';
 import { BlogHeader } from '../components/blog/blog-header';
 import { getTitleFromFilename } from '../utils/blog';
-import { useTranslation } from 'react-i18next';
 
-type MdxLayoutProps = {
+export type MdxLayoutProps = {
   children: ReactNode;
   blogPost: BlogPost & { tags: Tag[] };
 };

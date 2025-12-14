@@ -1,10 +1,10 @@
 import { SmallCloseIcon, StarIcon } from '@chakra-ui/icons';
 import { Box, Flex, IconButton, Image, Text } from '@chakra-ui/react';
-import { FieldArrayWithId } from 'react-hook-form';
+
 import { AwardForm } from '~/lundprod/types/awards';
 
 type AwardGameProps = {
-  game: FieldArrayWithId<AwardForm, 'awards.0.games', 'id'>;
+  game: AwardForm['awards'][number]['games'][number];
   onDelete: VoidFunction;
   isBest: boolean;
   onClick: (value: boolean) => void;
@@ -49,8 +49,8 @@ export const AwardGame = ({
         borderRadius={4}
         cursor="pointer"
       >
-        <Image src={game.image} maxW="50px" mx="auto" />
-        <Text color={isBest ? 'black' : 'white'}>{game.label}</Text>
+        {!!game.cover && <Image src={game.cover.url} maxW="50px" mx="auto" />}
+        <Text color={isBest ? 'black' : 'white'}>{game.name}</Text>
       </Flex>
       {isBest && (
         <Flex mt="5px" gap={2} alignItems="center" justifyContent="center">

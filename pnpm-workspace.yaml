@@ -1,7 +1,14 @@
-# https://pnpm.io/pnpm-workspace_yaml
-
 packages:
-  # exclude these folders
   - '!**/dist/**'
   - '!**/tmp/**'
   - '!**/node_modules/**'
+
+onlyBuiltDependencies:
+  - '@prisma/client'
+  - '@prisma/engines'
+  - canvas
+  - core-js
+  - esbuild
+  - nx
+  - prisma
+  - unrs-resolver

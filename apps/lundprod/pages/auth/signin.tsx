@@ -3,11 +3,11 @@ import styled from '@emotion/styled';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { getProviders, signIn } from 'next-auth/react';
+import { useTranslation } from 'react-i18next';
 
 import { LightStyledLink } from '~/lundprod/components/styled-link';
-import { networks } from '~/lundprod/utils/url';
-import { useTranslation } from 'react-i18next';
 import { getErrorMessage } from '~/lundprod/utils/auth';
+import { networks } from '~/lundprod/utils/url';
 
 type Providers = Awaited<ReturnType<typeof getProviders>>;
 
@@ -41,13 +41,13 @@ export default function SignIn({ providers }: SignInProps) {
   const { query } = useRouter();
   const discordNetwork = networks.lundprod.find(
     (network) => network.title === 'Discord',
-  );
+  )!;
 
   return (
     <Box maxW="500px" mx="auto" mt="50px">
       <Fieldset>
         <Legend>{t('auth.login')}</Legend>
-        {Object.values(providers).map((provider) => (
+        {Object.values(providers || {}).map((provider) => (
           <Box key={provider.name}>
             <Button
               variant="outline"

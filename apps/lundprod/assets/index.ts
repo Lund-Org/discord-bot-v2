@@ -3,6 +3,7 @@ export { default as fusionIcon } from './fusion.svg';
 export { default as illustrationBookReading } from './illustration-book-reading.svg';
 export { default as illustrationCodeThinking } from './illustration-code-thinking.svg';
 export { default as illustrationFirmware } from './illustration-firmware.svg';
+export { default as illustrationNotFound } from './illustration-not-found.svg';
 export { default as illustrationPlayingCards } from './illustration-playing-cards.svg';
 export { default as illustrationSketching } from './illustration-sketching.svg';
 export { default as illustrationTrip } from './illustration-trip.svg';

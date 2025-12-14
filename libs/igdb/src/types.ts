@@ -1,6 +1,16 @@
 import { ValueOf } from '@discord-bot-v2/common';
 
-import { gameTypeMapping } from './lib/constants';
+import { gameTypeMapping, QUERY_OPERATOR } from './lib/constants';
+
+export type Filter = {
+  field: string;
+  operator: QUERY_OPERATOR;
+  value: IGDBConditionValue;
+};
+
+export type OrFilter = {
+  or: Filter[];
+};
 
 export enum GAME_TYPE {
   MAIN_GAME = 0,
@@ -46,7 +56,7 @@ export type Game = {
   id: number;
   name: string;
   cover?: {
-    id: string;
+    id: number;
     url: string;
   };
   status?: GAME_STATUS;
@@ -61,7 +71,7 @@ export type Game = {
   }>;
   release_dates?: Array<{
     id: number;
-    date: number;
+    date?: number;
     release_region?: REGION;
     human: string;
     platform: {
@@ -75,7 +85,7 @@ export type LightGame = Pick<Game, 'id' | 'name'>;
 
 export type GameTypeTranslation = ValueOf<typeof gameTypeMapping> | 'Autre';
 
-export type IGDBConditionValue = string[] | number[] | string | number;
+export type IGDBConditionValue = string[] | number[] | string | number | null;
 
 export type Webhook = {
   id: number;

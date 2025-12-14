@@ -2,6 +2,11 @@
   "root": true,
   "ignorePatterns": ["**/*"],
   "plugins": ["@nx", "import", "simple-import-sort", "unused-imports"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime"
+  ],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
@@ -32,7 +37,10 @@
     {
       "files": ["*.ts", "*.tsx"],
       "extends": ["plugin:@nx/typescript"],
-      "rules": {}
+      "rules": {
+        "no-unused-vars": "off",
+        "quotes": "off"
+      }
     },
     {
       "files": ["*.js", "*.jsx"],

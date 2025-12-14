@@ -39,7 +39,7 @@ export const BlogHeader = ({ title, blogPost }: BlogHeaderProps) => (
       <Text>{blogPost.description}</Text>
     </Box>
     <Box textAlign="right" mb="20px">
-      {blogPost.tags.map((tag, index) => (
+      {blogPost.tags.map((tag) => (
         <Tag size="sm" colorScheme="blue" key={tag.id}>
           {tag.name}
         </Tag>

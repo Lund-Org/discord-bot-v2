@@ -148,7 +148,7 @@ export const gift = async (interaction: ChatInputCommandInteraction) => {
 
   if (unionCards.length) {
     const canvas = await generateDrawImage(
-      interaction.user.username,
+      interaction.user.globalName,
       unionCards,
     );
     attachment = new AttachmentBuilder(canvas.toBuffer(), {

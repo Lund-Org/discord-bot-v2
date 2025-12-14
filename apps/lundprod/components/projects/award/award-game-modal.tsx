@@ -1,7 +1,7 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import {
-  Box,
   Button,
+  chakra,
   Flex,
   FormControl,
   FormErrorMessage,
@@ -25,18 +25,18 @@ import {
   Th,
   Thead,
   Tr,
-  chakra,
   useBoolean,
 } from '@chakra-ui/react';
 import {
+  Game as IGDBGame,
   GAME_PER_PAGE,
   GAME_TYPE,
-  Game as IGDBGame,
   QUERY_OPERATOR,
 } from '@discord-bot-v2/igdb-front';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+
 import { useFetcher } from '~/lundprod/hooks/useFetcher';
 import { Game } from '~/lundprod/types/awards';
 
@@ -117,7 +117,9 @@ export const AwardGameModal = ({ onSave, onClose }: AwardGameModalProps) => {
     cover: string | undefined,
     name: string,
   ) => {
-    submit({ game: { igdb: id, image: cover, label: name, isBest: false } });
+    submit({
+      game: { igdb: id, image: cover || '', label: name, isBest: false },
+    });
   };
 
   const submit = ({ game }: { game: Game }) => {
@@ -185,6 +187,7 @@ export const AwardGameModal = ({ onSave, onClose }: AwardGameModalProps) => {
                     <Tbody>
                       {data.map(({ id, cover, name }) => (
                         <Tr
+                          key={id}
                           sx={
                             id.toString() === selectedGameId
                               ? {
