@@ -124,12 +124,12 @@ const CustomApp: AppType = ({
           </SessionProvider>
         </QueryClientProvider>
       </main>
-      {!!process.env.NX_GOOGLE_ANALYTICS_ID && (
+      {!!process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID && (
         <>
           {/* Google tag (gtag.js) */}
           <Script
             async
-            src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NX_GOOGLE_ANALYTICS_ID}`}
+            src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}`}
           />
           <Script
             id="analytics"
@@ -138,7 +138,7 @@ const CustomApp: AppType = ({
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
-        gtag('config', '${process.env.NX_GOOGLE_ANALYTICS_ID}');`,
+        gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}');`,
             }}
           />
         </>

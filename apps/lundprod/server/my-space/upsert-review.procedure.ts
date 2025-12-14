@@ -181,7 +181,7 @@ function webhookNotification(user: User, backlogItem: BacklogItemType) {
   const webhookClient = new WebhookClient({
     url: process.env.BACKLOG_WEBHOOK || '',
   });
-  const url = `${process.env.WEBSITE_URL}${getUserProfileUrl(
+  const url = `${process.env.NEXT_PUBLIC_WEBSITE_URL}${getUserProfileUrl(
     user.discordId,
   )}?igdbGameId=${backlogItem.igdbGameId}`;
   const embed = new EmbedBuilder()

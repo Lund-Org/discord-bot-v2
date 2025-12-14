@@ -42,7 +42,7 @@ export default async function publishBlogPosts(
   embed.addFields({ name: 'Titre', value: getTitleFromFilename(filename) });
   embed.addFields({
     name: 'URL',
-    value: `${process.env.WEBSITE_URL}/blog/${filename}`,
+    value: `${process.env.NEXT_PUBLIC_WEBSITE_URL}/blog/${filename}`,
   });
 
   webhookClient.send({

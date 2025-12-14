@@ -4,11 +4,7 @@ import { createTRPCNext } from '@trpc/next';
 import type { AppRouter } from '../server/trpc';
 
 function getBaseUrl() {
-  return (
-    process.env.WEBSITE_URL ||
-    process.env.NX_PUBLIC_WEBSITE_URL ||
-    'http://localhost:4200'
-  );
+  return process.env.NEXT_PUBLIC_WEBSITE_URL || 'http://localhost:4200';
 }
 
 export const trpc = createTRPCNext<AppRouter>({

@@ -154,7 +154,7 @@ function webhookNotification(user: User, backlogItem: BacklogItem) {
   });
   embed.addFields({
     name: 'URL du profil',
-    value: `${process.env.WEBSITE_URL}${getUserProfileUrl(user.discordId)}`,
+    value: `${process.env.NEXT_PUBLIC_WEBSITE_URL}${getUserProfileUrl(user.discordId)}`,
   });
 
   webhookClient.send({

@@ -132,13 +132,13 @@ The informations from [the twitch console](https://dev.twitch.tv/console/apps) t
 
 The domain url (_ex: https://my-domain.com_) for the Let's Encrypt ssl folder. Not used in dev mode (because it's localhost so not https)
 
-> **WEBSITE_URL**
+> **NEXT_PUBLIC_WEBSITE_URL**
 
 The website url to generate links for the discord webhooks
 
 > **NEXTAUTH_URL**
 
-Same value of WEBSITE_URL, used by Next-Auth to redirect to the right url, otherwise it's localhost:3000 which is used
+Same value of NEXT_PUBLIC_WEBSITE_URL, used by Next-Auth to redirect to the right url, otherwise it's localhost:3000 which is used
 
 > **BLOGPOST_WEBHOOK**
 
@@ -147,8 +147,6 @@ The webhook to post the link when a blog post is published
 > **BACKLOG_WEBHOOK**
 
 The webhook to post the updates on the backlog
-
-> **CDN_URL**
 
 > **NEXT_PUBLIC_CDN_URL**
 
