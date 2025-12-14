@@ -2,7 +2,8 @@ import { TServer } from '../types';
 import { addBacklogItemProcedure } from './add-backlog-item.procedure';
 import { addExpectedGameProcedure } from './add-expected-game.procedure';
 import { changeBacklogItemStatusProcedure } from './change-backlog-item-status.procedure';
-import { moveBacklogItemProcedureProcedure } from './move-backlog-item.procedure';
+import { moveBacklogItemProcedure } from './move-backlog-item.procedure';
+import { moveBacklogItemToPositionProcedure } from './move-backlog-item-to-position.procedure';
 import { removeBacklogItemProcedure } from './remove-backlog-item.procedure';
 import { removeExpectedGameProcedure } from './remove-expected-game.procedure';
 import { sortMyBacklogProcedure } from './sort-my-backlog.procedure';
@@ -15,7 +16,8 @@ export function getMySpaceRouter(t: TServer) {
     addBacklogItem: addBacklogItemProcedure(t),
     addExpectedGame: addExpectedGameProcedure(t),
     changeBacklogItemStatus: changeBacklogItemStatusProcedure(t),
-    moveBacklogItem: moveBacklogItemProcedureProcedure(t),
+    moveBacklogItem: moveBacklogItemProcedure(t),
+    moveBacklogItemToPosition: moveBacklogItemToPositionProcedure(t),
     removeBacklogItem: removeBacklogItemProcedure(t),
     removeExpectedGame: removeExpectedGameProcedure(t),
     sortMyBacklog: sortMyBacklogProcedure(t),

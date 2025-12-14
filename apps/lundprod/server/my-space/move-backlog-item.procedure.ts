@@ -17,7 +17,7 @@ const moveBacklogItemOutput = z.object({
 export type MoveBacklogItemInputType = z.infer<typeof moveBacklogItemInput>;
 export type MoveBacklogItemOutputType = z.infer<typeof moveBacklogItemOutput>;
 
-export const moveBacklogItemProcedureProcedure = (t: TServer) => {
+export const moveBacklogItemProcedure = (t: TServer) => {
   return getAuthedProcedure(t)
     .input(moveBacklogItemInput)
     .output(moveBacklogItemOutput)

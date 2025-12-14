@@ -32,10 +32,10 @@ export const SignMenu = () => {
   }
 
   const drawerItems = [
-    ...(session?.isPlayer
+    ...(session?.userId
       ? [
           {
-            label: t('menu.sign.myGacha'),
+            label: t('menu.sign.myProfile'),
             link: getUserProfileUrl(session?.userId),
           },
         ]
@@ -59,14 +59,14 @@ export const SignMenu = () => {
             : signIn('credentials', { callbackUrl: '/' })
         }
       >
-        {session ? (
+        {session?.user ? (
           <>
             {session?.user.image && (
               <Image
                 maxW="35px"
                 mr={4}
                 src={session?.user.image}
-                alt={session?.user?.name}
+                alt={session?.user?.name || ''}
                 fallback={
                   <Tooltip
                     label={t('menu.sign.avatarError')}
@@ -78,9 +78,9 @@ export const SignMenu = () => {
                       maxW="35px"
                       mr={4}
                       src={`https://via.placeholder.com/100x100/ffae00/333333?text=${
-                        session?.user?.name[0] || 'Ø'
+                        session?.user?.name?.[0] || 'Ø'
                       }`}
-                      alt={session?.user?.name}
+                      alt={session?.user?.name || ''}
                     />
                   </Tooltip>
                 }

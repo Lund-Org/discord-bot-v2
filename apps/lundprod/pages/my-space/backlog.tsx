@@ -2,7 +2,9 @@ import { AddIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
+  Center,
   Show,
+  Spinner,
   Tab,
   TabIndicator,
   TabList,
@@ -72,7 +74,7 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
 
 export function BacklogWrapper() {
   const { t } = useTranslation();
-  const { backlog } = useMe();
+  const { backlog, isLoading } = useMe();
   const queryClient = trpc.useUtils();
   const successToast = useSuccessToast();
   const errorToast = useErrorToast();
@@ -158,34 +160,50 @@ export function BacklogWrapper() {
         </Button>
       }
     >
-      <Tabs variant="unstyled" isFitted colorScheme="teal" position="relative">
-        <TabList>
-          <Tab>{t('myBacklog.tabs.backlog')}</Tab>
-          <Tab>{t('myBacklog.tabs.currently')}</Tab>
-          <Tab>{t('myBacklog.tabs.finished')}</Tab>
-          <Tab>{t('myBacklog.tabs.abandoned')}</Tab>
-          <Tab>{t('myBacklog.tabs.wishlist')}</Tab>
-        </TabList>
-        <TabIndicator mt="-2px" height="3px" bg="teal.400" borderRadius="1px" />
-        <Box h="1px" bg="teal.200" opacity={0.5} />
-        <TabPanels pt="20px">
-          <TabPanel>
-            <TodoSection openAddGameModal={() => setIsSearchingGame(true)} />
-          </TabPanel>
-          <TabPanel>
-            <CurrentlySection />
-          </TabPanel>
-          <TabPanel>
-            <FinishedSection />
-          </TabPanel>
-          <TabPanel>
-            <AbandonedSection />
-          </TabPanel>
-          <TabPanel>
-            <WishlistSection />
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+      {isLoading ? (
+        <Center>
+          <Spinner />
+        </Center>
+      ) : (
+        <Tabs
+          variant="unstyled"
+          isFitted
+          colorScheme="teal"
+          position="relative"
+        >
+          <TabList>
+            <Tab>{t('myBacklog.tabs.backlog')}</Tab>
+            <Tab>{t('myBacklog.tabs.currently')}</Tab>
+            <Tab>{t('myBacklog.tabs.finished')}</Tab>
+            <Tab>{t('myBacklog.tabs.abandoned')}</Tab>
+            <Tab>{t('myBacklog.tabs.wishlist')}</Tab>
+          </TabList>
+          <TabIndicator
+            mt="-2px"
+            height="3px"
+            bg="teal.400"
+            borderRadius="1px"
+          />
+          <Box h="1px" bg="teal.200" opacity={0.5} />
+          <TabPanels pt="20px">
+            <TabPanel>
+              <TodoSection openAddGameModal={() => setIsSearchingGame(true)} />
+            </TabPanel>
+            <TabPanel>
+              <CurrentlySection />
+            </TabPanel>
+            <TabPanel>
+              <FinishedSection />
+            </TabPanel>
+            <TabPanel>
+              <AbandonedSection />
+            </TabPanel>
+            <TabPanel>
+              <WishlistSection />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      )}
 
       {/*  */}
       <SearchGameModal

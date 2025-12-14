@@ -3,7 +3,10 @@ import { useTranslation } from 'react-i18next';
 
 import { BacklogGame } from '~/lundprod/contexts/me.context';
 import { BacklogItemMoveType, SortType } from '~/lundprod/server/types';
-import { reorderMyBacklog } from '~/lundprod/utils/cache-management/my-backlog';
+import {
+  moveItemInMyBacklog,
+  reorderMyBacklog,
+} from '~/lundprod/utils/cache-management/my-backlog';
 import { trpc } from '~/lundprod/utils/trpc';
 
 import { useErrorToast, useSuccessToast } from '../use-toast';
@@ -30,6 +33,8 @@ export const useBacklogHooks = () => {
   const { mutateAsync: sortMyBacklog, isPending: isSortIsLoading } =
     trpc.sortMyBacklog.useMutation();
   const { mutate: moveBacklogItem } = trpc.moveBacklogItem.useMutation();
+  const { mutate: moveBacklogItemToPosition } =
+    trpc.moveBacklogItemToPosition.useMutation();
   const {
     mutateAsync: removeBacklogItem,
     isPending: isRemoveBacklogItemLoading,
@@ -117,25 +122,67 @@ export const useBacklogHooks = () => {
       direction: BacklogItemMoveType,
       status: BacklogGame['status'],
     ) => {
+      // optimistic update
+      queryClient.getMyBacklog.setData({}, reorderMyBacklog(itemId, direction));
+
       moveBacklogItem(
         { direction, itemId, status },
         {
-          onSuccess: () => {
-            queryClient.getMyBacklog.setData(
-              {},
-              reorderMyBacklog(itemId, direction),
-            );
-          },
           onError: () => {
             errorToast({
               title: t('myBacklog.error.reorderTitle'),
               description: t('myBacklog.error.reorderDescription'),
             });
+
+            queryClient.getMyBacklog.setData(
+              {},
+              reorderMyBacklog(
+                itemId,
+                direction === BacklogItemMoveType.UP
+                  ? BacklogItemMoveType.DOWN
+                  : BacklogItemMoveType.UP,
+              ),
+            );
           },
         },
       );
     },
     [moveBacklogItem, queryClient.getMyBacklog, errorToast, t],
+  );
+
+  const moveToPosition = useCallback(
+    (itemId: number, newPosition: number) => {
+      const currentData = queryClient.getMyBacklog.getData({});
+
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const currentPosition = (currentData || []).find(
+        ({ id }) => id === itemId,
+      )!.order!;
+
+      // optimistic update
+      queryClient.getMyBacklog.setData(
+        {},
+        moveItemInMyBacklog(itemId, newPosition),
+      );
+
+      moveBacklogItemToPosition(
+        { itemId, newPosition },
+        {
+          onError: () => {
+            errorToast({
+              title: t('myBacklog.error.reorderTitle'),
+              description: t('myBacklog.error.reorderDescription'),
+            });
+
+            queryClient.getMyBacklog.setData(
+              {},
+              moveItemInMyBacklog(itemId, currentPosition),
+            );
+          },
+        },
+      );
+    },
+    [queryClient.getMyBacklog, moveBacklogItemToPosition, errorToast, t],
   );
 
   return {
@@ -151,6 +198,7 @@ export const useBacklogHooks = () => {
     setUpdateReviewBacklogItemId,
     removeBacklogItemId,
     setRemoveBacklogItemId,
+    moveToPosition,
     isSortIsLoading,
     isRemoveBacklogItemLoading,
   };

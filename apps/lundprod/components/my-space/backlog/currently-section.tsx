@@ -1,6 +1,4 @@
 import {
-  ArrowDownIcon,
-  ArrowUpIcon,
   DeleteIcon,
   EditIcon,
   ExternalLinkIcon,
@@ -27,12 +25,12 @@ import { useTranslation } from 'react-i18next';
 
 import { BacklogGame, useMe } from '~/lundprod/contexts/me.context';
 import { useBacklogHooks } from '~/lundprod/hooks/my-space/use-backlog-hooks';
-import { BacklogItemMoveType } from '~/lundprod/server/types';
 
 import { ConfirmationModal } from '../../confirmation-modal';
 import { ChangeStateModal } from './change-state-modal';
 import { EmptyPlaceholder } from './empty-placeholder';
 import { NoteModal } from './note-modal';
+import { ReorderControl } from './reorder-control';
 
 const STATUS: BacklogGame['status'] = 'CURRENTLY';
 
@@ -51,6 +49,7 @@ export const CurrentlySection = () => {
     sortByName,
     sortByDate,
     onArrowClick,
+    moveToPosition,
     isSortIsLoading,
     isRemoveBacklogItemLoading,
   } = useBacklogHooks();
@@ -95,7 +94,7 @@ export const CurrentlySection = () => {
           )}
           <Grid
             minW="600px"
-            gridTemplateColumns={'65px 1fr 200px max-content'}
+            gridTemplateColumns={'90px 1fr 200px max-content'}
             rowGap="10px"
             alignItems="center"
           >
@@ -115,51 +114,15 @@ export const CurrentlySection = () => {
               return (
                 <Fragment key={game.id}>
                   <GridItem>
-                    <Flex
-                      h="100%"
-                      flexDir="column"
-                      justifyContent="center"
-                      display="block"
-                    >
-                      <Box
-                        color={firstRow ? 'gray.700' : 'gray.500'}
-                        _hover={firstRow ? undefined : { color: 'gray.300' }}
-                        mb={1}
-                        onClick={
-                          firstRow
-                            ? undefined
-                            : () =>
-                                onArrowClick(
-                                  game.id,
-                                  BacklogItemMoveType.UP,
-                                  STATUS,
-                                )
-                        }
-                        cursor={firstRow ? 'not-allowed' : 'pointer'}
-                        w="fit-content"
-                      >
-                        <ArrowUpIcon boxSize="24px" />
-                      </Box>
-                      <Box
-                        color={lastRow ? 'gray.700' : 'gray.500'}
-                        _hover={lastRow ? undefined : { color: 'gray.300' }}
-                        mt={1}
-                        onClick={
-                          lastRow
-                            ? undefined
-                            : () =>
-                                onArrowClick(
-                                  game.id,
-                                  BacklogItemMoveType.DOWN,
-                                  STATUS,
-                                )
-                        }
-                        cursor={lastRow ? 'not-allowed' : 'pointer'}
-                        w="fit-content"
-                      >
-                        <ArrowDownIcon boxSize="24px" />
-                      </Box>
-                    </Flex>
+                    <ReorderControl
+                      firstRow={firstRow}
+                      lastRow={lastRow}
+                      gameId={game.id}
+                      status={STATUS}
+                      onArrowClick={onArrowClick}
+                      moveToPosition={moveToPosition}
+                      index={index + 1}
+                    />
                   </GridItem>
                   <GridItem>
                     <Text mb={2}>{game.name}</Text>

@@ -1,3 +1,5 @@
+import { sortBy } from 'lodash';
+
 import { BacklogGame } from '~/lundprod/contexts/me.context';
 import { BacklogItemMoveType } from '~/lundprod/server/types';
 
@@ -5,28 +7,52 @@ export const reorderMyBacklog =
   (itemId: number, direction: BacklogItemMoveType) =>
   (data: BacklogGame[] | undefined) => {
     const item = (data || []).find(({ id }) => itemId === id);
-    const newList = [...(data || [])].filter(
+    const tmpList = [...(data || [])].filter(
       ({ status }) => status === item?.status,
     );
-    const itemIndex = newList.findIndex(({ id }) => itemId === id);
+    const itemIndex = tmpList.findIndex(({ id }) => itemId === id);
 
     if (direction === BacklogItemMoveType.UP) {
-      const previousItem = newList[itemIndex - 1];
+      const previousItem = tmpList[itemIndex - 1];
 
-      newList[itemIndex - 1] = newList[itemIndex];
-      newList[itemIndex] = previousItem;
-      --newList[itemIndex - 1].order;
-      ++newList[itemIndex].order;
+      ++previousItem.order;
+      --tmpList[itemIndex].order;
     } else {
-      const nextItem = newList[itemIndex + 1];
+      const nextItem = tmpList[itemIndex + 1];
 
-      newList[itemIndex + 1] = newList[itemIndex];
-      newList[itemIndex] = nextItem;
-      ++newList[itemIndex + 1].order;
-      --newList[itemIndex].order;
+      --nextItem.order;
+      ++tmpList[itemIndex].order;
     }
 
-    return newList;
+    return sortBy(data || [], ['status', 'order']);
+  };
+
+export const moveItemInMyBacklog =
+  (itemId: number, newPosition: number) =>
+  (data: BacklogGame[] | undefined) => {
+    const item = (data || []).find(({ id }) => itemId === id);
+
+    if (!item) {
+      return data;
+    }
+
+    const dirIncrement = item.order < newPosition ? -1 : 1;
+    const statusList = [...(data || [])].filter(
+      ({ status }) => status === item.status,
+    );
+    const maxNewPosition = Math.min(statusList.length, newPosition);
+    const toReorderList = statusList.filter(({ order }) =>
+      item.order < newPosition
+        ? order >= item.order && order <= maxNewPosition
+        : order <= item.order && order >= newPosition,
+    );
+
+    toReorderList.forEach((backlogItem) => {
+      backlogItem.order += dirIncrement;
+    });
+    item.order = maxNewPosition;
+
+    return sortBy(data || [], ['status', 'order']);
   };
 
 export const updateBacklogItemCache =
