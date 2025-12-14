@@ -43,6 +43,15 @@ export const removeBacklogItemProcedure = (t: TServer) => {
       }
 
       await prisma.backlogItem.delete({ where: { id: backlogItem.id } });
+      await prisma.backlogItem.updateMany({
+        where: {
+          status: backlogItem.status,
+          order: { gte: backlogItem.order },
+        },
+        data: {
+          order: { decrement: 1 },
+        },
+      });
 
       return {
         success: true,

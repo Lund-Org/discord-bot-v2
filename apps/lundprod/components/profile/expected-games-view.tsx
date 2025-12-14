@@ -1,6 +1,7 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Box,
+  Center,
   chakra,
   Divider,
   Flex,
@@ -39,8 +40,17 @@ export const ExpectedGamesView = () => {
       placeholderData: keepPreviousData,
       refetchOnWindowFocus: false,
       staleTime: Infinity,
+      refetchOnMount: true,
     },
   );
+
+  if (isFetching) {
+    return (
+      <Center>
+        <Spinner />
+      </Center>
+    );
+  }
 
   if (!games?.list.length) {
     return <PlaceholderEmpty />;

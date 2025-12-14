@@ -50,7 +50,7 @@ export const addBacklogItemProcedure = (t: TServer) => {
             igdbGameId: input.gameId,
             name: input.name,
             url: input.url,
-            order: lastItemInBacklog?.order,
+            order: (lastItemInBacklog?.order || 0) + 1,
           },
           include: {
             backlogItemReview: {

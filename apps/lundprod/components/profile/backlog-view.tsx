@@ -67,6 +67,7 @@ export const BacklogView = ({ username, discordId }: BacklogViewProps) => {
       {
         // first rendering is there to only fetch on landing on the page
         enabled: !!igdbGameId && firstRendering.current,
+        refetchOnMount: true,
       },
     );
 
