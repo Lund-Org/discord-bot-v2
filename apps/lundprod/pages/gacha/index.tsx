@@ -142,7 +142,8 @@ export function GachaPage({
               {Object.keys(configDropChances)
                 .sort()
                 .map((key) => {
-                  const dropChance = configDropChances[key];
+                  const dropChance =
+                    configDropChances[key as keyof ChancesConfig];
 
                   return (
                     <ListItem key={key}>

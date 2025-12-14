@@ -32,8 +32,6 @@ export const TooltipIconIndicator = ({
           borderRadius="20px"
           bottom={0}
           right={0}
-          bg="gray.200"
-          color="gray.900"
           w="20px"
           h="20px"
           fontSize="12px"
@@ -44,7 +42,10 @@ export const TooltipIconIndicator = ({
                 bg: 'orange.700',
                 color: 'gray.200',
               }
-            : {})}
+            : {
+                bg: 'gray.200',
+                color: 'gray.900',
+              })}
         >
           <span>{count}</span>
         </Flex>

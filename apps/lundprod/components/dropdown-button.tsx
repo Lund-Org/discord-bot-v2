@@ -19,7 +19,7 @@ export const DropdownButton = <T,>({
   ...rest
 }: DropdownButtonProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
-  const ref = useRef();
+  const ref = useRef(null);
 
   useClickAway(ref, () => setTimeout(() => setIsOpen(false), 100));
 

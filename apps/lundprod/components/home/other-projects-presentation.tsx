@@ -27,7 +27,7 @@ export const OtherProjectsPresentation = () => {
             projectLink: <LightStyledLink href="/projects" />,
             discordLink: (
               <LightStyledLink
-                href={discordNetwork.url}
+                href={discordNetwork?.url || '#'}
                 target="_blank"
                 rel="noreferrer noopener"
               />

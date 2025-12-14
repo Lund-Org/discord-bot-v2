@@ -15,7 +15,7 @@ export const DiscordCTA = () => {
       <Trans
         i18nKey="gacha.index.discordCTA"
         components={{
-          lightLink: <LightStyledLink href={discordNetwork.url} />,
+          lightLink: <LightStyledLink href={discordNetwork?.url || '#'} />,
         }}
       />
     </Heading>

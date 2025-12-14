@@ -14,7 +14,7 @@ export function validateFilters(filters: unknown): filters is {
   value: IGDBConditionValue;
 }[] {
   if (!Array.isArray(filters)) {
-    return null;
+    return false;
   }
 
   return filters.every((filter) => {
@@ -32,8 +32,8 @@ export function validateFilters(filters: unknown): filters is {
       typeof filter.value === 'string' ||
       typeof filter.value === 'number' ||
       (Array.isArray(filter.value) &&
-        (filter.value.every((v) => typeof v === 'string') ||
-          filter.value.every((v) => typeof v === 'number')))
+        (filter.value.every((v: unknown) => typeof v === 'string') ||
+          filter.value.every((v: unknown) => typeof v === 'number')))
     );
   });
 }

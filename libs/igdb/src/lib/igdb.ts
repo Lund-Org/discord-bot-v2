@@ -65,7 +65,7 @@ async function IGDBRequest<T>(
     headers: {
       Accept: 'application/json',
       'Client-ID': process.env.TWITCH_CLIENT_ID,
-      Authorization: `Bearer ${twitchToken.access_token}`,
+      Authorization: `Bearer ${twitchToken?.access_token || ''}`,
       ...headers,
     },
     data: query,

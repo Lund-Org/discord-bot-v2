@@ -73,7 +73,7 @@ export default function SignIn({ providers }: SignInProps) {
       <Box mt="50px" textAlign="center">
         <Text as="span">{t('auth.signup')}</Text>
         <LightStyledLink
-          href={discordNetwork.url}
+          href={discordNetwork?.url || '#'}
           target="_blank"
           rel="noopener noreferrer"
         >

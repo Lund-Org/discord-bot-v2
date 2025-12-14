@@ -6,15 +6,17 @@ export const AllCards = 'all';
 
 export const options = [AllCards, '*', '**', '***', '****'];
 
-export const filterCards = <T extends CardType>(
+export const filterCards = <
+  T extends Omit<CardType, 'createdAt' | 'updatedAt'>,
+>(
   cards: T[],
-  filters: Filters
+  filters: Filters,
 ) => {
   return cards.filter(
     (card) =>
       card.name.toLowerCase().includes(filters.search.toLowerCase()) &&
       (filters.fusion === false || !!card.isFusion === filters.fusion) &&
       (filters.filterStars === AllCards ||
-        card.level === filters.filterStars.length)
+        card.level === filters.filterStars.length),
   );
 };

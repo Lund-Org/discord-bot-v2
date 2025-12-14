@@ -31,7 +31,7 @@ export default async function publishBlogPosts(
     },
   });
   const webhookClient = new WebhookClient({
-    url: process.env.BLOGPOST_WEBHOOK,
+    url: process.env.BLOGPOST_WEBHOOK || '',
   });
 
   const embed = new EmbedBuilder()

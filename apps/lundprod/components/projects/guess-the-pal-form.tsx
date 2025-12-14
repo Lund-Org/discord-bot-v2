@@ -26,6 +26,10 @@ export const GuessThePalForm = ({ cdnUrl }: GuessThePalFormProps) => {
   const ref = useRef<HTMLInputElement>(null);
 
   const onSubmit = () => {
+    if (!ref.current) {
+      return;
+    }
+
     const { notFound, valid, wrong } = isRightPal(ref.current.value, pal.id);
 
     ref.current.value = '';

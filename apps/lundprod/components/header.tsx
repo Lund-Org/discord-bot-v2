@@ -22,7 +22,7 @@ export const Header = () => {
     ProjectMenu,
     ContactMenu,
   ];
-  const ref = useRef();
+  const ref = useRef(null);
 
   useClickAway(ref, () => setTimeout(() => setIsMenuOpen(false), 100));
 

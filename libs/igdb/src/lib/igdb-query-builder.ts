@@ -2,12 +2,12 @@ import { Filter, IGDBConditionValue } from '../types';
 import { QUERY_OPERATOR } from './constants';
 
 export class IGDBQueryBuilder {
-  private fields: string[];
-  private query: string;
-  private search: string;
-  private sort: string;
-  private limit: number;
-  private offset: number;
+  private fields: string[] = [];
+  private query = '';
+  private search = '';
+  private sort = '';
+  private limit = 10;
+  private offset = 0;
 
   constructor() {
     this.reset();
