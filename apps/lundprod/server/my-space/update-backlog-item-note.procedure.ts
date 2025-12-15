@@ -5,8 +5,7 @@ import z from 'zod';
 import { convertTs } from '../../utils/trpc/date-to-string';
 import { backlogItemSchema } from '../common-schema';
 import { getAuthedProcedure } from '../middleware';
-import { MAX_NOTE_SIZE,TServer  } from '../types';
-
+import { MAX_NOTE_SIZE, TServer } from '../types';
 
 const updateBacklogItemNoteInput = z.object({
   itemId: z.number(),
@@ -73,6 +72,7 @@ export const updateBacklogItemNoteProcedure = (t: TServer) => {
           'finishedAt',
           'startedAt',
           'updatedAt',
+          'wishlistAt',
         ]),
       };
     });

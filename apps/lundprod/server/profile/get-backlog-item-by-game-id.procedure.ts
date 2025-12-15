@@ -89,6 +89,7 @@ export const getBacklogItemByGameIdProcedure = (t: TServer) => {
           'finishedAt',
           'startedAt',
           'updatedAt',
+          'wishlistAt',
         ]),
       };
     });

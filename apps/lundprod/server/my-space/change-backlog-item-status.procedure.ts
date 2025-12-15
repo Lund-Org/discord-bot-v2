@@ -125,6 +125,7 @@ export const changeBacklogItemStatusProcedure = (t: TServer) => {
           'finishedAt',
           'startedAt',
           'updatedAt',
+          'wishlistAt',
         ]),
       };
     });

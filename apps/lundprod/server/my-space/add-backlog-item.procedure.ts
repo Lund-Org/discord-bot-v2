@@ -72,6 +72,7 @@ export const addBacklogItemProcedure = (t: TServer) => {
           'finishedAt',
           'startedAt',
           'updatedAt',
+          'wishlistAt',
         ]),
       };
     });

@@ -160,6 +160,7 @@ export const upsertReviewProcedure = (t: TServer) => {
           'finishedAt',
           'startedAt',
           'updatedAt',
+          'wishlistAt',
         ]),
       };
     });

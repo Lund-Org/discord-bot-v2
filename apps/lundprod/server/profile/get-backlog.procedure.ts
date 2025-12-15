@@ -105,6 +105,7 @@ export const getMyBacklogProcedure = (t: TServer) => {
           'finishedAt',
           'startedAt',
           'updatedAt',
+          'wishlistAt',
         ]),
       );
     });
@@ -139,6 +140,7 @@ const getBacklogByDiscordId = async ({
       'finishedAt',
       'startedAt',
       'updatedAt',
+      'wishlistAt',
     ]),
   );
 };
