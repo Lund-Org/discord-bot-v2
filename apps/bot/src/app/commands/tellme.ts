@@ -107,8 +107,8 @@ Ne raconte ta vie que si on la demande, sinon focalise toi surtout sur la phrase
         { role: 'system', content: prompt },
         { role: 'user', content: question },
       ],
-      model: 'gpt-3.5-turbo',
-      max_tokens: 2000,
+      model: 'gpt-5-mini',
+      max_completion_tokens: 2000,
     });
 
     await prisma.aiAttempt.create({ data: { userId, createdAt: new Date() } });
