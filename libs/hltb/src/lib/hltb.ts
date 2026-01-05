@@ -1,6 +1,6 @@
 import { Axios } from 'axios';
 
-import { BASE_URL, IMAGE_URL, SEARCH_URL } from './constants';
+import { IMAGE_URL, SEARCH_INIT_URL, SEARCH_URL } from './constants';
 
 type HLTBObj = {
   game_id: number;
@@ -20,7 +20,7 @@ const hltbHeaders = {
   referer: 'https://howlongtobeat.com',
   host: 'howlongtobeat.com',
   'user-agent':
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:143.0) Gecko/20100101 Firefox/143.0',
+    'Mozilla/5.0 (X11; Linux x86_64; rv:146.0) Gecko/20100101 Firefox/146.0',
   'Sec-Fetch-Dest': 'empty',
   'Sec-Fetch-Mode': 'cors',
   'Sec-Fetch-Site': 'same-origin',
@@ -85,19 +85,15 @@ export class HowLongToBeatService {
 
       const searchData = JSON.stringify(search);
 
-      const result = await this.axios.post(
-        `${SEARCH_URL}/${token}`,
-        searchData,
-        {
-          headers: {
-            ...hltbHeaders,
-            'content-type': 'application/json',
-            'content-length': searchData.length,
-          },
+      const result = await this.axios.post(SEARCH_URL, searchData, {
+        headers: {
+          ...hltbHeaders,
+          'content-type': 'application/json',
+          'content-length': searchData.length,
+          'x-auth-token': token,
         },
-      );
+      });
 
-      console.log(result.data);
       const { data } = JSON.parse(result.data);
 
       if (data.length) {
@@ -131,42 +127,13 @@ export class HowLongToBeatService {
   // }
 
   private async getHLTBToken() {
-    const result = await this.axios.get(BASE_URL, {
-      headers: {
-        ...hltbHeaders,
-        'Sec-Fetch-Dest': 'script',
-        'Sec-Fetch-Mode': 'no-cors',
-        'Sec-Fetch-Site': 'same-origin',
-      },
+    const result = await this.axios.get(SEARCH_INIT_URL, {
+      headers: hltbHeaders,
     });
-    const startIndex = result.data.indexOf(
-      `<script src="/_next/static/chunks/pages/_app-`,
-    );
-    const endIndex = result.data.indexOf(`</script>`, startIndex);
+    const data = JSON.parse(result.data);
+    const token = data.token;
 
-    const scriptTag = result.data.substr(startIndex, endIndex - startIndex);
-    const scriptUrlMatch = scriptTag.match(/src="([0-9a-zA-Z\-_./]+)"/);
-
-    const scriptResult = await this.axios.get(BASE_URL + scriptUrlMatch[1], {
-      headers: {
-        ...hltbHeaders,
-      },
-    });
-
-    const searchLine = (scriptResult.data as string).match(
-      new RegExp(`fetch\\("/api/locate/"(.*),`),
-    );
-    if (!searchLine) {
-      return '';
-    }
-
-    const tokenMatch = Array.from(
-      searchLine[1].matchAll(new RegExp(`.concat\\("([a-zA-Z0-9]+)"\\)`, 'g')),
-    )
-      .map((match) => match[1])
-      .join('');
-
-    return tokenMatch;
+    return token;
   }
 
   private getFormattedData(data: HLTBObj) {

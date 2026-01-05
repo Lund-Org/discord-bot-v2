@@ -305,7 +305,9 @@
     "addGameSuccessTitle": "Game added to the backlog successfully",
     "autosort": {
       "alphabeticalOrder": "By name",
+      "asc": "Ascending order",
       "byDateOrder": "By date",
+      "desc": "Descending order",
       "text": "Sort automatically:"
     },
     "changeStatus": "Status",

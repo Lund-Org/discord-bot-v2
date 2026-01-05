@@ -24,6 +24,7 @@ import { ChangeStateModal } from './change-state-modal';
 import { EmptyPlaceholder } from './empty-placeholder';
 import { ReorderControl } from './reorder-control';
 import { ReviewModal } from './review-modal/review-modal';
+import { SortByDateButton } from './sort-by-date-button';
 
 const STATUS: BacklogGame['status'] = 'ABANDONED';
 
@@ -64,9 +65,7 @@ export const AbandonedSection = () => {
         <Button onClick={() => sortByName(STATUS)} isDisabled={isSortIsLoading}>
           {t('myBacklog.autosort.alphabeticalOrder')}
         </Button>
-        <Button onClick={() => sortByDate(STATUS)} isDisabled={isSortIsLoading}>
-          {t('myBacklog.autosort.byDateOrder')}
-        </Button>
+        <SortByDateButton status={STATUS} isDisabled={isSortIsLoading} />
       </Flex>
       <Flex flexDir="column" gap={2} mt={6}>
         <Box w="100%" overflowX="auto" position="relative" px="8px">

@@ -2,7 +2,11 @@ import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { BacklogGame } from '~/lundprod/contexts/me.context';
-import { BacklogItemMoveType, SortType } from '~/lundprod/server/types';
+import {
+  BacklogItemMoveType,
+  SortOrderType,
+  SortType,
+} from '~/lundprod/server/types';
 import {
   moveItemInMyBacklog,
   reorderMyBacklog,
@@ -75,7 +79,7 @@ export const useBacklogHooks = () => {
       try {
         await sortMyBacklog({
           status,
-          order: SortType.ALPHABETICAL_ORDER,
+          sort: SortType.ALPHABETICAL_ORDER,
         });
 
         queryClient.getMyBacklog.invalidate();
@@ -94,11 +98,12 @@ export const useBacklogHooks = () => {
   );
 
   const sortByDate = useCallback(
-    async (status: BacklogGame['status']) => {
+    async (status: BacklogGame['status'], ordering?: SortOrderType) => {
       try {
         await sortMyBacklog({
           status,
-          order: SortType.DATE_ORDER,
+          sort: SortType.DATE_ORDER,
+          ordering,
         });
 
         queryClient.getMyBacklog.invalidate();

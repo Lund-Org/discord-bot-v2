@@ -3,11 +3,12 @@ import { BacklogStatus } from '@prisma/client';
 import z from 'zod';
 
 import { getAuthedProcedure } from '../middleware';
-import { SortType, TServer } from '../types';
+import { SortOrderType, SortType, TServer } from '../types';
 
 const sortMyBacklogInput = z.object({
-  status: z.nativeEnum(BacklogStatus),
-  order: z.nativeEnum(SortType),
+  status: z.enum(BacklogStatus),
+  sort: z.enum(SortType),
+  ordering: z.enum(SortOrderType).optional(),
 });
 const sortMyBacklogOutput = z.object({
   success: z.boolean(),
@@ -29,18 +30,39 @@ export const sortMyBacklogProcedure = (t: TServer) => {
 
       let field = 'order';
 
-      switch (input.order) {
+      switch (input.sort) {
         case SortType.ALPHABETICAL_ORDER: {
           field = 'name';
           break;
         }
         case SortType.DATE_ORDER: {
-          field = 'createdAt';
+          switch (input.status) {
+            case BacklogStatus.BACKLOG:
+              field = 'createdAt';
+              break;
+            case BacklogStatus.ABANDONED:
+              field = 'abandonedAt';
+              break;
+            case BacklogStatus.CURRENTLY:
+              field = 'startedAt';
+              break;
+            case BacklogStatus.FINISHED:
+              field = 'finishedAt';
+              break;
+            case BacklogStatus.WISHLIST:
+              field = 'wishlistAt';
+              break;
+          }
           break;
         }
       }
 
-      await updateBacklogItemsOrder(field, input.status, user.id);
+      await updateBacklogItemsOrder(
+        field,
+        input.status,
+        user.id,
+        input.ordering,
+      );
 
       return {
         success: true,
@@ -52,13 +74,14 @@ async function updateBacklogItemsOrder(
   field: string,
   status: BacklogStatus,
   userId: number,
+  order: SortOrderType = SortOrderType.ASC,
 ) {
   await prisma.$queryRawUnsafe(`
     WITH backlog AS (
       SELECT 
         id,
         userId,
-        ROW_NUMBER() OVER (PARTITION BY userId ORDER BY ${field}, id) AS new_order
+        ROW_NUMBER() OVER (PARTITION BY userId ORDER BY ${field} ${order}, id) AS new_order
       FROM BacklogItem
       WHERE status = "${status}" AND userId = ${userId}
     )

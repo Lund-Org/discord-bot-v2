@@ -8,6 +8,10 @@ export enum SortType {
   ALPHABETICAL_ORDER = 'ALPHABETICAL_ORDER',
   DATE_ORDER = 'DATE_ORDER',
 }
+export enum SortOrderType {
+  ASC = 'asc',
+  DESC = 'desc',
+}
 
 export enum BacklogItemMoveType {
   UP = 'UP',

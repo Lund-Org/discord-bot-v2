@@ -1,4 +1,11 @@
-import { Tab, TabList, TabProps, Tabs, TabsProps } from '@chakra-ui/react';
+import {
+  Tab,
+  TabList,
+  TabListProps,
+  TabProps,
+  Tabs,
+  TabsProps,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect, useState } from 'react';
 
@@ -9,6 +16,7 @@ type QueryTabsProps<T extends string> = {
   values: T[];
   tabs: Record<T, string>;
   tabsProps?: Omit<TabsProps, 'children'>;
+  tabListProps?: Omit<TabListProps, 'children'>;
   tabProps?: TabProps | ((value: T, isSelected: boolean) => TabProps);
   children: ReactNode;
   defaultValue: T;
@@ -20,6 +28,7 @@ export const QueryTabs = <T extends string>({
   tabs,
   values,
   tabProps,
+  tabListProps,
   tabsProps,
   children,
   defaultValue,
@@ -51,7 +60,7 @@ export const QueryTabs = <T extends string>({
       onChange={(index) => setQueryParam(values[index])}
       {...(tabsProps || {})}
     >
-      <TabList>
+      <TabList {...(tabListProps || {})}>
         {values.map((val, index) => (
           <Tab
             key={val}

@@ -98,9 +98,15 @@ export const ReviewModal = ({ backlogItemId, onClose }: ReviewModalProps) => {
   };
 
   return (
-    <Modal isOpen={!!backlogItemId} onClose={onClose} size="3xl">
+    <Modal
+      isOpen={!!backlogItemId}
+      onClose={onClose}
+      size="3xl"
+      autoFocus={false}
+      returnFocusOnClose={false}
+    >
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent my="auto">
         <ModalHeader borderBottom="1px solid" borderColor="gray.200">
           {t('reviewModal.title')}
         </ModalHeader>
