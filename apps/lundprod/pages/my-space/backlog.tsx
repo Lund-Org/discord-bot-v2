@@ -5,12 +5,8 @@ import {
   Center,
   Show,
   Spinner,
-  Tab,
-  TabIndicator,
-  TabList,
   TabPanel,
   TabPanels,
-  Tabs,
 } from '@chakra-ui/react';
 import { Game, gameTypeMapping } from '@discord-bot-v2/igdb-front';
 import { prisma } from '@discord-bot-v2/prisma';
@@ -25,12 +21,21 @@ import { FinishedSection } from '~/lundprod/components/my-space/backlog/finished
 import { TodoSection } from '~/lundprod/components/my-space/backlog/todo-section';
 import { WishlistSection } from '~/lundprod/components/my-space/backlog/wishlist-section';
 import { SearchGameModal } from '~/lundprod/components/search-game-modal/search-game-modal';
+import { QueryTabs } from '~/lundprod/components/tabs';
 import { BacklogGame, useMe } from '~/lundprod/contexts/me.context';
 import { useErrorToast, useSuccessToast } from '~/lundprod/hooks/use-toast';
 import { MyPagesLayout } from '~/lundprod/layouts/MyPagesLayout';
 import { trpc } from '~/lundprod/utils/trpc';
 
 import { authOptions } from '../api/auth/[...nextauth]';
+
+enum TABS {
+  BACKLOG = 'backlog',
+  IN_PROGRESS = 'in-progress',
+  FINISHED = 'finished',
+  ABANDONED = 'abandoned',
+  WISHLIST = 'wishlist',
+}
 
 type PropsType = object;
 
@@ -74,7 +79,7 @@ export const getServerSideProps: GetServerSideProps<PropsType> = async ({
 
 export function BacklogWrapper() {
   const { t } = useTranslation();
-  const { backlog, isLoading } = useMe();
+  const { backlog, isInitialLoading, isLoading } = useMe();
   const queryClient = trpc.useUtils();
   const successToast = useSuccessToast();
   const errorToast = useErrorToast();
@@ -160,30 +165,46 @@ export function BacklogWrapper() {
         </Button>
       }
     >
-      {isLoading ? (
+      {isInitialLoading ? (
         <Center>
           <Spinner />
         </Center>
       ) : (
-        <Tabs
-          variant="unstyled"
-          isFitted
-          colorScheme="teal"
-          position="relative"
+        <QueryTabs
+          queryName={'status'}
+          values={Object.values(TABS)}
+          tabs={{
+            [TABS.BACKLOG]: t('myBacklog.tabs.backlog'),
+            [TABS.IN_PROGRESS]: t('myBacklog.tabs.currently'),
+            [TABS.FINISHED]: t('myBacklog.tabs.finished'),
+            [TABS.ABANDONED]: t('myBacklog.tabs.abandoned'),
+            [TABS.WISHLIST]: t('myBacklog.tabs.wishlist'),
+          }}
+          tabListProps={{
+            maxW: '100%',
+            overflow: 'auto',
+            sx: {
+              '.chakra-tabs__tab': {
+                whiteSpace: 'nowrap',
+              },
+            },
+          }}
+          defaultValue={TABS.BACKLOG}
+          tabsProps={{
+            colorScheme: 'teal',
+            variant: 'line',
+            isFitted: true,
+            position: 'relative',
+          }}
+          tabProps={{
+            sx: {
+              '&[aria-selected="true"]': {
+                bg: 'whiteAlpha.900',
+                fontWeight: 600,
+              },
+            },
+          }}
         >
-          <TabList>
-            <Tab>{t('myBacklog.tabs.backlog')}</Tab>
-            <Tab>{t('myBacklog.tabs.currently')}</Tab>
-            <Tab>{t('myBacklog.tabs.finished')}</Tab>
-            <Tab>{t('myBacklog.tabs.abandoned')}</Tab>
-            <Tab>{t('myBacklog.tabs.wishlist')}</Tab>
-          </TabList>
-          <TabIndicator
-            mt="-2px"
-            height="3px"
-            bg="teal.400"
-            borderRadius="1px"
-          />
           <Box h="1px" bg="teal.200" opacity={0.5} />
           <TabPanels pt="20px">
             <TabPanel>
@@ -202,7 +223,7 @@ export function BacklogWrapper() {
               <WishlistSection />
             </TabPanel>
           </TabPanels>
-        </Tabs>
+        </QueryTabs>
       )}
 
       {/*  */}

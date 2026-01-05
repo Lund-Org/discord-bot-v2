@@ -29,7 +29,14 @@ export const MyPagesLayout = ({
           </Box>
         </Flex>
       </Box>
-      <Box maxW="1200px" w="100%" mx="auto" flex={1} pt="40px">
+      <Box
+        maxW="1200px"
+        w="100%"
+        mx="auto"
+        flex={1}
+        pt="40px"
+        position="relative"
+      >
         {children}
       </Box>
     </Flex>

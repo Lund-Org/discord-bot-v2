@@ -61,7 +61,14 @@ export const BacklogReviewDrawer = ({
   };
 
   return (
-    <Drawer isOpen={!!item} onClose={onReviewClose} placement="right" size="lg">
+    <Drawer
+      isOpen={!!item}
+      onClose={onReviewClose}
+      placement="right"
+      size="lg"
+      autoFocus={false}
+      returnFocusOnClose={false}
+    >
       <DrawerOverlay />
       {!!item && (
         <DrawerContent bg="gray.100">

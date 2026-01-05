@@ -306,7 +306,9 @@
     "addGameSuccessTitle": "Jeu ajouté au backlog avec succès",
     "autosort": {
       "alphabeticalOrder": "Par nom",
+      "asc": "Ordre croissant",
       "byDateOrder": "Par date",
+      "desc": "Ordre décroissant",
       "text": "Tri automatique :"
     },
     "changeStatus": "Statut",

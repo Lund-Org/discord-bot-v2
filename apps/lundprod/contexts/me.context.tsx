@@ -16,6 +16,7 @@ type MeProvider = {
   backlogByStatus: Partial<Record<BacklogStatus, BacklogGame[]>>;
   expectedGames: ExpectedGame[];
   isLoading: boolean;
+  isInitialLoading: boolean;
 };
 
 type MeProps = {
@@ -29,30 +30,37 @@ export const MeContext = createContext<MeProvider>({
   backlogByStatus: {},
   expectedGames: [],
   isLoading: true,
+  isInitialLoading: true,
 });
 
 export const useMe = (): MeProvider => useContext(MeContext);
 
 //-- Exposed Provider
 export const MeProvider = ({ children }: MeProps) => {
-  const { data: backlog = [], isFetching: isFetchingBacklog } =
-    trpc.getMyBacklog.useQuery(
-      {},
-      {
-        placeholderData: keepPreviousData,
-        refetchOnWindowFocus: false,
-        staleTime: Infinity,
-      },
-    );
-  const { data: expectedGames = [], isFetching: isFetchingExpectedGames } =
-    trpc.getMyExpectedGames.useQuery(
-      {},
-      {
-        placeholderData: keepPreviousData,
-        refetchOnWindowFocus: false,
-        staleTime: Infinity,
-      },
-    );
+  const {
+    data: backlog = [],
+    isFetching: isFetchingBacklog,
+    isLoading: isInitialLoadingBacklog,
+  } = trpc.getMyBacklog.useQuery(
+    {},
+    {
+      placeholderData: keepPreviousData,
+      refetchOnWindowFocus: false,
+      staleTime: Infinity,
+    },
+  );
+  const {
+    data: expectedGames = [],
+    isFetching: isFetchingExpectedGames,
+    isLoading: isInitialLoadingExpectedGames,
+  } = trpc.getMyExpectedGames.useQuery(
+    {},
+    {
+      placeholderData: keepPreviousData,
+      refetchOnWindowFocus: false,
+      staleTime: Infinity,
+    },
+  );
 
   const backlogByStatus = useMemo(
     () =>
@@ -69,6 +77,8 @@ export const MeProvider = ({ children }: MeProps) => {
         backlogByStatus,
         expectedGames,
         isLoading: isFetchingBacklog || isFetchingExpectedGames,
+        isInitialLoading:
+          isInitialLoadingBacklog || isInitialLoadingExpectedGames,
       }}
     >
       {children}

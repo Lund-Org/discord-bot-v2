@@ -109,7 +109,7 @@ export const getGamesProcedure = (t: TServer) => {
         queryFilters.push({
           field: 'platforms',
           operator: QUERY_OPERATOR.EQ,
-          value: platformId,
+          value: [platformId],
         });
       }
 

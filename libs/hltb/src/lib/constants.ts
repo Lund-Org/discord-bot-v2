@@ -1,4 +1,5 @@
 export const BASE_URL = 'https://howlongtobeat.com/';
 export const DETAIL_URL = `${BASE_URL}game/`;
-export const SEARCH_URL = `${BASE_URL}api/locate`;
+export const SEARCH_INIT_URL = `${BASE_URL}api/search/init`;
+export const SEARCH_URL = `${BASE_URL}api/search`;
 export const IMAGE_URL = `${BASE_URL}games/`;
