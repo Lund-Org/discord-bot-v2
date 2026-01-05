@@ -13,6 +13,7 @@
   },
   "private": true,
   "dependencies": {
+    "@chakra-ui/anatomy": "^2.3.6",
     "@chakra-ui/icons": "2.2.4",
     "@chakra-ui/react": "2.10.9",
     "@discordjs/builders": "1.11.3",
