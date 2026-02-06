@@ -182,7 +182,7 @@ export function BacklogWrapper() {
           }}
           tabListProps={{
             maxW: '100%',
-            overflow: 'auto',
+            overflowX: 'auto',
             sx: {
               '.chakra-tabs__tab': {
                 whiteSpace: 'nowrap',

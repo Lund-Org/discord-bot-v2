@@ -14,7 +14,7 @@ export const howlongtobeatCmd = new SlashCommandBuilder()
   .setName(CMD_NAME)
   .setDescription('Récupère les informations de durée de vie pour un jeu')
   .addStringOption((option) =>
-    option.setName('name').setDescription('Le nom du jeu').setRequired(true)
+    option.setName('name').setDescription('Le nom du jeu').setRequired(true),
   )
   .toJSON();
 
@@ -48,12 +48,16 @@ async function howlongtobeatCallback(interaction: ChatInputCommandInteraction) {
     } else if (typeof searchResult === 'undefined') {
       return interaction.reply({
         content: `Aucun résultat trouvé, peut-être dû à un probleme interne, vous pouvez tout de même aller voir sur https://howlongtobeat.com/?q=${encodeURI(
-          name
+          name,
         )}`,
       });
     }
 
-    return interaction.reply('Aucun jeu trouvé');
+    return interaction.reply(
+      `Aucun jeu trouvé, ou problème interne, vous pouvez tout de même aller voir sur https://howlongtobeat.com/?q=${encodeURI(
+        name,
+      )}`,
+    );
   } catch (e) {
     return interaction.reply('Une erreur est survenue');
   }
