@@ -9,7 +9,7 @@ export async function UserInitializer(client: Client) {
     const discordMembers = await guild.members.fetch();
 
     discordMembers.forEach(async (discordMember) => {
-      if (discordMember.user.bot) {
+      if (discordMember.user.bot || !discordMember.user.globalName) {
         return;
       }
 

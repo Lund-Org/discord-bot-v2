@@ -53,17 +53,19 @@ export const startBot = (): Promise<Client> => {
     });
 
     client.on(Events.GuildMemberAdd, async (discordMember) => {
-      await prisma.user.upsert({
-        create: {
-          username: discordMember.user.globalName,
-          discordId: discordMember.user.id,
-        },
-        update: {
-          username: discordMember.user.globalName,
-          isActive: true,
-        },
-        where: { discordId: discordMember.user.id },
-      });
+      if (discordMember.user.globalName) {
+        await prisma.user.upsert({
+          create: {
+            username: discordMember.user.globalName,
+            discordId: discordMember.user.id,
+          },
+          update: {
+            username: discordMember.user.globalName,
+            isActive: true,
+          },
+          where: { discordId: discordMember.user.id },
+        });
+      }
     });
 
     client.on(Events.GuildMemberRemove, async (discordMember) => {
