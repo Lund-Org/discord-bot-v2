@@ -33,20 +33,42 @@ export async function getStaticProps({
 
   let mdxContent;
 
-  if (existsSync(join(dir, `${params.filename}.mdx`))) {
-    mdxContent = readFileSync(join(dir, `${params.filename}.mdx`));
-  } else {
-    const remoteFile = await axios.get(
-      `${process.env.NEXT_PUBLIC_CDN_URL}/blog-articles/${
-        params.filename
-      }.mdx?t=${Date.now()}`,
+  try {
+    console.log(
+      `Try to get the local file ${join(dir, `${params.filename}.mdx`)}`,
     );
 
-    mdxContent = remoteFile.data;
+    if (existsSync(join(dir, `${params.filename}.mdx`))) {
+      console.log('Local file exists');
+      mdxContent = readFileSync(join(dir, `${params.filename}.mdx`));
+    } else {
+      console.log(
+        `Local file doesn't exist, will fetch ${`${process.env.NEXT_PUBLIC_CDN_URL}/blog-articles/${encodeURIComponent(
+          params.filename,
+        )}.mdx?t=${Date.now()}`}`,
+      );
+      const remoteFile = await axios.get(
+        `${process.env.NEXT_PUBLIC_CDN_URL}/blog-articles/${encodeURIComponent(
+          params.filename,
+        )}.mdx?t=${Date.now()}`,
+      );
 
-    writeFileSync(join(dir, `${params.filename}.mdx`), mdxContent, {
-      flag: 'w+',
-    });
+      mdxContent = remoteFile.data;
+
+      writeFileSync(join(dir, `${params.filename}.mdx`), mdxContent, {
+        flag: 'w+',
+      });
+    }
+  } catch (err) {
+    console.error(`Could not get the blog article ${params.filename}`);
+    console.error(err);
+
+    return {
+      redirect: {
+        destination: '/blog',
+        permanent: false,
+      },
+    };
   }
 
   return {
