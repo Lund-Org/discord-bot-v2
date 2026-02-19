@@ -91,7 +91,11 @@ const CdnImage = ({
   ...rest
 }: ImageProps & { external?: boolean }) => (
   <Image
-    src={external ? src : `${process.env.NEXT_PUBLIC_CDN_URL}${src}`}
+    src={
+      external || src?.startsWith(process.env.NEXT_PUBLIC_CDN_URL || '')
+        ? src
+        : `${process.env.NEXT_PUBLIC_CDN_URL}${src}`
+    }
     {...rest}
   />
 );
