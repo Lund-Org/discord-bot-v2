@@ -14,7 +14,13 @@ export const Video = ({
   <AspectRatio ratio={16 / 9} maxW="800px" mx={isCentered ? 'auto' : ''}>
     <video controls width="100%">
       <source
-        src={external ? src : `${process.env.NEXT_PUBLIC_CDN_URL}${src}`}
+        src={
+          external ||
+          src?.startsWith(process.env.NEXT_PUBLIC_CDN_URL || '') ||
+          src?.startsWith(process.env.NEXT_PUBLIC_CLOUDFRONT_URL || '')
+            ? src
+            : `${process.env.NEXT_PUBLIC_CDN_URL}${src}`
+        }
         type={type}
       />
     </video>

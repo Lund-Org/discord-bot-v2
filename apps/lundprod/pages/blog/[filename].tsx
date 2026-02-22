@@ -43,12 +43,12 @@ export async function getStaticProps({
       mdxContent = readFileSync(join(dir, `${params.filename}.mdx`));
     } else {
       console.log(
-        `Local file doesn't exist, will fetch ${`${process.env.NEXT_PUBLIC_CDN_URL}/blog-articles/${encodeURIComponent(
+        `Local file doesn't exist, will fetch ${`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/blog-articles/${encodeURIComponent(
           params.filename,
         )}.mdx?t=${Date.now()}`}`,
       );
       const remoteFile = await axios.get(
-        `${process.env.NEXT_PUBLIC_CDN_URL}/blog-articles/${encodeURIComponent(
+        `${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/blog-articles/${encodeURIComponent(
           params.filename,
         )}.mdx?t=${Date.now()}`,
       );

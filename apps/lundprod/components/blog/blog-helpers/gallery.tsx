@@ -79,7 +79,9 @@ export const Gallery = ({ images, aspectRatio = 16 / 9 }: GalleryProps) => {
     }
   };
   const getImageSrc = (image: ImageItem) => {
-    return image.external
+    return image.external ||
+      image.src?.startsWith(process.env.NEXT_PUBLIC_CDN_URL || '') ||
+      image.src?.startsWith(process.env.NEXT_PUBLIC_CLOUDFRONT_URL || '')
       ? image.src
       : `${process.env.NEXT_PUBLIC_CDN_URL}${image.src}`;
   };

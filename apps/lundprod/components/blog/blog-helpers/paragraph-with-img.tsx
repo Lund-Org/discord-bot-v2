@@ -21,7 +21,13 @@ export const ParagraphWithImg = ({
 }: ParagraphWithImgProps) => (
   <Box alignItems="center" justifyContent="center" {...rest}>
     <Image
-      src={external ? src : `${process.env.NEXT_PUBLIC_CDN_URL}${src}`}
+      src={
+        external ||
+        src?.startsWith(process.env.NEXT_PUBLIC_CDN_URL || '') ||
+        src?.startsWith(process.env.NEXT_PUBLIC_CLOUDFRONT_URL || '')
+          ? src
+          : `${process.env.NEXT_PUBLIC_CDN_URL}${src}`
+      }
       alt={alt}
       float={direction}
       m={direction === 'right' ? '0 0 10px 10px' : '0 10px 10px 0'}
