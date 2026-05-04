@@ -330,21 +330,8 @@ model User {
   player        Player?
   backlogItems  BacklogItem[]
   expectedGames ExpectedGame[]
-  aiAttempts    AiAttempt[]
 
   @@map("User")
-}
-
-model AiAttempt {
-  id     Int @id @default(autoincrement())
-  userId Int
-
-  createdAt DateTime @default(now()) @db.Timestamp(3)
-  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
-
-  user User @relation(fields: [userId], references: [id])
-
-  @@map("AiAttempt")
 }
 
 //-- Enums

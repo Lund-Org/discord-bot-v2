@@ -9,7 +9,6 @@ import { pongResponse } from './pong';
 import { ppResponse } from './pp';
 import { roll6Response, roll20Response, roll100Response } from './roll';
 import { shifumiResponse } from './shifumi';
-import { tellmeResponse } from './tellme';
 
 export const commandsResponses = [
   birthdayResponse,
@@ -25,7 +24,6 @@ export const commandsResponses = [
   roll20Response,
   roll100Response,
   shifumiResponse,
-  tellmeResponse,
 ];
 
 export const menusCallback = [gachaMenuResponse];
