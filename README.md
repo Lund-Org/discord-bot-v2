@@ -4,19 +4,19 @@ Discord bot for the LundProd server
 
 ## Commands
 
-- `npm run build`
+- `pnpm run build`
   Compile the TypeScript into Javascript to be executed with Node
 
-- `npm run generate-cards`
+- `pnpm run generate-cards`
   Create the card assets
 
-- `npm run start-bot`
+- `pnpm run start-bot`
   Execute the compiled code built earlier for the bot
 
-- `npm run start-lundprod`
+- `pnpm run start-lundprod`
   Execute the compiled code built earlier for the website
 
-- `npm run test`
+- `pnpm run test`
   Run tests. Currently, they are not written.
 
 ## Bot features
