@@ -1,4 +1,3 @@
-import { giftPointsForBirthday } from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { ChatInputCommandInteraction } from 'discord.js';
@@ -27,7 +26,7 @@ export const birthdayCmd = new SlashCommandBuilder()
     option
       .setName('day')
       .setDescription('Le jour de naissance')
-      .setRequired(true)
+      .setRequired(true),
   )
   .addNumberOption((option) => {
     const opt = option
@@ -45,7 +44,7 @@ export const birthdayCmd = new SlashCommandBuilder()
     option
       .setName('year')
       .setDescription("L'année de naissance")
-      .setRequired(true)
+      .setRequired(true),
   )
   .toJSON();
 
@@ -65,7 +64,7 @@ async function birthdayCallback(interaction: ChatInputCommandInteraction) {
   }
 
   try {
-    const newBirthday = await prisma.birthday.upsert({
+    await prisma.birthday.upsert({
       where: { discordId: userId },
       update: {
         birthdayDay: day,
@@ -80,33 +79,11 @@ async function birthdayCallback(interaction: ChatInputCommandInteraction) {
       },
     });
     interaction.reply(`Anniversaire enregistré !`);
-    if (newBirthday) {
-      await backportThisYearPoints(day, month, userId);
-    }
   } catch (e) {
     console.log(e);
     interaction.reply(
-      `Une erreur est arrivée lors de la sauvegarde de l'anniversaire`
+      `Une erreur est arrivée lors de la sauvegarde de l'anniversaire`,
     );
-  }
-}
-
-async function backportThisYearPoints(
-  day: number,
-  month: number,
-  discordId: string
-) {
-  const birthdayThisYear = new Date(new Date().getFullYear(), month - 1, day);
-
-  if (birthdayThisYear.getTime() < Date.now()) {
-    const user = await prisma.user.findFirst({
-      include: { player: true },
-      where: { discordId, isActive: true },
-    });
-
-    if (user?.player && user.isActive) {
-      await giftPointsForBirthday(discordId);
-    }
   }
 }
 

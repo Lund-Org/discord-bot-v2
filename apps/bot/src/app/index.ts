@@ -7,7 +7,6 @@ import {
   OmitPartialGroupDMChannel,
   PartialMessage,
   Partials,
-  User,
 } from 'discord.js';
 
 import { buttonsCallback, commandsResponses, menusCallback } from './commands';
@@ -15,7 +14,6 @@ import { initCommands } from './commands/initializer';
 import CreateHandlerClasses from './handlers/createHandlers';
 import { Handler } from './handlers/Handler';
 import UpdateHandlerClasses from './handlers/updateHandlers';
-import { manageGachaPagination } from './helpers/discordEvent';
 import initializers from './initializers';
 
 export const startBot = (): Promise<Client> => {
@@ -152,11 +150,11 @@ export const startBot = (): Promise<Client> => {
       });
 
       if (matchingPagination) {
-        await manageGachaPagination(
-          matchingPagination,
-          fullReaction,
-          user as User,
-        );
+        // await manageGachaPagination(
+        //   matchingPagination,
+        //   fullReaction,
+        //   user as User,
+        // );
       }
     });
 

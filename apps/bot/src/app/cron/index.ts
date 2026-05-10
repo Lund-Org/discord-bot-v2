@@ -2,7 +2,6 @@ import { CronJob } from 'cron';
 import { Client } from 'discord.js';
 
 import * as birthdayJob from './birthday.job';
-import * as dailyShopJob from './daily-shop.job';
 import * as gameReleaseJob from './game-release.job';
 import * as syncReleaseDateJob from './sync-release-date.job';
 
@@ -11,13 +10,6 @@ function setupCron(discordClient: Client) {
     new CronJob(
       birthdayJob.cronTiming,
       () => birthdayJob.cronDefinition(discordClient),
-      null,
-      true,
-      'Europe/Paris',
-    ),
-    new CronJob(
-      dailyShopJob.cronTiming,
-      () => dailyShopJob.cronDefinition(discordClient),
       null,
       true,
       'Europe/Paris',
