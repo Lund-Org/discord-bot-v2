@@ -10,13 +10,13 @@ const prismaClientSingleton = () => {
 
   const discordNotificationChannelExtension =
     DiscordNotificationChannelExtension(prismaClient);
-  const playerInventoryExtension = PlayerInventoryExtension(prismaClient);
+  const gachaPlayerInventoryExtension = PlayerInventoryExtension(prismaClient);
   const userExtension = UserExtension(prismaClient);
 
   return prismaClient.$extends({
     model: {
       discordNotificationChannel: discordNotificationChannelExtension,
-      playerInventory: playerInventoryExtension,
+      gachaPlayerInventory: gachaPlayerInventoryExtension,
       user: userExtension,
     },
   });

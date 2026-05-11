@@ -13,13 +13,13 @@ export async function getCardsToFusion(discordId: string) {
         fusionDependencies: true,
       },
     });
-    const inventoryCards = await prisma.playerInventory.findMany({
+    const inventoryCards = await prisma.gachaPlayerInventory.findMany({
       include: {
-        player: true,
+        gachaPlayer: true,
         cardType: true,
       },
       where: {
-        player: { user: { discordId } },
+        gachaPlayer: { user: { discordId } },
         type: 'basic',
       },
     });
@@ -29,7 +29,7 @@ export async function getCardsToFusion(discordId: string) {
       const hasAllDeps = depsIds.every((depId) => {
         return inventoryCards.find(
           (inventoryCard) =>
-            inventoryCard.cardType.id === depId && inventoryCard.total > 0
+            inventoryCard.cardType.id === depId && inventoryCard.total > 0,
         );
       });
 

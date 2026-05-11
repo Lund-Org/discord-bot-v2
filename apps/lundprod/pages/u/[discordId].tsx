@@ -52,9 +52,10 @@ export const getServerSideProps: GetServerSideProps<
     };
   }
 
-  const cardsToGold = await prisma.playerInventory.getCardsToGold(discordId);
-  const [rank] = profile.player
-    ? await getGlobalRanking([profile.player.id])
+  const cardsToGold =
+    await prisma.gachaPlayerInventory.getCardsToGold(discordId);
+  const [rank] = profile.gachaPlayer
+    ? await getGlobalRanking([profile.gachaPlayer.id])
     : [null];
   const fusions = await getCardsToFusion(discordId);
 
@@ -149,7 +150,7 @@ export function UserProfilePage({
         tabProps={(value) => ({
           ...(value === PROFILE_TABS.GACHA
             ? {
-                isDisabled: !profile.player,
+                isDisabled: !profile.gachaPlayer,
               }
             : {}),
           _selected: {

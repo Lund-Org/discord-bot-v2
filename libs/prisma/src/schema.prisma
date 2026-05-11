@@ -122,10 +122,10 @@ model CardType {
   createdAt DateTime @default(now()) @db.Timestamp(3)
   updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
 
-  possibleFusions    CardType[]        @relation("CardFusions")
-  fusionDependencies CardType[]        @relation("CardFusions")
-  playerInventory    PlayerInventory[]
-  dailyShopItems     DailyShopItem[]
+  possibleFusions    CardType[]             @relation("CardFusions")
+  fusionDependencies CardType[]             @relation("CardFusions")
+  playerInventory    GachaPlayerInventory[]
+  dailyShopItems     GachaDailyShopItem[]
 
   @@map("CardType")
 }
@@ -138,7 +138,7 @@ model Config {
   @@map("Config")
 }
 
-model DailyPurchase {
+model GachaDailyPurchase {
   id              Int @id @default(autoincrement())
   playerId        Int
   dailyShopItemId Int
@@ -146,8 +146,8 @@ model DailyPurchase {
   createdAt DateTime @default(now()) @db.Timestamp(3)
   updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
 
-  dailyShopItem DailyShopItem @relation(fields: [dailyShopItemId], references: [id])
-  player        Player        @relation(fields: [playerId], references: [id])
+  dailyShopItem GachaDailyShopItem @relation(fields: [dailyShopItemId], references: [id])
+  player        GachaPlayer        @relation(fields: [playerId], references: [id])
 
   @@unique([playerId, dailyShopItemId])
   @@index([dailyShopItemId])
@@ -155,7 +155,7 @@ model DailyPurchase {
   @@map("DailyPurchase")
 }
 
-model DailyShop {
+model GachaDailyShop {
   id        Int    @id @default(autoincrement())
   shopDay   Int
   shopMonth Int
@@ -165,13 +165,13 @@ model DailyShop {
   createdAt DateTime @default(now()) @db.Timestamp(3)
   updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
 
-  dailyShopItems DailyShopItem[]
+  dailyShopItems GachaDailyShopItem[]
 
   @@unique([shopDay, shopMonth, shopYear])
-  @@map("DailyShop")
+  @@map("GachaDailyShop")
 }
 
-model DailyShopItem {
+model GachaDailyShopItem {
   id          Int    @id @default(autoincrement())
   cardTypeId  Int
   dailyShopId Int
@@ -181,14 +181,14 @@ model DailyShopItem {
   createdAt DateTime @default(now()) @db.Timestamp(3)
   updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
 
-  cardType      CardType        @relation(fields: [cardTypeId], references: [id])
-  dailyShop     DailyShop       @relation(fields: [dailyShopId], references: [id])
-  dailyPurchase DailyPurchase[]
+  cardType      CardType             @relation(fields: [cardTypeId], references: [id])
+  dailyShop     GachaDailyShop       @relation(fields: [dailyShopId], references: [id])
+  dailyPurchase GachaDailyPurchase[]
 
   @@unique([cardTypeId, dailyShopId])
   @@index([dailyShopId])
   @@index([cardTypeId])
-  @@map("DailyShopItem")
+  @@map("GachaDailyShopItem")
 }
 
 model DiscordNotificationChannel {
@@ -244,7 +244,7 @@ model GameCache {
   @@map("GameCache")
 }
 
-model Gift {
+model GachaGift {
   id                Int      @id @default(autoincrement())
   beginningDatetime DateTime @db.DateTime(0)
   endDatetime       DateTime @db.DateTime(0)
@@ -254,9 +254,9 @@ model Gift {
   createdAt DateTime @default(now()) @db.Timestamp(3)
   updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
 
-  players Player[]
+  players GachaPlayer[]
 
-  @@map("Gift")
+  @@map("GachaGift")
 }
 
 model Pagination {
@@ -268,7 +268,7 @@ model Pagination {
   @@map("Pagination")
 }
 
-model Player {
+model GachaPlayer {
   id                 Int       @id @default(autoincrement())
   points             Int
   lastMessageDate    DateTime  @default(now()) @db.DateTime(0)
@@ -282,15 +282,15 @@ model Player {
   createdAt DateTime @default(now()) @db.Timestamp(3)
   updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
 
-  gifts           Gift[]
-  playerInventory PlayerInventory[]
-  dailyPurchase   DailyPurchase[]
-  user            User              @relation(fields: [userId], references: [id])
+  gifts                GachaGift[]
+  gachaPlayerInventory GachaPlayerInventory[]
+  dailyPurchase        GachaDailyPurchase[]
+  user                 User                   @relation(fields: [userId], references: [id])
 
-  @@map("Player")
+  @@map("GachaPlayer")
 }
 
-model PlayerInventory {
+model GachaPlayerInventory {
   id         Int    @id @default(autoincrement())
   total      Int
   playerId   Int
@@ -300,13 +300,13 @@ model PlayerInventory {
   createdAt DateTime @default(now()) @db.Timestamp(3)
   updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
 
-  cardType CardType @relation(fields: [cardTypeId], references: [id])
-  player   Player   @relation(fields: [playerId], references: [id])
+  cardType    CardType    @relation(fields: [cardTypeId], references: [id])
+  gachaPlayer GachaPlayer @relation(fields: [playerId], references: [id])
 
   @@unique([playerId, cardTypeId, type])
   @@index([cardTypeId])
   @@index([playerId])
-  @@map("PlayerInventory")
+  @@map("GachaPlayerInventory")
 }
 
 model Tag {
@@ -327,7 +327,7 @@ model User {
   createdAt DateTime @default(now()) @db.Timestamp(3)
   updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
 
-  player        Player?
+  gachaPlayer   GachaPlayer?
   backlogItems  BacklogItem[]
   expectedGames ExpectedGame[]
 

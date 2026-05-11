@@ -11,7 +11,7 @@ import {
   PopoverTrigger,
   Text,
 } from '@chakra-ui/react';
-import { CardType, PlayerInventory } from '@prisma/client';
+import { CardType, GachaPlayerInventory } from '@prisma/client';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -39,7 +39,7 @@ export const GachaInventoryList = ({
   });
 
   const [basicCards, goldCards] = useMemo(() => {
-    const playerInventory = profile.player?.playerInventory || [];
+    const playerInventory = profile.gachaPlayer?.gachaPlayerInventory || [];
     const filteredBasicInventories = playerInventory.filter(
       (x) => x.type === 'basic',
     );
@@ -48,7 +48,7 @@ export const GachaInventoryList = ({
     );
 
     const filterCardsByFilter = (
-      sourceCards: (PlayerInventory & {
+      sourceCards: (GachaPlayerInventory & {
         cardType: CardType;
       })[],
     ) => {

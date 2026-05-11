@@ -1,4 +1,9 @@
-import { CardType, Player, PlayerInventory, User } from '@prisma/client';
+import {
+  CardType,
+  GachaPlayer,
+  GachaPlayerInventory,
+  User,
+} from '@prisma/client';
 
 //-- Gacha types
 
@@ -17,18 +22,18 @@ export type Filters = {
 };
 
 export type ProfileType = User & {
-  player?: Player & {
-    playerInventory?: (PlayerInventory & {
+  gachaPlayer?: GachaPlayer & {
+    gachaPlayerInventory?: (GachaPlayerInventory & {
       cardType: CardType;
     })[];
   };
 };
 
-export type CardsToGoldType = (PlayerInventory & {
+export type CardsToGoldType = (GachaPlayerInventory & {
   cardType: CardType;
 })[];
 
-export type Rank = Player & {
+export type Rank = GachaPlayer & {
   username: string;
   discordId: string;
   playerId: number;
