@@ -28,7 +28,7 @@ export const GachaView = ({
 }: GachaTabProps) => {
   const { t } = useTranslation();
 
-  if (!profile.player) {
+  if (!profile.gachaPlayer) {
     return null;
   }
 
@@ -45,18 +45,21 @@ export const GachaView = ({
             {t('profile.gacha.xpToNextLevel', { xp: rank.level.xpNextLevel })}
           </Text>
           <Text>
-            {t('profile.gacha.points', { points: profile.player.points })}
+            {t('profile.gacha.points', { points: profile.gachaPlayer.points })}
           </Text>
           <Divider w="200px" my="16px" />
           <Text>
             {t('profile.gacha.join', {
-              date: formatDate(t, new Date(profile.player.joinDate)),
+              date: formatDate(t, new Date(profile.gachaPlayer.joinDate)),
             })}
           </Text>
-          {profile.player.lastDailyDraw ? (
+          {profile.gachaPlayer.lastDailyDraw ? (
             <Text>
               {t('profile.gacha.lastDraw', {
-                date: formatDate(t, new Date(profile.player.lastDailyDraw)),
+                date: formatDate(
+                  t,
+                  new Date(profile.gachaPlayer.lastDailyDraw),
+                ),
               })}
             </Text>
           ) : null}

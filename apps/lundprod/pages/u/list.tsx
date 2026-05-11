@@ -14,7 +14,7 @@ type UsersPageProps = {
   users: Array<{
     discordId: string;
     username: string;
-    isPlayer: boolean;
+    isGachaPlayer: boolean;
     backlogItemsCount: number;
     expectedGamesCount: number;
   }>;
@@ -27,7 +27,7 @@ export const getServerSideProps: GetServerSideProps<
     select: {
       discordId: true,
       username: true,
-      player: { select: { id: true } },
+      gachaPlayer: { select: { id: true } },
       backlogItems: {
         select: {
           id: true,
@@ -48,18 +48,19 @@ export const getServerSideProps: GetServerSideProps<
   });
 
   const users = DBUsers.map((user) => {
-    const { backlogItems, expectedGames, player, username, discordId } = user;
+    const { backlogItems, expectedGames, gachaPlayer, username, discordId } =
+      user;
 
     return {
       username,
       discordId,
-      isPlayer: !!player,
+      isGachaPlayer: !!gachaPlayer,
       backlogItemsCount: backlogItems.length,
       expectedGamesCount: expectedGames.length,
     };
   }).filter(
-    ({ isPlayer, backlogItemsCount, expectedGamesCount }) =>
-      isPlayer || backlogItemsCount || expectedGamesCount,
+    ({ isGachaPlayer, backlogItemsCount, expectedGamesCount }) =>
+      isGachaPlayer || backlogItemsCount || expectedGamesCount,
   );
 
   return {
@@ -106,13 +107,13 @@ export function UserProfilePage({ users }: UsersPageProps) {
                   label="Joueur de gacha"
                   bg="gray.200"
                   color="gray.900"
-                  isDisabled={!user.isPlayer}
+                  isDisabled={!user.isGachaPlayer}
                   hasArrow
                 >
                   <Button variant="third" px={[2, 4]}>
                     <GamepadIcon
                       boxSize={[6, 8]}
-                      {...iconColorFn(user.isPlayer, index)}
+                      {...iconColorFn(user.isGachaPlayer, index)}
                     />
                   </Button>
                 </Tooltip>

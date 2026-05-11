@@ -48,7 +48,7 @@ export const GachaMenu = ({ onClick }: { onClick: () => void }) => {
       href: getGachaRankingPage(),
       isActive: isGachaRankingPage,
     },
-    ...(session?.isPlayer
+    ...(session?.isGachaPlayer
       ? [
           {
             label: t('menu.gacha.myPage'),

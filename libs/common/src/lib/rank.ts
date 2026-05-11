@@ -1,10 +1,10 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import { Player } from '@prisma/client';
+import { GachaPlayer } from '@prisma/client';
 
 import { GachaConfigEnum } from './gacha-enum';
 import { CardXPConfig } from './types';
 
-type XpByPlayer = Player & {
+type XpByPlayer = GachaPlayer & {
   playerId: number;
   currentXP: number;
   totalCards: number;
@@ -40,23 +40,23 @@ export async function getGlobalRanking(
     SELECT
       t1.playerId,
       SUM(t1.price * t1.level) AS currentXP,
-      Player.*,
+      GachaPlayer.*,
       User.discordId,
       User.username,
       COUNT(playerId) as totalCards
     FROM (
       SELECT
-        PlayerInventory.playerId,
-        PlayerInventory.cardTypeId,
-        PlayerInventory.type,
-        CASE WHEN PlayerInventory.type = "gold" THEN ${xpVal.gold} ELSE ${xpVal.basic} END AS price,
+        GachaPlayerInventory.playerId,
+        GachaPlayerInventory.cardTypeId,
+        GachaPlayerInventory.type,
+        CASE WHEN GachaPlayerInventory.type = "gold" THEN ${xpVal.gold} ELSE ${xpVal.basic} END AS price,
         CardType.level
-      FROM PlayerInventory
-      LEFT JOIN CardType ON CardType.id = PlayerInventory.cardTypeId
+      FROM GachaPlayerInventory
+      LEFT JOIN CardType ON CardType.id = GachaPlayerInventory.cardTypeId
       WHERE total > 0
       GROUP BY playerId, cardTypeId, type
     ) as t1
-    LEFT JOIN Player on Player.id = t1.playerId
+    LEFT JOIN GachaPlayer on Player.id = t1.playerId
     LEFT JOIN User on User.id = Player.userId
     GROUP BY playerId
     ORDER BY currentXP DESC, finishRank ASC`;

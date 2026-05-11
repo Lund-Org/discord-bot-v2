@@ -41,7 +41,7 @@ export const authOptions: AuthOptions = {
       const newSession: Session = {
         ...session,
         userId: token.userId,
-        isPlayer: !!dbUser?.player,
+        isGachaPlayer: !!dbUser?.gachaPlayer,
       };
 
       return newSession;

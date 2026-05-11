@@ -4,20 +4,20 @@ export const UserExtension = (prisma: PrismaClient) => ({
   getPlayer: async (discordId: string) => {
     const user = await prisma.user.findFirst({
       include: {
-        player: true,
+        gachaPlayer: true,
       },
       where: { discordId, isActive: true },
     });
 
-    return user?.player && user.isActive ? user : null;
+    return user?.gachaPlayer && user.isActive ? user : null;
   },
 
   getPlayerWithInventory: async (discordId: string) => {
     const user = await prisma.user.findFirst({
       include: {
-        player: {
+        gachaPlayer: {
           include: {
-            playerInventory: {
+            gachaPlayerInventory: {
               include: {
                 cardType: true,
               },
@@ -28,15 +28,15 @@ export const UserExtension = (prisma: PrismaClient) => ({
       where: { discordId, isActive: true },
     });
 
-    return user?.player && user.isActive ? user : null;
+    return user?.gachaPlayer && user.isActive ? user : null;
   },
 
   getProfile: async (discordId: string) => {
     return prisma.user.findUnique({
       include: {
-        player: {
+        gachaPlayer: {
           include: {
-            playerInventory: {
+            gachaPlayerInventory: {
               include: {
                 cardType: true,
               },

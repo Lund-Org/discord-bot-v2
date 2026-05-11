@@ -13,7 +13,7 @@ declare module 'next-auth' {
    */
   interface Session extends DefaultSession {
     userId: string;
-    isPlayer: boolean;
+    isGachaPlayer: boolean;
   }
 }
 

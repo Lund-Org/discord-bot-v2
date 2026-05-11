@@ -3,9 +3,9 @@ import { PrismaClient } from '@prisma/client';
 export const PlayerInventoryExtension = (prisma: PrismaClient) => ({
   getCardsToGold: async (discordId: string) => {
     try {
-      return prisma.playerInventory.findMany({
+      return prisma.gachaPlayerInventory.findMany({
         where: {
-          player: {
+          gachaPlayer: {
             user: { discordId },
           },
           type: 'basic',
