@@ -260,10 +260,11 @@ model GachaGift {
 }
 
 model Pagination {
-  id               Int    @id @default(autoincrement())
+  id               Int            @id @default(autoincrement())
   page             Int
-  discordMessageId String @unique @db.VarChar(255)
-  discordUserId    String @db.VarChar(255)
+  discordMessageId String         @unique @db.VarChar(255)
+  discordUserId    String         @db.VarChar(255)
+  type             PaginationType @default(GACHA_INVENTORY) // to backfill existing
 
   @@map("Pagination")
 }
@@ -327,11 +328,167 @@ model User {
   createdAt DateTime @default(now()) @db.Timestamp(3)
   updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
 
-  gachaPlayer   GachaPlayer?
-  backlogItems  BacklogItem[]
-  expectedGames ExpectedGame[]
+  gachaPlayer     GachaPlayer?
+  backlogItems    BacklogItem[]
+  expectedGames   ExpectedGame[]
+  adventurePlayer AdventurePlayer?
 
+  @@index([discordId])
   @@map("User")
+}
+
+model AdventurePlayer {
+  id     Int @id @default(autoincrement())
+  userId Int @unique
+
+  name       String
+  gold       Int    @default(0)
+  level      Int    @default(1)
+  experience Int    @default(0)
+  health     Int
+  raidLeft   Int    @default(5)
+
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+
+  user                User                                @relation(fields: [userId], references: [id])
+  raids               AdventureRaid[]
+  equipments          AdventurePlayerEquipment[]
+  inventoryEquipments AdventurePlayerInventoryEquipment[]
+
+  @@index([userId])
+  @@map("AdventurePlayer")
+}
+
+model AdventureEquipment {
+  id                        Int                    @id @default(autoincrement())
+  name                      String
+  imageUrl                  String
+  level                     Int
+  physicalDamageLowerBound  Int
+  magicDamageLowerBound     Int
+  physicalDamageHigherBound Int
+  magicDamageHigherBound    Int
+  life                      Int
+  shield                    Int
+  consummable               Boolean
+  rarity                    AdventureRarity
+  slot                      AdventureEquipmentType
+
+  createdAt                 DateTime                            @default(now()) @db.Timestamp(3)
+  updatedAt                 DateTime                            @default(now()) @updatedAt @db.Timestamp(3)
+  rooms                     AdventureRaidRoom[]
+  playerEquipments          AdventurePlayerEquipment[]
+  playerInventoryEquipments AdventurePlayerInventoryEquipment[]
+
+  @@map("AdventureEquipment")
+}
+
+model AdventureEnemy {
+  id         Int    @id @default(autoincrement())
+  name       String
+  imageUrl   String
+  difficulty Int    @default(1)
+
+  // in the future : drop resources & craft ?
+
+  physicalDamageMultiplierLowerBound  Float
+  magicDamageMultiplierLowerBound     Float
+  physicalDamageMultiplierHigherBound Float
+  magicDamageMultiplierHigherBound    Float
+  lifeMultiplier                      Float
+  shieldMultiplier                    Float
+
+  createdAt DateTime            @default(now()) @db.Timestamp(3)
+  updatedAt DateTime            @default(now()) @updatedAt @db.Timestamp(3)
+  rooms     AdventureRaidRoom[]
+
+  @@map("AdventureEnemy")
+}
+
+model AdventurePlayerEquipment {
+  id          Int           @id @default(autoincrement())
+  playerId    Int
+  equipmentId Int
+  slot        AdventureSlot
+
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+
+  player    AdventurePlayer    @relation(fields: [playerId], references: [id])
+  equipment AdventureEquipment @relation(fields: [equipmentId], references: [id])
+
+  @@unique([playerId, slot])
+  @@index([playerId])
+  @@index([equipmentId])
+  @@map("AdventurePlayerEquipment")
+}
+
+model AdventurePlayerInventoryEquipment {
+  id          Int @id @default(autoincrement())
+  playerId    Int
+  equipmentId Int
+  count       Int @default(1)
+
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+
+  player    AdventurePlayer    @relation(fields: [playerId], references: [id])
+  equipment AdventureEquipment @relation(fields: [equipmentId], references: [id])
+
+  @@unique([playerId, equipmentId])
+  @@index([playerId])
+  @@index([equipmentId])
+  @@map("AdventurePlayerInventoryEquipment")
+}
+
+model AdventureRaid {
+  id       Int    @id @default(autoincrement())
+  name     String
+  threadId String
+  playerId Int
+
+  playerX Int
+  playerY Int
+  active  Boolean
+
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+
+  player AdventurePlayer     @relation(fields: [playerId], references: [id])
+  rooms  AdventureRaidRoom[]
+
+  @@index([playerId])
+  @@index([threadId])
+  @@map("AdventureRaid")
+}
+
+model AdventureRaidRoom {
+  id     Int @id @default(autoincrement())
+  raidId Int
+
+  x    Int
+  y    Int
+  seen Boolean @default(false)
+
+  isEscape       Boolean
+  enemyId        Int?
+  enemyLevel     Int     @default(1)
+  enemyLife      Int     @default(0)
+  equipmentId    Int?
+  equipmentTaken Boolean @default(false)
+
+  raid      AdventureRaid       @relation(fields: [raidId], references: [id])
+  enemy     AdventureEnemy?     @relation(fields: [enemyId], references: [id])
+  equipment AdventureEquipment? @relation(fields: [equipmentId], references: [id])
+
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+
+  @@index([raidId])
+  @@index([enemyId])
+  @@index([equipmentId])
+  @@map("AdventureRaidRoom")
 }
 
 //-- Enums
@@ -360,4 +517,42 @@ enum ChannelNotification {
   BIRTHDAY
   MEME
   SHOP
+}
+
+enum AdventureEquipmentType {
+  HEAD
+  BODY
+  ARM
+  PANTS
+  SHOES
+  HAND
+  DUAL_HAND
+  CONSUMABLE
+}
+
+enum AdventureSlot {
+  HEAD
+  BODY
+  ARM_LEFT
+  ARM_RIGHT
+  PANTS
+  SHOES
+  HAND_LEFT
+  HAND_RIGHT
+  CONSUMABLE_1
+  CONSUMABLE_2
+}
+
+enum AdventureRarity {
+  COMMON
+  UNCOMMON
+  RARE
+  EPIC
+  LEGENDARY
+  MYTHIC
+}
+
+enum PaginationType {
+  GACHA_INVENTORY
+  ADVENTURE_INVENTORY
 }

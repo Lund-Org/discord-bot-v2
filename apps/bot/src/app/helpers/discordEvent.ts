@@ -1,4 +1,11 @@
+import { Pagination } from '@prisma/client';
 import axios from 'axios';
+import { MessageReaction, User } from 'discord.js';
+
+import {
+  EQUIPMENT_PER_PAGE,
+  updateMessage,
+} from '../commands/adventure/inventory';
 
 export function invalidateWebsitePages(discordId: string) {
   axios
@@ -10,31 +17,39 @@ export function invalidateWebsitePages(discordId: string) {
     });
 }
 
-// @todo: to reuse for adventure
-// export const manageGachaPagination = async (
-//   pagination: Pagination,
-//   reaction: MessageReaction,
-//   discordUser: DiscordUser
-// ) => {
-//   const user = await prisma.user.getPlayerWithInventory(discordUser.id);
+export const manageAdventurePagination = async (
+  pagination: Pagination,
+  reaction: MessageReaction,
+  discordUser: User,
+) => {
+  const user = await prisma.user.findUnique({
+    where: { discordId: discordUser.id },
+    include: {
+      adventurePlayer: {
+        include: {
+          inventoryEquipments: true,
+        },
+      },
+    },
+  });
 
-//   if (!user?.player) {
-//     return;
-//   }
+  if (!user?.adventurePlayer) {
+    return;
+  }
 
-//   const maxPage = Math.floor(
-//     user.player.playerInventory.length / CARD_PER_PAGE
-//   );
+  const maxPage = Math.floor(
+    user.adventurePlayer.inventoryEquipments.length / EQUIPMENT_PER_PAGE,
+  );
 
-//   if (pagination.page === maxPage && reaction.emoji.name === '▶') {
-//     pagination.page = 0;
-//   } else if (pagination.page === 0 && reaction.emoji.name === '◀') {
-//     pagination.page = maxPage;
-//   } else if (reaction.emoji.name === '▶') {
-//     pagination.page += 1;
-//   } else if (reaction.emoji.name === '◀') {
-//     pagination.page -= 1;
-//   }
+  if (pagination.page === maxPage && reaction.emoji.name === '▶') {
+    pagination.page = 0;
+  } else if (pagination.page === 0 && reaction.emoji.name === '◀') {
+    pagination.page = maxPage;
+  } else if (reaction.emoji.name === '▶') {
+    pagination.page += 1;
+  } else if (reaction.emoji.name === '◀') {
+    pagination.page -= 1;
+  }
 
-//   await updateMessage(pagination, reaction, discordUser);
-// };
+  await updateMessage(pagination, reaction, discordUser);
+};

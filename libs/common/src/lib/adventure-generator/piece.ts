@@ -60,7 +60,7 @@ export class Piece {
   max_interconnect_length = 0;
   room_count = 0;
 
-  start_pos = [0, 0];
+  start_pos: Vector = [0, 0];
 
   constructor(options: PieceOptions) {
     options = Object.assign(
