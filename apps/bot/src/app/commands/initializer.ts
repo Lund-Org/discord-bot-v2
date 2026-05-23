@@ -1,6 +1,7 @@
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
 
+import { adventureCmd } from './adventure';
 import { birthdayCmd } from './birthday';
 import { googleCmd } from './google';
 import { howlongtobeatCmd } from './howlongtobeat';
@@ -13,6 +14,7 @@ import { roll6Cmd, roll20Cmd, roll100Cmd } from './roll';
 import { shifumiCmd } from './shifumi';
 
 const commands = [
+  adventureCmd,
   birthdayCmd,
   googleCmd,
   howlongtobeatCmd,

@@ -1,3 +1,4 @@
+import { adventureResponse } from './adventure';
 import { birthdayResponse } from './birthday';
 import { googleResponse } from './google';
 import { howlongtobeatResponse } from './howlongtobeat';
@@ -10,6 +11,7 @@ import { roll6Response, roll20Response, roll100Response } from './roll';
 import { shifumiResponse } from './shifumi';
 
 export const commandsResponses = [
+  adventureResponse,
   birthdayResponse,
   googleResponse,
   howlongtobeatResponse,
