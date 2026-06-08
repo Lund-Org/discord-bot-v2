@@ -9,7 +9,9 @@ export const help = async (interaction: ChatInputCommandInteraction) => {
       { name: 'update <name>', value: 'Met à jour le nom de joueur' },
     ])
     .addFields([{ name: 'inventory', value: 'Affiche son inventaire' }])
-    .addFields([{ name: 'equipment', value: 'Affiche les objets équipés' }])
+    .addFields([
+      { name: 'status', value: 'Affiche les stats et objets équipés' },
+    ])
     .addFields([{ name: 'equip <id> <slot>', value: 'Equipe un objet' }])
     .addFields([{ name: 'unequip <slot>', value: 'Déséquipe un objet' }])
     .addFields([{ name: 'raid', value: 'Démarre un raid' }])

@@ -1,5 +1,9 @@
 import { AdventureEquipment } from '@prisma/client';
-import { ChatInputCommandInteraction, TextChannel } from 'discord.js';
+import {
+  AttachmentBuilder,
+  ChatInputCommandInteraction,
+  TextChannel,
+} from 'discord.js';
 import { isEqual } from 'lodash';
 
 import {
@@ -21,6 +25,7 @@ export const move = async (interaction: ChatInputCommandInteraction) => {
               rooms: {
                 include: {
                   equipment: true,
+                  enemy: true,
                 },
               },
             },
@@ -147,16 +152,22 @@ export const move = async (interaction: ChatInputCommandInteraction) => {
     nextAdjacentRooms,
   );
 
-  return interaction.editReply(
-    `${takeItem ? `Tu ramasses un nouvel objet qui s'ajoute à ton inventaire.\n${displayEquipmentData(targetRoom.equipment)}\n` : ''}${description}`,
-  );
+  const attachments: AttachmentBuilder[] =
+    targetRoom.enemy && targetRoom.enemyLife > 0
+      ? [new AttachmentBuilder(targetRoom.enemy.imageUrl)]
+      : [];
+
+  return interaction.editReply({
+    content: `${takeItem ? `Tu ramasses un nouvel objet qui s'ajoute à ton inventaire.\n${displayEquipmentData(targetRoom.equipment)}\n` : ''}${description}`,
+    files: attachments,
+  });
 };
 
 function displayEquipmentData(equipment: AdventureEquipment) {
-  const { life, magicDmg, physicalDmg, shield, slot } =
+  const { life, magicDmg, physicalDmg, shield, slot, type } =
     getEquipmentData(equipment);
 
-  return [physicalDmg, magicDmg, life, shield, slot]
+  return [physicalDmg, magicDmg, life, shield, slot, type]
     .filter(Boolean)
     .join(' · ');
 }

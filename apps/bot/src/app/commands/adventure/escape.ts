@@ -98,13 +98,13 @@ export const escape = async (interaction: ChatInputCommandInteraction) => {
     return interaction.editReply(
       [
         "Tu n'as pas réussi à t'échapper",
-        `L'ennemi t'attaque avec ${enemyDamage} dégats (${enemyPhysicalDamage}🗡️ - ${Math.min(playerShield, enemyPhysicalDamage)}🛡️ + ${enemyMagicDamage}🪄)`,
+        `L'ennemi t'attaque avec ${enemyDamage} dégats (${enemyPhysicalDamage} ⚔️ - ${Math.min(playerShield, enemyPhysicalDamage)} 🛡️ + ${enemyMagicDamage} 🪄)`,
         ...(isPlayerDead
           ? [
               `Cette attaque a raison de toi, tu réussis néanmoins à fuir le donjon en y laissant quelques pièces sur la route.`,
             ]
           : [
-              `${user.adventurePlayer.name} : ${playerLife - enemyDamage}❤️ - ${currentRoom.enemy.name} : ${currentRoom.enemyLife}❤️`,
+              `${user.adventurePlayer.name} : ${playerLife - enemyDamage} ❤️ - ${currentRoom.enemy.name} : ${currentRoom.enemyLife} ❤️`,
             ]),
       ].join('\n'),
     );

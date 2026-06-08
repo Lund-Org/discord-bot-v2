@@ -243,22 +243,22 @@ export const use = async (interaction: ChatInputCommandInteraction) => {
 
     if (isPlayerDead) {
       await interaction.editReply(
-        `Tu attaques l'ennemi avec ${enemyLifeLost} dégats (${physicalDamage}🗡️ - ${Math.round(
+        `Tu attaques l'ennemi avec ${enemyLifeLost} dégats (${physicalDamage} ⚔️ - ${Math.round(
           currentRoom.enemy.shieldMultiplier * currentRoom.enemyLevel,
-        )}🛡️ + ${magicDamage}🪄) et il riposte avec ${enemyDamage} dégats (${enemyPhysicalDamage}🗡️ - ${Math.min(playerShield, enemyPhysicalDamage)}🛡️ + ${enemyMagicDamage}🪄)
+        )} 🛡️ + ${magicDamage} 🪄) et il riposte avec ${enemyDamage} dégats (${enemyPhysicalDamage} ⚔️ - ${Math.min(playerShield, enemyPhysicalDamage)} 🛡️ + ${enemyMagicDamage} 🪄)
         Cette attaque a raison de toi, tu réussis néanmoins à fuir le donjon en y laissant quelques pièces sur la route.`,
       );
       return (interaction.channel as ThreadChannel).setLocked(true);
     } else {
       const lifeStatus =
         currentRoom.enemyLife - enemyLifeLost > 0
-          ? `${user.adventurePlayer.name} : ${playerLife - enemyDamage}❤️ - ${currentRoom.enemy.name} : ${currentRoom.enemyLife - enemyLifeLost}❤️`
-          : `L'ennemi est vaincu. ${user.adventurePlayer.name} : ${playerLife - enemyDamage}❤️`;
+          ? `${user.adventurePlayer.name} : ${playerLife - enemyDamage} ❤️ - ${currentRoom.enemy.name} : ${currentRoom.enemyLife - enemyLifeLost}❤️`
+          : `L'ennemi est vaincu. ${user.adventurePlayer.name} : ${playerLife - enemyDamage} ❤️`;
 
       return interaction.editReply(
-        `Tu attaques l'ennemi avec ${enemyLifeLost} dégats (${physicalDamage}🗡️ - ${Math.round(
+        `Tu attaques l'ennemi avec ${enemyLifeLost} dégats (${physicalDamage} ⚔️ - ${Math.round(
           currentRoom.enemy.shieldMultiplier * currentRoom.enemyLevel,
-        )}🛡️ + ${magicDamage}🪄) et il riposte avec ${enemyDamage} dégats (${enemyPhysicalDamage}🗡️ - ${Math.min(playerShield, enemyPhysicalDamage)}🛡️ + ${enemyMagicDamage}🪄)
+        )} 🛡️ + ${magicDamage} 🪄) et il riposte avec ${enemyDamage} dégats (${enemyPhysicalDamage} ⚔️ - ${Math.min(playerShield, enemyPhysicalDamage)} 🛡️ + ${enemyMagicDamage} 🪄)
         ${lifeStatus}`,
       );
     }
@@ -304,7 +304,7 @@ export const use = async (interaction: ChatInputCommandInteraction) => {
       ]);
 
       return interaction.editReply(
-        `Tu as utilisé "${consummable.name}" et récupéré des points de vie. Tu as dorénavant ${newHealth}❤️`,
+        `Tu as utilisé "${consummable.name}" et récupéré des points de vie. Tu as dorénavant ${newHealth} ❤️`,
       );
     }
 
