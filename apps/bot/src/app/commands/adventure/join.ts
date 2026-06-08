@@ -20,8 +20,6 @@ export const join = async (interaction: ChatInputCommandInteraction) => {
 
   await interaction.deferReply();
 
-  // preset d'objets, random build
-
   await prisma.adventurePlayer.create({
     data: {
       name,

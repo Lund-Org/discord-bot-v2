@@ -1,4 +1,8 @@
-import { directionMapping, equipmentTypeMapping } from '@discord-bot-v2/common';
+import {
+  directionMapping,
+  equipmentTypeMapping,
+  slotMapping,
+} from '@discord-bot-v2/common';
 import {
   AdventureEnemy,
   AdventureEquipment,
@@ -7,6 +11,7 @@ import {
   AdventurePlayerEquipment,
   AdventureRaidRoom,
   AdventureRarity,
+  AdventureSlot,
 } from '@prisma/client';
 import { isEqual } from 'lodash';
 
@@ -18,29 +23,35 @@ export const xpMultiplier = 3;
 
 export type RoomDirection = keyof typeof directionMapping;
 
-export function getEquipmentData(equipment: AdventureEquipment) {
+export function getEquipmentData(
+  equipment: AdventureEquipment,
+  equipmentSlot?: AdventureSlot,
+) {
   const physicalDmg =
     equipment.physicalDamageHigherBound === 0
       ? ''
       : equipment.physicalDamageLowerBound ===
           equipment.physicalDamageHigherBound
-        ? `⚔️ ${equipment.physicalDamageLowerBound}`
-        : `⚔️ ${equipment.physicalDamageLowerBound} - ${equipment.physicalDamageHigherBound}`;
+        ? `${equipment.physicalDamageLowerBound} ⚔️`
+        : `${equipment.physicalDamageLowerBound} - ${equipment.physicalDamageHigherBound} ⚔️`;
 
   const magicDmg =
     equipment.magicDamageHigherBound === 0
       ? ''
       : equipment.magicDamageLowerBound === equipment.magicDamageHigherBound
-        ? `🪄 ${equipment.magicDamageLowerBound}`
-        : `🪄 ${equipment.magicDamageLowerBound} - ${equipment.magicDamageHigherBound}`;
+        ? `${equipment.magicDamageLowerBound} 🪄`
+        : `${equipment.magicDamageLowerBound} - ${equipment.magicDamageHigherBound} 🪄`;
 
-  const life = equipment.life ? `🩸 ${equipment.life}` : '';
+  const life = equipment.life ? `${equipment.life} ❤️` : '';
 
-  const shield = equipment.shield ? `🛡️ ${equipment.shield}` : '';
+  const shield = equipment.shield ? `${equipment.shield} 🛡️` : '';
 
-  const slot = `Type : ${equipmentTypeMapping[equipment.slot]}`;
+  const type = `Type : ${equipmentTypeMapping[equipment.slot]}`;
+  const slot = equipmentSlot
+    ? `Emplacement : ${slotMapping[equipmentSlot]}`
+    : null;
 
-  return { physicalDmg, magicDmg, life, shield, slot };
+  return { physicalDmg, magicDmg, life, shield, slot, type };
 }
 
 export function getAdjacentRoomsDescription(
