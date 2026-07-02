@@ -5,7 +5,7 @@ import { Trans } from 'react-i18next';
 import { illustrationSketching } from '~/lundprod/assets';
 import { networks } from '~/lundprod/utils/url';
 
-import { LightStyledLink } from '../styled-link';
+import { DarkStyledLink } from '../styled-link';
 import { FullLinePresentation } from './full-line-presentation';
 
 export const OtherProjectsPresentation = () => {
@@ -15,7 +15,7 @@ export const OtherProjectsPresentation = () => {
 
   return (
     <FullLinePresentation
-      theme="dark"
+      theme="light"
       title="Autres projets"
       illustration={illustrationSketching}
       illustrationPosition="left"
@@ -24,9 +24,9 @@ export const OtherProjectsPresentation = () => {
         <Trans
           i18nKey="home.other.line1"
           components={{
-            projectLink: <LightStyledLink href="/projects" />,
+            projectLink: <DarkStyledLink href="/projects" />,
             discordLink: (
-              <LightStyledLink
+              <DarkStyledLink
                 href={discordNetwork?.url || '#'}
                 target="_blank"
                 rel="noreferrer noopener"

@@ -1,12 +1,11 @@
 import { ChevronRightIcon, TimeIcon } from '@chakra-ui/icons';
-import { Box, Button, Flex, Heading, Text, Tooltip } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import { prisma } from '@discord-bot-v2/prisma';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { GamepadIcon } from '~/lundprod/components/icons/gamepad';
 import { ListIcon } from '~/lundprod/components/icons/list';
 import { TooltipIconIndicator } from '~/lundprod/components/users/tooltip-icon-indicator';
 
@@ -14,7 +13,6 @@ type UsersPageProps = {
   users: Array<{
     discordId: string;
     username: string;
-    isPlayer: boolean;
     backlogItemsCount: number;
     expectedGamesCount: number;
   }>;
@@ -27,7 +25,6 @@ export const getServerSideProps: GetServerSideProps<
     select: {
       discordId: true,
       username: true,
-      player: { select: { id: true } },
       backlogItems: {
         select: {
           id: true,
@@ -48,18 +45,17 @@ export const getServerSideProps: GetServerSideProps<
   });
 
   const users = DBUsers.map((user) => {
-    const { backlogItems, expectedGames, player, username, discordId } = user;
+    const { backlogItems, expectedGames, username, discordId } = user;
 
     return {
       username,
       discordId,
-      isPlayer: !!player,
       backlogItemsCount: backlogItems.length,
       expectedGamesCount: expectedGames.length,
     };
   }).filter(
-    ({ isPlayer, backlogItemsCount, expectedGamesCount }) =>
-      isPlayer || backlogItemsCount || expectedGamesCount,
+    ({ backlogItemsCount, expectedGamesCount }) =>
+      backlogItemsCount || expectedGamesCount,
   );
 
   return {
@@ -102,20 +98,6 @@ export function UserProfilePage({ users }: UsersPageProps) {
             >
               <Text pl={[2, 0]}>{user.username}</Text>
               <Box ml="auto" mr={0}>
-                <Tooltip
-                  label="Joueur de gacha"
-                  bg="gray.200"
-                  color="gray.900"
-                  isDisabled={!user.isPlayer}
-                  hasArrow
-                >
-                  <Button variant="third" px={[2, 4]}>
-                    <GamepadIcon
-                      boxSize={[6, 8]}
-                      {...iconColorFn(user.isPlayer, index)}
-                    />
-                  </Button>
-                </Tooltip>
                 <TooltipIconIndicator
                   tooltipLabel="A un backlog"
                   icon={

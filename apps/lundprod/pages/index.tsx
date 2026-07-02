@@ -13,7 +13,6 @@ import { GetStaticProps } from 'next';
 import { useTranslation } from 'react-i18next';
 
 import { BotPresentation } from '../components/home/bot-presentation';
-import { GachaPresentation } from '../components/home/gacha-presentation';
 import { OtherProjectsPresentation } from '../components/home/other-projects-presentation';
 import { WebsitePresentation } from '../components/home/website-presentation';
 import { Welcome } from '../components/home/welcome';
@@ -106,9 +105,8 @@ export function Index({
           </AspectRatio>
         </Collapse>
       </Box>
-      <GachaPresentation />
-      <BotPresentation />
       <WebsitePresentation />
+      <BotPresentation />
       <OtherProjectsPresentation />
     </Box>
   );

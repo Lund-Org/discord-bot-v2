@@ -5,7 +5,7 @@ import { useClickAway } from 'react-use';
 
 import { MENU_HEIGHT } from '~/lundprod/utils/constants';
 
-import { BlogMenu, GachaMenu, HomeMenu, SignMenu } from './navigation';
+import { BlogMenu, HomeMenu, SignMenu } from './navigation';
 import { ContactMenu } from './navigation/contact-menu';
 import { ProjectMenu } from './navigation/project-menu';
 import { MenuBox } from './navigation/styled-components';
@@ -16,7 +16,6 @@ export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const Menus = [
     HomeMenu,
-    GachaMenu,
     BlogMenu,
     UserMenu,
     ProjectMenu,

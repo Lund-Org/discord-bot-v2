@@ -9,6 +9,7 @@ import {
   ProfileType,
 } from '~/lundprod/utils/types';
 
+import { Warning } from '../gacha/warning';
 import { GachaCardToGoldList } from './gacha-card-to-gold-list';
 import { GachaFusionList } from './gacha-fusion-list';
 import { GachaInventoryList } from './gacha-inventory-list';
@@ -34,6 +35,7 @@ export const GachaView = ({
 
   return (
     <Box>
+      <Warning />
       {rank && (
         <Box lineHeight="30px" mb="24px">
           <Text>

@@ -10,18 +10,23 @@ import {
 import {
   CardXPConfig,
   ChancesConfig,
-  GachaConfigEnum,
+  configCardXP,
+  configDropChances,
+  configLevels,
+  configPrice,
+  configSell,
   PriceConfig,
   SellConfig,
 } from '@discord-bot-v2/common';
-import { prisma } from '@discord-bot-v2/prisma';
 import { GetStaticProps } from 'next';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { CommandTable } from '~/lundprod/components/gacha/home/command-table';
 import { DiscordCTA } from '~/lundprod/components/gacha/home/discord-CTA';
 import { LevelsTable } from '~/lundprod/components/gacha/home/levels-table';
+import { Warning } from '~/lundprod/components/gacha/warning';
 import { LightStyledLink } from '~/lundprod/components/styled-link';
+
 
 type GachaPageProps = {
   configSell: SellConfig;
@@ -32,32 +37,6 @@ type GachaPageProps = {
 };
 
 export const getStaticProps: GetStaticProps<GachaPageProps> = async () => {
-  const configSell = (
-    await prisma.config.findUnique({
-      where: { name: GachaConfigEnum.SELL },
-    })
-  )?.value as SellConfig;
-  const configPrice = (
-    await prisma.config.findUnique({
-      where: { name: GachaConfigEnum.PRICE },
-    })
-  )?.value as PriceConfig;
-  const configDropChances = (
-    await prisma.config.findUnique({
-      where: { name: GachaConfigEnum.DROP_CHANCES },
-    })
-  )?.value as ChancesConfig;
-  const configCardXP = (
-    await prisma.config.findUnique({
-      where: { name: GachaConfigEnum.CARD_XP },
-    })
-  )?.value as CardXPConfig;
-  const configLevels = (
-    await prisma.config.findUnique({
-      where: { name: GachaConfigEnum.LEVELS },
-    })
-  )?.value as Record<string, number>;
-
   return {
     // Next.js will attempt to re-generate the page:
     // - When a request comes in
@@ -86,6 +65,7 @@ export function GachaPage({
   return (
     <Flex justifyContent="center">
       <Box maxW="1200px" p="30px" overflow="hidden">
+        <Warning />
         <Heading
           variant="h3"
           as="h3"
@@ -93,6 +73,7 @@ export function GachaPage({
           mb="30px"
           borderBottom="1px solid var(--chakra-colors-orange-500)"
           maxW="400px"
+          mt="30px"
         >
           {t('gacha.index.title')}
         </Heading>
