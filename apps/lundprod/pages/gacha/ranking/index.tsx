@@ -1,9 +1,10 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import { getGlobalRanking, RankByUser } from '@discord-bot-v2/common';
 import { GetStaticProps } from 'next';
 
 import { Rank } from '~/lundprod/components/gacha/ranking/rank';
 import { RankList } from '~/lundprod/components/gacha/ranking/rank-list';
+import { Warning } from '~/lundprod/components/gacha/warning';
 
 type GachaRankPageProps = {
   ranks: RankByUser[];
@@ -26,22 +27,25 @@ export function GachaRankPage({ ranks }: GachaRankPageProps) {
   const [top1, top2, top3, ...others] = ranks;
 
   return (
-    <Box
-      padding={{ base: 0, md: '20px' }}
-      display={{ base: 'block', md: 'flex' }}
-    >
-      <Box width={{ base: '100%', md: '50%' }}>
-        {top1 ? <Rank rank={top1} level={1} /> : null}
-        {top2 ? <Rank rank={top2} level={2} /> : null}
-        {top3 ? <Rank rank={top3} level={3} /> : null}
-      </Box>
+    <Flex flexDir="column">
+      <Warning />
       <Box
-        width={{ base: '100%', md: '50%' }}
-        fontSize={{ base: 'inherit', md: '16px' }}
+        padding={{ base: 0, md: '20px' }}
+        display={{ base: 'block', md: 'flex' }}
       >
-        <RankList ranks={others} />
+        <Box width={{ base: '100%', md: '50%' }}>
+          {top1 ? <Rank rank={top1} level={1} /> : null}
+          {top2 ? <Rank rank={top2} level={2} /> : null}
+          {top3 ? <Rank rank={top3} level={3} /> : null}
+        </Box>
+        <Box
+          width={{ base: '100%', md: '50%' }}
+          fontSize={{ base: 'inherit', md: '16px' }}
+        >
+          <RankList ranks={others} />
+        </Box>
       </Box>
-    </Box>
+    </Flex>
   );
 }
 

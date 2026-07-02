@@ -185,7 +185,8 @@
       "level": "Niveau : {{level}}",
       "listUserInfo": ", niveau {{level}} avec {{xp}}xp",
       "xp": "XP : {{xp}}"
-    }
+    },
+    "warning": "Ce jeu a été supprimé du serveur Discord. Vous pouvez toujours voir comment il fonctionnait."
   },
   "gameModal": {
     "details": "Détails",
@@ -232,12 +233,6 @@
       "line3": "Vous pouvez retrouver le code du site et le bot sur <darkLinkGithub>Github<externalIcon /></darkLinkGithub>",
       "title": "MauriceBot"
     },
-    "gacha": {
-      "line1": "Jeu sur mon discord de collection de cartes. Ces cartes sont basées sur l'univers de ma chaine, par rapport aux jeux auxquels j'ai pu jouer en live.",
-      "line2": "Contrairement aux gachas mobiles qui incitent aux microtransactions, ici tout est évidemment gratuit.",
-      "line3": "Vous pouvez y accéder <darkLinkDiscord>ici<externalIcon /></darkLinkDiscord> ou consulter les cartes & le classement <darkLinkGacha>ici</darkLinkGacha>.",
-      "title": "Gacha"
-    },
     "other": {
       "line1": "Et bien d'autres projets sont disponibles ou en cours de réalisation comme des réalisations 3D, des jeux, et plus encore. Ils sont visibles dans la rubrique <projectLink>projets</projectLink> mais vous pouvez aussi retrouver les annonces de nouveaux projets via <discordLink>Discord<externalIcon /></discordLink>"
     },
@@ -261,14 +256,6 @@
   "menu": {
     "blog": "Blog",
     "contact": "Mes réseaux",
-    "gacha": {
-      "gacha": "Gacha",
-      "gachaEntry": "Gacha > {{entry}}",
-      "intro": "Introduction",
-      "list": "Liste",
-      "myPage": "Ma page",
-      "ranking": "Classement"
-    },
     "home": "Accueil",
     "projects": "Projets",
     "sign": {
@@ -650,7 +637,7 @@
         "title": "Générateur d'Awards"
       },
       "gacha": {
-        "date": "2021 - 2024",
+        "date": "2021 - 2026",
         "description": "Le jeu de carte sur Discord",
         "title": "Gacha"
       },

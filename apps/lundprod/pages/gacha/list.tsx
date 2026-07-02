@@ -4,6 +4,7 @@ import { GetStaticProps } from 'next';
 
 import { CardPreviewContainer } from '~/lundprod/components/gacha/list/card-preview-container';
 import { Navbar } from '~/lundprod/components/gacha/list/navbar';
+import { Warning } from '~/lundprod/components/gacha/warning';
 import { GachaHomeProvider } from '~/lundprod/contexts/gacha-home-context';
 import { CardWithFusionDependencies } from '~/lundprod/utils/types';
 
@@ -45,9 +46,12 @@ export function GachaPageList({ cardTypes }: GachaPageListProps) {
 
   return (
     <GachaHomeProvider cards={cardTypes}>
-      <Flex maxH="100vh">
-        <Navbar />
-        {!isMobile && <CardPreviewContainer />}
+      <Flex maxH="100vh" flexDir={"column"}>
+        <Warning />
+        <Flex flex={1}>
+          <Navbar />
+          {!isMobile && <CardPreviewContainer />}
+        </Flex>
       </Flex>
     </GachaHomeProvider>
   );
