@@ -11,7 +11,7 @@ import {
   PopoverTrigger,
   Text,
 } from '@chakra-ui/react';
-import { CardType, PlayerInventory } from '@prisma/client';
+import { CardType, PlayerInventory } from '@discord-bot-v2/prisma';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

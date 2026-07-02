@@ -1,6 +1,6 @@
 import { getCardsToFusion } from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
-import { CardType, Player, PlayerInventory } from '@prisma/client';
+import { CardType, Player, PlayerInventory } from '@discord-bot-v2/prisma';
 import {
   ActionRowBuilder,
   APISelectMenuOption,

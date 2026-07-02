@@ -11,7 +11,7 @@ import {
   PlayerInventory,
   Prisma,
   User,
-} from '@prisma/client';
+} from '@discord-bot-v2/prisma';
 import {
   ButtonInteraction,
   ChatInputCommandInteraction,

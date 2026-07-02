@@ -1,5 +1,5 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import { BacklogItem, BacklogStatus, User } from '@prisma/client';
+import { BacklogItem, BacklogStatus, User } from '@discord-bot-v2/prisma';
 import { TRPCError } from '@trpc/server';
 import { EmbedBuilder, WebhookClient } from 'discord.js';
 import z from 'zod';

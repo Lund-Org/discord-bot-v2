@@ -1,5 +1,5 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import { BlogStatus, Category } from '@prisma/client';
+import { BlogStatus, Category } from '@discord-bot-v2/prisma';
 
 import { POST_PER_PAGE } from '../constants';
 

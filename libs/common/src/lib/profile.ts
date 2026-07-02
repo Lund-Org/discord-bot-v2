@@ -1,5 +1,5 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import { CardType } from '@prisma/client';
+import { CardType } from '@discord-bot-v2/prisma';
 
 export type CardTypeWithFusionDependencies = CardType & {
   fusionDependencies: CardType[];
@@ -29,7 +29,7 @@ export async function getCardsToFusion(discordId: string) {
       const hasAllDeps = depsIds.every((depId) => {
         return inventoryCards.find(
           (inventoryCard) =>
-            inventoryCard.cardType.id === depId && inventoryCard.total > 0
+            inventoryCard.cardType.id === depId && inventoryCard.total > 0,
         );
       });
 

@@ -1,5 +1,5 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import { BacklogStatus, Prisma } from '@prisma/client';
+import { BacklogStatus, Prisma } from '@discord-bot-v2/prisma';
 import z from 'zod';
 
 import { BACKLOG_ITEMS_PER_PAGE } from '../../utils/trpc/constants';

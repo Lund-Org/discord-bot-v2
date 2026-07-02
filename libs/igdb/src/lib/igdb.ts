@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 import { Filter, Game, OrFilter } from '../types';
 import { addGameToCache } from './cache';
 import {
@@ -23,21 +21,19 @@ async function twitchAuth() {
     return twitchToken;
   }
 
-  return axios
-    .post(
-      'https://id.twitch.tv/oauth2/token',
-      {
-        client_id: process.env.TWITCH_CLIENT_ID,
-        client_secret: process.env.TWITCH_SECRET_ID,
-        grant_type: 'client_credentials',
-      },
-      {
-        headers: {
-          'content-type': 'application/json',
-        },
-      },
-    )
-    .then(({ data }) => {
+  return fetch('https://id.twitch.tv/oauth2/token', {
+    method: 'POST',
+    body: JSON.stringify({
+      client_id: process.env.TWITCH_CLIENT_ID,
+      client_secret: process.env.TWITCH_SECRET_ID,
+      grant_type: 'client_credentials',
+    }),
+    headers: {
+      'content-type': 'application/json',
+    },
+  })
+    .then(({ json }) => json())
+    .then((data) => {
       twitchToken = {
         ...data,
         refreshDate: new Date(Date.now() + data.expires_in * 1000),
@@ -59,28 +55,16 @@ async function IGDBRequest<T>(
 ): Promise<T> {
   await twitchAuth();
 
-  return axios({
-    url: `${BASE_URL}${path}`,
+  return fetch(`${BASE_URL}${path}`, {
     method,
     headers: {
       Accept: 'application/json',
-      'Client-ID': process.env.TWITCH_CLIENT_ID,
+      'Client-ID': process.env.TWITCH_CLIENT_ID as string,
       Authorization: `Bearer ${twitchToken?.access_token || ''}`,
       ...headers,
     },
-    data: query,
-  })
-    .then(({ data }) => data)
-    .catch((err) => {
-      if (axios.isAxiosError(err)) {
-        // Too many request, limit reach, retry
-        if (err.response?.status === 429) {
-          return IGDBRequest(path, query);
-        }
-      }
-
-      throw err;
-    });
+    body: query,
+  }).then(({ json }) => json());
 }
 
 // for test or update data purpose

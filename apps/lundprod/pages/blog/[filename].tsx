@@ -1,5 +1,4 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import axios from 'axios';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { MDXRemote } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
@@ -47,13 +46,13 @@ export async function getStaticProps({
           params.filename,
         )}.mdx?t=${Date.now()}`}`,
       );
-      const remoteFile = await axios.get(
+      const { text: getRemoteData } = await fetch(
         `${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/blog-articles/${encodeURIComponent(
           params.filename,
         )}.mdx?t=${Date.now()}`,
       );
 
-      mdxContent = remoteFile.data;
+      mdxContent = await getRemoteData();
 
       writeFileSync(join(dir, `${params.filename}.mdx`), mdxContent, {
         flag: 'w+',

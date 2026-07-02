@@ -44,6 +44,7 @@ apps/lundprod/public/card-images/*
 apps/lundprod/public/mdx/*
 .env
 .vscode
+libs/prisma/src/generated/
 
 # Next.js
 .next

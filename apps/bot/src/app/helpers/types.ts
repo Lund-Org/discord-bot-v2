@@ -1,4 +1,4 @@
-import { CardType } from '@prisma/client';
+import { CardType } from '@discord-bot-v2/prisma';
 
 export type CardDraw = {
   cardType: CardType;

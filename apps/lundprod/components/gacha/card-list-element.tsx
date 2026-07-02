@@ -1,6 +1,6 @@
 import { StarIcon } from '@chakra-ui/icons';
 import { Box, Flex, FlexProps, Image, Text } from '@chakra-ui/react';
-import { CardType } from '@prisma/client';
+import { CardType } from '@discord-bot-v2/prisma';
 
 import { fusionIcon } from '~/lundprod/assets';
 import { useGachaHome } from '~/lundprod/contexts/gacha-home-context';
@@ -53,7 +53,7 @@ export const CardListElement = ({
 };
 
 function hasFusionDependencies(
-  data: CardListElementProps['card']
+  data: CardListElementProps['card'],
 ): data is CardWithFusionDependencies {
   return 'fusionDependencies' in data;
 }

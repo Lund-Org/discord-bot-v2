@@ -3,7 +3,12 @@ import {
   givenPointsForBirthday,
 } from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
-import { Client, NonThreadGuildBasedChannel, TextChannel } from 'discord.js';
+import {
+  Client,
+  GuildBasedChannel,
+  NonThreadGuildBasedChannel,
+  TextChannel,
+} from 'discord.js';
 
 export const cronTiming = '0 0 0 * * *';
 
@@ -32,8 +37,9 @@ export async function cronDefinition(discordClient: Client) {
           .catch(() => null);
 
         if (target) {
-          const notifChannel: NonThreadGuildBasedChannel | null =
-            await guild.channels.fetch(BirthdayChannelId).catch(() => null);
+          const notifChannel: GuildBasedChannel | null = await guild.channels
+            .fetch(BirthdayChannelId)
+            .catch(() => null);
 
           // get the general channel
           if (notifChannel && notifChannel.isTextBased()) {
@@ -41,11 +47,11 @@ export async function cronDefinition(discordClient: Client) {
 
             if (hasEarnPoints) {
               (notifChannel as TextChannel).send(
-                `Bon anniversaire ${target.toString()} 🎂. En tant que joueur de gacha, tu as gagné ${givenPointsForBirthday} points :)`
+                `Bon anniversaire ${target.toString()} 🎂. En tant que joueur de gacha, tu as gagné ${givenPointsForBirthday} points :)`,
               );
             } else {
               (notifChannel as TextChannel).send(
-                `Bon anniversaire ${target.toString()} 🎂`
+                `Bon anniversaire ${target.toString()} 🎂`,
               );
             }
           }

@@ -1,5 +1,5 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@discord-bot-v2/prisma';
 import { TRPCError } from '@trpc/server';
 import z from 'zod';
 

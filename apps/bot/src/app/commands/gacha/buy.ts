@@ -1,6 +1,6 @@
 import { GachaConfigEnum, PriceConfig } from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
-import { Player, User } from '@prisma/client';
+import { Player, User } from '@discord-bot-v2/prisma';
 import { AttachmentBuilder, ChatInputCommandInteraction } from 'discord.js';
 
 import { generateDrawImage } from '../../helpers/canvas';

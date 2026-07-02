@@ -14,7 +14,7 @@ export const view = async (interaction: ChatInputCommandInteraction) => {
     },
   });
   if (cardToCreate) {
-    const canvas = await generateDrawImage(interaction.user.globalName, [
+    const canvas = await generateDrawImage(interaction.user?.globalName || '', [
       { cardType: cardToCreate, isGold: false },
     ]);
     const attachment = new AttachmentBuilder(canvas.toBuffer(), {

@@ -1,4 +1,4 @@
-import { Category } from '@prisma/client';
+import { Category } from '@discord-bot-v2/prisma';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import { getManyBlogPosts } from '~/lundprod/utils/api/blog';

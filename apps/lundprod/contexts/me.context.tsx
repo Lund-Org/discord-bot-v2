@@ -1,4 +1,4 @@
-import type { BacklogStatus } from '@prisma/client';
+import type { BacklogStatus } from '@discord-bot-v2/prisma';
 import { keepPreviousData } from '@tanstack/react-query';
 import { groupBy } from 'lodash';
 import { createContext, ReactNode, useContext, useMemo } from 'react';

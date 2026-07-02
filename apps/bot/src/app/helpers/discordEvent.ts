@@ -1,24 +1,21 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import { Pagination } from '@prisma/client';
-import axios from 'axios';
+import { Pagination } from '@discord-bot-v2/prisma';
 import { MessageReaction, User as DiscordUser } from 'discord.js';
 
 import { CARD_PER_PAGE, updateMessage } from '../commands/gacha/cards';
 
 export function invalidateWebsitePages(discordId: string) {
-  axios
-    .get(
-      `http://localhost:${process.env.PORT}/api/refresh-gacha-profile?discordId=${discordId}`
-    )
-    .catch(() => {
-      console.error("Can't reach the refresh gacha profile URL");
-    });
+  return fetch(
+    `http://localhost:${process.env.PORT}/api/refresh-gacha-profile?discordId=${discordId}`,
+  ).catch(() => {
+    console.error("Can't reach the refresh gacha profile URL");
+  });
 }
 
 export const manageGachaPagination = async (
   pagination: Pagination,
   reaction: MessageReaction,
-  discordUser: DiscordUser
+  discordUser: DiscordUser,
 ) => {
   const user = await prisma.user.getPlayerWithInventory(discordUser.id);
 
@@ -27,7 +24,7 @@ export const manageGachaPagination = async (
   }
 
   const maxPage = Math.floor(
-    user.player.playerInventory.length / CARD_PER_PAGE
+    user.player.playerInventory.length / CARD_PER_PAGE,
   );
 
   if (pagination.page === maxPage && reaction.emoji.name === '▶') {

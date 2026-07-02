@@ -78,12 +78,14 @@ export const startBot = (): Promise<Client> => {
     });
 
     client.on(Events.UserUpdate, async (user) => {
-      await prisma.user.update({
-        data: {
-          username: user.globalName,
-        },
-        where: { discordId: user.id },
-      });
+      if (user.globalName) {
+        await prisma.user.update({
+          data: {
+            username: user.globalName,
+          },
+          where: { discordId: user.id },
+        });
+      }
     });
 
     client.on(Events.MessageCreate, async (msg: Message) => {

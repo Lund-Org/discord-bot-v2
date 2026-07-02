@@ -1,5 +1,5 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import { BlogStatus } from '@prisma/client';
+import { BlogStatus } from '@discord-bot-v2/prisma';
 import { EmbedBuilder, WebhookClient } from 'discord.js';
 import { NextApiRequest, NextApiResponse } from 'next';
 

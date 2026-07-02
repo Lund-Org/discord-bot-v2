@@ -1,12 +1,15 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaMariaDb } from '@prisma/adapter-mariadb';
+import { PrismaClient } from '../generated/prisma/client';
 
 import { DiscordNotificationChannelExtension } from './extensions/discord-notification-channel';
 import { PlayerInventoryExtension } from './extensions/player-inventory';
 import { UserExtension } from './extensions/user';
 
+const adapter = new PrismaMariaDb({});
+
 // https://www.prisma.io/docs/orm/more/help-and-troubleshooting/help-articles/nextjs-prisma-client-dev-practices
 const prismaClientSingleton = () => {
-  const prismaClient = new PrismaClient();
+  const prismaClient = new PrismaClient({ adapter });
 
   const discordNotificationChannelExtension =
     DiscordNotificationChannelExtension(prismaClient);

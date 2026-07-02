@@ -1,5 +1,5 @@
 import { AspectRatio, Box, Heading, Image, Tag, Text } from '@chakra-ui/react';
-import { BlogPost, Tag as TagType } from '@prisma/client';
+import { BlogPost, Tag as TagType } from '@discord-bot-v2/prisma';
 
 import { ColoredSpacer } from './blog-helpers/colored-spacer';
 

@@ -1,4 +1,9 @@
-import { CardType, Player, PlayerInventory, User } from '@prisma/client';
+import {
+  CardType,
+  Player,
+  PlayerInventory,
+  User,
+} from '@discord-bot-v2/prisma';
 
 //-- Gacha types
 

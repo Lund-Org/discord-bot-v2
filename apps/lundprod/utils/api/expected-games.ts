@@ -1,6 +1,9 @@
 import { ArrayElement } from '@discord-bot-v2/common';
 import { REGION } from '@discord-bot-v2/igdb-front';
-import { ExpectedGame as PrismaExpectedGame, Prisma } from '@prisma/client';
+import {
+  ExpectedGame as PrismaExpectedGame,
+  Prisma,
+} from '@discord-bot-v2/prisma';
 
 export const expectedGamesFields = [
   'id',
@@ -14,7 +17,7 @@ export const expectedGamesFields = [
 export type ExpectedGamesFields = ArrayElement<typeof expectedGamesFields>;
 
 export const expectedGamesPrismaFields = Object.fromEntries(
-  expectedGamesFields.map((fieldName) => [fieldName, true])
+  expectedGamesFields.map((fieldName) => [fieldName, true]),
 ) as Record<ExpectedGamesFields, true>;
 
 export const expectedGamesPrismaSelect =

@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from './lib/prisma';
 
 async function main() {
   await prisma.cardType.createMany({
@@ -1328,7 +1326,7 @@ async function main() {
             connect: dependencyIds.map((id) => ({ id })),
           },
         },
-      })
+      }),
   );
 }
 

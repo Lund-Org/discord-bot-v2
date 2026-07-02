@@ -1,4 +1,4 @@
-import { Category } from '@prisma/client';
+import { Category } from '@discord-bot-v2/prisma';
 import { TFunction } from 'i18next';
 
 export const getTitleFromFilename = (filename: string) => {

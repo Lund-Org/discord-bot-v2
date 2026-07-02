@@ -8,7 +8,7 @@ export const CARD_PER_PAGE = 10;
 export const warn = async (interaction: ChatInputCommandInteraction) => {
   const user = await prisma.user.getPlayer(interaction.user.id);
 
-  if (!user?.player && user.isActive) {
+  if (!user || !user?.player || !user.isActive) {
     return userNotFoundWarning(interaction);
   }
 
@@ -28,6 +28,6 @@ export const warn = async (interaction: ChatInputCommandInteraction) => {
   return interaction.editReply(
     choice
       ? 'Tu seras prévenu si tu approches de la limite de points'
-      : "Tu ne seras plus prévenu à l'avenir"
+      : "Tu ne seras plus prévenu à l'avenir",
   );
 };

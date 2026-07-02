@@ -56,7 +56,7 @@ export async function cronDefinition() {
 
   try {
     const webhookClient = new WebhookClient({
-      url: process.env.EXPECTED_GAMES_WEBHOOK,
+      url: process.env.EXPECTED_GAMES_WEBHOOK as string,
     });
 
     // get the release date of the day for games not cancelled
@@ -99,12 +99,12 @@ export async function cronDefinition() {
           userDiscordIds: expectedGames.map(({ user }) => user.discordId),
           regions: expectedGames
             .map(
-              ({ releaseDate }) => translateRegion(t, releaseDate.region),
+              ({ releaseDate }) => translateRegion(t, releaseDate?.region),
               // translateRegion(i18n.t, releaseDate.region),
             )
             .join(', '),
           platforms: expectedGames
-            .map(({ releaseDate }) => getPlatformLabel(releaseDate.platformId))
+            .map(({ releaseDate }) => getPlatformLabel(releaseDate?.platformId))
             .join(', '),
         };
       })
@@ -148,7 +148,7 @@ export async function cronDefinition() {
           igdbId: expectedGame.igdbId,
         },
       });
-      let game_type = (gameCache.content as { game_type?: GAME_TYPE })
+      let game_type = (gameCache?.content as { game_type?: GAME_TYPE })
         .game_type;
 
       if (!game_type) {
@@ -175,7 +175,7 @@ export async function cronDefinition() {
               update: {},
               create: {
                 url: expectedGame.url,
-                game_type: translateGameType(t, game_type),
+                game_type: translateGameType(t, game_type) as string,
                 // game_type: translateGameType(i18n.t, game_type),
                 igdbGameId: expectedGame.igdbId,
                 name: expectedGame.name,

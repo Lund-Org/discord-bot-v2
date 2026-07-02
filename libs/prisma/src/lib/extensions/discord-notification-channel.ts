@@ -1,4 +1,4 @@
-import { ChannelNotification, PrismaClient } from '@prisma/client';
+import { ChannelNotification, PrismaClient } from '@discord-bot-v2/prisma';
 
 export const DiscordNotificationChannelExtension = (prisma: PrismaClient) => ({
   getBirthdayChannelId: async (): Promise<string> => {

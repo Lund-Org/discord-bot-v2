@@ -93,14 +93,6 @@ Copy the .env.dist as a .env
 
 The mysql url to connect to the database
 
-> **PORT**
-
-The port used by the proxy
-
-> **ENV**
-
-The env used for the proxy. If 'dev' => it ignores the https
-
 > **BOT_TOKEN**
 
 The token of your bot. Can be found [here](https://discord.com/developers/applications) > Select application > Bot
@@ -149,7 +141,7 @@ The webhook to post the updates on the backlog
 
 > **NEXT_PUBLIC_CDN_URL**
 
-The CDN url to redirect to when calling the proxy with the cdn subdomain
+The CDN url
 
 > **NEXTAUTH_SECRET**
 

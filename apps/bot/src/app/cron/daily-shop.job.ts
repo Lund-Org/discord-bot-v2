@@ -1,6 +1,6 @@
 import { GachaConfigEnum } from '@discord-bot-v2/common';
 import { prisma } from '@discord-bot-v2/prisma';
-import { CardType } from '@prisma/client';
+import { CardType } from '@discord-bot-v2/prisma';
 import {
   ActionRowBuilder,
   AttachmentBuilder,
@@ -9,6 +9,7 @@ import {
   Client,
   Collection,
   Guild,
+  GuildBasedChannel,
   TextChannel,
 } from 'discord.js';
 
@@ -49,7 +50,7 @@ export async function cronDefinition(discordClient: Client) {
     const threadName = getThreadName(date);
     const canvas = await generateDrawImage(
       threadName,
-      cards.map((card, index) => ({ cardType: card, isGold: index === 0 }))
+      cards.map((card, index) => ({ cardType: card, isGold: index === 0 })),
     );
     const attachment = new AttachmentBuilder(canvas.toBuffer(), {
       name: 'cards.png',
@@ -101,7 +102,7 @@ export async function cronDefinition(discordClient: Client) {
 }
 
 async function findShopChannel(
-  discordClient: Client
+  discordClient: Client,
 ): Promise<TextChannel | null> {
   let shopChannel = null;
   const servers: Collection<string, Guild> = discordClient.guilds.cache;
@@ -109,7 +110,7 @@ async function findShopChannel(
     await prisma.discordNotificationChannel.getShopChannelId();
 
   servers.some((server: Guild): boolean => {
-    shopChannel = server.channels.cache.find((channel: TextChannel) => {
+    shopChannel = server.channels.cache.find((channel: GuildBasedChannel) => {
       return channel.id === ShopChannelId;
     });
 
@@ -136,7 +137,7 @@ function getThreadName(d: Date) {
 
 async function deleteThreadJMin2(shopChannel: TextChannel) {
   const previousDateJMin2 = new Date(
-    new Date().getTime() - 24 * 60 * 60 * 1000 * 2
+    new Date().getTime() - 24 * 60 * 60 * 1000 * 2,
   );
 
   const previousDailyShopJMin2 = await prisma.dailyShop.findUnique({
@@ -153,7 +154,7 @@ async function deleteThreadJMin2(shopChannel: TextChannel) {
   if (previousDailyShopJMin2) {
     const { threads: channelThreads } = await shopChannel.threads.fetch();
     const previousThread = channelThreads.find(
-      (x) => x.id === previousDailyShopJMin2.threadId
+      (x) => x.id === previousDailyShopJMin2.threadId,
     );
 
     if (previousThread) {
@@ -165,7 +166,7 @@ async function deleteThreadJMin2(shopChannel: TextChannel) {
 
 async function lockThreadJMin1(shopChannel: TextChannel) {
   const previousDateJMin1 = new Date(
-    new Date().getTime() - 24 * 60 * 60 * 1000
+    new Date().getTime() - 24 * 60 * 60 * 1000,
   );
 
   const previousDailyShopJMin1 = await prisma.dailyShop.findUnique({
@@ -182,7 +183,7 @@ async function lockThreadJMin1(shopChannel: TextChannel) {
   if (previousDailyShopJMin1) {
     const { threads: channelThreads } = await shopChannel.threads.fetch();
     const previousThread = channelThreads.find(
-      (x) => x.id === previousDailyShopJMin1.threadId
+      (x) => x.id === previousDailyShopJMin1.threadId,
     );
 
     if (previousThread) {
@@ -206,7 +207,7 @@ function getButtons(cards: CardType[]) {
       new ButtonBuilder()
         .setCustomId(`shopbuy-${card.id}`)
         .setLabel(`Carte ${index + 1} : #${card.id}`)
-        .setStyle(ButtonStyle.Primary)
+        .setStyle(ButtonStyle.Primary),
     );
     return row;
   });

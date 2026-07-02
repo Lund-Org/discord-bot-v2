@@ -1,5 +1,5 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import { CardType, Player, PlayerInventory } from '@prisma/client';
+import { CardType, Player, PlayerInventory } from '@discord-bot-v2/prisma';
 import { ChatInputCommandInteraction } from 'discord.js';
 
 import { invalidateWebsitePages } from '../../helpers/discordEvent';

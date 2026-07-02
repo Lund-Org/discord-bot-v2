@@ -5,7 +5,7 @@ import {
   BacklogItemReviewCons,
   BacklogItemReviewPros,
   BacklogStatus,
-} from '@prisma/client';
+} from '@discord-bot-v2/prisma';
 import { TFunction } from 'i18next';
 
 import { BacklogItemFields, BacklogItemReviewFields } from './api/backlog';

@@ -1,5 +1,5 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import { CardType, Pagination, PlayerInventory } from '@prisma/client';
+import { CardType, Pagination, PlayerInventory } from '@discord-bot-v2/prisma';
 import {
   ChatInputCommandInteraction,
   EmbedBuilder,

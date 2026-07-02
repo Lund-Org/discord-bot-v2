@@ -20,9 +20,11 @@ export async function cronDefinition() {
 
       cache[expectedGame.igdbId] = game;
 
-      const relatedReleaseDate = game.release_dates.find(
+      const relatedReleaseDate = game.release_dates?.find(
         ({ platform, release_region }) =>
+          expectedGame.releaseDate?.platformId &&
           expectedGame.releaseDate.platformId === platform.id &&
+          expectedGame.releaseDate?.region &&
           expectedGame.releaseDate.region === release_region,
       );
 
@@ -40,6 +42,10 @@ export async function cronDefinition() {
         });
       }
 
+      if (!expectedGame.releaseDate) {
+        continue;
+      }
+
       if (!relatedReleaseDate.date) {
         await prisma.expectedGameReleaseDate.update({
           where: { id: expectedGame.releaseDate.id },
@@ -52,7 +58,7 @@ export async function cronDefinition() {
       if (
         (!expectedGame.releaseDate.date && relatedReleaseDate.date) ||
         relatedReleaseDate.date * 1000 !==
-          expectedGame.releaseDate.date.getTime()
+          expectedGame.releaseDate.date?.getTime()
       ) {
         if (relatedReleaseDate.date * 1000 < new Date().getTime()) {
           await prisma.expectedGame.delete({

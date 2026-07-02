@@ -1,5 +1,5 @@
 import { GAME_STATUS, GAME_TYPE, REGION } from '@discord-bot-v2/igdb';
-import { BacklogStatus } from '@prisma/client';
+import { BacklogStatus } from '@discord-bot-v2/prisma';
 import z from 'zod';
 
 export const gameStatusSchema = z.nativeEnum(GAME_STATUS);

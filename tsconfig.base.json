@@ -10,7 +10,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "importHelpers": true,
-    "target": "es2015",
+    "target": "es2023",
     "module": "esnext",
     "lib": ["es2021", "ESNext.String", "dom"],
     "skipLibCheck": true,

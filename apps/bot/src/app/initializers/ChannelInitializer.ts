@@ -1,5 +1,5 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import { ChannelNotification } from '@prisma/client';
+import { ChannelNotification } from '@discord-bot-v2/prisma';
 import {
   ChannelType,
   Client,

@@ -1,3 +1,4 @@
+export * from './lib/array';
 export * from './lib/birthday';
 export * from './lib/dates';
 export * from './lib/gacha-enum';

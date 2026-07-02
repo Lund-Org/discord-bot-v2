@@ -5,7 +5,7 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
 } from '@chakra-ui/react';
-import type { BlogPost, Tag } from '@prisma/client';
+import type { BlogPost, Tag } from '@discord-bot-v2/prisma';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';

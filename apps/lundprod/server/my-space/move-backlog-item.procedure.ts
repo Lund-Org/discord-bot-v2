@@ -1,5 +1,5 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import { BacklogStatus } from '@prisma/client';
+import { BacklogStatus } from '@discord-bot-v2/prisma';
 import z from 'zod';
 
 import { getAuthedProcedure } from '../middleware';

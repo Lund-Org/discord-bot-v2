@@ -7,7 +7,7 @@ import {
   Text,
   UnorderedList,
 } from '@chakra-ui/react';
-import { BlogPost, Category, Tag } from '@prisma/client';
+import { BlogPost, Category, Tag } from '@discord-bot-v2/prisma';
 import { GetServerSideProps } from 'next';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';

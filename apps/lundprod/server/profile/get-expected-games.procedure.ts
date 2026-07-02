@@ -1,5 +1,5 @@
 import { prisma } from '@discord-bot-v2/prisma';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@discord-bot-v2/prisma';
 import z from 'zod';
 
 import { convertTs } from '~/lundprod/utils/trpc/date-to-string';

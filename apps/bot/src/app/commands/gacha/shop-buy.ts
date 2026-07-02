@@ -1,5 +1,5 @@
-import { GachaConfigEnum } from '@discord-bot-v2/common';
-import { prisma } from '@discord-bot-v2/prisma';
+import { GachaConfigEnum, isPresent } from '@discord-bot-v2/common';
+import { Player, PlayerInventory, prisma, User } from '@discord-bot-v2/prisma';
 import { ButtonInteraction } from 'discord.js';
 
 import { invalidateWebsitePages } from '../../helpers/discordEvent';
@@ -41,7 +41,13 @@ function getDailyShop(playerId: number) {
 }
 
 function getCardId(customId: string) {
-  const [_, id] = customId.match(/^shopbuy-(\d+)$/);
+  const match = customId.match(/^shopbuy-(\d+)$/);
+
+  if (!match) {
+    return 0;
+  }
+
+  const [_, id] = match;
 
   return parseInt(id, 10);
 }
@@ -76,7 +82,7 @@ export const shopBuy = async (interaction: ButtonInteraction) => {
     .map((item) => {
       return item.dailyPurchase.length ? null : item;
     })
-    .filter(Boolean);
+    .filter(isPresent);
 
   if (!availableShopItems.length) {
     return interaction.editReply(

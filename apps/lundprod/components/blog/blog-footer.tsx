@@ -1,5 +1,5 @@
 import { Text } from '@chakra-ui/react';
-import { BlogPost, Tag as TagType } from '@prisma/client';
+import { BlogPost, Tag as TagType } from '@discord-bot-v2/prisma';
 
 import { formatBlogDate } from '~/lundprod/utils/dates';
 

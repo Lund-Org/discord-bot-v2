@@ -1,6 +1,5 @@
-import { HowLongToBeatService } from '@discord-bot-v2/hltb';
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
+import { ChatInputCommandInteraction } from 'discord.js';
 
 type HLTBCode = 'gameplayMain' | 'gameplayMainExtra' | 'gameplayCompletionist';
 const HLTBLabelCode: [HLTBCode, string][] = [
@@ -24,41 +23,41 @@ export const howlongtobeatResponse = {
 };
 
 async function howlongtobeatCallback(interaction: ChatInputCommandInteraction) {
-  const hltbService = new HowLongToBeatService();
+  // const hltbService = new HowLongToBeatService();
   const name = interaction.options.getString('name', true);
 
-  try {
-    const searchResult = await hltbService.search(name);
+  // try {
+  //   const searchResult = await hltbService.search(name);
 
-    if (searchResult) {
-      const embed = new EmbedBuilder()
-        .setColor('#0ee8da')
-        .setTitle(searchResult.name)
-        .setThumbnail(searchResult.imageUrl);
+  //   if (searchResult) {
+  //     const embed = new EmbedBuilder()
+  //       .setColor('#0ee8da')
+  //       .setTitle(searchResult.name)
+  //       .setThumbnail(searchResult.imageUrl);
 
-      HLTBLabelCode.forEach(([code, label]) => {
-        const value = searchResult[code];
+  //     HLTBLabelCode.forEach(([code, label]) => {
+  //       const value = searchResult[code];
 
-        if (value) {
-          embed.addFields([{ name: label, value }]);
-        }
-      });
+  //       if (value) {
+  //         embed.addFields([{ name: label, value }]);
+  //       }
+  //     });
 
-      return interaction.reply({ embeds: [embed] });
-    } else if (typeof searchResult === 'undefined') {
-      return interaction.reply({
-        content: `Aucun résultat trouvé, peut-être dû à un probleme interne, vous pouvez tout de même aller voir sur https://howlongtobeat.com/?q=${encodeURI(
-          name,
-        )}`,
-      });
-    }
+  //     return interaction.reply({ embeds: [embed] });
+  //   } else if (typeof searchResult === 'undefined') {
+  //     return interaction.reply({
+  //       content: `Aucun résultat trouvé, peut-être dû à un probleme interne, vous pouvez tout de même aller voir sur https://howlongtobeat.com/?q=${encodeURI(
+  //         name,
+  //       )}`,
+  //     });
+  //   }
 
-    return interaction.reply(
-      `Aucun jeu trouvé, ou problème interne, vous pouvez tout de même aller voir sur https://howlongtobeat.com/?q=${encodeURI(
-        name,
-      )}`,
-    );
-  } catch (e) {
-    return interaction.reply('Une erreur est survenue');
-  }
+  return interaction.reply(
+    `Infos disponible ici https://howlongtobeat.com/?q=${encodeURI(
+      name,
+    )} ||(solution temporaire, j'en ai marre de réparer l'accès à leur donnée)||`,
+  );
+  // } catch (e) {
+  //   return interaction.reply('Une erreur est survenue');
+  // }
 }

@@ -1,4 +1,4 @@
-import { CardType,PrismaClient } from '@prisma/client';
+import { CardType, PrismaClient } from '@discord-bot-v2/prisma';
 import {
   CanvasRenderingContext2D,
   createCanvas,
@@ -112,14 +112,14 @@ async function setTextMultiLine({
       --wordsTaken
     ) {
       const desc = fragmentedDescription.filter(
-        (_, index) => index < wordsTaken
+        (_, index) => index < wordsTaken,
       );
 
       if (ctx.measureText(desc.join(' ')).width < size[0]) {
         ctx.fillText(
           desc.join(' '),
           position[0],
-          position[1] + linesInput * (fontSize + 10)
+          position[1] + linesInput * (fontSize + 10),
         );
         fragmentedDescription.splice(0, wordsTaken);
         ++linesInput;
@@ -133,7 +133,7 @@ async function setImage(
   imageUrl: string,
   ctx: CanvasRenderingContext2D,
   position: readonly [number, number],
-  size: readonly [number, number]
+  size: readonly [number, number],
 ) {
   try {
     const img = await loadImage(imageUrl);
@@ -157,14 +157,14 @@ async function createImage(card: CardTypeAndFusions, type: 'basic' | 'gold') {
     join(__dirname, `../assets/${bgImage}`),
     ctx,
     [0, 0],
-    CARD_SIZE
+    CARD_SIZE,
   );
   // illustration
   await setImage(
     join(__dirname, '../assets/illustrations', card.imageName),
     ctx,
     IMAGE_OFFSET,
-    IMAGE_SIZE
+    IMAGE_SIZE,
   );
   // card name
   setTextMultiLine({
@@ -200,7 +200,7 @@ async function createImage(card: CardTypeAndFusions, type: 'basic' | 'gold') {
       join(__dirname, `../assets/fusion-icon.png`),
       ctx,
       FUSION_OFFSET,
-      FUSION_IMG_SIZE
+      FUSION_IMG_SIZE,
     );
   } else if (card.possibleFusions.length) {
     setTextRescale({
@@ -223,7 +223,7 @@ async function createImage(card: CardTypeAndFusions, type: 'basic' | 'gold') {
       join(__dirname, `../assets/${starImg}`),
       ctx,
       [position[0] + i * STAR_SIZE[0], position[1]],
-      STAR_SIZE
+      STAR_SIZE,
     );
   }
 
@@ -239,15 +239,15 @@ async function createImage(card: CardTypeAndFusions, type: 'basic' | 'gold') {
       'lundprod',
       'public',
       'card-images',
-      `${type}-${card.imageName}`
-    )
+      `${type}-${card.imageName}`,
+    ),
   );
   const streamLundProd = canvas.createJPEGStream();
   streamLundProd.pipe(lundProdOut);
   lundProdOut.on('finish', () =>
     console.log(
-      `The file ${type}-${card.imageName} has been created in lundprod public folder.`
-    )
+      `The file ${type}-${card.imageName} has been created in lundprod public folder.`,
+    ),
   );
   const publicOut = createWriteStream(
     join(
@@ -259,15 +259,15 @@ async function createImage(card: CardTypeAndFusions, type: 'basic' | 'gold') {
       '..', // /
       'public',
       'card-images',
-      `${type}-${card.imageName}`
-    )
+      `${type}-${card.imageName}`,
+    ),
   );
   const publicStream = canvas.createJPEGStream();
   publicStream.pipe(publicOut);
   publicOut.on('finish', () =>
     console.log(
-      `The file ${type}-${card.imageName} has been created in root public folder.`
-    )
+      `The file ${type}-${card.imageName} has been created in root public folder.`,
+    ),
   );
 }
 

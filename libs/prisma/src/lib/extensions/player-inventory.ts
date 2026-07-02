@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@discord-bot-v2/prisma';
 
 export const PlayerInventoryExtension = (prisma: PrismaClient) => ({
   getCardsToGold: async (discordId: string) => {
