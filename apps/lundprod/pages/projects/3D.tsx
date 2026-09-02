@@ -1,5 +1,5 @@
 import { Box, Divider, Heading, Text } from '@chakra-ui/react';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import { Fragment } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -8,9 +8,8 @@ import { LightStyledLink } from '~/lundprod/components/styled-link';
 
 import { getGallery } from '../../utils/data/3D-gallery';
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   return {
-    revalidate: 3600,
     props: {
       cdnUrl: process.env.NEXT_PUBLIC_CDN_URL,
     },
