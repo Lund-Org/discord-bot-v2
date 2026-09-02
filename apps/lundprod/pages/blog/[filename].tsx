@@ -9,18 +9,7 @@ import remarkGfm from 'remark-gfm';
 import { components } from '~/lundprod/components/mdx-components';
 import { MdxLayout, MdxLayoutProps } from '~/lundprod/layouts/MdxLayout';
 
-export async function getStaticPaths() {
-  const mdxList = await prisma.blogPost.findMany({
-    select: { filename: true },
-  });
-
-  return {
-    paths: mdxList.map(({ filename }) => ({ params: { filename } })),
-    fallback: 'blocking', // can also be true or 'blocking'
-  };
-}
-
-export async function getStaticProps({
+export async function getServerSideProps({
   params,
 }: {
   params: { filename: string };
@@ -72,7 +61,6 @@ export async function getStaticProps({
   }
 
   return {
-    revalidate: 3600, // In seconds
     props: {
       blogPost: JSON.parse(JSON.stringify(blogPost)),
       mdxSource: await serialize(mdxContent, {

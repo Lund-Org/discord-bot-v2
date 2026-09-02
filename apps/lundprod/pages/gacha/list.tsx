@@ -1,6 +1,6 @@
 import { Flex, useBreakpointValue } from '@chakra-ui/react';
 import { prisma } from '@discord-bot-v2/prisma';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 
 import { CardPreviewContainer } from '~/lundprod/components/gacha/list/card-preview-container';
 import { Navbar } from '~/lundprod/components/gacha/list/navbar';
@@ -12,7 +12,9 @@ type GachaPageListProps = {
   cardTypes: CardWithFusionDependencies[];
 };
 
-export const getStaticProps: GetStaticProps<GachaPageListProps> = async () => {
+export const getServerSideProps: GetServerSideProps<
+  GachaPageListProps
+> = async () => {
   const cardTypes = await prisma.cardType.findMany({
     omit: {
       createdAt: true,
@@ -29,11 +31,6 @@ export const getStaticProps: GetStaticProps<GachaPageListProps> = async () => {
   });
 
   return {
-    // Next.js will attempt to re-generate the page:
-    // - When a request comes in
-    // - At most once every hour
-    revalidate: 3600, // In seconds
-    // Passed to the page component as props
     props: { cardTypes },
   };
 };
@@ -46,7 +43,7 @@ export function GachaPageList({ cardTypes }: GachaPageListProps) {
 
   return (
     <GachaHomeProvider cards={cardTypes}>
-      <Flex maxH="100vh" flexDir={"column"}>
+      <Flex maxH="100vh" flexDir={'column'}>
         <Warning />
         <Flex flex={1}>
           <Navbar />

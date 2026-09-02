@@ -1,6 +1,6 @@
 import { Box, Flex } from '@chakra-ui/react';
 import { getGlobalRanking, RankByUser } from '@discord-bot-v2/common';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 
 import { Rank } from '~/lundprod/components/gacha/ranking/rank';
 import { RankList } from '~/lundprod/components/gacha/ranking/rank-list';
@@ -10,15 +10,12 @@ type GachaRankPageProps = {
   ranks: RankByUser[];
 };
 
-export const getStaticProps: GetStaticProps<GachaRankPageProps> = async () => {
+export const getServerSideProps: GetServerSideProps<
+  GachaRankPageProps
+> = async () => {
   const ranks = await getGlobalRanking();
 
   return {
-    // Next.js will attempt to re-generate the page:
-    // - When a request comes in
-    // - At most once every hour
-    revalidate: 3600, // In seconds
-    // Passed to the page component as props
     props: { ranks: JSON.parse(JSON.stringify(ranks)) },
   };
 };

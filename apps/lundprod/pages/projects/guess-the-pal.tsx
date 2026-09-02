@@ -1,13 +1,12 @@
 import { Box, Button, Heading, Text, useBoolean } from '@chakra-ui/react';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { GuessThePalForm } from '~/lundprod/components/projects/guess-the-pal-form';
 import { LightStyledLink } from '~/lundprod/components/styled-link';
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   return {
-    revalidate: 3600,
     props: {
       cdnUrl: process.env.NEXT_PUBLIC_CDN_URL,
     },

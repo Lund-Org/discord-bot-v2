@@ -27,7 +27,6 @@ import { LevelsTable } from '~/lundprod/components/gacha/home/levels-table';
 import { Warning } from '~/lundprod/components/gacha/warning';
 import { LightStyledLink } from '~/lundprod/components/styled-link';
 
-
 type GachaPageProps = {
   configSell: SellConfig;
   configPrice: PriceConfig;

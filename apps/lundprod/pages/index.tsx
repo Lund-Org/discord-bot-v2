@@ -9,7 +9,7 @@ import {
   useBoolean,
 } from '@chakra-ui/react';
 import { prisma } from '@discord-bot-v2/prisma';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import { useTranslation } from 'react-i18next';
 
 import { BotPresentation } from '../components/home/bot-presentation';
@@ -22,7 +22,7 @@ type IndexProps = {
   lundprodGamedevEmbedUrl: string;
 };
 
-export const getStaticProps: GetStaticProps<IndexProps> = async () => {
+export const getServerSideProps: GetServerSideProps<IndexProps> = async () => {
   const configLundProdVideo = await prisma.config.findUnique({
     where: { name: 'LAST_LUNDPROD_VIDEO' },
   });
@@ -31,7 +31,6 @@ export const getStaticProps: GetStaticProps<IndexProps> = async () => {
   });
 
   return {
-    revalidate: 3600,
     props: {
       lundprodEmbedUrl:
         (configLundProdVideo?.value as { embedUrl?: string })?.embedUrl || '',
