@@ -27,6 +27,7 @@ COPY public/ /usr/src/app/public/
 COPY babel.config.json /usr/src/app
 COPY tsconfig.base.json /usr/src/app
 COPY nx.json /usr/src/app
+COPY .env /usr/src/app
 
 RUN pnpm nx run prisma:generate
 
