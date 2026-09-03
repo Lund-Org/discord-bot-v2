@@ -113,54 +113,66 @@ const Em = ({ children }: { children?: ReactNode }) => (
 );
 const H1 = ({ children }: { children?: ReactNode }) => {
   const { push } = useRouter();
+  const { id, ...props } = titleCommonProps(children, push);
 
   return (
-    <Heading {...titleCommonProps(children, push)} variant="h1" as="h1">
+    <Heading {...props} variant="h1" as="h1">
+      <Box id={id} position="relative" left={0} top="-75px" />
       {children}
     </Heading>
   );
 };
 const H2 = ({ children }: { children?: ReactNode }) => {
   const { push } = useRouter();
+  const { id, ...props } = titleCommonProps(children, push);
 
   return (
-    <Heading {...titleCommonProps(children, push)} variant="h2" as="h2">
+    <Heading {...props} variant="h2" as="h2">
+      <Box id={id} position="relative" left={0} top="-75px" />
       {children}
     </Heading>
   );
 };
 const H3 = ({ children }: { children?: ReactNode }) => {
   const { push } = useRouter();
+  const { id, ...props } = titleCommonProps(children, push);
 
   return (
-    <Heading {...titleCommonProps(children, push)} variant="h3" as="h3">
+    <Heading {...props} variant="h3" as="h3">
+      <Box id={id} position="relative" left={0} top="-75px" />
       {children}
     </Heading>
   );
 };
 const H4 = ({ children }: { children?: ReactNode }) => {
   const { push } = useRouter();
+  const { id, ...props } = titleCommonProps(children, push);
 
   return (
-    <Heading {...titleCommonProps(children, push)} variant="h4" as="h4">
+    <Heading {...props} variant="h4" as="h4">
+      <Box id={id} position="relative" left={0} top="-75px" />
       {children}
     </Heading>
   );
 };
 const H5 = ({ children }: { children?: ReactNode }) => {
   const { push } = useRouter();
+  const { id, ...props } = titleCommonProps(children, push);
 
   return (
-    <Heading {...titleCommonProps(children, push)} variant="h5" as="h5">
+    <Heading {...props} variant="h5" as="h5">
+      <Box id={id} position="relative" left={0} top="-75px" />
       {children}
     </Heading>
   );
 };
 const H6 = ({ children }: { children?: ReactNode }) => {
   const { push } = useRouter();
+  const { id, ...props } = titleCommonProps(children, push);
 
   return (
-    <Heading {...titleCommonProps(children, push)} variant="h6" as="h6">
+    <Heading {...props} variant="h6" as="h6">
+      <Box id={id} position="relative" left={0} top="-75px" />
       {children}
     </Heading>
   );
@@ -168,16 +180,24 @@ const H6 = ({ children }: { children?: ReactNode }) => {
 const MdxHr = () => <Divider my="25px" />;
 const MdxLink = ({
   href,
+  target,
   children,
 }: {
   href?: string;
+  target?: string;
   children?: ReactNode;
-}) => (
-  <StyledLink href={href} target="_blank" rel="noreferrer noopener">
-    {children}
-    <ExternalLinkIcon ml="3px" verticalAlign="baseline" mb="-2px" />
-  </StyledLink>
-);
+} & any) => {
+  return (
+    <StyledLink
+      href={href}
+      target={target || '_blank'}
+      rel="noreferrer noopener"
+    >
+      {children}
+      <ExternalLinkIcon ml="3px" verticalAlign="baseline" mb="-2px" />
+    </StyledLink>
+  );
+};
 const Pre = ({ children }: { children?: ReactNode }) => (
   <Box
     as="pre"
