@@ -40,8 +40,8 @@ testem.log
 Thumbs.db
 
 public/card-images/*
-apps/lundprod/public/card-images/*
-apps/lundprod/public/mdx/*
+apps/lundprod/public/card-images/*.jpg
+apps/lundprod/public/mdx/*.mdx
 .env
 .vscode
 
