@@ -10,6 +10,7 @@ export const authOptions: AuthOptions = {
     DiscordProvider({
       clientId: process.env.DISCORD_OAUTH_CLIENT_ID || '',
       clientSecret: process.env.DISCORD_OAUTH_SECRET_ID || '',
+      issuer: "https://discord.com",
     }),
   ],
   pages: {
