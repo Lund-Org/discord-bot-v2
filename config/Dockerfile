@@ -29,6 +29,8 @@ COPY tsconfig.base.json /usr/src/app
 COPY nx.json /usr/src/app
 COPY .env /usr/src/app
 
+ENV TZ=Europe/Paris
+
 RUN pnpm nx run prisma:generate
 
 RUN pnpm nx run lundprod:build:production
