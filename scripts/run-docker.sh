@@ -13,5 +13,5 @@ if [ "$delete_version" =  "y" ]; then
   docker image rm maurice:$current_version
 fi
 
-docker run -it -d --name discord_bot --network maurice-network --restart always --env-file .env maurice:$new_version pnpm nx run bot:serve:production &&
+docker run -it -d --name discord_bot --network maurice-network --restart always --env-file .env maurice:$new_version sh start-bot.sh &&
 docker run -it -d --name lundprod --network maurice-network --restart always -p 4200:4200 --env-file .env maurice:$new_version pnpm nx run lundprod:serve:production

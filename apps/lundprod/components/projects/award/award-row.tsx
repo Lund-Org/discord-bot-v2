@@ -81,7 +81,6 @@ export const AwardRow = ({
         bg="gray.900"
         position="relative"
         pb="40px"
-        mb="30px"
       >
         <Flex gap={3} alignItems="center">
           <Box position="relative">

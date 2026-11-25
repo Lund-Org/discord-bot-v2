@@ -28,6 +28,9 @@ COPY babel.config.json /usr/src/app
 COPY tsconfig.base.json /usr/src/app
 COPY nx.json /usr/src/app
 COPY .env /usr/src/app
+COPY scripts/start-bot.sh /usr/src/app
+
+RUN chmod +x /usr/src/app/start-bot.sh
 
 ENV TZ=Europe/Paris
 

@@ -1,15 +1,7 @@
 import { AddIcon, StarIcon } from '@chakra-ui/icons';
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  Text,
-  Tooltip,
-  useBoolean,
-} from '@chakra-ui/react';
+import { Button, Flex, Text, Tooltip } from '@chakra-ui/react';
 import { chunk } from 'lodash';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   FieldArrayWithId,
   Form,
@@ -19,33 +11,34 @@ import {
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { useGetDefaultAwards } from '~/lundprod/hooks/use-get-default-awards';
 import { useScreenshot } from '~/lundprod/hooks/use-screenshot';
 import { AwardForm } from '~/lundprod/types/awards';
 
 import { AwardRow } from './award/award-row';
 import { EditAwardModal } from './award/edit-award-modal';
 
-export const AwardConfigurator = () => {
+type AwardConfiguratorProps = {
+  defaultConfig: string[];
+};
+
+export const AwardConfigurator = ({
+  defaultConfig,
+}: AwardConfiguratorProps) => {
   const { t } = useTranslation();
 
-  const canvasRef = useRef<HTMLDivElement>(null);
-
-  const [hasCanvas, setHasCanvas] = useBoolean(false);
   const screenshot = useScreenshot();
   const [editedAward, setEditedAward] = useState<{
     field: FieldArrayWithId<AwardForm, 'awards', 'id'>;
     index: number;
   } | null>(null);
-  const defaultCategories = useGetDefaultAwards();
   const defaultValues = useMemo<AwardForm>(() => {
     return {
-      awards: defaultCategories.map((label) => ({
+      awards: defaultConfig.map((label) => ({
         label,
         games: [],
       })),
     };
-  }, [defaultCategories]);
+  }, [defaultConfig]);
 
   const form = useForm<AwardForm>({
     defaultValues,
@@ -56,23 +49,41 @@ export const AwardConfigurator = () => {
     name: 'awards',
   });
 
-  const screenshotAwards = async () => {
-    for (const child of Array.from(canvasRef.current?.children || [])) {
-      canvasRef.current?.removeChild(child);
-    }
-
-    for (let i = 0; i < 4; ++i) {
-      const block = document.querySelector(`#award-block-${i}`);
+  const screenshotAwards = async (all: boolean) => {
+    const screen = async (selector: string) => {
+      const block = document.querySelector(selector);
 
       if (!block) {
         return;
       }
 
-      const canvas = await screenshot(block as HTMLElement | null);
+      const image = await screenshot(block as HTMLElement | null);
 
-      if (canvas) {
-        canvasRef.current?.appendChild(canvas);
-        setHasCanvas.on();
+      if (image) {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = image.width;
+        canvas.height = image.height;
+
+        ctx?.drawImage(image, 0, 0);
+        const converted = canvas.toDataURL('image/jpeg');
+
+        const link = document.createElement('a');
+        link.id = 'award';
+        link.download = `award.jpg`;
+        link.href = converted;
+        link.click();
+      }
+    };
+
+    if (all) {
+      await screen(`#awards`);
+    } else {
+      for (let i = 0; i < 4; ++i) {
+        await screen(`#award-block-${i}`);
+
+        await new Promise((resolve) => setTimeout(resolve, 0.5));
       }
     }
   };
@@ -82,12 +93,14 @@ export const AwardConfigurator = () => {
   return (
     <FormProvider {...form}>
       <Form>
-        <Box>
+        <Flex id="awards" flexDir="column" gap="30px" bg="gray.800">
           {fieldBlocks.map((fieldBlock, blockIndex) => (
-            <Box
+            <Flex
               id={`award-block-${blockIndex}`}
               bg="gray.800"
               key={blockIndex}
+              flexDir="column"
+              gap="30px"
             >
               {fieldBlock.map((field, index) => (
                 <AwardRow
@@ -105,9 +118,9 @@ export const AwardConfigurator = () => {
                   {t('awards.copyright')}
                 </Text>
               )}
-            </Box>
+            </Flex>
           ))}
-        </Box>
+        </Flex>
 
         <Flex alignItems="center" gap={4}>
           <Tooltip isDisabled={fields.length < 20} label={t('awards.maxAward')}>
@@ -123,33 +136,20 @@ export const AwardConfigurator = () => {
           <Button
             colorScheme="teal"
             leftIcon={<StarIcon color="white" />}
-            onClick={screenshotAwards}
+            onClick={() => screenshotAwards(true)}
           >
-            {t('awards.screenshot')}
+            {t('awards.screenshotAll')}
           </Button>
+          <Tooltip label={t('awards.screenshotTooltip')}>
+            <Button
+              colorScheme="teal"
+              leftIcon={<StarIcon color="white" />}
+              onClick={() => screenshotAwards(false)}
+            >
+              {t('awards.screenshotMultipleFiles')}
+            </Button>
+          </Tooltip>
         </Flex>
-
-        <Box pt="25px" w="fit-content" mx="auto" textAlign="center">
-          {hasCanvas && (
-            <>
-              <Heading variant="h5">{t('awards.canvas')}</Heading>
-              <Text mb="10px">{t('awards.canvasHint')}</Text>
-            </>
-          )}
-          <Flex
-            flexWrap="wrap"
-            gap={5}
-            ref={canvasRef}
-            p="8px"
-            maxW="1000px"
-            sx={{
-              '& > img': {
-                w: '200px',
-                border: '1px solid white',
-              },
-            }}
-          />
-        </Box>
 
         {!!editedAward && (
           <EditAwardModal

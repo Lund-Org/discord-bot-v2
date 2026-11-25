@@ -65,10 +65,15 @@
       }
     },
     "maxAward": "20 awards max",
+    "openDefaultGA": "Ouvrir le configurateur avec les catégories Game Awards",
+    "openEmpty": "Ouvrir le configurateur vide",
     "passDisclaimer": "Accéder au configurateur d'awards",
-    "screenshot": "Exporter",
+    "screenshotAll": "Exporter en une image",
+    "screenshotMultipleFiles": "Exporter en plusieurs images",
+    "screenshotTooltip": "Le navigateur va surement demander une autorisation pour télécharger plusieurs fichiers",
     "subtitle": "Crée tes propres awards et partage les avec tes amis ou sur les réseaux.",
-    "title": "Mes awards"
+    "title": "Mes awards",
+    "toEdit": "À éditer"
   },
   "blog": {
     "categories": "Catégories",

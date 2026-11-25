@@ -65,10 +65,14 @@
       }
     },
     "maxAward": "Max 20 awards",
-    "passDisclaimer": "Go to the awards configurator",
-    "screenshot": "Export",
+    "openDefaultGA": "Open the configurator with the default Game Awards categories",
+    "openEmpty": "Open the configurator with empty categories",
+    "screenshotAll": "Export in one image",
+    "screenshotMultipleFiles": "Export in multiple images",
+    "screenshotTooltip": "Your browser will probably ask an authozization to download multiple files",
     "subtitle": "Create your own awards and share them with your friends or on your social networks.",
-    "title": "My awards"
+    "title": "My awards",
+    "toEdit": "To edit"
   },
   "blog": {
     "categories": "Categories",
